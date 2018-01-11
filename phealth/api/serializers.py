@@ -8,4 +8,9 @@ for every model in the API
 Models will have to be divided into api and non-api models
 
 '''
+from . models import * 
 
+class AddressSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Address
+		fields = ('__all__') 
