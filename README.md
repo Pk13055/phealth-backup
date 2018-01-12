@@ -1,5 +1,11 @@
 # Hostpital Management System
 
+## Experimental Branch 
+
+- Adding changes here will mostly break stuff. Use this to test out latest
+  features to merge into dev later
+
+
 ## Database setup
 
 Since we are using postgresql for the backend connectivity, and want to avoid
