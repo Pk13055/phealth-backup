@@ -11,7 +11,6 @@ from django.db import models
 class Address(models.Model):
     address_id = models.AutoField(primary_key=True)
     district = models.ForeignKey('District', models.DO_NOTHING)
-    telephone = models.ForeignKey('Telephone', models.DO_NOTHING)
     country = models.ForeignKey('Country', models.DO_NOTHING)
     state = models.ForeignKey('State', models.DO_NOTHING)
     city = models.ForeignKey('City', models.DO_NOTHING)
@@ -62,81 +61,23 @@ class Alerttype(models.Model):
 
 class Appointmentbooking(models.Model):
     appointmentbooking_id = models.AutoField(primary_key=True)
+    date = models.DateField()
+    priyority = models.ForeignKey('Priyority', models.DO_NOTHING)
+    speciality = models.ForeignKey('Speciality', models.DO_NOTHING)
     healthseeker = models.ForeignKey('Healthseeker', models.DO_NOTHING)
     clinicians = models.ForeignKey('Clinicians', models.DO_NOTHING)
     bookingsources = models.ForeignKey('Bookingsources', models.DO_NOTHING)
-    date = models.DateField(blank=True, null=True)
     time = models.TimeField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    ipaddress = models.CharField(max_length=225, blank=True, null=True)
+    macaddress = models.CharField(max_length=225, blank=True, null=True)
+    isnew = models.IntegerField(blank=True, null=True)
+    visittype = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'appointmentbooking'
-
-
-class AuthGroup(models.Model):
-    name = models.CharField(unique=True, max_length=80)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group'
-
-
-class AuthGroupPermissions(models.Model):
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group_permissions'
-        unique_together = (('group', 'permission'),)
-
-
-class AuthPermission(models.Model):
-    name = models.CharField(max_length=255)
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_permission'
-        unique_together = (('content_type', 'codename'),)
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.BooleanField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
-    is_staff = models.BooleanField()
-    is_active = models.BooleanField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_groups'
-        unique_together = (('user', 'group'),)
-
-
-class AuthUserUserPermissions(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_user_permissions'
-        unique_together = (('user', 'permission'),)
+        unique_together = (('appointmentbooking_id', 'date'),)
 
 
 class Availablefacilities(models.Model):
@@ -190,6 +131,7 @@ class ClinicianMemberships(models.Model):
     city = models.ForeignKey(City, models.DO_NOTHING)
     country = models.ForeignKey('Country', models.DO_NOTHING)
     association = models.CharField(max_length=225, blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -223,8 +165,10 @@ class CliniciansDates(models.Model):
 
 class CliniciansEducation(models.Model):
     clinicians_education_id = models.AutoField(primary_key=True)
+    qualification = models.ForeignKey('Qualification', models.DO_NOTHING)
     clinicians = models.ForeignKey(Clinicians, models.DO_NOTHING)
-    education = models.IntegerField(blank=True, null=True)
+    registrationno = models.CharField(max_length=225, blank=True, null=True)
+    college = models.CharField(max_length=225, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -233,15 +177,30 @@ class CliniciansEducation(models.Model):
 
 class CliniciansExperience(models.Model):
     clinicians_experience_id = models.AutoField(primary_key=True)
+    designation = models.ForeignKey('Designation', models.DO_NOTHING)
     clinicians = models.ForeignKey(Clinicians, models.DO_NOTHING)
     institution = models.CharField(max_length=225, blank=True, null=True)
-    designation = models.CharField(max_length=225, blank=True, null=True)
     workfrom = models.DateField(blank=True, null=True)
     workto = models.DateField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'clinicians_experience'
+
+
+class CliniciansSpeciality(models.Model):
+    clinicians_speciality_id = models.AutoField(primary_key=True)
+    symptoms = models.ForeignKey('Symptoms', models.DO_NOTHING)
+    healthproviders_speciality = models.ForeignKey('HealthprovidersSpeciality', models.DO_NOTHING)
+    clinicians = models.ForeignKey(Clinicians, models.DO_NOTHING)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'clinicians_speciality'
 
 
 class Conditions(models.Model):
@@ -289,6 +248,17 @@ class Coupons(models.Model):
     class Meta:
         managed = False
         db_table = 'coupons'
+
+
+class Designation(models.Model):
+    designation_id = models.AutoField(primary_key=True)
+    designation = models.CharField(max_length=225, blank=True, null=True)
+    sort_by = models.IntegerField(blank=True, null=True)
+    status_2 = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'designation'
 
 
 class Discountcard(models.Model):
@@ -340,50 +310,6 @@ class District(models.Model):
         db_table = 'district'
 
 
-class DjangoAdminLog(models.Model):
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True, null=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.SmallIntegerField()
-    change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'django_content_type'
-        unique_together = (('app_label', 'model'),)
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_session'
-
-
 class Facilities(models.Model):
     facilities_id = models.AutoField(primary_key=True)
     facility = models.CharField(max_length=225, blank=True, null=True)
@@ -423,6 +349,8 @@ class Feedback(models.Model):
     users = models.ForeignKey('Users', models.DO_NOTHING)
     users_feedback = models.CharField(max_length=225, blank=True, null=True)
     from_2 = models.CharField(max_length=225, blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    feedbackstatus = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -440,17 +368,18 @@ class Gender(models.Model):
         db_table = 'gender'
 
 
-class Healthcheckbookibg(models.Model):
-    healthcheckbookibg_id = models.AutoField(primary_key=True)
+class Healthcheckbooking(models.Model):
+    healthcheckbooking_id = models.AutoField(primary_key=True)
     healthseeker = models.ForeignKey('Healthseeker', models.DO_NOTHING)
     healthproviders = models.ForeignKey('Healthproviders', models.DO_NOTHING)
     bookingsources = models.ForeignKey(Bookingsources, models.DO_NOTHING)
     date = models.DateField(blank=True, null=True)
     time = models.TimeField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'healthcheckbookibg'
+        db_table = 'healthcheckbooking'
 
 
 class Healthchecks(models.Model):
@@ -484,10 +413,32 @@ class Healthproviders(models.Model):
     is_branch = models.IntegerField(blank=True, null=True)
     under_healthproviders_id = models.IntegerField(blank=True, null=True)
     display_cost = models.IntegerField(blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
+    m_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'healthproviders'
+
+
+class HealthprovidersSpeciality(models.Model):
+    healthproviders_speciality_id = models.AutoField(primary_key=True)
+    speciality = models.ForeignKey('Speciality', models.DO_NOTHING)
+    healthproviders = models.ForeignKey(Healthproviders, models.DO_NOTHING)
+    sort_by = models.IntegerField(blank=True, null=True)
+    speciality_name = models.CharField(max_length=225, blank=True, null=True)
+    speciality_description = models.CharField(max_length=225, blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
+    discountpercentage = models.IntegerField(blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
+    status_2 = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'healthproviders_speciality'
 
 
 class Healthrecords(models.Model):
@@ -503,6 +454,7 @@ class Healthrecords(models.Model):
 
 class Healthseeker(models.Model):
     healthseeker_id = models.AutoField(primary_key=True)
+    healthseeker_type = models.ForeignKey('HealthseekerType', models.DO_NOTHING)
     profession = models.ForeignKey('Profession', models.DO_NOTHING)
     languages = models.ForeignKey('Languages', models.DO_NOTHING)
     gender = models.ForeignKey(Gender, models.DO_NOTHING)
@@ -515,6 +467,20 @@ class Healthseeker(models.Model):
     class Meta:
         managed = False
         db_table = 'healthseeker'
+
+
+class HealthseekerAlerts(models.Model):
+    healthseeker_alerts_id = models.AutoField(primary_key=True)
+    alertsources = models.ForeignKey(Alertsources, models.DO_NOTHING)
+    alerttype = models.ForeignKey(Alerttype, models.DO_NOTHING)
+    healthseeker = models.ForeignKey(Healthseeker, models.DO_NOTHING)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
+    alert_to = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'healthseeker_alerts'
 
 
 class HealthseekerAvailabilities(models.Model):
@@ -537,10 +503,21 @@ class HealthseekerHealthrecords(models.Model):
     refdate = models.DateField(blank=True, null=True)
     file_2 = models.CharField(max_length=225, blank=True, null=True)
     file3 = models.CharField(max_length=225, blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    m_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'healthseeker_healthrecords'
+
+
+class HealthseekerType(models.Model):
+    healthseeker_type_id = models.AutoField(primary_key=True)
+    healthseeker_type = models.CharField(max_length=225, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'healthseeker_type'
 
 
 class Interest(models.Model):
@@ -582,6 +559,7 @@ class Photoalbum(models.Model):
 
 class Plans(models.Model):
     plans_id = models.AutoField(primary_key=True)
+    plans_groups = models.ForeignKey('PlansGroups', models.DO_NOTHING)
     plan = models.CharField(max_length=225, blank=True, null=True)
     description = models.CharField(max_length=225, blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
@@ -598,6 +576,9 @@ class Plans(models.Model):
     promoimage = models.CharField(max_length=225, blank=True, null=True)
     applicability = models.CharField(max_length=225, blank=True, null=True)
     doctorscoupon = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -608,6 +589,8 @@ class PlansGroups(models.Model):
     plans_groups_id = models.AutoField(primary_key=True)
     plans_groups_specialities = models.ForeignKey('PlansGroupsSpecialities', models.DO_NOTHING)
     plans_group = models.CharField(max_length=225, blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -620,6 +603,17 @@ class PlansGroupsSpecialities(models.Model):
     class Meta:
         managed = False
         db_table = 'plans_groups_specialities'
+
+
+class Priyority(models.Model):
+    priyority_id = models.AutoField(primary_key=True)
+    priyority = models.IntegerField(blank=True, null=True)
+    sort_by = models.IntegerField(blank=True, null=True)
+    status_2 = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'priyority'
 
 
 class Profession(models.Model):
@@ -644,6 +638,19 @@ class Qualification(models.Model):
         db_table = 'qualification'
 
 
+class Referrels(models.Model):
+    referrels_id = models.AutoField(primary_key=True)
+    fromusers_id = models.IntegerField(blank=True, null=True)
+    referredusers_id = models.IntegerField(blank=True, null=True)
+    cashback = models.IntegerField(blank=True, null=True)
+    source = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'referrels'
+
+
 class Referrelscheme(models.Model):
     referrelscheme_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=225, blank=True, null=True)
@@ -660,6 +667,12 @@ class RegistrationWelcomeMessage(models.Model):
     registration_welcome_message = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
+    m_user = models.IntegerField(blank=True, null=True)
+    c_user = models.IntegerField(blank=True, null=True)
+    m_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -697,11 +710,11 @@ class Resellers(models.Model):
 
 
 class Role(models.Model):
-    idrole = models.AutoField(primary_key=True)
-    subrole = models.ForeignKey('Subrole', models.DO_NOTHING)
+    role_id = models.AutoField(primary_key=True)
     role = models.CharField(max_length=225)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+    roleocode = models.CharField(max_length=225, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -758,8 +771,20 @@ class Salestarget(models.Model):
         db_table = 'salestarget'
 
 
+class Secretquestions(models.Model):
+    secretquestions_id = models.AutoField(primary_key=True)
+    secretquestion = models.CharField(max_length=225, blank=True, null=True)
+    sort_by = models.IntegerField(blank=True, null=True)
+    status_2 = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'secretquestions'
+
+
 class Speciality(models.Model):
     speciality_id = models.AutoField(primary_key=True)
+    speciality_type = models.ForeignKey('SpecialityType', models.DO_NOTHING)
     qualification = models.ForeignKey(Qualification, models.DO_NOTHING)
     speciality = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
@@ -768,6 +793,17 @@ class Speciality(models.Model):
     class Meta:
         managed = False
         db_table = 'speciality'
+
+
+class SpecialityType(models.Model):
+    speciality_type_id = models.AutoField(primary_key=True)
+    speciality_type_name = models.CharField(max_length=225, blank=True, null=True)
+    sort_by = models.IntegerField(blank=True, null=True)
+    status_2 = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'speciality_type'
 
 
 class Sponsors(models.Model):
@@ -781,7 +817,10 @@ class Sponsors(models.Model):
     image = models.CharField(max_length=225, blank=True, null=True)
     operatinghours = models.CharField(max_length=225, blank=True, null=True)
     oprtainglocation = models.CharField(max_length=225, blank=True, null=True)
+    website = models.CharField(max_length=225, blank=True, null=True)
     requiredlocation = models.CharField(max_length=225, blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -810,17 +849,6 @@ class State(models.Model):
         db_table = 'state'
 
 
-class Subrole(models.Model):
-    subrole_id = models.AutoField(primary_key=True)
-    subrole = models.CharField(max_length=225, blank=True, null=True)
-    sort_by = models.IntegerField(blank=True, null=True)
-    status_2 = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'subrole'
-
-
 class Symptoms(models.Model):
     symptoms_id = models.AutoField(primary_key=True)
     speciality = models.ForeignKey(Speciality, models.DO_NOTHING)
@@ -835,12 +863,10 @@ class Symptoms(models.Model):
 
 class Telephone(models.Model):
     telephone_id = models.AutoField(primary_key=True)
-    phone1 = models.IntegerField(blank=True, null=True)
-    phone2 = models.IntegerField(blank=True, null=True)
-    phone3 = models.IntegerField(blank=True, null=True)
-    phone4 = models.IntegerField(blank=True, null=True)
-    phone5 = models.IntegerField(blank=True, null=True)
-    phone6 = models.IntegerField(blank=True, null=True)
+    address = models.ForeignKey(Address, models.DO_NOTHING)
+    phone = models.IntegerField(blank=True, null=True)
+    sort_by = models.IntegerField(blank=True, null=True)
+    status_2 = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -887,6 +913,9 @@ class Testimonials(models.Model):
     image = models.CharField(max_length=225, blank=True, null=True)
     video = models.CharField(max_length=225, blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+    activefrom = models.DateTimeField(blank=True, null=True)
+    activeto = models.DateTimeField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -906,9 +935,82 @@ class Timeslots(models.Model):
         db_table = 'timeslots'
 
 
+class TrxnAppointmentbookings(models.Model):
+    trxn_appointmentbookings_id = models.AutoField(primary_key=True)
+    appointmentbooking_date = models.DateField()
+    appointmentbooking = models.ForeignKey(Appointmentbooking, models.DO_NOTHING)
+    status_2 = models.CharField(max_length=225, blank=True, null=True)
+    session_activity = models.IntegerField(blank=True, null=True)
+    ip = models.CharField(max_length=225, blank=True, null=True)
+    trxn_by = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'trxn_appointmentbookings'
+
+
+class TrxnCoupons(models.Model):
+    trxn_coupons_id = models.AutoField(primary_key=True)
+    coupons = models.ForeignKey(Coupons, models.DO_NOTHING)
+    status_2 = models.CharField(max_length=225, blank=True, null=True)
+    sessionactivity = models.IntegerField(blank=True, null=True)
+    ip = models.CharField(max_length=225, blank=True, null=True)
+    trxn_by = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'trxn_coupons'
+
+
+class TrxnDiscountcard(models.Model):
+    trxn_discountcard_id = models.AutoField(primary_key=True)
+    discountcard = models.ForeignKey(Discountcard, models.DO_NOTHING)
+    status_2 = models.CharField(max_length=225, blank=True, null=True)
+    sessionactivity = models.IntegerField(blank=True, null=True)
+    ip = models.CharField(max_length=225, blank=True, null=True)
+    trxn_by = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'trxn_discountcard'
+
+
+class TrxnHealthcheckbooking(models.Model):
+    trxn_healthcheckbooking_id = models.AutoField(primary_key=True)
+    healthcheckbooking = models.ForeignKey(Healthcheckbooking, models.DO_NOTHING)
+    status_2 = models.CharField(max_length=225, blank=True, null=True)
+    sessionactivity = models.IntegerField(blank=True, null=True)
+    ip = models.CharField(max_length=225, blank=True, null=True)
+    trxn_by = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'trxn_healthcheckbooking'
+
+
+class TrxnPayments(models.Model):
+    trxn_payments_id = models.AutoField(primary_key=True)
+    amount = models.IntegerField(blank=True, null=True)
+    status_2 = models.CharField(max_length=225, blank=True, null=True)
+    paymentfor = models.CharField(max_length=225, blank=True, null=True)
+    for_id = models.IntegerField(blank=True, null=True)
+    ip = models.CharField(max_length=225, blank=True, null=True)
+    trxn_by = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'trxn_payments'
+
+
 class Users(models.Model):
     users_id = models.AutoField(primary_key=True)
-    role_idrole = models.ForeignKey(Role, models.DO_NOTHING, db_column='role_idrole')
+    secretquestions = models.ForeignKey(Secretquestions, models.DO_NOTHING)
+    role = models.ForeignKey(Role, models.DO_NOTHING)
     mobile = models.IntegerField()
     email = models.CharField(max_length=225)
     firstname = models.CharField(max_length=225, blank=True, null=True)
@@ -918,6 +1020,14 @@ class Users(models.Model):
     verified = models.IntegerField(blank=True, null=True)
     pw_request = models.IntegerField(blank=True, null=True)
     user_status = models.IntegerField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    reg_by = models.IntegerField(blank=True, null=True)
+    m_date = models.DateTimeField(blank=True, null=True)
+    m_by = models.IntegerField(blank=True, null=True)
+    failure_attempts = models.IntegerField(blank=True, null=True)
+    secretanswer = models.CharField(max_length=225, blank=True, null=True)
+    ipaddress = models.CharField(max_length=225, blank=True, null=True)
+    macaddress = models.CharField(max_length=225, blank=True, null=True)
 
     class Meta:
         managed = False
