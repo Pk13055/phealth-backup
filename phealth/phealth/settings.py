@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'dry_rest_permissions',
     'drf_generators',
     'api'
 ]
@@ -87,7 +88,15 @@ WSGI_APPLICATION = 'phealth.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default' : {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'phealth',
+        'USER': 'phealth',
+        'PASSWORD': 'phealth12345',
+        'HOST': 'mydbinstance.chkiemmqhprn.us-east-2.rds.amazonaws.com',
+        'PORT': '5432',
+    },
+    'backup': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hospital',
         'USER': 'hospital',
@@ -122,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Calcutta'
 
 USE_I18N = True
 
