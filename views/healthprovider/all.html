@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,490 +15,543 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsVE0g9J5rYRh43rWyHc6NOHA8ERPCFOE&amp;sensor=true&amp;libraries=places">
     </script>
     <script src="jquery.placepicker.js"></script>
-    <script src="main.js"></script>
+    <script src="functionality.js"></script>
+    <script>
+    let sections = ["plans", "instant_registration", "otp", "password", "verification",
+        "contact_details", "adding_branch", "specialities", "facilities", "offerings", "special_checks"
+    ];
+    $(document).ready(function() {
+        sectionNav(sections);
+        addSubmit(sections[sections.length - 1]);
+    });
+
+    </script>
 </head>
+
 <body>
     <div class="container">
         <div class="row">
             <h1>Health Provider Registration</h1>
         </div>
-    <form id="main-form" enctype="multipart/form-data">
-    <section class="container" data="1">
-        <h3>Plans </h3>
-        <p>Group I (Modern Medicine All Specialities except Eye and Dental)</p>
-            <div class="container bootstrap snippet">
+        <form id="main-form" enctype="multipart/form-data">
+            <section class="container">
+                <h3>Plans </h3>
+                <div class="row group_toggles">
+                    <button type="button" class="col-xs-6 btn btn-primary btn-lg btn-block" section="0">
+                        Group I
+                        <div class="hidden-xs">(All <em>except</em> Eye, Dental, Physiotherapy &amp; <em>alternative</em> Medicine)</div>
+                    </button>
+                    <button type="button" class="col-xs-6 btn btn-success btn-lg btn-block" section="1">
+                        Group II
+                        <div class="hidden-xs">(Eye, Dental, Physiotherapy and Alternative Medicine)</div>
+                    </button>
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+                <div class="group-0 package_groups">
+                    <div class="container snippet">
+                        <div class="row">
+                            <h4>Group I</h4>
+                            <p class="lead visible-xs">(All <em>except</em> Eye, Dental, Physiotherapy &amp; <em>alternative</em> Medicine)</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-amber">
+                                        <h2>Rs.1500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Silver Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-green">
+                                        <h2>Rs. 2500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Gold Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-cyan">
+                                        <h2>Rs. 5000/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Titanium Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-1 package_groups">
+                    <div class="container snippet">
+                        <div class="row">
+                            <h4>Group II</h4>
+                            <p class="lead visible-xs">(Eye, Dental, Physiotherapy and Alternative Medicine)</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-amber">
+                                        <h2>Rs.1500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Silver Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-green">
+                                        <h2>Rs. 2500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Gold Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-cyan">
+                                        <h2>Rs. 5000/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Titanium Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Instant Registration</h3>
+                <div class="form-group">
+                    <label for="email">User Type:</label>
+                    <select class="form-control" id="role_id" name="role_id">
+                        <option disabled="" selected="">Select User Type</option>
+                        <option>Clinic</option>
+                        <option>Hospital</option>
+                        <option>Diagnostic Center</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="firstname">Full Name (Clinic/Hospital/Diagnostics):</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname" required>
+                </div>
+                <div class="form-group">
+                    <label for="mobile">mobile:</label>
+                    <input type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="remember"> By Signing Up I accept All Terms &amp; Conditions</label>
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Enter OTP</h3>
+                <p>OTP has sent to Mobile No and/or email ID </p>
+                <div class="form-group">
+                    <label for="otp">Enter OTP</label>
+                    <input type="text" class="form-control" id="otp" placeholder="Enter OTP" name="otp">
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Set Password</h3>
+                <p>Setup your password </p>
+                <div class="form-group">
+                    <label for="enc_password">Enter New password</label>
+                    <input type="text" class="form-control" id="enc_password" placeholder="Enter enc_password" name="enc_password">
+                </div>
+                <div class="form-group">
+                    <label for="re_enc_password">Re-Enter Password</label>
+                    <input type="text" class="form-control" id="re_enc_password" placeholder="Enter re_enc_password" name="re_enc_password">
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>On Successful verification of Otp &amp; Password </h3>
+                <div class="form-group">
+                    <label for="firstname">Full Name (Clinic/Hospital/Diagnostics):</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
+                </div>
+                <div class="form-group">
+                    <label for="mobile">mobile:</label>
+                    <input type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="image">Upload Photo:</label>
+                    <input type="file" class="form-control" id="image" placeholder="Upload image" name="image">
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Contact Details</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div class="tile pt-inner">
-                            <div class="pti-header bg-amber">
-                                <h2>Rs.1500/- <small>| Year</small></h2>
-                                <div class="ptih-title">Silver Plan</div>
+                        <h3>Use My current Location</h3>
+                        <button id="find_btn" class="btn btn-default">Get My Current Location</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>Point Location from Map</h3>
+                        <div class="row" data-example>
+                            <div class="form-group">
+                                <input class="placepicker form-control" data-map-container-id="collapseOne" />
                             </div>
-                            <div class="pti-body">
-                                <div class="ptib-item">
-                                    AD MyClinic Software License – 1 Year
-                                </div>
-                                <div class="ptib-item">
-                                    No. of New Registrations/Patients – 10
-                                </div>
-                                <div class="ptib-item">
-                                    Additional Benefits – Advertisements worth INR 1000/- free
-                                </div>
-                                <div class="ptib-item">
-                                    Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                </div>
-                                <p>Terms of Plan</p>
-                                <div class="ptib-item">
-                                    Minimum Discount for New Registrations – 50%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    AD Referral Share on Subsequent Consultations – 10%
-                                </div>
-                                <p>How This Plan Works? </p>
-                                <div class="ptib-item">
-                                    Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                </div>
-                                <p>What Else Do You Get? </p>
-                                <div class="ptib-item">
-                                    Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                </div>
-                            </div>
-                            <div class="pti-footer">
-                                <button type="submit" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
+                            <div id="collapseOne" class="collapse">
+                                <div class="placepicker-map thumbnail"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <div class="tile pt-inner">
-                            <div class="pti-header bg-green">
-                                <h2>Rs. 2500/- <small>| Year</small></h2>
-                                <div class="ptih-title">Gold Plan</div>
-                            </div>
-                            <div class="pti-body">
-                                <div class="ptib-item">
-                                    AD MyClinic Software License – 1 Year
-                                </div>
-                                <div class="ptib-item">
-                                    No. of New Registrations/Patients – 10
-                                </div>
-                                <div class="ptib-item">
-                                    Additional Benefits – Advertisements worth INR 1000/- free
-                                </div>
-                                <div class="ptib-item">
-                                    Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                </div>
-                                <p>Terms of Plan</p>
-                                <div class="ptib-item">
-                                    Minimum Discount for New Registrations – 50%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    AD Referral Share on Subsequent Consultations – 10%
-                                </div>
-                                <p>How This Plan Works? </p>
-                                <div class="ptib-item">
-                                    Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                </div>
-                                <p>What Else Do You Get? </p>
-                                <div class="ptib-item">
-                                    Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                </div>
-                            </div>
-                            <div class="pti-footer">
-                                <button type="submit" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="tile pt-inner">
-                            <div class="pti-header bg-cyan">
-                                <h2>Rs. 5000/- <small>| Year</small></h2>
-                                <div class="ptih-title">Titanium Plan</div>
-                            </div>
-                            <div class="pti-body">
-                                <div class="ptib-item">
-                                    AD MyClinic Software License – 1 Year
-                                </div>
-                                <div class="ptib-item">
-                                    No. of New Registrations/Patients – 10
-                                </div>
-                                <div class="ptib-item">
-                                    Additional Benefits – Advertisements worth INR 1000/- free
-                                </div>
-                                <div class="ptib-item">
-                                    Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                </div>
-                                <p>Terms of Plan</p>
-                                <div class="ptib-item">
-                                    Minimum Discount for New Registrations – 50%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    AD Referral Share on Subsequent Consultations – 10%
-                                </div>
-                                <p>How This Plan Works? </p>
-                                <div class="ptib-item">
-                                    Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                </div>
-                                <p>What Else Do You Get? </p>
-                                <div class="ptib-item">
-                                    Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                </div>
-                            </div>
-                            <div class="pti-footer">
-                                <button type="submit" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
+                        <h3>Enter Address Manually</h3>
+                        <div data-example>
+                            <div class="form-group">
+                                <input class="placepicker form-control" placeholder="Enter a location" data-latitude-input="#latitude" data-longitude-input="#longitude" />
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Plans </h3>
-        <p>Group II (Eye, Dental, Physiotherapy and Alternative Medicine)</p>
-            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-            <div class="container bootstrap snippet">
+                <div class="form-group">
+                    <div id="result"></div>
+                </div>
+                <div class="form-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" class="form-control" id="latitude" placeholder="Enter latitude" name="latitude">
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" class="form-control" id="longitude" placeholder="Enter longitude" name="longitude">
+                </div>
+                <div class="form-group">
+                    <label for="image">Upload Photos</label>
+                    <input type="file" class="form-control" id="image" placeholder="Upload image" name="image" multiple="true">
+                </div>
+                <div class="form-group">
+                    <label for="contactperson">Contact Person</label>
+                    <input type="text" class="form-control" id="contactperson" placeholder="Enter Fullname" name="contactperson">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone No</label>
+                    <input type="text" class="form-control" id="phone" placeholder="Enter Fullname" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="fax">fax </label>
+                    <input type="text" class="form-control" id="fax" placeholder="Enter Fullname" name="fax">
+                </div>
+                <div class="form-group">
+                    <label for="establishedyear">Year of Establishment </label>
+                    <input type="text" class="form-control" id="establishedyear" placeholder="Enter Year" name="establishedyear">
+                </div>
+                <div class="form-group">
+                    <label for="beds">No of Beds </label>
+                    <input type="text" class="form-control" id="beds" placeholder="Enter Year" name="beds">
+                </div>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="tile pt-inner">
-                            <div class="pti-header bg-amber">
-                                <h2>Rs.1500/- <small>| Year</small></h2>
-                                <div class="ptih-title">Silver Plan</div>
-                            </div>
-                            <div class="pti-body">
-                                <div class="ptib-item">
-                                    AD MyClinic Software License – 1 Year
-                                </div>
-                                <div class="ptib-item">
-                                    No. of New Registrations/Patients – 10
-                                </div>
-                                <div class="ptib-item">
-                                    Additional Benefits – Advertisements worth INR 1000/- free
-                                </div>
-                                <div class="ptib-item">
-                                    Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                </div>
-                                <p>Terms of Plan</p>
-                                <div class="ptib-item">
-                                    Minimum Discount for New Registrations – 50%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    AD Referral Share on Subsequent Consultations – 10%
-                                </div>
-                                <p>How This Plan Works? </p>
-                                <div class="ptib-item">
-                                    Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                </div>
-                                <p>What Else Do You Get? </p>
-                                <div class="ptib-item">
-                                    Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                </div>
-                            </div>
-                            <div class="pti-footer">
-                                <button type="submit" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
-                            </div>
-                        </div>
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Adding a Branch</h3>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default">Add a Branch</button>
+                </div>
+                <p>Onclick add a branch repeat the Step4 Pass is_branch =1 and under_healthproviders_id = healthproviders_id registered</p>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Specialities Available:</h3>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Anaesthesiology &amp; Emergency Medicine" name="speciality_id[]">Anaesthesiology &amp; Emergency Medicine
                     </div>
-                    <div class="col-sm-4">
-                        <div class="tile pt-inner">
-                            <div class="pti-header bg-green">
-                                <h2>Rs. 2500/- <small>| Year</small></h2>
-                                <div class="ptih-title">Gold Plan</div>
-                            </div>
-                            <div class="pti-body">
-                                <div class="ptib-item">
-                                    AD MyClinic Software License – 1 Year
-                                </div>
-                                <div class="ptib-item">
-                                    No. of New Registrations/Patients – 10
-                                </div>
-                                <div class="ptib-item">
-                                    Additional Benefits – Advertisements worth INR 1000/- free
-                                </div>
-                                <div class="ptib-item">
-                                    Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                </div>
-                                <p>Terms of Plan</p>
-                                <div class="ptib-item">
-                                    Minimum Discount for New Registrations – 50%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    AD Referral Share on Subsequent Consultations – 10%
-                                </div>
-                                <p>How This Plan Works? </p>
-                                <div class="ptib-item">
-                                    Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                </div>
-                                <p>What Else Do You Get? </p>
-                                <div class="ptib-item">
-                                    Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                </div>
-                            </div>
-                            <div class="pti-footer">
-                                <button type="submit" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
-                            </div>
-                        </div>
+                    </label>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Ayurvedic" name="speciality_id[]">Ayurvedic
+                        </label>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="tile pt-inner">
-                            <div class="pti-header bg-cyan">
-                                <h2>Rs. 5000/- <small>| Year</small></h2>
-                                <div class="ptih-title">Titanium Plan</div>
-                            </div>
-                            <div class="pti-body">
-                                <div class="ptib-item">
-                                    AD MyClinic Software License – 1 Year
-                                </div>
-                                <div class="ptib-item">
-                                    No. of New Registrations/Patients – 10
-                                </div>
-                                <div class="ptib-item">
-                                    Additional Benefits – Advertisements worth INR 1000/- free
-                                </div>
-                                <div class="ptib-item">
-                                    Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                </div>
-                                <p>Terms of Plan</p>
-                                <div class="ptib-item">
-                                    Minimum Discount for New Registrations – 50%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    Minimum Discount for Revisiting Patients – 10%
-                                </div>
-                                <div class="ptib-item">
-                                    AD Referral Share on Subsequent Consultations – 10%
-                                </div>
-                                <p>How This Plan Works? </p>
-                                <div class="ptib-item">
-                                    Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                </div>
-                                <p>What Else Do You Get? </p>
-                                <div class="ptib-item">
-                                    Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                </div>
-                            </div>
-                            <div class="pti-footer">
-                                <button type="submit" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
-                            </div>
-                        </div>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Cardio Thorasic Surgery" name="speciality_id[]">Cardio Thorasic Surgery
+                    </div>
+                    </label>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Cochlar Implant Surgery" name="speciality_id[]">Cochlar Implant Surgery
+                    </div>
+                    </label>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Cardiology" name="speciality_id[]">Cardiology
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Cosmetology - Beutycare" name="speciality_id[]">Cosmetology - Beutycare
+                    </div>
+                    </label>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Dermatology - Skincare" name="speciality_id[]">Dermatology - Skincare
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="Diet &amp; Nutrition" name="speciality_id[]">Diet &amp; Nutrition
+                        </label>
                     </div>
                 </div>
-            </div>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Instant Registration</h3>
-            <div class="form-group">
-                <label for="email">User Type:</label>
-                <select class="form-control" id="role_id" name="role_id">
-                    <option disabled="" selected="">Select User Type</option>
-                    <option>Clinic</option>
-                    <option>Hospital</option>
-                    <option>Diagnostic Center</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="firstname">Full Name (Clinic/Hospital/Diagnostics):</label>
-                <input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
-            </div>
-            <div class="form-group">
-                <label for="mobile">mobile:</label>
-                <input type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="remember"> By Signing Up I accept All Terms &amp; Conditions</label>
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Enter OTP</h3>
-        <p>OTP has sent to Mobile No and/or email ID </p>
-            <div class="form-group">
-                <label for="otp">Enter OTP</label>
-                <input type="text" class="form-control" id="otp" placeholder="Enter OTP" name="otp">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Set Password</h3>
-        <p>Setup your password </p>
-            <div class="form-group">
-                <label for="enc_password">Enter New password</label>
-                <input type="text" class="form-control" id="enc_password" placeholder="Enter enc_password" name="enc_password">
-            </div>
-            <div class="form-group">
-                <label for="re_enc_password">Re-Enter Password</label>
-                <input type="text" class="form-control" id="re_enc_password" placeholder="Enter re_enc_password" name="re_enc_password">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>On Successful verification of Otp &amp; Password </h3>
-            <div class="form-group">
-                <label for="firstname">Full Name (Clinic/Hospital/Diagnostics):</label>
-                <input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
-            </div>
-            <div class="form-group">
-                <label for="mobile">mobile:</label>
-                <input type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-            </div>
-            <div class="form-group">
-                <label for="image">Upload Photo:</label>
-                <input type="file" class="form-control" id="image" placeholder="Upload image" name="image">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Contact Details</h3>
-        <div class="row">
-            <div class="col-sm-4">
-                <h3>Use My current Location</h3>
-                <button id="find_btn" class="btn btn-default">Get My Current Location</button>
-            </div>
-            <div class="col-sm-4">
-                <h3>Point Location from Map</h3>
-                <div class="row" data-example>
-                        <div class="form-group">
-                            <input class="placepicker form-control" data-map-container-id="collapseOne" />
-                        </div>
-                        <div id="collapseOne" class="collapse">
-                            <div class="placepicker-map thumbnail"></div>
-                        </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <h3>Enter Address Manually</h3>
-                <div data-example>
-                    <div class="form-group">
-                        <input class="placepicker form-control" placeholder="Enter a location" data-latitude-input="#latitude" data-longitude-input="#longitude" />
-                    </div>
-                </div>
-            </div>
-        </div>
-            <div class="form-group">
-                <div id="result"></div>
-            </div>
-            <div class="form-group">
-                <label for="latitude">Latitude:</label>
-                <input type="text" class="form-control" id="latitude" placeholder="Enter latitude" name="latitude">
-            </div>
-            <div class="form-group">
-                <label for="longitude">Longitude:</label>
-                <input type="text" class="form-control" id="longitude" placeholder="Enter longitude" name="longitude">
-            </div>
-            <div class="form-group">
-                <label for="image">Upload Photos Use any multi upload plugin:</label>
-                <input type="file" class="form-control" id="image" placeholder="Upload image" name="image">
-            </div>
-            <div class="form-group">
-                <label for="contactperson">Contact Person</label>
-                <input type="text" class="form-control" id="contactperson" placeholder="Enter Fullname" name="contactperson">
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone No</label>
-                <input type="text" class="form-control" id="phone" placeholder="Enter Fullname" name="phone">
-            </div>
-            <div class="form-group">
-                <label for="fax">fax </label>
-                <input type="text" class="form-control" id="fax" placeholder="Enter Fullname" name="fax">
-            </div>
-            <div class="form-group">
-                <label for="establishedyear">Year of Establishment </label>
-                <input type="text" class="form-control" id="establishedyear" placeholder="Enter Year" name="establishedyear">
-            </div>
-            <div class="form-group">
-                <label for="beds">No of Beds </label>
-                <input type="text" class="form-control" id="beds" placeholder="Enter Year" name="beds">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Adding a Branch</h3>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Add a Branch</button>
-            </div>
-            <p>Onclick add a branch repeat the Step4 Pass is_branch =1 and under_healthproviders_id = healthproviders_id registered</p>
-    <div class="row"><hr></div>
-    </section>
-    <section class="container" data="1">
-        <h3>Specialities Available:</h3>
-            <div class="form-group">
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Anaesthesiology &amp; Emergency Medicine" name="speciality_id[]">Anaesthesiology &amp; Emergency Medicine
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Ayurvedic" name="speciality_id[]">Ayurvedic
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Cardio Thorasic Surgery" name="speciality_id[]">Cardio Thorasic Surgery
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Cochlar Implant Surgery" name="speciality_id[]">Cochlar Implant Surgery
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Cardiology" name="speciality_id[]">Cardiology
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Cosmetology - Beutycare" name="speciality_id[]">Cosmetology - Beutycare
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Dermatology - Skincare" name="speciality_id[]">Dermatology - Skincare
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="Diet &amp; Nutrition" name="speciality_id[]">Diet &amp; Nutrition
-                </label>
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </section>
-        <div class="row"></div>
-        <section class="container" data="1">
-            <h3>Facilities/Services Available:</h3>
+            </section>
+            <div class="row"></div>
+            <section class="container">
+                <h3>Facilities/Services Available:</h3>
                 <p></p>
                 <div class="form-group">
                     <div class="checkbox">
@@ -582,11 +636,10 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-        </section>
-        <div class="row"></div>
-        <section class="container" data="1">
-            <h3>Configure Offerings to AAAD Health Seekers</h3>
+            </section>
+            <div class="row"></div>
+            <section class="container">
+                <h3>Configure Offerings to AAAD Health Seekers</h3>
                 <div class="form-group">
                     <label for="facilities_services_id">Out-Patient Services:</label>
                     <input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
@@ -616,12 +669,11 @@
                     <label for="facilities_services_id">Speciality Discount</label>
                     <input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
                 </div>
-                <button type="submit" class="btn btn-default">Add More Speciality Discounts</button>
-                <button type="submit" class="btn btn-default">Submit</button>
-        </section>
-        <div class="row"></div>
-        <section class="container" data="1">
-            <h3>Share on AAD Special Health Checks to AAD </h3>
+                <button type="button" class="btn btn-default">Add More Speciality Discounts</button>
+            </section>
+            <div class="row"></div>
+            <section class="container">
+                <h3>Share on AAD Special Health Checks to AAD </h3>
                 <div class="form-group">
                     <label for="healthcheck">healthcheck Package Name:</label>
                     <input type="text" class="form-control" id="healthcheck" placeholder="Enter healthcheck Package Name" name="healthcheck">
@@ -655,11 +707,14 @@
                     <label for="facilities_services_id">Lab Services</label>
                     <input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
                 </div>
-                <button type="submit" class="btn btn-default">Add more Special Health Checks to AAD </button>
-                <button type="submit" class="btn btn-default">Submit</button>
-        <div class="row"><hr></div>
-        </section>
-    </form>
+                <button type="button" class="btn btn-default">Add more Special Health Checks to AAD </button>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+        </form>
     </div>
-    </body>
+    <script src="main.js"></script>
+</body>
+
 </html>
