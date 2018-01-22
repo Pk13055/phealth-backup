@@ -13,12 +13,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsVE0g9J5rYRh43rWyHc6NOHA8ERPCFOE&amp;sensor=true&amp;libraries=places">
+
+
     </script>
     <script src="jquery.placepicker.js"></script>
     <script src="functionality.js"></script>
     <script>
-    let sections = ["plans", "instant_registration", "otp", "password", "verification",
-        "contact_details", "adding_branch", "specialities", "facilities", "offerings", "special_checks"
+    let sections = ["instant_registration", "otp", "password", "verification",
+        "contact_details", "adding_branch", "specialities", "facilities", "offerings", "special_checks", "plans"
     ];
     $(document).ready(function() {
         sectionNav(sections);
@@ -34,321 +36,6 @@
             <h1>Health Provider Registration</h1>
         </div>
         <form id="main-form" enctype="multipart/form-data">
-            <section class="container">
-                <h3>Plans </h3>
-                <div class="row group_toggles">
-                    <button type="button" class="col-xs-6 btn btn-primary btn-lg btn-block" section="0">
-                        Group I
-                        <div class="hidden-xs">(All <em>except</em> Eye, Dental, Physiotherapy &amp; <em>alternative</em> Medicine)</div>
-                    </button>
-                    <button type="button" class="col-xs-6 btn btn-success btn-lg btn-block" section="1">
-                        Group II
-                        <div class="hidden-xs">(Eye, Dental, Physiotherapy and Alternative Medicine)</div>
-                    </button>
-                </div>
-                <div class="row">
-                    <hr>
-                </div>
-                <div class="group-0 package_groups">
-                    <div class="container snippet">
-                        <div class="row">
-                            <h4>Group I</h4>
-                            <p class="lead visible-xs">(All <em>except</em> Eye, Dental, Physiotherapy &amp; <em>alternative</em> Medicine)</p>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="tile pt-inner">
-                                    <div class="pti-header bg-amber">
-                                        <h2>Rs.1500/- <small>| Year</small></h2>
-                                        <div class="ptih-title">Silver Plan</div>
-                                    </div>
-                                    <div class="pti-body">
-                                        <div class="ptib-item">
-                                            AD MyClinic Software License – 1 Year
-                                        </div>
-                                        <div class="ptib-item">
-                                            No. of New Registrations/Patients – 10
-                                        </div>
-                                        <div class="ptib-item">
-                                            Additional Benefits – Advertisements worth INR 1000/- free
-                                        </div>
-                                        <div class="ptib-item">
-                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                        </div>
-                                        <p>Terms of Plan</p>
-                                        <div class="ptib-item">
-                                            Minimum Discount for New Registrations – 50%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            AD Referral Share on Subsequent Consultations – 10%
-                                        </div>
-                                        <p>How This Plan Works? </p>
-                                        <div class="ptib-item">
-                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                        </div>
-                                        <p>What Else Do You Get? </p>
-                                        <div class="ptib-item">
-                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                        </div>
-                                    </div>
-                                    <div class="pti-footer">
-                                        <button type="button" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="tile pt-inner">
-                                    <div class="pti-header bg-green">
-                                        <h2>Rs. 2500/- <small>| Year</small></h2>
-                                        <div class="ptih-title">Gold Plan</div>
-                                    </div>
-                                    <div class="pti-body">
-                                        <div class="ptib-item">
-                                            AD MyClinic Software License – 1 Year
-                                        </div>
-                                        <div class="ptib-item">
-                                            No. of New Registrations/Patients – 10
-                                        </div>
-                                        <div class="ptib-item">
-                                            Additional Benefits – Advertisements worth INR 1000/- free
-                                        </div>
-                                        <div class="ptib-item">
-                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                        </div>
-                                        <p>Terms of Plan</p>
-                                        <div class="ptib-item">
-                                            Minimum Discount for New Registrations – 50%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            AD Referral Share on Subsequent Consultations – 10%
-                                        </div>
-                                        <p>How This Plan Works? </p>
-                                        <div class="ptib-item">
-                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                        </div>
-                                        <p>What Else Do You Get? </p>
-                                        <div class="ptib-item">
-                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                        </div>
-                                    </div>
-                                    <div class="pti-footer">
-                                        <button type="button" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="tile pt-inner">
-                                    <div class="pti-header bg-cyan">
-                                        <h2>Rs. 5000/- <small>| Year</small></h2>
-                                        <div class="ptih-title">Titanium Plan</div>
-                                    </div>
-                                    <div class="pti-body">
-                                        <div class="ptib-item">
-                                            AD MyClinic Software License – 1 Year
-                                        </div>
-                                        <div class="ptib-item">
-                                            No. of New Registrations/Patients – 10
-                                        </div>
-                                        <div class="ptib-item">
-                                            Additional Benefits – Advertisements worth INR 1000/- free
-                                        </div>
-                                        <div class="ptib-item">
-                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                        </div>
-                                        <p>Terms of Plan</p>
-                                        <div class="ptib-item">
-                                            Minimum Discount for New Registrations – 50%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            AD Referral Share on Subsequent Consultations – 10%
-                                        </div>
-                                        <p>How This Plan Works? </p>
-                                        <div class="ptib-item">
-                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                        </div>
-                                        <p>What Else Do You Get? </p>
-                                        <div class="ptib-item">
-                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                        </div>
-                                    </div>
-                                    <div class="pti-footer">
-                                        <button type="button" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="group-1 package_groups">
-                    <div class="container snippet">
-                        <div class="row">
-                            <h4>Group II</h4>
-                            <p class="lead visible-xs">(Eye, Dental, Physiotherapy and Alternative Medicine)</p>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="tile pt-inner">
-                                    <div class="pti-header bg-amber">
-                                        <h2>Rs.1500/- <small>| Year</small></h2>
-                                        <div class="ptih-title">Silver Plan</div>
-                                    </div>
-                                    <div class="pti-body">
-                                        <div class="ptib-item">
-                                            AD MyClinic Software License – 1 Year
-                                        </div>
-                                        <div class="ptib-item">
-                                            No. of New Registrations/Patients – 10
-                                        </div>
-                                        <div class="ptib-item">
-                                            Additional Benefits – Advertisements worth INR 1000/- free
-                                        </div>
-                                        <div class="ptib-item">
-                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                        </div>
-                                        <p>Terms of Plan</p>
-                                        <div class="ptib-item">
-                                            Minimum Discount for New Registrations – 50%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            AD Referral Share on Subsequent Consultations – 10%
-                                        </div>
-                                        <p>How This Plan Works? </p>
-                                        <div class="ptib-item">
-                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                        </div>
-                                        <p>What Else Do You Get? </p>
-                                        <div class="ptib-item">
-                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                        </div>
-                                    </div>
-                                    <div class="pti-footer">
-                                        <button type="button" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="tile pt-inner">
-                                    <div class="pti-header bg-green">
-                                        <h2>Rs. 2500/- <small>| Year</small></h2>
-                                        <div class="ptih-title">Gold Plan</div>
-                                    </div>
-                                    <div class="pti-body">
-                                        <div class="ptib-item">
-                                            AD MyClinic Software License – 1 Year
-                                        </div>
-                                        <div class="ptib-item">
-                                            No. of New Registrations/Patients – 10
-                                        </div>
-                                        <div class="ptib-item">
-                                            Additional Benefits – Advertisements worth INR 1000/- free
-                                        </div>
-                                        <div class="ptib-item">
-                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                        </div>
-                                        <p>Terms of Plan</p>
-                                        <div class="ptib-item">
-                                            Minimum Discount for New Registrations – 50%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            AD Referral Share on Subsequent Consultations – 10%
-                                        </div>
-                                        <p>How This Plan Works? </p>
-                                        <div class="ptib-item">
-                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                        </div>
-                                        <p>What Else Do You Get? </p>
-                                        <div class="ptib-item">
-                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                        </div>
-                                    </div>
-                                    <div class="pti-footer">
-                                        <button type="button" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="tile pt-inner">
-                                    <div class="pti-header bg-cyan">
-                                        <h2>Rs. 5000/- <small>| Year</small></h2>
-                                        <div class="ptih-title">Titanium Plan</div>
-                                    </div>
-                                    <div class="pti-body">
-                                        <div class="ptib-item">
-                                            AD MyClinic Software License – 1 Year
-                                        </div>
-                                        <div class="ptib-item">
-                                            No. of New Registrations/Patients – 10
-                                        </div>
-                                        <div class="ptib-item">
-                                            Additional Benefits – Advertisements worth INR 1000/- free
-                                        </div>
-                                        <div class="ptib-item">
-                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
-                                        </div>
-                                        <p>Terms of Plan</p>
-                                        <div class="ptib-item">
-                                            Minimum Discount for New Registrations – 50%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            Minimum Discount for Revisiting Patients – 10%
-                                        </div>
-                                        <div class="ptib-item">
-                                            AD Referral Share on Subsequent Consultations – 10%
-                                        </div>
-                                        <p>How This Plan Works? </p>
-                                        <div class="ptib-item">
-                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
-                                        </div>
-                                        <p>What Else Do You Get? </p>
-                                        <div class="ptib-item">
-                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
-                                        </div>
-                                    </div>
-                                    <div class="pti-footer">
-                                        <button type="button" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <hr>
-                </div>
-            </section>
             <section class="container">
                 <h3>Instant Registration</h3>
                 <div class="form-group">
@@ -708,6 +395,321 @@
                     <input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
                 </div>
                 <button type="button" class="btn btn-default">Add more Special Health Checks to AAD </button>
+                <div class="row">
+                    <hr>
+                </div>
+            </section>
+            <section class="container">
+                <h3>Plans </h3>
+                <div class="row group_toggles">
+                    <button type="button" class="col-xs-6 btn btn-primary btn-lg btn-block" section="0">
+                        Group I
+                        <div class="hidden-xs">(All <em>except</em> Eye, Dental, Physiotherapy &amp; <em>alternative</em> Medicine)</div>
+                    </button>
+                    <button type="button" class="col-xs-6 btn btn-success btn-lg btn-block" section="1">
+                        Group II
+                        <div class="hidden-xs">(Eye, Dental, Physiotherapy and Alternative Medicine)</div>
+                    </button>
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+                <div class="group-0 package_groups">
+                    <div class="container snippet">
+                        <div class="row">
+                            <h4>Group I</h4>
+                            <p class="lead visible-xs">(All <em>except</em> Eye, Dental, Physiotherapy &amp; <em>alternative</em> Medicine)</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-amber">
+                                        <h2>Rs.1500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Silver Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-green">
+                                        <h2>Rs. 2500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Gold Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-cyan">
+                                        <h2>Rs. 5000/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Titanium Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-1 package_groups">
+                    <div class="container snippet">
+                        <div class="row">
+                            <h4>Group II</h4>
+                            <p class="lead visible-xs">(Eye, Dental, Physiotherapy and Alternative Medicine)</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-amber">
+                                        <h2>Rs.1500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Silver Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-amber">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-green">
+                                        <h2>Rs. 2500/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Gold Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-green">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="tile pt-inner">
+                                    <div class="pti-header bg-cyan">
+                                        <h2>Rs. 5000/- <small>| Year</small></h2>
+                                        <div class="ptih-title">Titanium Plan</div>
+                                    </div>
+                                    <div class="pti-body">
+                                        <div class="ptib-item">
+                                            AD MyClinic Software License – 1 Year
+                                        </div>
+                                        <div class="ptib-item">
+                                            No. of New Registrations/Patients – 10
+                                        </div>
+                                        <div class="ptib-item">
+                                            Additional Benefits – Advertisements worth INR 1000/- free
+                                        </div>
+                                        <div class="ptib-item">
+                                            Discounts – 5% discount on AD Advertisement packages for 1 Year
+                                        </div>
+                                        <p>Terms of Plan</p>
+                                        <div class="ptib-item">
+                                            Minimum Discount for New Registrations – 50%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            Minimum Discount for Revisiting Patients – 10%
+                                        </div>
+                                        <div class="ptib-item">
+                                            AD Referral Share on Subsequent Consultations – 10%
+                                        </div>
+                                        <p>How This Plan Works? </p>
+                                        <div class="ptib-item">
+                                            Doctors registering under the Silver Plan shall be required to pay INR 1500/- as the Plan fee. Once this fee is paid, the doctor shall be able to secure 10 new patients. For each new registration, the doctor shall be providing a minimum of 50% discount to the patient. For every subsequent visit of a registered patient, the doctor shall be providing a minimum of 10% discount to the patient. Also in the event of a revisiting patient, the doctor shall be paying 10% of the appointment fee as referral amount to AarogyaData.
+                                        </div>
+                                        <p>What Else Do You Get? </p>
+                                        <div class="ptib-item">
+                                            Apart from the regular flow of new patients along with follow-up visits of the already registered ones, you will be able to put up advertisements worth INR 1000/- on AD site. You can also opt for a preferred advertisement package for displaying your ad on AarogyaData site for 1 year and avail a discount of 5% on the package chosen.
+                                        </div>
+                                    </div>
+                                    <div class="pti-footer">
+                                        <button type="button" name="plans_id" value="plans_id" class="bg-cyan">Select Plan <i class="fa fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <hr>
                 </div>

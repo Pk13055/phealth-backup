@@ -2,7 +2,7 @@
 
 // previous next buttons to be appended
 var navButtons = (sections) => {
-    let $row = $("<div>", { 'class': "row" }),
+    let $row = $("<div>", { 'class': "row center-block" }),
         icons = {
             'previous_section': $("<i>", { 'class': "fa fa-lg fa-chevron-left" }),
             'next_section': $("<i>", { 'class': "fa fa-lg fa-chevron-right" })
@@ -10,15 +10,15 @@ var navButtons = (sections) => {
     ["previous_section", "next_section"].forEach(function(ele) {
         if (sections[ele])
             $row.append($("<div>", {
-                'class': "col-xs-12 col-md-6"
+                'class': "col-xs-12 col-md-6 text-center"
             }).append($("<button>", {
-                'class': "btn btn-default " + ((ele == "next_section")? "validate_current": ""),
+                'class': "btn btn-default btn-block nav-btns " + ((ele == "next_section") ? "validate_current" : ""),
                 'type': "button",
             }).on('click', function() {
                 let status = true;
                 // validate current before moving onto the next
-                if(ele == "next_section") status = validateCurrent(sections.current_section);
-                if(status) {
+                if (ele == "next_section") status = validateCurrent(sections.current_section);
+                if (status) {
                     $("section." + sections.current_section).hide();
                     $("section." + sections[ele]).fadeIn();
                 }
