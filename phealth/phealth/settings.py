@@ -25,7 +25,12 @@ SECRET_KEY = '0)nrv2o5!@167l-!0jzp9m3ry5m3(3#y40!mq#+cbznkpc(1e6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "ec2-13-127-28-19.ap-south-1.compute.amazonaws.com",
+    "ec2-35-154-57-53.ap-south-1.compute.amazonaws.com",
+]
 
 
 # Application definition
@@ -37,10 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'dry_rest_permissions',
     'drf_generators',
-    'api'
+    'api',
+
+    'sponsor',
+    'clinician',
+    'healthprovider',
 ]
 
 REST_FRAMEWORK = {
@@ -65,6 +75,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'phealth.urls'
 
+
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#             'django.core.context_processors.static',
+# )
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -82,6 +97,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'phealth.wsgi.application'
 
@@ -145,8 +161,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATIC_URL = '/static/'
+
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
 ]
-
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

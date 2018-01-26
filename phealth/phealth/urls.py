@@ -19,14 +19,10 @@ from django.conf.urls import include, url
 
 from .api import router as api
 
-from .clinician import urlpatterns as clinician_urls
-from .healthprovider import urlpatterns as healthprovider_urls
-from .sponsor import urlpatterns as sponsor_urls
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/', include(api.urls)),
-    url(r'^clinician/', include(clinician_urls)),
-    url(r'^healthprovider/', include(healthprovider_urls)),
-    url(r'^sponsor/', include(sponsor_urls)),
+    url(r'^clinician/', include('clinician.urls')),
+    url(r'^healthprovider/', include('healthprovider.urls')),
+    url(r'^sponsor/', include('sponsor.urls')),
 ]

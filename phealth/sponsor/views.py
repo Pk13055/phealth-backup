@@ -3,5 +3,5 @@ from django.shortcuts import render
 # Create your views here.
 
 def SignUp(request):
-    return render(request, 'sponsor/index.html')
-    
+    return render(request, 'sponsor/registration.html.j2')
+
