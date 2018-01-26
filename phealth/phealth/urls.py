@@ -17,10 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import include, url
 
-from .api import router
+from .api import router as api
 
+from .clinician import urlpatterns as clinician_urls
+from .healthprovider import urlpatterns as healthprovider_urls
+from .sponsor import urlpatterns as sponsor_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include(api.urls)),
+    url(r'^clinician/', include(clinician_urls)),
+    url(r'^healthprovider/', include(healthprovider_urls)),
+    url(r'^sponsor/', include(sponsor_urls)),
 ]
