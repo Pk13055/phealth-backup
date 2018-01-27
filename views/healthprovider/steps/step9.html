@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Title of Form</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+
+    <div class="container">
+
+      <h3>Share on AAD Special Health Checks to AAD </h3>
+
+      <form action="">
+
+
+        <div class="form-group">
+          <label for="healthcheck">healthcheck Package Name:</label>
+          <input type="text" class="form-control" id="healthcheck" placeholder="Enter healthcheck Package Name" name="healthcheck">
+        </div>
+
+
+        <div class="form-group">
+          <label for="description">healthcheck Package description:</label>
+          <textarea class="form-control" id="description" placeholder="Enter healthcheck Package description" name="description" rows="4"></textarea>
+        </div>
+
+        <p>Service Includes </p>
+        <p>Select the tests that will be included in the package</p>
+      <div class="form-group">
+            <label class="checkbox-inline">
+                <input type="checkbox" value="Pathology" name="test_id">Pathology
+            </label>
+            
+            <label class="checkbox-inline">
+                <input type="checkbox" value="Microbiology" name="test_id">Microbiology
+            </label>
+            
+            <label class="checkbox-inline">
+                <input type="checkbox" value="Bio Chemistry" name="test_id">Bio Chemistry
+            </label>
+            
+           
+
+        </div>
+
+        <div class="form-group">
+          <label for="price">Ad Price</label>
+          <input type="number" class="form-control" id="price" placeholder="Enter Price" name="price">
+        </div>
+
+        <div class="form-group">
+          <label for="sharetoad">Share to AD</label>
+          <input type="number" class="form-control" id="sharetoad" placeholder="Enter Share to AD" name="sharetoad">
+        </div>
+
+        <div class="form-group">
+          <label for="facilities_services_id">Lab Services</label>
+          <input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+        </div>
+
+       
+        
+        <button type="submit" class="btn btn-default">Add more Special Health Checks to AAD </button>
+
+
+        
+        <button type="submit" class="btn btn-default">Submit</button>
+
+      </form>
+
+    </div>
+
+  </body>
+</html>
