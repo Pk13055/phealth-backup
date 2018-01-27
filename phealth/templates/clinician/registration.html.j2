@@ -1,6 +1,346 @@
 {% extends 'clinician/base.html.j2' %}
+{% load static %}
+{% block head %}
+<script src="{% static 'common/js/functionality.js' %}"></script>
+<script>
+let sections = ["personal_information", "professional_information", "education_trainings", "consultation_fee", "offerings", "conditions_treated", "experience", "awards_recognitions", "registrations", "memberships", "areas_of_interests"];
+$(document).ready(function() {
+	sectionNav(sections);
+	addSubmit(sections[sections.length - 1]);
+});
+</script>
+{% endblock %}
 {% block content %}
 <div class="row">
 	<h2>Clinician Registration</h2>
 </div>
+<form id="main-form" enctype="multipart/form-data">
+	<section class="container" data="1">
+		<h3>Personal Information</h3>
+		<div class="form-group">
+			<label for="firstname">Full Name </label>
+			<input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
+		</div>
+		<div class="form-group">
+			<label for="dob">DOB </label>
+			<input type="date" class="form-control" id="dob" name="dob">
+		</div>
+		<div class="form-group">
+			<label for="gender_id">Select Gender </label>
+			<select name="gender_id" class="form-control">
+				<option value="Select Gender">Select Gender</option>
+				<option value="1">Male</option>
+				<option value="2">Female</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="languages_id"> Select language</label>
+			<select name="languages_id" class="form-control">
+				<option value="1">English</option>
+				<option value="2">Telugu</option>
+				<option value="3">Hindi</option>
+			</select>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="2">
+		<h3>Professional Information</h3>
+		<div class="form-group">
+			<label for=" Speciality"> Speciality</label>
+			<select name="Obstetrician" class="form-control">
+				<option value="" disabled="" selected="">Select Speciality</option>
+				<option value="urologist">urologist</option>
+				<option value="Cardiologist">Cardiologist</option>
+				<option value="Dermatologist">Dermatologist</option>
+				<option value="Surgery">Surgery</option>
+				<option value="neurologist">neurologist</option>
+			</select>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="3">
+		<h3>Education &amp; Trainings</h3>
+		<div class="form-group">
+			<label for="qualification_id">Basic </label>
+			<select name="qualification_id[]" name="qualification_id[]" class="form-control">
+				<option value="Select from List">Select from List</option>
+				<option value="">10</option>
+				<option value="">10+2</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="qualification_id">Diploma </label>
+			<select name="qualification_id[]" id="qualification_id[]" class="form-control">
+				<option value="Select from List">Select from List</option>
+				<option value="">Diploma</option>
+				<option value="">Diploma List</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="qualification_id">Post Graduation </label>
+			<select name="qualification_id[]" id="qualification_id[]" class="form-control">
+				<option value="Select from List">Select from List</option>
+				<option value="">Pg</option>
+				<option value="">Pg list</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="qualification_id">Super Speciality </label>
+			<select name="qualification_id[]" id="qualification_id[]" class="form-control">
+				<option value="Select from List">Select from List</option>
+				<option value="">Speciality List</option>
+				<option value="">Speciality List</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="otherdegree">Others Degrees</label>
+			<input type="text" class="form-control" name="otherdegree" id="otherdegree">
+		</div>
+		<div class="form-group">
+			<label for="othertraining">Others Trainings</label>
+			<input type="text" class="form-control" name="othertraining" id="othertraining">
+		</div>
+		<div class="form-group">
+			<label for="Upload file">Upload Photo </label>
+			<input type="File" class="form-control" name="image" id="image">
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="4">
+		<h3>Consultation Fee</h3>
+		<div class="form-group">
+			<label for="consultationfee">Consultation Fee</label>
+			<input type="text" class="form-control" name="consultationfee" id="consultationfee">
+		</div>
+		<div class="form-group">
+			<label for="discount1st">Discount for 1st Consultation</label>
+			<input type="text" class="form-control" name="discount1st" id="discount1st">
+		</div>
+		<div class="form-group">
+			<label for="discountsubsequent">Discount for Subsequent Consultation</label>
+			<input type="text" class="form-control" name="discountsubsequent" id="discountsubsequent">
+		</div>
+		<div class="form-group">
+			<label for="activefrom">Active From</label>
+			<input type="date" class="form-control" name="activefrom" id="activefrom">
+		</div>
+		<div class="form-group">
+			<label for="activeto">Active To</label>
+			<input type="date" class="form-control" name="activeto" id="activeto">
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="5">
+		<h3>Offerings</h3>
+		<div class="checkbox">
+			<label class="checkbox">
+				<input type="checkbox" value="Anaesthesiology &amp; Emergency Medicine" name="speciality_id[]">Anaesthesiology &amp; Emergency Medicine
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Ayurvedic" name="speciality_id[]">Ayurvedic
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Cardio Thorasic Surgery" name="speciality_id[]">Cardio Thorasic Surgery
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Cochlar Implant Surgery" name="speciality_id[]">Cochlar Implant Surgery
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Cardiology" name="speciality_id[]">Cardiology
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Cosmetology - Beutycare" name="speciality_id[]">Cosmetology - Beutycare
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Dermatology - Skincare" name="speciality_id[]">Dermatology - Skincare
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" value="Diet &amp; Nutrition" name="speciality_id[]">Diet &amp; Nutrition
+			</label>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="6">
+		<h3>Conditions Treated</h3>
+		<p>Show all the symptoms based on the step4 selected speciality_id</p>
+		<div class="form-group">
+			<div class="row">
+				<label class="checkbox-inline">
+					<input type="checkbox" value="general" name="symptoms_id[]">general
+				</label>
+			</div>
+			<div class="row">
+				<label class="checkbox-inline">
+					<input type="checkbox" value="Symptoms list" name="symptoms_id[]">Symptoms list
+				</label>
+			</div>
+			<div class="row">
+				<label class="checkbox-inline">
+					<input type="checkbox" value="symptom2" name="symptoms_id[]">symptom2
+				</label>
+			</div>
+			<div class="row">
+				<label class="checkbox-inline">
+					<input type="checkbox" value="symptom3" name="symptoms_id[]">symptom3
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="7">
+		<h3>Procedures</h3>
+		<div class="form-group">
+			<div class="form-group">
+				<label for="Procedures / Surgeries Performed">Procedures / Surgeries Performed</label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="surgery_id[]" value="">Surgery1</label>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="surgery_id[]" value="">Surgery2</label>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="surgery_id[]" value="">Surgery3</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="8">
+		<h3>Experience</h3>
+		<div class="form-group">
+			<label for="institution">Institution </label>
+			<input type="text" class="form-control" name="institution" id="institution">
+		</div>
+		<div class="form-group">
+			<label for="designation_id">Designation </label>
+			<input type="text" class="form-control" name="designation_id" id="designation_id">
+		</div>
+		<p>Working Period</p>
+		<div class="form-group">
+			<label for="workfrom">From </label>
+			<input type="date" class="form-control" id="workfrom" name="workfrom">
+		</div>
+		<div class="form-group">
+			<label for="workto">To</label>
+			<input type="date" class="form-control" id="workto" name="workto">
+		</div>
+		<button type="button" class="btn btn-default">Add More</button>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="9">
+		<h3>Awards &amp; Recognitions</h3>
+		<div class="form-group">
+			<label for="award">Award/Recognistion </label>
+			<input type="text" class="form-control" name="award" id="award">
+		</div>
+		<div class="form-group">
+			<label for="recognisedby">Recognised By </label>
+			<input type="text" class="form-control" name="recognisedby" id="recognisedby">
+		</div>
+		<div class="form-group">
+			<label for="year_2">Year </label>
+			<input type="number" class="form-control" id="year_2" name="year_2">
+		</div>
+		<div class="form-group">
+			<label for="Upload">Upload</label>
+			<input type="file" class="form-control" name="upload" id="upload">
+		</div>
+		<button type="button" class="btn btn-default">Add More</button>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="10">
+		<h3>Registrations</h3>
+		<div class="form-group">
+			<label for="registeringauthority">Registering Authority </label>
+			<input type="text" class="form-control" name="registeringauthority" id="registeringauthority">
+		</div>
+		<div class="form-group">
+			<label for="registrationno">Registration Number </label>
+			<input type="text" class="form-control" name="registrationno" id="registrationno">
+		</div>
+		<div class="form-group">
+			<label for="year_2">Year </label>
+			<input type="number" class="form-control" id="year_2" name="year_2">
+		</div>
+		<div class="form-group">
+			<label for="Upload">Upload</label>
+			<input type="file" class="form-control" name="upload" id="upload">
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="11">
+		<h3>Memberships</h3>
+		<div class="form-group">
+			<label for="association">Name of the Association/Society </label>
+			<input type="text" class="form-control" name="association" id="association">
+		</div>
+		<div class="form-group">
+			<label for="country_id">Country </label>
+			<input type="text" class="form-control" name="country_id" id="country_id">
+		</div>
+		<div class="form-group">
+			<label for="city_id">City </label>
+			<input type="text" class="form-control" name="city_id" id="city_id">
+		</div>
+		<button type="button" class="btn btn-default">Add More</button>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+	<section class="container" data="12">
+		<h3>Area of Interests</h3>
+		<div class="form-group">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="Article" name="interest_id" id="interest_id">Article Writing</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="Health" name="interest_id" id="interest_id">Health Talks</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="Health" name="interest_id" id="interest_id">Health Camps - Social &amp; Corporate</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="Special" name="interest_id" id="interest_id">Special Camps - In-House (i)</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="Public" name="interest_id" id="interest_id">Public Health Awareness Campaigns</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="CME" name="interest_id" id="interest_id">CME's</label>
+			</div>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+	</section>
+</form>
 {% endblock %}

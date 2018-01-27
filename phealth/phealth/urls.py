@@ -21,7 +21,7 @@ from .api import router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^api/', include(api.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^clinician/', include('clinician.urls')),
     url(r'^healthprovider/', include('healthprovider.urls')),
     url(r'^sponsor/', include('sponsor.urls')),
