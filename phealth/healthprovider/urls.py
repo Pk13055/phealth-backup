@@ -4,5 +4,7 @@ from django.conf.urls import include, url
 from . import views
 
 urlpatterns = [
-    url(r'^signup/', views.SignUp),
+    url(r'^signup/?$', views.SignUp),
+    url(r'^signin/?$', views.SignIn)
 ]
+
