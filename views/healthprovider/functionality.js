@@ -40,6 +40,7 @@ var validateCurrent = (section) => {
 // the function wrapping the ajax for the overall registration
 var register = () => {
     console.log("Submit form for approval");
+<<<<<<< Updated upstream
     /*$.ajax({
         url: "#",
         method: "POST",
@@ -50,6 +51,20 @@ var register = () => {
 
         }
     });*/
+=======
+    e.preventDefault();
+    let fdata = new FormData($("#main-form")[0]);
+    for (var entry of fdata) {
+        console.log(entry);
+    }
+    $.ajax({
+      url: window.location.pathname,
+      type: 'POST',
+      data: fdata,
+      processData: false,
+      contentType: false
+    });
+>>>>>>> Stashed changes
 };
 
 // add submit button to final section
