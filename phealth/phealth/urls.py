@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^clinician/', include('clinician.urls')),
     url(r'^healthprovider/', include('healthprovider.urls')),
     url(r'^sponsor/', include('sponsor.urls')),
+    url(r'^auth/', include('authentication.urls')),
 ]
