@@ -34,6 +34,13 @@ var navButtons = (sections) => {
 // and perform any other tasks
 var validateCurrent = (section) => {
     console.log("Validating " + section);
+    let fields = [ "select", "textarea", "input", "button" ].map((e) => { return e + ":invalid"; });
+    if($("section." + section).find(fields.toString()).length) {
+        // trigger the submission
+        // will not work due to invalid fields being present on the page
+        $("button#submitBtn").click();
+        return false;
+    }
     return true;
 };
 
@@ -55,7 +62,7 @@ var register = () => {
 // add submit button to final section
 var addSubmit = (final_section) => {
     let $btn = $("<button>", {
-            'type': "button",
+            'type': "submit",
             'class': "btn btn-block btn-danger",
             'id': "submitBtn"
         }).text("Register")
@@ -78,3 +85,8 @@ var sectionNav = (sections) => {
         if (idx) $(this).hide();
     });
 }
+
+
+$(document).ready(function() {
+    $(document).find("form").on('submit', function(e) { e.preventDefault(); });
+});

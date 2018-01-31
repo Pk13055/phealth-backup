@@ -6,7 +6,9 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class Address(models.Model):
     address_id = models.AutoField(primary_key=True)
@@ -1009,9 +1011,10 @@ class TrxnPayments(models.Model):
 
 class Users(models.Model):
     users_id = models.AutoField(primary_key=True)
-    secretquestions = models.ForeignKey(Secretquestions, models.DO_NOTHING)
-    role = models.ForeignKey(Role, models.DO_NOTHING)
-    mobile = models.IntegerField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    secretquestions = models.ForeignKey(Secretquestions, models.DO_NOTHING, null=True)
+    role = models.ForeignKey(Role, models.DO_NOTHING, null=True)
+    mobile = models.IntegerField(null=True)
     email = models.CharField(max_length=225)
     firstname = models.CharField(max_length=225, blank=True, null=True)
     lastname = models.CharField(max_length=225, blank=True, null=True)
@@ -1030,8 +1033,17 @@ class Users(models.Model):
     macaddress = models.CharField(max_length=225, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users'
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Week(models.Model):
