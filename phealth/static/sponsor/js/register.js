@@ -15,9 +15,34 @@ $("#find_btn").click(function() { //user clicks button
 // Specific Section wise features
 let specificUI = () => {
 
+    console.log("specific UI trigger");
+
+    // send OTP section
+    $("section.instant_registration button.validate_current").on('click', () => {
+        let credentials = $("section.instant_registration")
+        .find("input#number, input#email").get()
+        .map((e) => { return $(e).val(); });
+        if(!$("section.instant_registration").find(":invalid").length)
+            sendOTP(credentials[0], credentials[1]);
+    });
+
+    // validate whether the correct OTP was sent or not
+    $("section.otp").find("input").on('input', function() {
+        let otp_val = $("section.otp").find("input").val(),
+        cook_otp = document.cookie.split(";").map((e) => {
+                return (e.split("=")[0] == " otp")? e.split("=")[1] : null;
+            }).filter((e) => { return e; })[0];
+        $(this)[0].setCustomValidity((otp_val !== cook_otp)? "OTPs don't match!" : "");
+    });
+
 };
 
 $(document).ready(function() {
+
+    $("form").on('submit', function(e) { e.preventDefault(); });
+    specificUI();
+
+    // MAP RELATED USAGE;
 
     // Basic usage
     $(".placepicker").placepicker();
@@ -36,7 +61,5 @@ $(document).ready(function() {
         }).data('placepicker');
     });
 
-    specificUI();
-    $("form").on('submit', function(e) { e.preventDefault(); });
 
 });

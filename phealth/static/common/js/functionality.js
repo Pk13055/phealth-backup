@@ -30,33 +30,68 @@ var navButtons = (sections) => {
     return $row;
 };
 
+
+// send the otp to the user and move to next step
+let sendOTP = (number, email) => {
+    let csrf_token = document.cookie.split(";")
+    .map((e) => {
+        return (e.split("=")[0] == "csrftoken")? e.split("=")[1] : null;
+    }).filter((e) => { return e; })[0];
+    console.log(csrf_token);
+    $.ajax({
+        'url' : "/auth/otp/",
+        'method' : "POST",
+        'headers' : {
+            'X-CSRFToken' : csrf_token
+        },
+        'data' : {
+            'email' : email,
+            'mobile' : number
+        },
+        'success' : function(response) {
+            console.log(response);
+        }
+    });
+
+};
+
 // function to validate current inputs
 // and perform any other tasks
-var validateCurrent = (section) => {
+var validateCurrent = (section, custom_validation = null) => {
     console.log("Validating " + section);
-    let fields = [ "select", "textarea", "input", "button" ].map((e) => { return e + ":invalid"; });
-    if($("section." + section).find(fields.toString()).length) {
+    if($("section." + section).find(":invalid").length) {
         // trigger the submission
         // will not work due to invalid fields being present on the page
         $("button#submitBtn").click();
         return false;
     }
-    return true;
+    return (custom_validation)? true && custom_validation() : true;
 };
 
 // the function wrapping the ajax for the overall registration
-var register = () => {
+var register = (section, btn) => {
     console.log("Submit form for approval");
-    /*$.ajax({
-        url: "#",
-        method: "POST",
-        data: {
-
-        },
-        success: function(response) {
-
-        }
-    });*/
+    let csrf_token = document.cookie.split(";")
+    .map((e) => {
+        return (e.split("=")[0] == "csrftoken")? e.split("=")[1] : null;
+    }).filter((e) => { return e; })[0];
+    if($(document).find("form")[0].checkValidity()) {
+        $(btn)[0].setCustomValidity("");
+        $.ajax({
+            url: window.location.pathname,
+            method: "POST",
+            headers: {
+                'X-CSRFToken' : csrf_token
+            },
+            processData: false,
+            contentType: false,
+            data: new FormData($(document).find("form")[0]),
+            success: function(response) {
+                console.log(response);
+            }
+        });
+    }
+    else $(btn)[0].setCustomValidity("Check last section!");
 };
 
 // add submit button to final section
@@ -66,7 +101,7 @@ var addSubmit = (final_section) => {
             'class': "btn btn-block btn-danger",
             'id': "submitBtn"
         }).text("Register")
-        .on('click', register);
+        .on('click', function() { register(final_section, this); });
     $("section." + final_section).append($("<div>", {
         'class': "row"
     }).append($("<hr>"), $btn));

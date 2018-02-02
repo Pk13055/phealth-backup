@@ -24,6 +24,16 @@ APPEND_SLASH = True
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# E-Mail settings
+
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_USER = 'rajesh@mbrinformatics.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Rajesh Rapally <rajesh@mbrinformatics.com>'
+
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",

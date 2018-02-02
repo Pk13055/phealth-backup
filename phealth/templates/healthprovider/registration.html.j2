@@ -31,19 +31,19 @@ $(document).ready(function() {
 		</div>
 		<div class="form-group">
 			<label for="firstname">Full Name (Clinic/Hospital/Diagnostics):</label>
-			<input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname" required>
+			<input required type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
 		</div>
 		<div class="form-group">
 			<label for="mobile">mobile:</label>
-			<input type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
+			<input required type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
 		</div>
 		<div class="form-group">
 			<label for="email">Email:</label>
-			<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+			<input required type="email" class="form-control" id="email" placeholder="Enter email" name="email">
 		</div>
 		<div class="checkbox">
 			<label>
-				<input type="checkbox" name="remember"> By Signing Up I accept All Terms &amp; Conditions</label>
+				<input required type="checkbox" name="remember"> By Signing Up I accept All Terms &amp; Conditions</label>
 		</div>
 		<div class="row">
 			<hr>
@@ -54,7 +54,7 @@ $(document).ready(function() {
 		<p>OTP has sent to Mobile No and/or email ID </p>
 		<div class="form-group">
 			<label for="otp">Enter OTP</label>
-			<input type="text" class="form-control" id="otp" placeholder="Enter OTP" name="otp">
+			<input required type="text" class="form-control" id="otp" placeholder="Enter OTP" name="otp">
 		</div>
 		<div class="row">
 			<hr>
@@ -65,11 +65,11 @@ $(document).ready(function() {
 		<p>Setup your password </p>
 		<div class="form-group">
 			<label for="enc_password">Enter New password</label>
-			<input type="text" class="form-control" id="enc_password" placeholder="Enter enc_password" name="enc_password">
+			<input required type="text" class="form-control" id="enc_password" placeholder="Enter enc_password" name="enc_password">
 		</div>
 		<div class="form-group">
 			<label for="re_enc_password">Re-Enter Password</label>
-			<input type="text" class="form-control" id="re_enc_password" placeholder="Enter re_enc_password" name="re_enc_password">
+			<input required type="text" class="form-control" id="re_enc_password" placeholder="Enter re_enc_password" name="re_enc_password">
 		</div>
 		<div class="row">
 			<hr>
@@ -79,19 +79,19 @@ $(document).ready(function() {
 		<h3>On Successful verification of Otp &amp; Password </h3>
 		<div class="form-group">
 			<label for="firstname">Full Name (Clinic/Hospital/Diagnostics):</label>
-			<input type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
+			<input required type="text" class="form-control" id="firstname" placeholder="Enter Fullname" name="firstname">
 		</div>
 		<div class="form-group">
 			<label for="mobile">mobile:</label>
-			<input type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
+			<input required type="number" class="form-control" id="mobile" placeholder="Enter mobile" name="mobile">
 		</div>
 		<div class="form-group">
 			<label for="email">Email:</label>
-			<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+			<input required type="email" class="form-control" id="email" placeholder="Enter email" name="email">
 		</div>
 		<div class="form-group">
 			<label for="image">Upload Photo:</label>
-			<input type="file" class="form-control" id="image" placeholder="Upload image" name="image">
+			<input required type="file" class="form-control" id="image" placeholder="Upload image" name="image">
 		</div>
 		<div class="row">
 			<hr>
@@ -108,7 +108,7 @@ $(document).ready(function() {
 				<h3>Point Location from Map</h3>
 				<div class="row" data-example>
 					<div class="form-group">
-						<input class="placepicker form-control" data-map-container-id="collapseOne" />
+						<input required class="placepicker form-control" data-map-container-id="collapseOne" />
 					</div>
 					<div id="collapseOne" class="collapse">
 						<div class="placepicker-map thumbnail"></div>
@@ -119,7 +119,7 @@ $(document).ready(function() {
 				<h3>Enter Address Manually</h3>
 				<div data-example>
 					<div class="form-group">
-						<input class="placepicker form-control" placeholder="Enter a location" data-latitude-input="#latitude" data-longitude-input="#longitude" />
+						<input required class="placepicker form-control" placeholder="Enter a location" data-latitude-input required="#latitude" data-longitude-input required="#longitude" />
 					</div>
 				</div>
 			</div>
@@ -129,35 +129,35 @@ $(document).ready(function() {
 		</div>
 		<div class="form-group">
 			<label for="latitude">Latitude:</label>
-			<input type="text" class="form-control" id="latitude" placeholder="Enter latitude" name="latitude">
+			<input required type="text" class="form-control" id="latitude" placeholder="Enter latitude" name="latitude">
 		</div>
 		<div class="form-group">
 			<label for="longitude">Longitude:</label>
-			<input type="text" class="form-control" id="longitude" placeholder="Enter longitude" name="longitude">
+			<input required type="text" class="form-control" id="longitude" placeholder="Enter longitude" name="longitude">
 		</div>
 		<div class="form-group">
 			<label for="image">Upload Photos</label>
-			<input type="file" class="form-control" id="image" placeholder="Upload image" name="image" multiple="true">
+			<input required type="file" class="form-control" id="image" placeholder="Upload image" name="image" multiple="true">
 		</div>
 		<div class="form-group">
 			<label for="contactperson">Contact Person</label>
-			<input type="text" class="form-control" id="contactperson" placeholder="Enter Fullname" name="contactperson">
+			<input required type="text" class="form-control" id="contactperson" placeholder="Enter Fullname" name="contactperson">
 		</div>
 		<div class="form-group">
 			<label for="phone">Phone No</label>
-			<input type="text" class="form-control" id="phone" placeholder="Enter Fullname" name="phone">
+			<input required type="text" class="form-control" id="phone" placeholder="Enter Fullname" name="phone">
 		</div>
 		<div class="form-group">
 			<label for="fax">fax </label>
-			<input type="text" class="form-control" id="fax" placeholder="Enter Fullname" name="fax">
+			<input required type="text" class="form-control" id="fax" placeholder="Enter Fullname" name="fax">
 		</div>
 		<div class="form-group">
 			<label for="establishedyear">Year of Establishment </label>
-			<input type="text" class="form-control" id="establishedyear" placeholder="Enter Year" name="establishedyear">
+			<input required type="text" class="form-control" id="establishedyear" placeholder="Enter Year" name="establishedyear">
 		</div>
 		<div class="form-group">
 			<label for="beds">No of Beds </label>
-			<input type="text" class="form-control" id="beds" placeholder="Enter Year" name="beds">
+			<input required type="text" class="form-control" id="beds" placeholder="Enter Year" name="beds">
 		</div>
 		<div class="row">
 			<hr>
@@ -178,42 +178,42 @@ $(document).ready(function() {
 		<div class="form-group">
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Anaesthesiology &amp; Emergency Medicine" name="speciality_id[]">Anaesthesiology &amp; Emergency Medicine
+					<input required type="checkbox" value="Anaesthesiology &amp; Emergency Medicine" name="speciality_id[]">Anaesthesiology &amp; Emergency Medicine
 			</div>
 			</label>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Ayurvedic" name="speciality_id[]">Ayurvedic
+					<input required type="checkbox" value="Ayurvedic" name="speciality_id[]">Ayurvedic
 				</label>
 			</div>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Cardio Thorasic Surgery" name="speciality_id[]">Cardio Thorasic Surgery
+					<input required type="checkbox" value="Cardio Thorasic Surgery" name="speciality_id[]">Cardio Thorasic Surgery
 			</div>
 			</label>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Cochlar Implant Surgery" name="speciality_id[]">Cochlar Implant Surgery
+					<input required type="checkbox" value="Cochlar Implant Surgery" name="speciality_id[]">Cochlar Implant Surgery
 			</div>
 			</label>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Cardiology" name="speciality_id[]">Cardiology
+					<input required type="checkbox" value="Cardiology" name="speciality_id[]">Cardiology
 				</label>
 			</div>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Cosmetology - Beutycare" name="speciality_id[]">Cosmetology - Beutycare
+					<input required type="checkbox" value="Cosmetology - Beutycare" name="speciality_id[]">Cosmetology - Beutycare
 			</div>
 			</label>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Dermatology - Skincare" name="speciality_id[]">Dermatology - Skincare
+					<input required type="checkbox" value="Dermatology - Skincare" name="speciality_id[]">Dermatology - Skincare
 				</label>
 			</div>
 			<div class="row">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Diet &amp; Nutrition" name="speciality_id[]">Diet &amp; Nutrition
+					<input required type="checkbox" value="Diet &amp; Nutrition" name="speciality_id[]">Diet &amp; Nutrition
 				</label>
 			</div>
 		</div>
@@ -225,82 +225,82 @@ $(document).ready(function() {
 		<div class="form-group">
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" value="Out Patient" name="facilities_id[]" data-toggle="collapse" data-target="#outpatient">Out Patient</label>
+					<input required type="checkbox" value="Out Patient" name="facilities_id[]" data-toggle="collapse" data-target="#outpatient">Out Patient</label>
 			</div>
 			<div id="outpatient" class="collapse">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Pharmacy 24 Hours" name="facilities_services_id[]">Pharmacy 24 Hours
+					<input required type="checkbox" value="Pharmacy 24 Hours" name="facilities_services_id[]">Pharmacy 24 Hours
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Ambulance" name="facilities_services_id[]">Ambulance
+					<input required type="checkbox" value="Ambulance" name="facilities_services_id[]">Ambulance
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Day Time" name="facilities_services_id[]">Day Time
+					<input required type="checkbox" value="Day Time" name="facilities_services_id[]">Day Time
 				</label>
 			</div>
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" value="In Patient" name="facilities_id[]" data-toggle="collapse" data-target="#inpatient">In Patient</label>
+					<input required type="checkbox" value="In Patient" name="facilities_id[]" data-toggle="collapse" data-target="#inpatient">In Patient</label>
 			</div>
 			<div id="inpatient" class="collapse">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Casuality / Emergency" name="facilities_services_id[]">Casuality / Emergency
+					<input required type="checkbox" value="Casuality / Emergency" name="facilities_services_id[]">Casuality / Emergency
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Pediatric Care" name="facilities_services_id[]">Pediatric Care
+					<input required type="checkbox" value="Pediatric Care" name="facilities_services_id[]">Pediatric Care
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Intensive Care Units" name="facilities_services_id[]">Intensive Care Units
+					<input required type="checkbox" value="Intensive Care Units" name="facilities_services_id[]">Intensive Care Units
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Isolation Rooms" name="facilities_services_id[]">Isolation Rooms
+					<input required type="checkbox" value="Isolation Rooms" name="facilities_services_id[]">Isolation Rooms
 				</label>
 			</div>
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" value="Insurance / Corporate Recognations" name="facilities_id[]" data-toggle="collapse" data-target="#insurance">Insurance / Corporate Recognations</label>
+					<input required type="checkbox" value="Insurance / Corporate Recognations" name="facilities_id[]" data-toggle="collapse" data-target="#insurance">Insurance / Corporate Recognations</label>
 			</div>
 			<div id="insurance" class="collapse">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Family Health Plan Limited" name="facilities_services_id[]">Family Health Plan Limited
+					<input required type="checkbox" value="Family Health Plan Limited" name="facilities_services_id[]">Family Health Plan Limited
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Good Health Plan Limited" name="facilities_services_id[]">Good Health Plan Limited
+					<input required type="checkbox" value="Good Health Plan Limited" name="facilities_services_id[]">Good Health Plan Limited
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Medi Assist" name="facilities_services_id[]">Medi Assist
+					<input required type="checkbox" value="Medi Assist" name="facilities_services_id[]">Medi Assist
 				</label>
 				<label class="checkbox-inline">
-					<input type="checkbox" value="Medicare" name="facilities_services_id[]">Medicare
+					<input required type="checkbox" value="Medicare" name="facilities_services_id[]">Medicare
 				</label>
 			</div>
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" value="Insurance / Corporate Recognations" name="test_id[]" data-toggle="collapse" data-target="#test">Diagnostics/ Tests</label>
+					<input required type="checkbox" value="Insurance / Corporate Recognations" name="test_id[]" data-toggle="collapse" data-target="#test">Diagnostics/ Tests</label>
 			</div>
 			<div id="test" class="collapse">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" value="Insurance / Corporate Recognations" name="test_category_id[]" data-toggle="collapse" data-target="#category">Radiology</label>
+						<input required type="checkbox" value="Insurance / Corporate Recognations" name="test_category_id[]" data-toggle="collapse" data-target="#category">Radiology</label>
 				</div>
 				<div id="category" class="collapse">
 					<label class="checkbox-inline">
-						<input type="checkbox" value="X-ray" name="test_subcategory_id[]">X-ray
+						<input required type="checkbox" value="X-ray" name="test_subcategory_id[]">X-ray
 					</label>
 					<label class="checkbox-inline">
-						<input type="checkbox" value="MRI Scan" name="test_subcategory_id[]">MRI Scan
+						<input required type="checkbox" value="MRI Scan" name="test_subcategory_id[]">MRI Scan
 					</label>
 				</div>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" value="Pathology" name="test_category_id[]" data-toggle="collapse" data-target="#Pathology">Pathology</label>
+						<input required type="checkbox" value="Pathology" name="test_category_id[]" data-toggle="collapse" data-target="#Pathology">Pathology</label>
 				</div>
 				<div id="Pathology" class="collapse">
 					<label class="checkbox-inline">
-						<input type="checkbox" value="Pathology" name="test_subcategory_id[]">Pathology
+						<input required type="checkbox" value="Pathology" name="test_subcategory_id[]">Pathology
 					</label>
 					<label class="checkbox-inline">
-						<input type="checkbox" value="Microbiology" name="test_subcategory_id[]">Microbiology
+						<input required type="checkbox" value="Microbiology" name="test_subcategory_id[]">Microbiology
 					</label>
 				</div>
 			</div>
@@ -311,19 +311,19 @@ $(document).ready(function() {
 		<h3>Configure Offerings to AAAD Health Seekers</h3>
 		<div class="form-group">
 			<label for="facilities_services_id">Out-Patient Services:</label>
-			<input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+			<input required type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
 		</div>
 		<div class="form-group">
 			<label for="facilities_services_id">Emergency Room:</label>
-			<input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+			<input required type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
 		</div>
 		<div class="form-group">
 			<label for="facilities_services_id">Day-Care Procedures:</label>
-			<input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+			<input required type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
 		</div>
 		<div class="form-group">
 			<label for="facilities_services_id">Lab Services</label>
-			<input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+			<input required type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
 		</div>
 		<div class="form-group">
 			<label for="gender">Select Speciality</label>
@@ -336,7 +336,7 @@ $(document).ready(function() {
 		</div>
 		<div class="form-group">
 			<label for="facilities_services_id">Speciality Discount</label>
-			<input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+			<input required type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
 		</div>
 		<button type="button" class="btn btn-default">Add More Speciality Discounts</button>
 	</section>
@@ -345,7 +345,7 @@ $(document).ready(function() {
 		<h3>Share on AAD Special Health Checks to AAD </h3>
 		<div class="form-group">
 			<label for="healthcheck">healthcheck Package Name:</label>
-			<input type="text" class="form-control" id="healthcheck" placeholder="Enter healthcheck Package Name" name="healthcheck">
+			<input required type="text" class="form-control" id="healthcheck" placeholder="Enter healthcheck Package Name" name="healthcheck">
 		</div>
 		<div class="form-group">
 			<label for="description">healthcheck Package description:</label>
@@ -355,26 +355,26 @@ $(document).ready(function() {
 		<p>Select the tests that will be included in the package</p>
 		<div class="form-group">
 			<label class="checkbox-inline">
-				<input type="checkbox" value="Pathology" name="test_id">Pathology
+				<input required type="checkbox" value="Pathology" name="test_id">Pathology
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" value="Microbiology" name="test_id">Microbiology
+				<input required type="checkbox" value="Microbiology" name="test_id">Microbiology
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" value="Bio Chemistry" name="test_id">Bio Chemistry
+				<input required type="checkbox" value="Bio Chemistry" name="test_id">Bio Chemistry
 			</label>
 		</div>
 		<div class="form-group">
 			<label for="price">Ad Price</label>
-			<input type="number" class="form-control" id="price" placeholder="Enter Price" name="price">
+			<input required type="number" class="form-control" id="price" placeholder="Enter Price" name="price">
 		</div>
 		<div class="form-group">
 			<label for="sharetoad">Share to AD</label>
-			<input type="number" class="form-control" id="sharetoad" placeholder="Enter Share to AD" name="sharetoad">
+			<input required type="number" class="form-control" id="sharetoad" placeholder="Enter Share to AD" name="sharetoad">
 		</div>
 		<div class="form-group">
 			<label for="facilities_services_id">Lab Services</label>
-			<input type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
+			<input required type="text" class="form-control" id="facilities_services_id" placeholder="Enter discount" name="facilities_services_id">
 		</div>
 		<button type="button" class="btn btn-default">Add more Special Health Checks to AAD </button>
 		<div class="row">
@@ -697,5 +697,5 @@ $(document).ready(function() {
 		</div>
 	</section>
 </form>
-<script src="{% static 'healthprovider/js/main.js' %}"></script>
+<script src="{% static 'healthprovider/js/register.js' %}"></script>
 {% endblock %}
