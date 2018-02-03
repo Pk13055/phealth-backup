@@ -37,7 +37,6 @@ let sendOTP = (number, email) => {
     .map((e) => {
         return (e.split("=")[0] == "csrftoken")? e.split("=")[1] : null;
     }).filter((e) => { return e; })[0];
-    console.log(csrf_token);
     $.ajax({
         'url' : "/auth/otp/",
         'method' : "POST",

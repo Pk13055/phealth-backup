@@ -13,7 +13,7 @@ def otphandle(request):
 	'''
 	if request.method == "GET":
 		print("GET REQUEST FOR VERIFICATION")
-		return render(request)
+		return JsonResponse({ 'status' : "Invalid Request type" })
 
 	elif request.method == "POST":
 

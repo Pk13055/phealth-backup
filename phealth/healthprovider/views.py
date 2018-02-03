@@ -2,10 +2,15 @@ from django.shortcuts import render
 
 # Create your views here.
 
+
 def SignUp(request):
-    return render(request, 'healthprovider/registration.html.j2', context={
-    	'route' : "/healthprovider"
-    	})
+	if request.method == "GET":
+		return render(request, 'healthprovider/registration.html.j2', context={ 'route': "/healthprovider" })
+	elif request.method == "POST":
+		print("Posting data")
+		print(request.POST)
+		print(request.FILES)
+		return JsonResponse({'status' : True })
 
 
 def SignIn(request):
