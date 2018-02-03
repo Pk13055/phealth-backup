@@ -1,5 +1,12 @@
 /* CROSS PAGE REUSABLE */
 
+function getCSRF() {
+    return document.cookie.split(";")
+    .map((e) => {
+        return (e.split("=")[0] == "csrftoken")? e.split("=")[1] : null;
+    }).filter((e) => { return e; })[0];
+};
+
 // previous next buttons to be appended
 var navButtons = (sections) => {
     let $row = $("<div>", { 'class': "row center-block" }),
