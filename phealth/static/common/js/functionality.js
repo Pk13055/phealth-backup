@@ -31,12 +31,10 @@ var navButtons = (sections) => {
 };
 
 
+
 // send the otp to the user and move to next step
 let sendOTP = (number, email) => {
-    let csrf_token = document.cookie.split(";")
-    .map((e) => {
-        return (e.split("=")[0] == "csrftoken")? e.split("=")[1] : null;
-    }).filter((e) => { return e; })[0];
+    let csrf_token = getCSRF();
     $.ajax({
         'url' : "/auth/otp/",
         'method' : "POST",
@@ -70,10 +68,7 @@ var validateCurrent = (section, custom_validation = null) => {
 // the function wrapping the ajax for the overall registration
 var register = (section, btn) => {
     console.log("Submit form for approval");
-    let csrf_token = document.cookie.split(";")
-    .map((e) => {
-        return (e.split("=")[0] == "csrftoken")? e.split("=")[1] : null;
-    }).filter((e) => { return e; })[0];
+    let csrf_token = getCSRF();
     if($(document).find("form")[0].checkValidity()) {
         $(btn)[0].setCustomValidity("");
         $.ajax({

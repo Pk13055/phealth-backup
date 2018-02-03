@@ -19,3 +19,12 @@ def SignIn(request):
 		"route": "/clinician",
 		"color": "info"
 	})
+
+
+def calender(request):
+	''' handles the calender page for clincian timings
+	and bookings
+	'''
+	return render(request, 'clinician/calender.html.j2', context={
+		'title' : "Set your timings"
+		})
