@@ -1011,7 +1011,7 @@ class TrxnPayments(models.Model):
 
 class Users(models.Model):
     users_id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     secretquestions = models.ForeignKey(Secretquestions, models.DO_NOTHING, null=True)
     role = models.ForeignKey(Role, models.DO_NOTHING, null=True)
     mobile = models.IntegerField(null=True)
@@ -1033,17 +1033,17 @@ class Users(models.Model):
     macaddress = models.CharField(max_length=225, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'users'
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Users.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.User.save()
 
 
 class Week(models.Model):

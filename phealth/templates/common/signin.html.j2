@@ -6,6 +6,7 @@
 		<div class="panel panel-{{ color }}">
 			<div class="panel-heading">{{ title }}</div>
 			<form id="main-form" method="POST" action="{{ route }}/signin">
+				{% csrf_token %}
 				<div class="panel-body">
 					<div class="form-group">
 						<label for="username" class="visible-xs">E-mail/Mobile-No</label>

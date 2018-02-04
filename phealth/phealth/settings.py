@@ -53,9 +53,9 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 
     'rest_framework',
-    'dry_rest_permissions',
     'drf_generators',
     'phealth',
+    'common',
 
     'api',
     'sponsor',
@@ -70,7 +70,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES':[
-    	'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     	'rest_framework.authentication.SessionAuthentication',
     	'rest_framework.authentication.BasicAuthentication'
     ],
@@ -89,11 +88,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'phealth.urls'
-
-
-# TEMPLATE_CONTEXT_PROCESSORS = (
-#             'django.core.context_processors.static',
-# )
 
 TEMPLATES = [
     {
