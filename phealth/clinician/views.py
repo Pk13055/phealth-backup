@@ -34,7 +34,9 @@ def SignIn(request):
 
 @match_role("clinician")
 def dashboard(request):
-	return JsonResponse({'status' : True })
+	return render(request, 'clinician/dashboard.html.j2', context={
+		"title": "Clinician Dashboard"
+		})
 
 @match_role("clinician")
 def calender(request):
@@ -59,3 +61,47 @@ def calender(request):
 		print("Form submitted for update")
 		print(request.POST)
 		return JsonResponse({ 'status' : True })
+
+@match_role("clinician")
+def personal_info(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def professional_info(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def education_training(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def consultation_fee(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def offerings(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def conditions_treated(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def experience(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def award_recognition(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def registrations(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def membership(request):
+	return JsonResponse({'status' : True })
+
+@match_role("clinician")
+def areas_of_interest(request):
+	return JsonResponse({'status' : True })
