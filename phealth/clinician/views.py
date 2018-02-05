@@ -1,14 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from common import match_role
-from api.models import Healthproviders
+from phealth.utils import match_role, signin
 import datetime
 
 # Create your views here.
 
 
 def SignUp(request):
-	if 'role' in request.session: del request.session['role']
 	if request.method == "GET":
 		return render(request, 'clinician/registration.html.j2', context={
 			'route': "/clinician",
@@ -29,16 +27,14 @@ def SignIn(request):
 			"color": "info"
 		})
 	elif request.method == "POST":
-		user = Healthproviders.objects.filter(users__email=request.POST['username'],
-		 users__enc_password=request.POST['password']).first()
-		if user:
-			request.session['role'] = "clinician"
-			request.session['email'] = user.users.email
-			return render(request, 'clinician/dashboard.html.j2', context= {
-				'title' : "Clinician - Dashboard"
-			})
+		if signin("clinician", request):
+			return redirect('clinician:dashboard')
+		return redirect('clinician:signin')
 
 
+@match_role("clinician")
+def dashboard(request):
+	return JsonResponse({'status' : True })
 
 @match_role("clinician")
 def calender(request):

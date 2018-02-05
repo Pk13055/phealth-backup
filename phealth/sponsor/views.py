@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from phealth.utils import match_role
 # Create your views here.
 
 
@@ -16,8 +17,18 @@ def SignUp(request):
 
 
 def SignIn(request):
-	return render(request, 'common/signin.html.j2', context={
-		"title" : "Sponsor Login",
-		"route" : "/sponsor",
-		"color" : "warning"
-		})
+	if request.method == "GET":
+		return render(request, 'common/signin.html.j2', context={
+			"title" : "Sponsor Login",
+			"route" : "/sponsor",
+			"color" : "warning"
+			})
+	elif request.method == "POST":
+		if signin("sponsor", request):
+			return redirect('sponsor:dashboard')
+		return redirect('sponsor:signin')
+
+
+@match_role("sponsor")
+def dashboard(request):
+	return JsonResponse({'status' : True })
