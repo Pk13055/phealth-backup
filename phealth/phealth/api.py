@@ -1,5 +1,5 @@
 '''
-contains the router for the api routes and the like 
+contains the router for the api routes and the like
 
 '''
 

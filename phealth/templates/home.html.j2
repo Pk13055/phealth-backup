@@ -1,0 +1,22 @@
+{% extends 'base.html.j2' %} {% block mainhead %}
+<style>
+.row,
+.row h1 {
+	text-align: center;
+}
+</style>
+{% endblock %} {% block maincontent %}
+<div class="container">
+	<div class="row">
+		<h1>Access Roles</h1>
+	</div>
+	<div class="row"><hr></div>
+	<div class="row">
+		<a class="col-xs-12 col-md-3 col-md-offset-1 jumbotron btn btn-primary" href="/admin"><h3>Admin</h3></a>
+		<a class="col-xs-12 col-md-3 col-md-offset-1 jumbotron btn btn-danger" href="/api"><h3>API</h3></a>
+		<a class="col-xs-12 col-md-3 col-md-offset-1 jumbotron btn btn-info" href="{% url 'clinician:dashboard' %}"><h3>Clinician</h3></a>
+		<a class="col-xs-12 col-md-3 col-md-offset-1 jumbotron btn btn-success" href="{% url 'healthprovider:dashboard' %}"><h3>Health Provider</h3></a>
+		<a class="col-xs-12 col-md-3 col-md-offset-1 jumbotron btn btn-warning" href="{% url 'sponsor:dashboard_home' %}"><h3>Sponsor</h3></a>
+	</div>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from api.models import *
 
@@ -15,7 +16,7 @@ def match_role(role_type):
 			if 'role' in request.session and role_type in request.session['role']:
 				return function(request, *args, **kwargs)
 			else:
-				return JsonResponse({ 'status' : "Login first" })
+				return redirect('/' + request.path_info.split('/')[1] + '/signin')
 		return wrapper
 	return inner_decorator
 

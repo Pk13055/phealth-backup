@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import include, url
-
+from common import views
 from .api import router
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^$', views.home_route, name='home'),
+    url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^common/', include('common.urls', namespace='common')),
     url(r'^clinician/', include('clinician.urls', namespace='clinician')),
