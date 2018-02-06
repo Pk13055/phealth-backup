@@ -166,4 +166,17 @@ body {
 .nav-btns {
   border: 2px solid black; }
 
+ body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+    margin: 2rem auto;
+    padding: 1rem auto;
+  }
+
+
 /*# sourceMappingURL=all.css.map */
