@@ -23,6 +23,9 @@ class Address(models.Model):
     fax = models.CharField(max_length=225, blank=True, null=True)
     contactperson = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.district + " "  + self.state + " " + self.city)
+
     class Meta:
         managed = False
         db_table = 'address'
@@ -33,6 +36,9 @@ class Agegroup(models.Model):
     agegroup = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.agegroup)
 
     class Meta:
         managed = False
@@ -45,6 +51,9 @@ class Alertsources(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.alertsource)
+
     class Meta:
         managed = False
         db_table = 'alertsources'
@@ -55,6 +64,9 @@ class Alerttype(models.Model):
     alerttype = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.alerttype)
 
     class Meta:
         managed = False
@@ -76,6 +88,9 @@ class Appointmentbooking(models.Model):
     isnew = models.IntegerField(blank=True, null=True)
     visittype = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.date)
+
     class Meta:
         managed = False
         db_table = 'appointmentbooking'
@@ -90,6 +105,9 @@ class Availablefacilities(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.facilities)
+
     class Meta:
         managed = False
         db_table = 'availablefacilities'
@@ -100,6 +118,9 @@ class Bookingsources(models.Model):
     sourcename = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.sourcename)
 
     class Meta:
         managed = False
@@ -112,6 +133,9 @@ class Businessregtype(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.businessregtype)
+
     class Meta:
         managed = False
         db_table = 'businessregtype'
@@ -122,6 +146,9 @@ class City(models.Model):
     city = models.CharField(max_length=225)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.city)
 
     class Meta:
         managed = False
@@ -134,6 +161,9 @@ class ClinicianMemberships(models.Model):
     country = models.ForeignKey('Country', models.DO_NOTHING)
     association = models.CharField(max_length=225, blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.association)
 
     class Meta:
         managed = False
@@ -148,6 +178,9 @@ class Clinicians(models.Model):
     dob = models.DateField(blank=True, null=True)
     image = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.users)
+
     class Meta:
         managed = False
         db_table = 'clinicians'
@@ -160,6 +193,9 @@ class CliniciansDates(models.Model):
     week = models.ForeignKey('Week', models.DO_NOTHING)
     alldays = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.timeslots)
+
     class Meta:
         managed = False
         db_table = 'clinicians_dates'
@@ -171,6 +207,9 @@ class CliniciansEducation(models.Model):
     clinicians = models.ForeignKey(Clinicians, models.DO_NOTHING)
     registrationno = models.CharField(max_length=225, blank=True, null=True)
     college = models.CharField(max_length=225, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.qualification)
 
     class Meta:
         managed = False
@@ -186,6 +225,9 @@ class CliniciansExperience(models.Model):
     workto = models.DateField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.institution)
+
     class Meta:
         managed = False
         db_table = 'clinicians_experience'
@@ -200,6 +242,9 @@ class CliniciansSpeciality(models.Model):
     activeto = models.DateTimeField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.healthproviders_speciality)
+
     class Meta:
         managed = False
         db_table = 'clinicians_speciality'
@@ -210,6 +255,9 @@ class Conditions(models.Model):
     conditionname = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.conditionname)
 
     class Meta:
         managed = False
@@ -222,6 +270,9 @@ class Country(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.country)
+
     class Meta:
         managed = False
         db_table = 'country'
@@ -232,6 +283,9 @@ class Couponaccept(models.Model):
     couponaccept = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.couponaccept)
 
     class Meta:
         managed = False
@@ -247,6 +301,9 @@ class Coupons(models.Model):
     timevalidity = models.IntegerField(blank=True, null=True)
     couponstatus = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.coupon)
+
     class Meta:
         managed = False
         db_table = 'coupons'
@@ -257,6 +314,9 @@ class Designation(models.Model):
     designation = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.designation)
 
     class Meta:
         managed = False
@@ -274,6 +334,9 @@ class Discountcard(models.Model):
     applicablesponser = models.IntegerField(blank=True, null=True)
     otherbenfits = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.discountcard)
+
     class Meta:
         managed = False
         db_table = 'discountcard'
@@ -284,6 +347,9 @@ class DiscountcardFamily(models.Model):
     discountcard = models.ForeignKey(Discountcard, models.DO_NOTHING)
     family = models.ForeignKey('Family', models.DO_NOTHING)
     price = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.family) + " : " + self.price
 
     class Meta:
         managed = False
@@ -307,6 +373,9 @@ class District(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.district)
+
     class Meta:
         managed = False
         db_table = 'district'
@@ -317,6 +386,9 @@ class Facilities(models.Model):
     facility = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.facility)
 
     class Meta:
         managed = False
@@ -330,6 +402,9 @@ class FacilitiesServices(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.facilities_services)
+
     class Meta:
         managed = False
         db_table = 'facilities_services'
@@ -340,6 +415,9 @@ class Family(models.Model):
     family = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.family)
 
     class Meta:
         managed = False
@@ -354,6 +432,9 @@ class Feedback(models.Model):
     reg_date = models.DateTimeField(blank=True, null=True)
     feedbackstatus = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.users_feedback)
+
     class Meta:
         managed = False
         db_table = 'feedback'
@@ -364,6 +445,9 @@ class Gender(models.Model):
     gender = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.gender)
 
     class Meta:
         managed = False
@@ -379,6 +463,9 @@ class Healthcheckbooking(models.Model):
     time = models.TimeField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.date)
+
     class Meta:
         managed = False
         db_table = 'healthcheckbooking'
@@ -393,6 +480,9 @@ class Healthchecks(models.Model):
     promoimage = models.CharField(max_length=225, blank=True, null=True)
     applicable_sponser = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.healthcheck)
+
     class Meta:
         managed = False
         db_table = 'healthchecks'
@@ -402,6 +492,9 @@ class HealthchecksInclusion(models.Model):
     healthchecks_inclusion_id = models.AutoField(primary_key=True)
     test = models.ForeignKey('Test', models.DO_NOTHING)
     healthchecks = models.ForeignKey(Healthchecks, models.DO_NOTHING)
+
+    def __str__(self):
+        return str(self.healthchecks)
 
     class Meta:
         managed = False
@@ -418,6 +511,9 @@ class Healthproviders(models.Model):
     activefrom = models.DateTimeField(blank=True, null=True)
     activeto = models.DateTimeField(blank=True, null=True)
     m_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.users)
 
     class Meta:
         managed = False
@@ -438,6 +534,9 @@ class HealthprovidersSpeciality(models.Model):
     status_2 = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.speciality_name)
+
     class Meta:
         managed = False
         db_table = 'healthproviders_speciality'
@@ -448,6 +547,9 @@ class Healthrecords(models.Model):
     healthrecord = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.healthrecord)
 
     class Meta:
         managed = False
@@ -466,6 +568,9 @@ class Healthseeker(models.Model):
     dob = models.DateField(blank=True, null=True)
     image = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.users)
+
     class Meta:
         managed = False
         db_table = 'healthseeker'
@@ -480,6 +585,9 @@ class HealthseekerAlerts(models.Model):
     activeto = models.DateTimeField(blank=True, null=True)
     alert_to = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return "Healthseeker : " + str(self.alertsources)
+
     class Meta:
         managed = False
         db_table = 'healthseeker_alerts'
@@ -492,6 +600,9 @@ class HealthseekerAvailabilities(models.Model):
     coupons = models.ForeignKey(Coupons, models.DO_NOTHING)
     healthseeker = models.ForeignKey(Healthseeker, models.DO_NOTHING)
     amount = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.coupons)
 
     class Meta:
         managed = False
@@ -508,6 +619,9 @@ class HealthseekerHealthrecords(models.Model):
     reg_date = models.DateTimeField(blank=True, null=True)
     m_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.healthrecords)
+
     class Meta:
         managed = False
         db_table = 'healthseeker_healthrecords'
@@ -516,6 +630,9 @@ class HealthseekerHealthrecords(models.Model):
 class HealthseekerType(models.Model):
     healthseeker_type_id = models.AutoField(primary_key=True)
     healthseeker_type = models.CharField(max_length=225, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.healthseeker_type)
 
     class Meta:
         managed = False
@@ -529,6 +646,9 @@ class Interest(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.interest)
+
     class Meta:
         managed = False
         db_table = 'interest'
@@ -539,6 +659,9 @@ class Languages(models.Model):
     language = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.language)
 
     class Meta:
         managed = False
@@ -553,6 +676,9 @@ class Photoalbum(models.Model):
     forusage = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.photo_title)
 
     class Meta:
         managed = False
@@ -582,6 +708,9 @@ class Plans(models.Model):
     activefrom = models.DateTimeField(blank=True, null=True)
     activeto = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.plan)
+
     class Meta:
         managed = False
         db_table = 'plans'
@@ -593,6 +722,9 @@ class PlansGroups(models.Model):
     plans_group = models.CharField(max_length=225, blank=True, null=True)
     activefrom = models.DateTimeField(blank=True, null=True)
     activeto = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.plans_group)
 
     class Meta:
         managed = False
@@ -613,6 +745,9 @@ class Priyority(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.priyority)
+
     class Meta:
         managed = False
         db_table = 'priyority'
@@ -624,6 +759,9 @@ class Profession(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.poorofession)
+
     class Meta:
         managed = False
         db_table = 'profession'
@@ -634,6 +772,9 @@ class Qualification(models.Model):
     qualification = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.qualification)
 
     class Meta:
         managed = False
@@ -648,6 +789,9 @@ class Referrels(models.Model):
     source = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.referral_id)
+
     class Meta:
         managed = False
         db_table = 'referrels'
@@ -658,6 +802,9 @@ class Referrelscheme(models.Model):
     title = models.CharField(max_length=225, blank=True, null=True)
     noofreferels = models.IntegerField(blank=True, null=True)
     cashback = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
 
     class Meta:
         managed = False
@@ -676,6 +823,9 @@ class RegistrationWelcomeMessage(models.Model):
     c_user = models.IntegerField(blank=True, null=True)
     m_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.registration_welcome_message)
+
     class Meta:
         managed = False
         db_table = 'registration_welcome_message'
@@ -692,6 +842,9 @@ class Resellerpackages(models.Model):
     campaignvalidfrom = models.DateField(blank=True, null=True)
     campaignvalidto = models.DateField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.packagename)
+
     class Meta:
         managed = False
         db_table = 'resellerpackages'
@@ -706,6 +859,9 @@ class Resellers(models.Model):
     serviceoffered = models.CharField(max_length=225, blank=True, null=True)
     seviceagreementimage = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.users)
+
     class Meta:
         managed = False
         db_table = 'resellers'
@@ -717,6 +873,9 @@ class Role(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
     roleocode = models.CharField(max_length=225, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.role)
 
     class Meta:
         managed = False
@@ -733,6 +892,9 @@ class Salesagentpackages(models.Model):
     validity = models.IntegerField(blank=True, null=True)
     campaignvalidfrom = models.DateField(blank=True, null=True)
     campaignvalidto = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.packagename)
 
     class Meta:
         managed = False
@@ -756,6 +918,9 @@ class Salesagents(models.Model):
     agreementends = models.DateField(blank=True, null=True)
     serviceagreementimage = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.agencyname + " " + str(self.users))
+
     class Meta:
         managed = False
         db_table = 'salesagents'
@@ -768,6 +933,9 @@ class Salestarget(models.Model):
     days = models.IntegerField(blank=True, null=True)
     addextracards = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.salestarget)
+
     class Meta:
         managed = False
         db_table = 'salestarget'
@@ -778,6 +946,9 @@ class Secretquestions(models.Model):
     secretquestion = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.secretquestion)
 
     class Meta:
         managed = False
@@ -792,6 +963,9 @@ class Speciality(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.speciality)
+
     class Meta:
         managed = False
         db_table = 'speciality'
@@ -802,6 +976,9 @@ class SpecialityType(models.Model):
     speciality_type_name = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.speciality_type_name)
 
     class Meta:
         managed = False
@@ -824,6 +1001,9 @@ class Sponsors(models.Model):
     activefrom = models.DateTimeField(blank=True, null=True)
     activeto = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.users)
+
     class Meta:
         managed = False
         db_table = 'sponsors'
@@ -835,6 +1015,9 @@ class SponsorsGroup(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.sponsors_group)
+
     class Meta:
         managed = False
         db_table = 'sponsors_group'
@@ -845,6 +1028,9 @@ class State(models.Model):
     state = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.state)
 
     class Meta:
         managed = False
@@ -858,6 +1044,9 @@ class Symptoms(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.symptoms)
+
     class Meta:
         managed = False
         db_table = 'symptoms'
@@ -869,6 +1058,9 @@ class Telephone(models.Model):
     phone = models.IntegerField(blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.phone)
 
     class Meta:
         managed = False
@@ -919,6 +1111,9 @@ class Testimonials(models.Model):
     activeto = models.DateTimeField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.testimonial)
+
     class Meta:
         managed = False
         db_table = 'testimonials'
@@ -931,6 +1126,9 @@ class Timeslots(models.Model):
     toslot = models.TimeField(blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.timeslots)
 
     class Meta:
         managed = False
@@ -947,6 +1145,9 @@ class TrxnAppointmentbookings(models.Model):
     trxn_by = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.appointmentbooking)
+
     class Meta:
         managed = False
         db_table = 'trxn_appointmentbookings'
@@ -960,6 +1161,9 @@ class TrxnCoupons(models.Model):
     ip = models.CharField(max_length=225, blank=True, null=True)
     trxn_by = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.coupons)
 
     class Meta:
         managed = False
@@ -975,6 +1179,9 @@ class TrxnDiscountcard(models.Model):
     trxn_by = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.discountcard)
+
     class Meta:
         managed = False
         db_table = 'trxn_discountcard'
@@ -988,6 +1195,9 @@ class TrxnHealthcheckbooking(models.Model):
     ip = models.CharField(max_length=225, blank=True, null=True)
     trxn_by = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.healthcheckbooking)
 
     class Meta:
         managed = False
@@ -1003,6 +1213,9 @@ class TrxnPayments(models.Model):
     ip = models.CharField(max_length=225, blank=True, null=True)
     trxn_by = models.IntegerField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.amount)
 
     class Meta:
         managed = False
@@ -1032,18 +1245,12 @@ class Users(models.Model):
     ipaddress = models.CharField(max_length=225, blank=True, null=True)
     macaddress = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.firstname + " " + self.email)
+
     class Meta:
         managed = False
         db_table = 'users'
-
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Users.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.User.save()
 
 
 class Week(models.Model):
@@ -1051,6 +1258,9 @@ class Week(models.Model):
     week = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.week)
 
     class Meta:
         managed = False
@@ -1066,6 +1276,9 @@ class Wellnessplan(models.Model):
     medicalhistory = models.CharField(max_length=225, blank=True, null=True)
     surgicalhistory = models.CharField(max_length=225, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.medicalhistory)
+
     class Meta:
         managed = False
         db_table = 'wellnessplan'
@@ -1077,6 +1290,9 @@ class WellnessplanProfession(models.Model):
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.wellnessplan_profession)
+
     class Meta:
         managed = False
         db_table = 'wellnessplan_profession'
@@ -1087,6 +1303,9 @@ class WellnessplanSocialhistory(models.Model):
     wellnessplan_socialhistory = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.wellnessplan_socialhistory)
 
     class Meta:
         managed = False
