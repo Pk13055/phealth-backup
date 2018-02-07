@@ -32,14 +32,18 @@ def SignIn(request):
 		return redirect('clinician:signin')
 
 
+# Dashboard view functions
+
 @match_role("clinician")
-def dashboard(request):
-	return render(request, 'clinician/dashboard.html.j2', context={
-		"title": "Clinician Dashboard"
+def personal_info(request):
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/home.html.j2', context={
+		'title' : "Clinician Dashboard"
 		})
 
 @match_role("clinician")
 def calender(request):
+	''' dashboard function '''
 	''' handles the calender page for clincian timings
 	and bookings
 	'''
@@ -53,7 +57,7 @@ def calender(request):
 		 		'end' : datetime.datetime.now().time(),
 		 	}
 		 	schedule.append(cur_day)
-		return render(request, 'clinician/calender.html.j2', context={
+		return render(request, 'clinician/dashboard/calender.html.j2', context={
 			'title' : "Set your timings",
 			'days' : schedule
 			})
@@ -63,45 +67,71 @@ def calender(request):
 		return JsonResponse({ 'status' : True })
 
 @match_role("clinician")
-def personal_info(request):
-	return JsonResponse({'status' : True })
-
-@match_role("clinician")
 def professional_info(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/profesional.html.j2', context={
+		"title" : "Dashboard - Professional Information"
+		})
 
 @match_role("clinician")
 def education_training(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/education.html.j2', context={
+		"title" : "Dashboard - education_training"
+		})
 
 @match_role("clinician")
 def consultation_fee(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/consulation.html.j2', context={
+		"title" : "Dashboard - consultation_fee"
+		})
 
 @match_role("clinician")
 def offerings(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/offerings.html.j2', context={
+		"title" : "Dashboard - offerings"
+		})
 
 @match_role("clinician")
 def conditions_treated(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/conditions.html.j2', context={
+		"title" : "Dashboard - conditions_treated"
+		})
 
 @match_role("clinician")
 def experience(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/experience.html.j2', context={
+		"title" : "Dashboard - experience"
+		})
 
 @match_role("clinician")
 def award_recognition(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/awards.html.j2', context={
+		"title" : "Dashboard - award_recognition"
+		})
 
 @match_role("clinician")
 def registrations(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/registrations.html.j2', context={
+		"title" : "Dashboard - registrations"
+		})
 
 @match_role("clinician")
 def membership(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/membership.html.j2', context={
+		"title" : "Dashboard - membership"
+		})
 
 @match_role("clinician")
 def areas_of_interest(request):
-	return JsonResponse({'status' : True })
+	''' dashboard function '''
+	return render(request, 'clinician/dashboard/interest.html.j2', context={
+		"title" : "Dashboard - areas_of_interest"
+		})

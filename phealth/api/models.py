@@ -24,7 +24,7 @@ class Address(models.Model):
     contactperson = models.CharField(max_length=225, blank=True, null=True)
 
     def __str__(self):
-        return str(self.district + " "  + self.state + " " + self.city)
+        return str(self.district) + " "  + str(self.state) + " " + str(self.city)
 
     class Meta:
         managed = False
