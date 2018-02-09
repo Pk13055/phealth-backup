@@ -34,6 +34,32 @@ def SignIn(request):
 
 # Dashboard view functions
 
+
+
+@match_role("sponsor")
+def dashboard(request):
+	''' route for dashboard home '''
+
+	u = Clinician.objects.filter(users__email=request.session['email']).first()
+
+	class BasicForm(forms.ModelForm):
+
+		class Meta:
+			model = Clinician
+			fields = ('__all__')
+
+	if request.method == "POST":
+		b = BasicForm(request.POST, request.FILES, instance=u)
+		if b.is_valid():
+			b.save()
+
+	return render(request, 'clinician/dashboard/home.html.j2', context={
+		"title": "Dashboard Home",
+		"form_title" : "Edit basic information",
+		"form" : BasicForm(instance=u)
+	})
+
+
 @match_role("clinician")
 def personal_info(request):
 	''' dashboard function '''

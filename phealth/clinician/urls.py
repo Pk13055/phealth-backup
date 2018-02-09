@@ -8,7 +8,7 @@ app_name = "clinician"
 dashboard_routes = [
 
 	# personal
-	url(r'', views.personal_info, name='dashboard'),
+	url(r'^?', views.dashboard, name='dashboard_home'),
 	url(r'calendar/?$', views.calender, name='calender'),
 	url(r'education_training/?$', views.education_training, name='education_training'),
 	url(r'experience/?$', views.experience, name='experience'),

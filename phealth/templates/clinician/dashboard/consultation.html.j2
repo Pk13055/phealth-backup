@@ -11,12 +11,32 @@
 		<div class="panel-heading">{{ form_title }}</div>
 		<form method="POST">
 			<div class="panel-body">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				<section class="container" data="4">
+	                <h3>Consultation Fee</h3>
+	                <div class="form-group">
+	                    <label for="consultationfee">Consultation Fee</label>
+	                    <input type="text" class="form-control" name="consultationfee" id="consultationfee">
+	                </div>
+	                <div class="form-group">
+	                    <label for="discount1st">Discount for 1st Consultation</label>
+	                    <input type="text" class="form-control" name="discount1st" id="discount1st">
+	                </div>
+	                <div class="form-group">
+	                    <label for="discountsubsequent">Discount for Subsequent Consultation</label>
+	                    <input type="text" class="form-control" name="discountsubsequent" id="discountsubsequent">
+	                </div>
+	                <div class="form-group">
+	                    <label for="activefrom">Active From</label>
+	                    <input type="date" class="form-control" name="activefrom" id="activefrom">
+	                </div>
+	                <div class="form-group">
+	                    <label for="activeto">Active To</label>
+	                    <input type="date" class="form-control" name="activeto" id="activeto">
+	                </div>
+	                <div class="row">
+	                    <hr>
+	                </div>
+            	</section>
 			</div>
 			<div class="panel-footer">
 				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-chevron-up"></i> Update!</button>
