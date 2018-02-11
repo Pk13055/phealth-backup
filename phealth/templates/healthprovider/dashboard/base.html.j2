@@ -1,7 +1,7 @@
 {# dashboard base template (with navbar) #}
-{% extends 'healthprovider/base.html.j2' %}
+{% extends 'sponsor/base.html.j2' %}
 {% block head %}
-<title> Healthprovider Dashboard - {{ title }}</title>
+<title> Sponsor Dashboard - {{ title }}</title>
 {% endblock %}
 {% load static %}
 {% block navbar %}
@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collaps" aria-expanded="false"><i class="fa fa-bars fa-lg"></i></button>
-			<a class="navbar-brand" href="{% url 'sponsor:dashboard_home' %}"><strong class="hidden-xs">PHealth</strong> Healthprovider</a>
+			<a class="navbar-brand" href="{% url 'healthprovider:dashboard_home' %}"><strong class="hidden-xs">PHealth</strong> Healthprovider</a>
 			<p class="navbar-text text-muted"><em>Dashboard</em></p>
 		</div>
 		<div class="collapse navbar-collapse" id="navbar-collaps">
@@ -18,14 +18,10 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Business<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="{% url 'healthprovider:dashboard_contact_details' %}">Contact Details</a></li>
+						<li><a href="{% url 'healthprovider:contact_details' %}">Contact Details</a></li>
 						<li role="separator" class="divider"></li>
-						<li><a href="{% url 'healthprovider:dashboard_branches' %}">Branches</a></li>
-						<li><a href="{% url 'healthprovider:dashboard_specialities' %}">Specialities</a></li>
-						<li><a href="{% url 'healthprovider:dashboard_facilities' %}">Facilities</a></li>
-						<li><a href="{% url 'healthprovider:dashboard_offerings' %}">Offerings</a></li>
-						<li><a href="{% url 'healthprovider:dashboard_special_health_checks' %}">Special Health Checks</a></li>
-						<li><a href="{% url 'healthprovider:dashboard_plans' %}">Plans</a></li>
+						<li><a href="{% url 'healthprovider:specialities' %}">Specialities</a></li>
+						<li><a href="{% url 'healthprovider:facilities' %}">Facilities</a></li>
 					</ul>
 				</li>
 			</ul>
