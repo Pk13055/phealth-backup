@@ -167,6 +167,11 @@ class ClinicianMemberships(models.Model):
     def __str__(self):
         return str(self.association)
 
+    def save(self, *args, **kwargs):
+        if self.reg_date == "" or self.reg_date is None:
+            self.reg_date = datetime.datetime.now().isoformat('T')
+        super(ClinicianMemberships, self).save(*args, **kwargs)
+
     class Meta:
         managed = False
         db_table = 'clinician_memberships'
@@ -178,6 +183,7 @@ class Clinicians(models.Model):
     gender = models.ForeignKey('Gender', models.DO_NOTHING)
     users = models.ForeignKey('Users', models.DO_NOTHING)
     dob = models.DateField(blank=True, null=True)
+    # fee = models.IntegerField(blank=True, null=False, default=0)
     image = models.CharField(max_length=225, blank=True, null=True)
 
     def __str__(self):
@@ -230,6 +236,11 @@ class CliniciansExperience(models.Model):
     def __str__(self):
         return str(self.institution)
 
+    def save(self, *args, **kwargs):
+        if self.reg_date == "" or self.reg_date is None:
+            self.reg_date = datetime.datetime.now()
+        super(CliniciansExperience, self).save(*args, **kwargs)
+
     class Meta:
         managed = False
         db_table = 'clinicians_experience'
@@ -238,7 +249,6 @@ class CliniciansExperience(models.Model):
 class CliniciansSpeciality(models.Model):
     clinicians_speciality_id = models.AutoField(primary_key=True)
     symptoms = models.ForeignKey('Symptoms', models.DO_NOTHING)
-    healthproviders_speciality = models.ForeignKey('HealthprovidersSpeciality', models.DO_NOTHING)
     clinicians = models.ForeignKey(Clinicians, models.DO_NOTHING)
     activefrom = models.DateTimeField(blank=True, null=True)
     activeto = models.DateTimeField(blank=True, null=True)
@@ -246,6 +256,11 @@ class CliniciansSpeciality(models.Model):
 
     def __str__(self):
         return str(self.healthproviders_speciality)
+
+    def save(self, *args, **kwargs):
+        if self.reg_date == "" or self.reg_date is None:
+            self.reg_date = datetime.datetime.now()
+        super(CliniciansSpeciality, self).save(*args, **kwargs)
 
     class Meta:
         managed = False
@@ -972,7 +987,7 @@ class Speciality(models.Model):
     speciality_id = models.AutoField(primary_key=True)
     speciality_type = models.ForeignKey('SpecialityType', models.DO_NOTHING)
     qualification = models.ForeignKey(Qualification, models.DO_NOTHING)
-    speciality = models.CharField(max_length=225, blank=True, null=True)
+    speciality = models.CharField(max_length=225, blank=True, null=True, default="None")
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
 
@@ -1052,7 +1067,6 @@ class State(models.Model):
 
 class Symptoms(models.Model):
     symptoms_id = models.AutoField(primary_key=True)
-    speciality = models.ForeignKey(Speciality, models.DO_NOTHING)
     symptoms = models.CharField(max_length=225, blank=True, null=True)
     sort_by = models.IntegerField(blank=True, null=True)
     status_2 = models.IntegerField(blank=True, null=True)
@@ -1061,7 +1075,7 @@ class Symptoms(models.Model):
         return str(self.symptoms)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'symptoms'
 
 

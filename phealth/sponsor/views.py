@@ -60,12 +60,16 @@ def dashboard(request):
 	})
 
 
-@match_role("sponsor")
-def participants(request):
-	''' route for dashboard participants'''
-	return render(request, 'sponsor/dashboard/participants.html.j2', context={
-		"title": "Dashboard - participants details "
-	})
+# @match_role("sponsor")
+# def participants(request):
+# 	''' route for dashboard participants'''
+# 	if request.method == "POST":
+# 		pass
+# 		# handle the form parsing and data etc here
+
+# 	return render(request, 'sponsor/dashboard/participants.html.j2', context={
+# 		"title": "Dashboard - participants details "
+# 	})
 
 
 @match_role("sponsor")

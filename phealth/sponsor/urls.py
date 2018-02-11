@@ -7,7 +7,7 @@ app_name = "sponsor"
 
 dashboard_urls = [
 	url(r'^$', views.dashboard, name='dashboard_home'), # basic details
-	url(r'^participants/?$', views.participants, name='dashboard_participants'), #participants details
+	# url(r'^participants/?$', views.participants, name='dashboard_participants'), #participants details
 	url(r'^discounts/?$', views.discounts, name='dashboard_discount'), #discount details
 ]
 

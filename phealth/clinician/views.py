@@ -1,6 +1,10 @@
+
+from django import forms
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
+from api.models import (Clinicians, CliniciansEducation,
+ CliniciansExperience, CliniciansSpeciality)
 import datetime
 
 # Create your views here.
@@ -28,43 +32,62 @@ def SignIn(request):
 		})
 	elif request.method == "POST":
 		if signin("clinician", request):
-			return redirect('clinician:dashboard')
+			return redirect('clinician:dashboard_home')
 		return redirect('clinician:signin')
 
 
 # Dashboard view functions
 
-
-
-@match_role("sponsor")
+@match_role("clinician")
 def dashboard(request):
 	''' route for dashboard home '''
 
-	u = Clinician.objects.filter(users__email=request.session['email']).first()
+	u = Clinicians.objects.filter(users__email=request.session['email']).first()
 
-	class BasicForm(forms.ModelForm):
+	class ClinicianForm(forms.ModelForm):
 
 		class Meta:
-			model = Clinician
-			fields = ('__all__')
+			model = Clinicians
+			exclude = ('users', 'image',)
 
 	if request.method == "POST":
-		b = BasicForm(request.POST, request.FILES, instance=u)
+		b = ClinicianForm(request.POST, request.FILES, instance=u)
 		if b.is_valid():
 			b.save()
 
 	return render(request, 'clinician/dashboard/home.html.j2', context={
 		"title": "Dashboard Home",
 		"form_title" : "Edit basic information",
-		"form" : BasicForm(instance=u)
+		"form" : ClinicianForm(instance=u)
 	})
 
-
 @match_role("clinician")
-def personal_info(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/home.html.j2', context={
-		'title' : "Clinician Dashboard"
+def education_training(request):
+	''' handles the edit and update of education details
+	'''
+	u = Clinicians.objects.filter(users__email=request.session['email']).first()
+	e = CliniciansEducation.objects.filter(clinicians=u).first()
+
+	class EducationForm(forms.ModelForm):
+
+		class Meta:
+			model = CliniciansEducation
+			exclude = ('clinicians',)
+
+
+	if request.method == "POST":
+		c = EducationForm(request.POST, request.FILES, instance=e)
+		if c.is_valid():
+			d = c.save(commit=False)
+			d.clinicians = u
+			d.save()
+	else:
+		e = CliniciansEducation.objects.filter(clinicians=u).first()
+
+	return render(request, 'clinician/dashboard/education.html.j2', context={
+		'title' : "Clinician - details",
+		'form_title' : "Education Details",
+		'form' : EducationForm(instance=e)
 		})
 
 @match_role("clinician")
@@ -93,71 +116,101 @@ def calender(request):
 		return JsonResponse({ 'status' : True })
 
 @match_role("clinician")
-def professional_info(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/profesional.html.j2', context={
-		"title" : "Dashboard - Professional Information"
-		})
+def conditions(request):
+	''' handles the edit and addition of conditions details
+	'''
+	u = Clinicians.objects.filter(users__email=request.session['email']).first()
 
-@match_role("clinician")
-def education_training(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/education.html.j2', context={
-		"title" : "Dashboard - education_training"
-		})
+	class CliniciansSpecialityForm(forms.ModelForm):
 
-@match_role("clinician")
-def consultation_fee(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/consulation.html.j2', context={
-		"title" : "Dashboard - consultation_fee"
-		})
+		class Meta:
+			model = CliniciansSpeciality
+			exclude = ('clinicians', 'reg_date', 'healthproviders_speciality',)
+			widgets = {
+				'activefrom' : forms.TextInput(attrs={ 'placeholder' : "YYYY-MM-DD" }),
+				'activeto' : forms.TextInput(attrs={ 'placeholder' : "YYYY-MM-DD" }),
+			}
 
-@match_role("clinician")
-def offerings(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/offerings.html.j2', context={
-		"title" : "Dashboard - offerings"
-		})
+	EditFormSet = forms.modelformset_factory(CliniciansSpeciality, form=CliniciansSpecialityForm, extra=0)
 
-@match_role("clinician")
-def conditions_treated(request):
-	''' dashboard function '''
+	if request.method == "POST":
+		_forms = []
+		if request.POST['data_type'] == "add":
+			c = CliniciansSpecialityForm(request.POST, request.FILES)
+			_forms.append(c)
+		elif request.POST['data_type'] == "update":
+			c = EditFormSet(request.POST, request.FILES)
+			_forms += c.forms
+
+		for form in _forms:
+			if form.is_valid():
+				d = form.save(commit=False)
+				d.clinicians = u
+				d.save()
+			else:
+				print("errors :", form.errors)
+
 	return render(request, 'clinician/dashboard/conditions.html.j2', context={
-		"title" : "Dashboard - conditions_treated"
-		})
+		'title' : "Clinician - Conditions treated",
+		'form_title': "Add conditions treated",
+		'form' : CliniciansSpecialityForm(),
+		'edit_forms' : EditFormSet(queryset=CliniciansSpeciality.objects.filter(clinicians=u))
+			})
 
 @match_role("clinician")
-def experience(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/experience.html.j2', context={
-		"title" : "Dashboard - experience"
-		})
+def surgeries(request):
+	''' handles the edit and addition of surgeries performed
+	'''
+	u = Clinicians.objects.filter(users__email=request.session['email']).first()
 
-@match_role("clinician")
-def award_recognition(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/awards.html.j2', context={
-		"title" : "Dashboard - award_recognition"
-		})
+	class CliniciansExperienceForm(forms.ModelForm):
 
-@match_role("clinician")
-def registrations(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/registrations.html.j2', context={
-		"title" : "Dashboard - registrations"
+		class Meta:
+			model = CliniciansExperience
+			exclude = ('clinicians', 'reg_date')
+			widgets = {
+				'workfrom' : forms.TextInput(attrs={ 'placeholder' : "YYYY-MM-DD" }),
+				'workto' : forms.TextInput(attrs={ 'placeholder' : "YYYY-MM-DD" }),
+			}
+
+	EditFormSet = forms.modelformset_factory(CliniciansExperience, form=CliniciansExperienceForm, extra=0)
+
+	if request.method == "POST":
+		_forms = []
+		if request.POST['data_type'] == "add":
+			c = CliniciansExperienceForm(request.POST, request.FILES)
+			_forms.append(c)
+		elif request.POST['data_type'] == "update":
+			c = EditFormSet(request.POST, request.FILES)
+			_forms += c.forms
+
+		for form in _forms:
+			if form.is_valid():
+				d = form.save(commit=False)
+				d.clinicians = u
+				d.save()
+			else:
+				print("errors :", form.errors)
+
+	return render(request, 'clinician/dashboard/surgeries.html.j2', context={
+		'title' : "Clinician - Surgeries performed",
+		'form_title': "Add surgeries performed",
+		'form' : CliniciansExperienceForm(),
+		'edit_forms' : EditFormSet(queryset=CliniciansExperience.objects.filter(clinicians=u))
 		})
 
 @match_role("clinician")
 def membership(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/membership.html.j2', context={
-		"title" : "Dashboard - membership"
+	''' handles the edit and addition of conditions details
+	'''
+	u = Clinicians.objects.filter(users__email=request.session['email']).first()
+
+	if request.method == "POST":
+		# add update part here
+		pass
+
+	return render(request, 'clinician/dashboard/members.html.j2', context={
+		'title' : "Clinician - Manage members",
+		'form_title' : "Add new member"
 		})
 
-@match_role("clinician")
-def areas_of_interest(request):
-	''' dashboard function '''
-	return render(request, 'clinician/dashboard/interest.html.j2', context={
-		"title" : "Dashboard - areas_of_interest"
-		})

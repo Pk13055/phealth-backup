@@ -9,18 +9,12 @@ dashboard_routes = [
 
 	# personal
 	url(r'^$', views.dashboard, name='dashboard_home'),
-	url(r'calendar/?$', views.calender, name='calender'),
-	url(r'education_training/?$', views.education_training, name='education_training'),
-	url(r'experience/?$', views.experience, name='experience'),
-	url(r'award_recognition/?$', views.award_recognition, name='award_recognition'),
-	url(r'conditions_treated/?$', views.conditions_treated, name='conditions_treated'),
-	url(r'areas_of_interest/?$', views.areas_of_interest, name='areas_of_interest'),
+	url(r'education_training/?$', views.education_training, name='education'),
 
 	# professional
-	url(r'professional_info/?$', views.professional_info, name='professional_info'),
-	url(r'consultation_fee/?$', views.consultation_fee, name='consultation_fee'),
-	url(r'offerings/?$', views.offerings, name='offerings'),
-	url(r'registrations/?$', views.registrations, name='registrations'),
+	url(r'calendar/?$', views.calender, name='calender'),
+	url(r'surgeries/?$', views.surgeries, name='surgeries'),
+	url(r'conditions/?$', views.conditions, name='conditions'),
 	url(r'membership/?$', views.membership, name='membership'),
 ]
 
