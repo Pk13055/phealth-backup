@@ -24,7 +24,7 @@ def match_role(role_type):
 def signin(role, request):
 	email = request.POST['username']
 	password = request.POST['password']
-	u = Users.objects.filter(email=email).first()
+	u = Users.objects.get(email=email)
 	if u and check_password(password, u.enc_password) and u.role.role == role:
 		request.session['email'] = email
 		if 'role' in request.session:
