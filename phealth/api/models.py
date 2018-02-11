@@ -9,6 +9,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+import datetime
+import hashlib
 
 class Address(models.Model):
     address_id = models.AutoField(primary_key=True)
@@ -301,12 +303,23 @@ class Coupons(models.Model):
     timevalidity = models.IntegerField(blank=True, null=True)
     couponstatus = models.IntegerField(blank=True, null=True)
 
-    def __str__(self):
-        return str(self.coupon)
-
     class Meta:
         managed = False
         db_table = 'coupons'
+
+    def save(self, *args, **kwargs):
+        try:
+            self.couponstatus = int(self.couponstatus)
+        except:
+            self.couponstatus = 0
+        self.uniquecode = hashlib.sha1(
+            datetime.datetime.now().isoformat('T').encode('utf-8')).hexdigest()
+        print(self)
+        super(Coupons, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.coupon)
+
 
 
 class Designation(models.Model):

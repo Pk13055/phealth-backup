@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from django import forms
-from api.models import Sponsors
+from api.models import Sponsors, Coupons
 # Create your views here.
 
 # sponsor common routes
@@ -41,53 +41,22 @@ def dashboard(request):
 
 	u = Sponsors.objects.filter(users__email=request.session['email']).first()
 
-	class BasicForm(forms.ModelForm):
+	class SponsorForm(forms.ModelForm):
 
 		class Meta:
 			model = Sponsors
-			fields = ('__all__')
+			exclude = ('users', 'image', 'activefrom', 'activeto',)
+
 
 	if request.method == "POST":
-		b = BasicForm(request.POST, request.FILES, instance=u)
+		b = SponsorForm(request.POST, request.FILES, instance=u)
 		if b.is_valid():
 			b.save()
 
 	return render(request, 'sponsor/dashboard/home.html.j2', context={
 		"title": "Dashboard Home",
 		"form_title" : "Edit basic information",
-		"form" : BasicForm(instance=u)
-	})
-
-
-@match_role("sponsor")
-def organization(request):
-	''' route for dashboard  organizations'''
-	return render(request, 'sponsor/dashboard/organization.html.j2', context={
-		"title": "Dashboard - Organization details"
-	})
-
-
-@match_role("sponsor")
-def education(request):
-	''' route for dashboard education'''
-	return render(request, 'sponsor/dashboard/education.html.j2', context={
-		"title": "Dashboard - education details "
-	})
-
-
-@match_role("sponsor")
-def contact(request):
-	''' route for dashboard  contact details'''
-	return render(request, 'sponsor/dashboard/contact.html.j2', context={
-		"title": "Dashboard - contact details "
-	})
-
-
-@match_role("sponsor")
-def business(request):
-	''' route for dashboard business '''
-	return render(request, 'sponsor/dashboard/business.html.j2', context={
-		"title": "Dashboard - business details "
+		"form" : SponsorForm(instance=u)
 	})
 
 
@@ -102,6 +71,43 @@ def participants(request):
 @match_role("sponsor")
 def discounts(request):
 	''' route for dashboard discounts '''
+
+	u = Sponsors.objects.filter(users__email=request.session['email']).first()
+
+	class DiscountForm(forms.ModelForm):
+		class Meta:
+			model = Coupons
+			exclude = ('applicablesponsor', 'uniquecode',)
+			widgets = {
+				'validity' : forms.TextInput(attrs={
+					'placeholder' : "YYYY-MM-DD"
+					})
+			}
+
+	EditFormSet = forms.modelformset_factory(Coupons, exclude=('applicablesponsor',
+		'uniquecode',), extra=0)
+
+	if request.method == "POST":
+		_forms = []
+		if request.POST['data_type'] == "add":
+			c = DiscountForm(request.POST, request.FILES)
+			_forms.append(c)
+		elif request.POST['data_type'] == "update":
+			c = EditFormSet(request.POST, request.FILES)
+			_forms += c.forms
+
+		for form in _forms:
+			if form.is_valid():
+				d = form.save(commit=False)
+				d.applicablesponsor = u.users.users_id
+				d.save()
+			else:
+				print("errors :", form.errors)
+
+
+	edit_forms = EditFormSet(queryset=Coupons.objects.filter(applicablesponsor=u.users.users_id))
 	return render(request, 'sponsor/dashboard/discounts.html.j2', context={
-		"title": "Dashboard - discounts details "
+		"title": "Dashboard - discounts details",
+		"form" : DiscountForm(),
+		"edit_forms": edit_forms
 	})
