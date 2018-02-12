@@ -352,6 +352,12 @@ class Designation(models.Model):
 
 
 class Discountcard(models.Model):
+    '''
+        `added by the admin given to
+            - user directly (has to buy)
+            - Sponsor (n users * cost)
+    '''
+
     discountcard_id = models.AutoField(primary_key=True)
     healthchecks = models.ForeignKey('Healthchecks', models.DO_NOTHING)
     discountcard = models.CharField(max_length=225, blank=True, null=True)
