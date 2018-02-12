@@ -14,6 +14,7 @@ dashboard_routes = [
 	# url(r'^offerings/?$', views.offerings, name='offerings'),
 	# url(r'^special_health_checks/?$', views.special_health_checks, name='special_health_checks'),
 	# url(r'^plans/?$', views.plans, name='plans'),
+	url(r'^doctors_list/?$', views.doctors_list, name='doctors_list'),
 ]
 
 urlpatterns = [
