@@ -21,6 +21,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User as admin_user
 from django.contrib.postgres.fields import ArrayField
+
 # functions for default
 def current_timestamp():
 	return datetime.datetime.now()
@@ -38,6 +39,9 @@ class Country(models.Model):
 	name = models.CharField(max_length=50, unique=True)
 	code = models.CharField(unique=True, max_length=5)
 
+	def __str__(self):
+		return "<Country %s: %s >" % (self.code, self.name)
+
 	class Meta:
 		managed = True
 		db_table = 'countries'
@@ -46,8 +50,11 @@ class Country(models.Model):
 class State(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=60)
-	code = models.CharField(unique=True, max_length=5)
+	code = models.CharField(max_length=5)
 	country = models.ForeignKey(Country, on_delete=models.DO_NOTHING)
+
+	def __str__(self):
+		return "<State %s | %s: %s>" %(self.code, self.country.code, self.name)
 
 	class Meta:
 		managed = True
@@ -57,8 +64,11 @@ class State(models.Model):
 class City(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=60)
-	code = models.CharField(unique=True, max_length=5)
+	code = models.CharField(max_length=5)
 	state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
+
+	def __str__(self):
+		return "<City %s | %s | %s >" % (self.code, self.state.name, self.name)
 
 	class Meta:
 		managed = True
@@ -68,7 +78,7 @@ class City(models.Model):
 class District(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=60)
-	code = models.CharField(unique=True, max_length=5)
+	code = models.CharField(max_length=5)
 	city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
 
 	class Meta:
@@ -215,6 +225,9 @@ class Question(models.Model):
 	id = models.AutoField(primary_key=True)
 	question = models.CharField(max_length=100)
 
+	def __str__(self):
+		return "<Question: %s >" % self.question
+
 	class Meta:
 		managed = True
 		db_table = 'questions'
@@ -242,7 +255,7 @@ class User(models.Model):
 	role = models.CharField(choices=role_choices, editable=False, max_length=30)
 	reg_date = models.DateTimeField(default=current_timestamp, editable=False)
 	last_update = models.DateTimeField(editable=False)
-	last_IP = models.GenericIPAddressField(editable=False)
+	last_IP = models.GenericIPAddressField(editable=False, default='127.0.0.1')
 
 	email = models.EmailField()
 	name = models.CharField(max_length=150)
@@ -258,6 +271,9 @@ class User(models.Model):
 
 	question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
 	answer = models.CharField(max_length=100)
+
+	def __str__(self):
+		return "<User: %s | %s | %s >" % (self.name, self.email, self.mobile)
 
 	def save(self, *args, **kwargs):
 		self.last_update = datetime.datetime.now()
