@@ -2,7 +2,7 @@ from django.shortcuts import render
 from phealth.utils import match_role, signin, redirect
 from django.http import JsonResponse
 from django import forms
-from api.models import Healthproviders, Users, HealthprovidersSpeciality, Availablefacilities
+# from api.models import Healthproviders, Users, HealthprovidersSpeciality, Availablefacilities
 # Create your views here.
 
 

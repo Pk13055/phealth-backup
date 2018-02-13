@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import include, url
 from common import views as common
-from .api import router
 
 urlpatterns = [
     url(r'^$', common.home_route, name='home'),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include('api.urls', namespace='api')),
     url(r'^common/', include('common.urls', namespace='common')),
     url(r'^clinician/', include('clinician.urls', namespace='clinician')),
     url(r'^healthprovider/', include('healthprovider.urls', namespace='healthprovider')),

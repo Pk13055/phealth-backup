@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from django import forms
-from api.models import Sponsors, Coupons
+# from api.models import Sponsors, Coupons
 # Create your views here.
 
 # sponsor common routes

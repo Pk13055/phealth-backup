@@ -3,8 +3,8 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
-from api.models import (Clinicians, CliniciansEducation,
- CliniciansExperience, CliniciansSpeciality)
+# from api.models import (Clinicians, CliniciansEducation,
+#  CliniciansExperience, CliniciansSpeciality)
 import datetime
 
 # Create your views here.
