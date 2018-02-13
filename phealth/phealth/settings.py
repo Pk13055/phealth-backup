@@ -121,7 +121,7 @@ DATABASES = {
         'NAME': 'phealth',
         'USER': 'phealth',
         'PASSWORD': 'phealth12345',
-        'HOST' : 'phealth-new.ckna3klbqd78.ap-south-1.rds.amazonaws.com',
+        'HOST' : 'phealth.ckna3klbqd78.ap-south-1.rds.amazonaws.com',
         'PORT': '5432',
     },
     'backup': {
