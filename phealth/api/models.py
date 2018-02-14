@@ -5,7 +5,6 @@
 #   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
-
 '''
 
 	All the models for the database
@@ -84,7 +83,6 @@ class District(models.Model):
 	class Meta:
 		managed = True
 		db_table = 'districts'
-
 
 class Address(models.Model):
 	''' address, can be of the user or any other model

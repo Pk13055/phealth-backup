@@ -1,0 +1,62 @@
+{# main template for the sponsor dashboard #}
+{% extends 'healthprovider/dashboard/base.html.j2' %}
+{% load static %}
+{% load bootstrap %}
+{% block content %}
+<div class="row">
+	<h3>{{ title }}</h3>
+</div>
+<div class="row">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">Dr. ABC DEF</h3>
+		</div>
+		<div class="panel-body">
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+		</div>
+		<div class="container">
+			<div class="well well-lg">
+				<h4>Mr. Health Seeker 1</h4>
+				<p>
+					<i class="fa fa-calendar-alt"></i>
+					dd/mm/yyyy
+					<br/>
+					<i class="fa fa-clock"></i>
+					hh:mm A - hh:mm A
+				</p>
+				<button type="submit" class="btn btn-success">Accept</button>
+				<button type="submit" class="btn btn-danger">Reject</button>
+			</div>
+			<div class="well well-lg">
+				<span class="label label-success">Accepted</span>
+				<h4>Mr. Health Seeker 2</h4>
+				<p>
+					<i class="fa fa-calendar-alt"></i>
+					dd/mm/yyyy
+					<br/>
+					<i class="fa fa-clock"></i>
+					hh:mm A - hh:mm A
+				</p>
+			</div>
+			<div class="well well-lg">
+				<span class="label label-danger">Rejected</span>
+				<h4>Mr. Health Seeker 3</h4>
+				<p>
+					<i class="fa fa-calendar-alt"></i>
+					dd/mm/yyyy
+					<br/>
+					<i class="fa fa-clock"></i>
+					hh:mm A - hh:mm A
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

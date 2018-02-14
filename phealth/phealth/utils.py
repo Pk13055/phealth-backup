@@ -1,7 +1,11 @@
 import datetime
+import hashlib
+from random import randint
+import requests
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
+from django.urls import reverse
 from api.models import *
 from ipware import get_client_ip
 
@@ -50,3 +54,43 @@ def signin(role, request):
 		request.session['role'] = u.role
 		return True
 	return False
+
+def generate_payment_data(request, to, amount, product_info, test=False):
+	PAYU_BASE_URL = 'https://secure.payu.in/_payment'
+	MERCHANT_KEY = 'omKM0P'
+	SALT = 'Rf0OQdPE'
+
+	# email = request.session['email']
+	# u = Users.objects.get(email=email)
+	u = True
+
+	if u:
+		hash_object = hashlib.sha256(b'randint(0,20)')
+		hash_string = ''
+
+		data = {
+			'key': MERCHANT_KEY,
+			'txnid': hash_object.hexdigest()[0:20],
+			'amount': str(amount),
+			'productinfo': product_info,
+			# 'firstname': u.firstname,
+			# 'email': u.email,
+			# 'phone': u.phone,
+			'firstname': 'Test',
+			'email': 'test@test.in',
+			'phone': '1010101010',
+			'surl': reverse('common:payment_success'),
+			'furl': reverse('common:payment_failure'),
+		}
+
+		hash_sequence = [
+			'key', 'txnid', 'amount', 'productinfo', 'firstname', 'email', 'udf1',
+			'udf2', 'udf3', 'udf4', 'udf5', 'udf6', 'udf7', 'udf8', 'udf9', 'udf10'
+		]
+
+		hash_string = '|'.join([str(data[_]) if _ in data else '' for _ in hash_sequence ]) + '|' + SALT
+		data['hash'] = hashlib.sha512(hash_string.encode('utf-8')).hexdigest()
+
+		return PAYU_BASE_URL, data
+
+	return None

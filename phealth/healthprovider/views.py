@@ -184,3 +184,10 @@ def facilities(request):
 # 		"title" : "Plans",
 # 		"section" : "Plans",
 # 		})
+
+def doctors_list(request):
+	''' route for dahsboard doctors list '''
+
+	return render(request, 'healthprovider/dashboard/doctors_list.html.j2', context={
+		"title": "Doctors Appointment List",
+	})
