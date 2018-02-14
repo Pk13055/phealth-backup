@@ -14,4 +14,5 @@ payment_routes = [
 urlpatterns = [
 	url(r'^signout/?$', views.logout, name='signout'),
 	url(r'^payment/', include(payment_routes)),
+	url(r'^otp/?$', views.send_OTP, name='otp'),
 ]

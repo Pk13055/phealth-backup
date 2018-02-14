@@ -1,5 +1,7 @@
 /* PAGE SPECIFIC JS */
 
+/*
+
 $("#find_btn").click(function() { //user clicks button
     if ("geolocation" in navigator) { //check geolocation available
         //try to get user current location using getCurrentPosition() method
@@ -62,4 +64,36 @@ $(document).ready(function() {
     });
 
 
+});
+*/
+// send the otp to the user and move to next step
+let sendOTP = (email, mobile, csrf_token) => {
+    $.ajax({
+        'url' : "/common/otp",
+        'method' : "POST",
+        'headers' : {
+            'X-CSRFToken' : csrf_token
+        },
+        'data' : {
+            'email' : email,
+            'mobile' : mobile
+        },
+        'success' : function(response) {
+            console.log(response);
+        }
+    });
+};
+
+
+$(document).ready(function() {
+
+    // trigger OTP on generateOTP click
+    $("button#otp_send").on('click', () => {
+        let mobile = $("input#mobile").val(),
+        email = $("input#email").val(),
+        csrf_token = $("input[name='csrfmiddlewaretoken']").val();
+        console.log(email);
+        console.log(mobile);
+        sendOTP(email, mobile, csrf_token);
+    });
 });

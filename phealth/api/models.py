@@ -269,6 +269,8 @@ class User(models.Model):
 
 	question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
 	answer = models.CharField(max_length=100)
+	profile_pic = models.ImageField(upload_to='profile_pics',
+	 default='default_profile.jpg')
 
 	def __str__(self):
 		return "<User: %s | %s | %s >" % (self.name, self.email, self.mobile)
@@ -345,8 +347,7 @@ class Seeker(models.Model):
 	profession = models.CharField(max_length=100, choices=profession_choices)
 	language = models.CharField(max_length=100, choices=language_choices)
 	dob = models.DateField()
-	profile_pic = models.ImageField(upload_to='profile_pics',
-	 default='default_profile.jpg')
+
 
 	class Meta:
 		managed = True
@@ -408,10 +409,28 @@ class Provider(models.Model):
 class Sponsor(models.Model):
 	''' the sponsor who can bulk register users as seekers
 	'''
+
+	org_type_choices = (
+		("corporate", "Corporations"),
+		("college", "Educational Institutions"),
+		("ngo", "Non-government Organizations"),
+		("community", "Gated communities"),
+		)
+
+	org_size_choices = (
+		("50-100", "50-100"),
+		("100-500", "100-500"),
+		("500-1000", "500-1000"),
+		("1000-5000", "1000-5000"),
+		("5000-10000", "5000-10000"),
+		("10000+", "10000+"),
+		)
+
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	org_name = models.CharField(max_length=50)
-	org_size = models.PositiveSmallIntegerField(default=10)
+	org_size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
+	org_type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
 	# add extra fields after consulting
 
 	class Meta:

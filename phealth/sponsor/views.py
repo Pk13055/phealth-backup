@@ -2,22 +2,62 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from django import forms
-# from api.models import Sponsors, Coupons
+from api.models import User, Sponsor
+import random
+
 # Create your views here.
 
+class UserForm(forms.ModelForm):
+
+	class Meta:
+		model = User
+		fields = ('__all__')
+		# exclude = ()
+
 # sponsor common routes
-
-
 def SignUp(request):
+
+	class SponsorForm(forms.ModelForm):
+
+		class Meta:
+			model = Sponsor
+			exclude = ('user',)
+
 	if request.method == "GET":
-		return render(request, 'sponsor/registration.html.j2', context={
-			'route': "/sponsor"
+
+		user_form = UserForm()
+		sponsor_form = SponsorForm()
+
+		if 'otp' not in request.session:
+			request.session['otp'] = random.randint(1, 9999)
+
+		print("SESSION : ", request.session['otp'])
+
+		return render(request, 'sponsor/new_reg.html.j2', context={
+			'route': "/sponsor",
+			'user_form' : user_form,
+			'sponsor_form' : sponsor_form
 		})
+
 	elif request.method == "POST":
-		print("Posting data")
-		print(request.POST)
-		print(request.FILES)
-		return JsonResponse({'status': True})
+		if request.POST['otp'] != request.session['otp']:
+			return JsonResponse({'status': False })
+		sponsor = SponsorForm(request.POST, request.FILES)
+		user = UserForm(request.POST, request.FILES)
+		if user.is_valid() and sponsor.is_valid():
+			print("Valid Data")
+			u = user.save()
+			s = sponsor.save(commit=False)
+			s.user = user
+			s.save()
+			del request.session['otp']
+		else:
+			return render(request, 'sponsor/new_reg.html.j2', context={
+				'route' : "/sponsor",
+				'user_form' : user,
+				'sponsor_form' : sponsor,
+				'errors' : [user.errors, sponsor.errors]
+				})
 
 
 def SignIn(request):
