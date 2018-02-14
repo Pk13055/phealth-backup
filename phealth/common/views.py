@@ -53,19 +53,18 @@ def send_OTP(request):
 	'''
 	print("POST DATA", request.POST)
 	try:
-		mobile, email = request.POST['mobile'], request.POST['email']
-		print(mobile, email)
+		mobile = request.POST['mobile']
+		email = request.POST['email']
 		otp = request.session['otp']
-		print(otp)
 	except:
 		return JsonResponse({ 'status' : "Invalid Request" })
 
-	# Email sending
-	try:
-		email = send_mail("Registration OTP", "Code: %d" % otp, "phealth@phealth.com", [email],
-			fail_silently=False)
-	except:
-		return JsonResponse({ 'status' : "E-mail failed to send" })
+	# # Email sending
+	# try:
+	# 	email = send_mail("Registration OTP", "Code: %d" % otp, "rajesh@mbrinformatics.com", [email],
+	# 		fail_silently=False)
+	# except Exception as e:
+	# 	return JsonResponse({ 'status' : "E-mail failed to send | %s" % str(e) })
 
 	# Mobile OTP sending
 	base_url = "http://api.msg91.com/api/sendhttp.php"
@@ -80,8 +79,8 @@ def send_OTP(request):
 	try:
 		r = requests.get(base_url, params=params)
 		if r.status_code != 200:
-			raise Exception
-	except:
-		return JsonResponse({ 'status' : "SMS failed to send" })
+			raise Exception("Invalid params")
+	except Exception as e:
+		return JsonResponse({ 'status' : "SMS failed to send | %s" % str(e) })
 
 	return JsonResponse({ 'status' : "OTP sent successfully!" })

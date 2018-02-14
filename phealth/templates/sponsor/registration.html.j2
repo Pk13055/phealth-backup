@@ -1,269 +1,53 @@
 {% extends 'sponsor/base.html.j2' %}
 {% load static %}
-{% block head %}
-<script src="{% static 'common/js/jquery.placepicker.js' %}"></script>
-<script src="{% static 'common/js/functionality.js' %}"></script>
-<script>
-let sections = ["instant_registration", "otp", "password",
-	"verification", "contact_details", "organizationdetails"
-];
-$(document).ready(function() {
-	sectionNav(sections);
-	addSubmit(sections[sections.length - 1]);
-});
-</script>
-{% endblock %} {% block content %}
+{% load bootstrap %}
+{% block content %}
 <div class="row">
-	<h1>Sponsor Registration</h1>
-	<p class="lead text-muted">Have an account already? Sign in <a href="{{ route }}/signin">here</a>.</p>
+	<h2>Sponsor Registration</h2>
+	<p class="lead text-muted">Already have an account? Sign in <a href="{% url 'sponsor:signin' %}">here</a>.</p>
 </div>
-<form id="main-form" enctype="multipart/form-data">
-	<section class="container">
-		<h3>Instant Registration</h3>
-		<div class="form-group">
-			<label for="organizationname"> organizationname</label>
-			<input required type="text" class="form-control" id="organizationname" placeholder="Enter Name of the Orgnization" name="organizationname">
-		</div>
-		<div class="form-group">
-			<label>businessregtype </label>
-			<select name="businessregtype" class="form-control" required>
-				<option value="">Select Sponsors_id</option>
-				<option value="1">Corporates</option>
-				<option value="2">Educational Institutions</option>
-				<option value="3">NGO's</option>
-				<option value="4">Gated Communities</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<label>groupsize</label>
-			<select name="groupsize" class="form-control">
-				<option value="">Select from List</option>
-				<option value="1">50-100</option>
-				<option value="2">100-500</option>
-				<option value="3">500-1000</option>
-				<option value="4">1000-5000</option>
-				<option value="4">5000-10000</option>
-				<option value="4">Above 10000</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<label>Mobile:</label>
-			<input required type="Number" class="form-control" id="number" placeholder="Number" name="number">
-		</div>
-		<div class="form-group">
-			<label>Email:</label>
-			<input required type="Email" class="form-control" id="email" placeholder="email" name="Email">
-		</div>
-		<div class="checkbox">
-			<label>
-				<input required type="checkbox" name="remember"> By Signing Up I accept All Terms & Conditions</label>
-		</div>
-	</section>
-	<section class="container">
-		<h3>Enter OTP</h3>
-		<p>OTP has sent to Mobile No and/or email ID </p>
-		<div class="form-group">
-			<label for="otp">Enter OTP</label>
-			<input required type="text" class="form-control" id="otp" placeholder="Enter OTP" name="otp">
-		</div>
-		<div class="row">
-			<hr>
-		</div>
-	</section>
-	<section class="container">
-		<h3>Set Password</h3>
-		<p>Setup your password </p>
-		<div class="form-group">
-			<label for="enc_password">Enter New password</label>
-			<input required type="text" class="form-control" id="enc_password" placeholder="Enter enc_password" name="enc_password">
-		</div>
-		<div class="form-group">
-			<label for="re_enc_password">Re-Enter Password</label>
-			<input required type="text" class="form-control" id="re_enc_password" placeholder="Enter re_enc_password" name="re_enc_password">
-		</div>
-		<div class="row">
-			<hr>
-		</div>
-	</section>
-	<section class="container">
-		<h3>On Successful verification of Otp &amp; Password </h3>
-		<div class="form-group">
-			<label for=organizationname>organizationname</label>
-			<input required type="text" class="form-control" id="organizationname" placeholder="Display as provided in instant registration" name="organizationname">
-		</div>
-		<div class="form-group">
-			<label for=businessregtype>businessregtype</label>
-			<input required type="text" class="form-control" id="businessregtype" placeholder="Display as provided in instant registration" name="businessregtype">
-		</div>
-		<div class="form-group">
-			<label for=contactperson>contactperson</label>
-			<input required type="text" class="form-control" id="contactperson" placeholder="Display as provided in instant registration" name="contactperson">
-		</div>
-		<div class="form-group">
-			<label for=designation>designation</label>
-			<input required type="text" class="form-control" id="designation" placeholder="Display as provided in instant registration" name="designation">
-		</div>
-		<div class="form-group">
-			<label for=mobileno>mobileno</label>
-			<input required type="number" class="form-control" id="mobileno" placeholder="mobileno" name="mobileno">
-		</div>
-		<div class="form-group">
-			<label for=email>email</label>
-			<input required type="text" class="form-control" id="email" placeholder="Display as provided in instant registration" name="email">
-		</div>
-		<div class="form-group">
-			<label for="image">image</label>
-			<input required type="file" class="form-control" id="image" name="image">
-		</div>
-		<button type="button" class="btn btn-default">Add More</button>
-		<div class="row">
-			<hr>
-		</div>
-	</section>
-	<section class="container">
-		<h3>Contact Details</h3>
-		<div class="row">
-			<div class="col-sm-4">
-				<h3>Use My current Location</h3>
-				<button id="find_btn" class="btn btn-default">Get My Current Location</button>
-			</div>
-			<div class="col-sm-4">
-				<h3>Point Location from Map</h3>
-				<div class="row" data-example>
-					<div class="form-group">
-						<input required class="placepicker form-control" data-map-container-id="collapseOne" />
-					</div>
-					<div id="collapseOne" class="collapse">
-						<div class="placepicker-map thumbnail"></div>
-					</div>
+<div class="row">
+	<form method="POST" enctype="multipart/form-data">
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
+				<div class="panel-body">
+					{% csrf_token %}
+					{{ user_form | bootstrap }}
 				</div>
 			</div>
-			<div class="col-sm-4">
-				<h3>Enter Address Manually</h3>
-				<div data-example>
+		</div>
+		<div class="col-xs-12 col-md-6">
+		<div class="row">
+			<div class="panel panel-danger">
+				<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Sponsor-specific Information</div>
+				<div class="panel-body">
+					{{ sponsor_form | bootstrap }}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading"><i class="fa fa-bolt fa-lg"></i> OTP Verification</div>
+				<div class="panel-body">
 					<div class="form-group">
-						<input required class="placepicker form-control" placeholder="Enter a location" data-latitude-input="#latitude" data-longitude-input="#longitude" />
+						<label class="control-label" for="otp">OTP</label>
+						<input class=" form-control" type="number" name="otp" id="otp" max="999999999" required>
+						<button type="button" class="btn btn-default" id="otp_send">Generate OTP</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<div id="result"></div>
 		</div>
-		<div class="form-group">
-			<label for="latitude">Latitude:</label>
-			<input required type="text" class="form-control" id="latitude" placeholder="Enter latitude" name="latitude">
-		</div>
-		<div class="form-group">
-			<label for="longitude">Longitude:</label>
-			<input required type="text" class="form-control" id="longitude" placeholder="Enter longitude" name="longitude">
-		</div>
-		<div class="form-group">
-			<label for="image">Upload Photos</label>
-			<input required type="file" class="form-control" id="image" placeholder="Upload image" name="image" multiple="true">
-		</div>
-		<div class="form-group">
-			<label for="contactperson">Contact Person</label>
-			<input required type="text" class="form-control" id="contactperson" placeholder="Enter Fullname" name="contactperson">
-		</div>
-		<div class="form-group">
-			<label for="phone">Phone No</label>
-			<input required type="text" class="form-control" id="phone" placeholder="Enter Fullname" name="phone">
-		</div>
-		<div class="form-group">
-			<label for="LandMark">Land Mark</label>
-			<input required type="text" class="form-control" id="LandMark" placeholder="Land Mark" name="LandMark">
-		</div>
-		<div class="form-group">
-			<label for="buildingname">buildingname</label>
-			<input required type="text" class="form-control" id="buildingname" placeholder="Building Name" name="BuildingName">
-		</div>
-		<div class="form-group">
-			<label for="H.No./FlatNo.">H.No./FlatNo.</label>
-			<input required type="text" class="form-control" id="H.No./FlatNo." placeholder="H. No. / Flat No." name="H.No./Flat No.">
-		</div>
-		<div class="form-group">
-			<label for="pincode">pincode</label>
-			<input required type="text" class="form-control" id="pincode" placeholder="PIN Code" name="pincode">
-		</div>
-		<h3>Add Alternate Contact Person</h3>
-		<div class="form-group">
-			<label for="name">name</label>
-			<input required type="text" class="form-control" id="name" placeholder="name" name="name">
-		</div>
-		<div class="form-group">
-			<label for="designation">designation</label>
-			<input required type="text" class="form-control" id="designation" placeholder="Designation" name="designation">
-		</div>
-		<div class="form-group">
-			<label for="Branch/Location">Branch/Location</label>
-			<input required type="text" class="form-control" id="Branch/Location" placeholder="Branch/Location" name="Branch/Location">
-		</div>
-		<div class="form-group">
-			<label for="mobileno">mobileno:</label>
-			<input required type="Number" class="form-control" id="mobileno" placeholder="Number" name="mobileno">
-		</div>
-		<div class="form-group">
-			<label for="email">email:</label>
-			<input required type="text" class="form-control" id="email" placeholder="email" name="email">
-		</div>
-		<p>Add More</p>
 		<div class="row">
-			<hr>
-		</div>
-	</section>
-	<section class="container">
-		<h3>Basic information of the Organization</h3>
-		<p>Skip</p>
-		<div class="form-group">
-			<label for=businessregtype>businessregtype</label>
-			<input required type="text" class="form-control" id="businessregtype" placeholder="Nature of Business" name="businessregtype">
-		</div>
-		<div class="form-group">
-			<label for=operatinghours>operatinghours</label>
-			<input required type="number" class="form-control" id="operatinghours" placeholder="Nature of Operation Hours" name="operatinghours">
-		</div>
-		<div class="form-group">
-			<label for="oprtainglocation">oprtainglocation</label>
-			<select name="oprtainglocation" id="oprtainglocation" class="form-control">
-				<option value="">SelectfromList</option>
-				<option value="1">Hyd</option>
-				<option value="2">Delhi</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<label for=addlocation>addlocation</label>
-			<input required type="text" class="form-control" id="addlocation" placeholder="Add Location" name="addlocation">
-		</div>
-		<div class="form-group">
-			<label for="requiredlocation">requiredlocation</label>
-			<select name="requiredlocation" id="requiredlocation" class="form-control">
-				<option value="">Select from List</option>
-				<option value="1">All</option>
-				<option value="2">Specific</option>
-			</select>
-		</div>
-		<p>If Specific</p>
-		<div class="form-group">
-			<label for="selectfromlist">selectfromlist</label>
-			<select name="selectfromlist" id="selectfromlist" class="form-control">
-				<option value="SelectfromList">SelectfromList</option>
-				<option value="1">Secbad</option>
-				<option value="2">Madhapur</option>
-			</select>
-			<div class="form-group">
-				<label> for=addlocation>addlocation</label>
-				<input required type="text" class="form-control" id="addlocation2" placeholder="Add Location" name="addlocation">
+			<div class="col-xs-12">
+				<p class="text-muted">
+					<input type="checkbox" required id="tick" class="form-inline"><label for="tick"> I have read all the details</label>
+				</p>
+				<button class="btn btn-block btn-primary">Register!</button>
 			</div>
-			<button type="button" class="btn btn-default">Submit</button>
-			<p>Thank you very much registering with us</p>
-			<p>Soon we will assign an account manager to assist you to explore exclusive services for you and your participants.</p>
-			<p>Kindly contact our corporate service team on _____________ for further assistance.</p>
 		</div>
-		<div class="row">
-			<hr>
-		</div>
-	</section>
-</form>
+	</form>
+</div>
 <script src="{% static 'sponsor/js/register.js' %}"></script>
 {% endblock %}

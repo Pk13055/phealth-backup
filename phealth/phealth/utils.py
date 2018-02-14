@@ -42,18 +42,20 @@ def signin(role, request):
 	'''
 	email = request.POST['username']
 	password = request.POST['password']
-	u = Users.objects.get(email=email)
+	u = User.objects.get(email=email)
 
 	client_ip, is_routable = getIP(request)
-	if client_ip is not None:
-		u.update(last_IP=client_ip)
+	if client_ip is not None: u.last_IP = client_ip
+	status = False
 
 	if u and check_password(password, u.password) and (u.role in role or role in u.role):
-		u.update(last_update=datetime.datetime.now())
+		u.last_update=datetime.datetime.now()
 		request.session['email'] = email
 		request.session['role'] = u.role
-		return True
-	return False
+		status = True
+
+	u.save()
+	return status
 
 def generate_payment_data(request, to, amount, product_info, test=False):
 	PAYU_BASE_URL = 'https://secure.payu.in/_payment'

@@ -31,7 +31,7 @@ EMAIL_HOST_USER = 'rajesh@mbrinformatics.com'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'Rajesh Rapally <rajesh@mbrinformatics.com>'
+DEFAULT_FROM_EMAIL = 'rajesh@mbrinformatics.com'
 
 
 ALLOWED_HOSTS = [

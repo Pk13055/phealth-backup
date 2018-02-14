@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from django import forms
+from phealth.utils import getIP
 from api.models import User, Sponsor
 import random
 
@@ -23,42 +24,44 @@ def SignUp(request):
 			model = Sponsor
 			exclude = ('user',)
 
-	if request.method == "GET":
+	if request.method == "POST":
+		print(request.POST, request.FILES)
+		s = SponsorForm(request.POST, request.FILES)
+		u = UserForm(request.POST, request.FILES)
+		print(s.is_valid(), u.is_valid())
+		print(request.session['otp'], request.POST['otp'])
+		if s.is_valid() and u.is_valid() and \
+			str(request.POST['otp']) == str(request.session['otp']):
+			user = u.save(commit=False)
+			ip_addr, del_val = getIP(request)
+			if ip_addr: user.last_IP = ip_addr
+			user.role = 'sponsor'
+			user.save()
+			sponsor = s.save(commit=False)
+			sponsor.user = user
+			sponsor.save()
+			del request.session['otp']
+			return redirect('sponsor:signin')
+		user_form = u
+		sponsor_form = s
+		errors = [u.errors, s.errors, "OTP did not match!"]
+		print(errors)
 
+	elif request.method == "GET":
 		user_form = UserForm()
 		sponsor_form = SponsorForm()
+		errors = None
 
-		if 'otp' not in request.session:
-			request.session['otp'] = random.randint(1, 9999)
+	if 'otp' not in request.session:
+		request.session['otp'] = random.randint(1, 9999)
 
-		print("SESSION : ", request.session['otp'])
-
-		return render(request, 'sponsor/new_reg.html.j2', context={
-			'route': "/sponsor",
-			'user_form' : user_form,
-			'sponsor_form' : sponsor_form
-		})
-
-	elif request.method == "POST":
-		if request.POST['otp'] != request.session['otp']:
-			return JsonResponse({'status': False })
-		sponsor = SponsorForm(request.POST, request.FILES)
-		user = UserForm(request.POST, request.FILES)
-		if user.is_valid() and sponsor.is_valid():
-			print("Valid Data")
-			u = user.save()
-			s = sponsor.save(commit=False)
-			s.user = user
-			s.save()
-			del request.session['otp']
-		else:
-			return render(request, 'sponsor/new_reg.html.j2', context={
-				'route' : "/sponsor",
-				'user_form' : user,
-				'sponsor_form' : sponsor,
-				'errors' : [user.errors, sponsor.errors]
-				})
-
+	return render(request, 'sponsor/registration.html.j2', context={
+		'title' : "Sponsor Registration",
+		'route': "/sponsor",
+		'user_form' : user_form,
+		'sponsor_form' : sponsor_form,
+		'errors' : errors
+	})
 
 def SignIn(request):
 	if request.method == "GET":
@@ -79,13 +82,13 @@ def SignIn(request):
 def dashboard(request):
 	''' route for dashboard home '''
 
-	u = Sponsors.objects.filter(users__email=request.session['email']).first()
+	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 
 	class SponsorForm(forms.ModelForm):
 
 		class Meta:
-			model = Sponsors
-			exclude = ('users', 'image', 'activefrom', 'activeto',)
+			model = Sponsor
+			exclude = ('user',)
 
 
 	if request.method == "POST":
@@ -100,23 +103,11 @@ def dashboard(request):
 	})
 
 
-# @match_role("sponsor")
-# def participants(request):
-# 	''' route for dashboard participants'''
-# 	if request.method == "POST":
-# 		pass
-# 		# handle the form parsing and data etc here
-
-# 	return render(request, 'sponsor/dashboard/participants.html.j2', context={
-# 		"title": "Dashboard - participants details "
-# 	})
-
-
 @match_role("sponsor")
 def discounts(request):
 	''' route for dashboard discounts '''
 
-	u = Sponsors.objects.filter(users__email=request.session['email']).first()
+	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 
 	class DiscountForm(forms.ModelForm):
 		class Meta:
@@ -143,13 +134,13 @@ def discounts(request):
 		for form in _forms:
 			if form.is_valid():
 				d = form.save(commit=False)
-				d.applicablesponsor = u.users.users_id
+				d.applicablesponsor = u.user.user_id
 				d.save()
 			else:
 				print("errors :", form.errors)
 
 
-	edit_forms = EditFormSet(queryset=Coupons.objects.filter(applicablesponsor=u.users.users_id))
+	edit_forms = EditFormSet(queryset=Coupons.objects.filter(applicablesponsor=u.user.user_id))
 	return render(request, 'sponsor/dashboard/discounts.html.j2', context={
 		"title": "Dashboard - discounts details",
 		"form" : DiscountForm(),
