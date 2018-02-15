@@ -3,20 +3,37 @@
 {% load bootstrap %}
 {% block content %}
 <div class="row">
-	<h3>{{ title }}</h3>
+	<h2>Clinician Registration</h2>
+	<p class="lead text-muted">Already have an account? Sign in <a href="{% url 'clinician:signin' %}">here</a>.</p>
 </div>
 <div class="row">
-	<div class="panel panel-primary">
-		<div class="panel-heading"><i class="fa fa-edit fa-lg"></i> {{ form_title }}</div>
-		<form method="POST">
-			{% csrf_token %}
-			<div class="panel-body">
-				{{ form | bootstrap }}
+	<form method="POST" enctype="multipart/form-data">
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
+				<div class="panel-body">
+					{% csrf_token %}
+					{{ user_form | bootstrap }}
+				</div>
 			</div>
-			<div class="panel-footer">
-				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-chevron-up fa-lg"></i> Update!</button>
+		</div>
+		<div class="col-xs-12 col-md-6">
+		<div class="row">
+			<div class="panel panel-danger">
+				<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Clinician-specific Information</div>
+				<div class="panel-body">
+					{{ clinician_form | bootstrap }}
+				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<button class="btn btn-block btn-primary">Update</button>
+			</div>
+		</div>
+	</form>
 </div>
+{# <script src="{% static 'clinician/js/register.js' %}"></script> #}
 {% endblock %}
+

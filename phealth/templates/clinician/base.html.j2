@@ -13,19 +13,16 @@
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personal <span class="caret"></span></a>
 	<ul class="dropdown-menu">
 		<li><a href="{% url 'clinician:dashboard_home' %}">Personal Information</a></li>
-		<li role="separator" class="divider"></li>
-		<li><a href="{% url 'clinician:education' %}">Education &amp; Training</a></li>
 	</ul>
 </li>
 {# business dropdown #}
 <li class="dropdown">
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Business <span class="caret"></span></a>
 	<ul class="dropdown-menu">
-		<li><a href="{% url 'clinician:conditions' %}">Conditions Treated</a></li>
-		<li><a href="{% url 'clinician:surgeries' %}">Surgeries Performed</a></li>
+		<li><a href="{% url 'clinician:speciality' %}">Speciality</a></li>
+		<li><a href="{% url 'clinician:calender' %}">Calender</a></li>
 		<li role="separator" class="divider"></li>
-		<li><a href="{% url 'clinician:calender' %}">Timings</a></li>
-		<li><a href="{% url 'clinician:membership' %}">Membership</a></li>
+		<li><a href="{% url 'clinician:appointments' %}">Appointments</a></li>
 	</ul>
 </li>
 {% endblock navs %}

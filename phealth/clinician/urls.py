@@ -9,13 +9,11 @@ dashboard_routes = [
 
 	# personal
 	url(r'^$', views.dashboard, name='dashboard_home'),
-	url(r'education_training/?$', views.education_training, name='education'),
+	url(r'calender/?$', views.calender, name='calender'),
+	url(r'speciality/?$', views.speciality, name='speciality'),
+	url(r'appointments/?$', views.appointments, name='appointments'),
 
-	# professional
-	url(r'calendar/?$', views.calender, name='calender'),
-	url(r'surgeries/?$', views.surgeries, name='surgeries'),
-	url(r'conditions/?$', views.conditions, name='conditions'),
-	url(r'membership/?$', views.membership, name='membership'),
+
 ]
 
 urlpatterns = [
