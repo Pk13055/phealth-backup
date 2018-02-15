@@ -1,17 +1,31 @@
-{% extends 'base.html.j2' %}
+{% extends 'common/dashboard_base.html.j2' %}
 {% load static %}
 {% block mainhead %}
 <link href="{% static 'clinician/css/style.css' %}" rel="stylesheet" type="text/css">
 <script src="{% static 'clinician/js/main.js' %}"></script>
 {% block head %}{% endblock %}
 {% endblock %}
-{% block maincontent %}
-	{% block navbar %}{% endblock %}
-	<main>
-		<div class="container">
-		{% block content %}
-		{% endblock %}
-		</div>
-	</main>
-	{% block footer %}{% endblock %}
-{% endblock %}
+{% block section %}Clinician{% endblock section %}
+{% block baseurl %}{% url 'clinician:dashboard_home' %}{% endblock baseurl %}
+{% block navs %}
+{# personal dropdown #}
+<li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personal <span class="caret"></span></a>
+	<ul class="dropdown-menu">
+		<li><a href="{% url 'clinician:dashboard_home' %}">Personal Information</a></li>
+		<li role="separator" class="divider"></li>
+		<li><a href="{% url 'clinician:education' %}">Education &amp; Training</a></li>
+	</ul>
+</li>
+{# business dropdown #}
+<li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Business <span class="caret"></span></a>
+	<ul class="dropdown-menu">
+		<li><a href="{% url 'clinician:conditions' %}">Conditions Treated</a></li>
+		<li><a href="{% url 'clinician:surgeries' %}">Surgeries Performed</a></li>
+		<li role="separator" class="divider"></li>
+		<li><a href="{% url 'clinician:calender' %}">Timings</a></li>
+		<li><a href="{% url 'clinician:membership' %}">Membership</a></li>
+	</ul>
+</li>
+{% endblock navs %}

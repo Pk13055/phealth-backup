@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     'sponsor',
     'clinician',
     'healthprovider',
+    'reseller',
+    'salesagent',
 ]
 
 REST_FRAMEWORK = {

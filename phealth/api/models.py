@@ -431,6 +431,7 @@ class Sponsor(models.Model):
 	org_name = models.CharField(max_length=50)
 	org_size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
 	org_type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	users = models.ManyToManyField(Seeker)
 	# add extra fields after consulting
 
 	class Meta:

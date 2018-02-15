@@ -19,7 +19,7 @@ dashboard_routes = [
 ]
 
 urlpatterns = [
-    url(r'^signup/?$', views.SignUp, name='signup'),
+    # url(r'^signup/?$', views.SignUp, name='signup'),
     url(r'^signin/?$', views.SignIn, name='signin'),
     url(r'^dashboard/', include(dashboard_routes))
 ]

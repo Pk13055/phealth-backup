@@ -10,17 +10,17 @@ import datetime
 # Create your views here.
 
 
-def SignUp(request):
-	if request.method == "GET":
-		return render(request, 'clinician/registration.html.j2', context={
-			'route': "/clinician",
-			'title': "Clinician Sign up"
-			})
-	elif request.method == "POST":
-		print("Posting data")
-		print(request.POST)
-		print(request.FILES)
-		return JsonResponse({'status' : True })
+# def SignUp(request):
+# 	if request.method == "GET":
+# 		return render(request, 'clinician/registration.html.j2', context={
+# 			'route': "/clinician",
+# 			'title': "Clinician Sign up"
+# 			})
+# 	elif request.method == "POST":
+# 		print("Posting data")
+# 		print(request.POST)
+# 		print(request.FILES)
+# 		return JsonResponse({'status' : True })
 
 
 def SignIn(request):

@@ -42,7 +42,10 @@ def signin(role, request):
 	'''
 	email = request.POST['username']
 	password = request.POST['password']
-	u = User.objects.get(email=email)
+	try:
+		u = User.objects.get(email=email)
+	except:
+		return False
 
 	client_ip, is_routable = getIP(request)
 	if client_ip is not None: u.last_IP = client_ip

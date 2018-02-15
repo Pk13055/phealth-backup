@@ -84,22 +84,8 @@ def dashboard(request):
 
 	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 
-	class SponsorForm(forms.ModelForm):
-
-		class Meta:
-			model = Sponsor
-			exclude = ('user',)
-
-
-	if request.method == "POST":
-		b = SponsorForm(request.POST, request.FILES, instance=u)
-		if b.is_valid():
-			b.save()
-
-	return render(request, 'sponsor/dashboard/home.html.j2', context={
-		"title": "Dashboard Home",
-		"form_title" : "Edit basic information",
-		"form" : SponsorForm(instance=u)
+	return render(request, 'sponsor/dashboard/basic_details.html.j2', context={
+		"title": "Basic details",
 	})
 
 
@@ -109,40 +95,17 @@ def discounts(request):
 
 	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 
-	class DiscountForm(forms.ModelForm):
-		class Meta:
-			model = Coupons
-			exclude = ('applicablesponsor', 'uniquecode',)
-			widgets = {
-				'validity' : forms.TextInput(attrs={
-					'placeholder' : "YYYY-MM-DD"
-					})
-			}
-
-	EditFormSet = forms.modelformset_factory(Coupons, exclude=('applicablesponsor',
-		'uniquecode',), extra=0)
-
-	if request.method == "POST":
-		_forms = []
-		if request.POST['data_type'] == "add":
-			c = DiscountForm(request.POST, request.FILES)
-			_forms.append(c)
-		elif request.POST['data_type'] == "update":
-			c = EditFormSet(request.POST, request.FILES)
-			_forms += c.forms
-
-		for form in _forms:
-			if form.is_valid():
-				d = form.save(commit=False)
-				d.applicablesponsor = u.user.user_id
-				d.save()
-			else:
-				print("errors :", form.errors)
+	return render(request, 'sponsor/dashboard/discountcards.html.j2', context={
+		'title' : "Discount cards",
+		})
 
 
-	edit_forms = EditFormSet(queryset=Coupons.objects.filter(applicablesponsor=u.user.user_id))
-	return render(request, 'sponsor/dashboard/discounts.html.j2', context={
-		"title": "Dashboard - discounts details",
-		"form" : DiscountForm(),
-		"edit_forms": edit_forms
-	})
+@match_role("sponsor")
+def user_view(request):
+	''' route for adding and viewing users '''
+
+	u = Sponsor.objects.filter(user__email=request.session['email']).first()
+
+	return render(request, 'sponsor/dashboard/users.html.j2', context={
+		'title' : "User Base",
+		})

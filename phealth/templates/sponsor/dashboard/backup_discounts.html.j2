@@ -1,7 +1,7 @@
 {# main template for the sponsor dashboard #}
-{% extends 'healthprovider/dashboard/base.html.j2' %} {% load static %} {% load bootstrap %}
+{% extends 'sponsor/base.html.j2' %} {% load static %} {% load bootstrap %}
 {% block head %}
-<script src="{% static 'healthprovider/js/speciality.js' %}"></script>
+<script src="{% static 'common/js/forms.js' %}"></script>
 {% endblock %}
 {% block content %}
 <section class="row">
@@ -9,11 +9,11 @@
 </section>
 <section class="row new-coupon">
 	<div class="row">
-		<h3>Add new speciality</h3>
+		<h3>Add new coupon</h3>
 	</div>
 	<div class="row">
 		<div class="panel panel-danger">
-			<div class="panel-heading"><i class="fa fa-ticket fa-lg"></i> New Speciality</div>
+			<div class="panel-heading"><i class="fa fa-ticket fa-lg"></i> New Coupon</div>
 			<form method="POST">
 				<div class="panel-body">
 					{% csrf_token %}
@@ -30,12 +30,12 @@
 <section class="row"><hr></section>
 <section class="row existing-coupons">
 	<div class="row">
-		<h3>Edit Existing Specialities</h3>
+		<h3>Edit Existing Coupons</h3>
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="panel panel-primary">
-				<div class="panel-heading"><i class="fa fa-edit fa-lg"></i> Edit speciality</div>
+				<div class="panel-heading"><i class="fa fa-edit fa-lg"></i> Edit coupon</div>
 				<form method="POST">
 					<div class="panel-body">
 						{% csrf_token %}
@@ -44,7 +44,7 @@
 							<thead>
 								<tr>
 									<th><input type="checkbox"></th>
-									<th>Speciality</th>
+									<th>Coupon</th>
 								</tr>
 							</thead>
 							<tbody>

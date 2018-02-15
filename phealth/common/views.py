@@ -21,7 +21,7 @@ def logout(request):
 	if 'role' in request.session:
 		request.session.pop('role')
 		request.session.pop('email')
-	return redirect('/')
+	return redirect('home')
 
 def home_route(request):
 	'''site home route for debugging purposes'''
