@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 .placepicker-map {
   width: 100%;
   height: 300px;
@@ -12,10 +14,7 @@
   border-radius: 5px;
 }
 
-body {
-  background: #eee;
-  margin-top: 20px;
-}
+
 
 .pt-inner {
   text-align: center;
@@ -104,11 +103,6 @@ body {
   display: inline-block;
   line-height: 60px;
   font-size: 30px;
-}
-
-body {
-  background: #eee;
-  margin-top: 20px;
 }
 
 .pt-inner {
@@ -205,6 +199,8 @@ body {
 }
 
 body {
+  background: #eee;
+  font-family: 'Roboto', sans-serif !important;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -213,4 +209,8 @@ body {
 main {
   flex: 1 0 auto;
   padding: 2rem auto;
+}
+
+main > div.container {
+  width: 80%;
 }

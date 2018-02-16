@@ -255,7 +255,7 @@ class User(models.Model):
 	last_update = models.DateTimeField(editable=False)
 	last_IP = models.GenericIPAddressField(editable=False, default='127.0.0.1')
 
-	email = models.EmailField()
+	email = models.EmailField(unique=True)
 	name = models.CharField(max_length=150)
 	mobile = models.CharField(validators=[
 		RegexValidator(
@@ -273,7 +273,7 @@ class User(models.Model):
 	 default='default_profile.jpg')
 
 	def __str__(self):
-		return "<User: %s | %s | %s >" % (self.name, self.email, self.mobile)
+		return str(self.email)
 
 	def save(self, *args, **kwargs):
 		self.last_update = datetime.datetime.now()
@@ -348,6 +348,9 @@ class Seeker(models.Model):
 	language = models.CharField(max_length=100, choices=language_choices)
 	dob = models.DateField()
 
+
+	def __str__(self):
+		return "<Seeker : %s >" % self.user.email
 
 	class Meta:
 		managed = True
@@ -431,7 +434,7 @@ class Sponsor(models.Model):
 	org_name = models.CharField(max_length=50)
 	org_size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
 	org_type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
-	users = models.ManyToManyField(Seeker)
+	users = models.ManyToManyField(Seeker, blank=True, null=True)
 	# add extra fields after consulting
 
 	class Meta:

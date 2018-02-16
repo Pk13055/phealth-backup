@@ -1,9 +1,33 @@
-{# main template for the sponsor dashboard #}
+{# main basic dashboard template #}
 {% extends 'sponsor/base.html.j2' %}
 {% load static %}
 {% load bootstrap %}
 {% block content %}
-<div class="row">
+<div class="row page-header well">
 	<h3>{{ title }}</h3>
+</div>
+<div class="row">
+	<form method="POST" enctype="multipart/form-data">
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
+				<div class="panel-body">
+					{% csrf_token %}
+					{{ user_form | bootstrap }}
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-danger">
+				<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Sponsor-specific Information</div>
+				<div class="panel-body">
+					{{ sponsor_form | bootstrap }}
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<button class="btn btn-block btn-primary"><i class="fa fa-chevron-up fa-lg"></i> Update</button>
+		</div>
+	</form>
 </div>
 {% endblock %}
