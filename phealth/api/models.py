@@ -19,7 +19,7 @@ import uuid
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User as admin_user
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField, HStoreField
 
 # functions for default
 def current_timestamp():
@@ -189,6 +189,7 @@ class DiscountCard(models.Model):
 	These cards are sold
 	'''
 	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(default=uuid.uuid4, editable=False)
 	code = models.CharField(max_length=3)
 	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField(null=True, blank=True)
@@ -343,7 +344,7 @@ class Seeker(models.Model):
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	family = models.ManyToManyField("self")
-
+	appointments = models.ManyToManyField('Appointment')
 	profession = models.CharField(max_length=100, choices=profession_choices)
 	language = models.CharField(max_length=100, choices=language_choices)
 	dob = models.DateField()
@@ -447,6 +448,7 @@ class Reseller(models.Model):
 	'''
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+	discount_cards = HStoreField(null=True, blank=True, editable=False)
 	class Meta:
 		managed = True
 		db_table = 'resellers'
@@ -457,7 +459,7 @@ class SalesAgent(models.Model):
 	'''
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-
+	discount_cards = HStoreField(null=True, blank=True, editable=False)
 	resellers = models.ManyToManyField(Reseller)
 
 	class Meta:
@@ -474,13 +476,19 @@ class SalesAgent(models.Model):
 class Appointment(models.Model):
 	''' appointments made by the user
 	'''
-
+	status_options = (
+		('pending', 'pending'),
+		('confirmed', 'confirmed'),
+		('cancelled', 'cancelled'),
+		('rescheduled', 'rescheduled'),
+		)
 	id = models.AutoField(primary_key=True)
 	create_on = models.DateTimeField(default=current_timestamp)
 	date = models.DateField()
 	time = models.TimeField()
-	under = models.OneToOneField(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
-	provider = models.OneToOneField(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
+	status = models.CharField(default='pending', max_length=40)
+	under = models.OneToOneField('Clinician', on_delete=models.DO_NOTHING, null=True, blank=True)
+	provider = models.OneToOneField('Provider', on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Testimonial(models.Model):
