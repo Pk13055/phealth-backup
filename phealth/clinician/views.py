@@ -83,6 +83,7 @@ def speciality(request):
 
 # @match_role("clinician")
 def appointments(request):
+	
 	return render(request, 'clinician/dashboard/appointments.html.j2', context={
 		"title": "Doctors Appointment List",})
 
