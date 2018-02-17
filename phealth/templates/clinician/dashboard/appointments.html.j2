@@ -21,40 +21,20 @@
 			</p>
 		</div>
 		<div class="container">
-			<div class="well well-lg">
-				<h4>Mr. Health Seeker 1</h4>
-				<p>
-					<span class="far fa-calendar-alt"></span>
-					dd/mm/yyyy
-					<br/>
-					<span class="far fa-clock"></span>
-					hh:mm A - hh:mm A
-				</p>
-				<button type="submit" class="btn btn-success">Accept</button>
-				<button type="submit" class="btn btn-danger">Reject</button>
-			</div>
-			<div class="well well-lg">
-				<span class="label label-success">Accepted</span>
-				<h4>Mr. Health Seeker 2</h4>  
-				<p>
-					<span class="far fa-calendar-alt"></span>
-					dd/mm/yyyy
-					<br/>
-					<span class="far fa-clock"></span>
-					hh:mm A - hh:mm A
-				</p>
-			</div>
-			<div class="well well-lg">
-				<span class="label label-danger">Rejected</span>
-				<h4>Mr. Health Seeker 3</h4>
-				<p>
-					<span class="far fa-calendar-alt"></span>
-					dd/mm/yyyy
-					<br/>
-					<span class="far fa-clock"></span>
-					hh:mm A - hh:mm A
-				</p>
-			</div>
+			{% for appointment in apppointments %}
+				<div class="well well-lg">
+					<h4>Patient</h4>
+					<p>
+						<span class="far fa-calendar-alt"></span>
+						{{appointment.date}}
+						<br/>
+						<span class="far fa-clock"></span>
+						{{appointment.time}}
+					</p>
+					<button type="submit" class="btn btn-success">Accept</button>
+					<button type="submit" class="btn btn-danger">Reject</button>
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 </div>
