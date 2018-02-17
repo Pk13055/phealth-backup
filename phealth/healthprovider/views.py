@@ -2,24 +2,68 @@ from django.shortcuts import render
 from phealth.utils import match_role, signin, redirect
 from django.http import JsonResponse
 from django import forms
-# from api.models import Healthproviders, Users, HealthprovidersSpeciality, Availablefacilities
+from api.models import User, Provider, Speciality, Clinician, \
+						Appointment
+
 # Create your views here.
 
+class UserForm(forms.ModelForm):
+
+	class Meta:
+		model = User
+		exclude = ('password',)
 
 def SignUp(request):
-	if request.method == "GET":
-		return render(request, 'healthprovider/registration.html.j2', context={ 'route': "/healthprovider" })
-	elif request.method == "POST":
-		print("Posting data")
-		print(request.POST)
-		print(request.FILES)
-		return JsonResponse({'status' : True })
 
+	class ProviderForm(forms.ModelForm):
+
+		class Meta:
+			model = Provider
+			exclude = ('poc', 'specialities')
+
+	if request.method == "POST":
+		print(request.POST, request.FILES)
+		p = ProviderForm(request.POST, request.FILES)
+		u = UserForm(request.POST, request.FILES)
+		print(s.is_valid(), u.is_valid())
+		print(request.session['otp'], request.POST['otp'])
+		if p.is_valid() and u.is_valid() and \
+			str(request.POST['otp']) == str(request.session['otp']):
+			user = u.save(commit=False)
+			ip_addr, del_val = getIP(request)
+			if ip_addr: user.last_IP = ip_addr
+			user.role = 'sponsor'
+			user.save()
+			provider = s.save(commit=False)
+			provider.poc = user
+			provider.save()
+			del request.session['otp']
+			return redirect('healthprovider:signin')
+		user_form = u
+		provider_form = p
+		errors = [u.errors, p.errors, "OTP did not match!"]
+		print(errors)
+
+	elif request.method == "GET":
+		user_form = UserForm()
+		provider_form = ProviderForm()
+		errors = None
+
+	if 'otp' not in request.session:
+		request.session['otp'] = random.randint(1, 9999)
+
+	return render(request, 'healthprovider/registration.html.j2', context={
+		'title' : "Healthprovider Registration",
+		'route': "/healthprovider",
+		'user_form' : user_form,
+		'sponsor_form' : provider_form,
+		'errors' : errors
+	})
 
 def SignIn(request):
 	if request.method == "GET":
 		return render(request, 'common/signin.html.j2', context={
-			"title" : "Health Provider Login",
+			"title" : "Healthprovider Login",
 			"route" : "/healthprovider",
 			"color" : "primary"
 			})
@@ -28,76 +72,40 @@ def SignIn(request):
 			return redirect('healthprovider:dashboard_home')
 		return redirect('healthprovider:signin')
 
-@match_role("healthprovider")
+# @match_role("healthprovider")
 def dashboard(request):
 	''' route for dashboard home '''
 
-	u = Healthproviders.objects.filter(users__email=request.session['email']).first()
-
-	class BasicForm(forms.ModelForm):
-
-		class Meta:
-			model = Healthproviders
-			fields = ('__all__')
+	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 	if request.method == "POST":
-		b = BasicForm(request.POST, request.FILES, instance=u)
-		if b.is_valid():
-			b.save()
-		print(b)
+		u = UserForm(request.POST, request.FILES, instance=p.poc)
+		if u.is_valid():
+			u.save()
+		print(u)
 
 	return render(request, 'healthprovider/dashboard/home.html.j2', context={
-		"title": "Dashboard Home",
+		"title": "Home",
 		"form_title" : "Edit Basic Information",
-		"form" : BasicForm(instance=u)
+		"form" : UserForm(instance=p.poc)
 	})
 
-@match_role("healthprovider")
-def contact_details(request):
-	''' route for dashboard contact details '''
+def branches(request):
+	''' route for provider branches '''
 
-	u = Healthproviders.objects.filter(users__email=request.session['email']).first()
-
-	class BasicForm(forms.ModelForm):
-
-		class Meta:
-			model = Users
-			fields = ('mobile', 'email', 'firstname', 'middlename', 'lastname')
-
-	if request.method == "POST":
-		b = BasicForm(request.POST, request.FILES, instance=u.users)
-		if b.is_valid():
-			b.save()
-		print(b)
-
-	return render(request, 'healthprovider/dashboard/home.html.j2', context={
-		"title": "Contact Details Dashboard",
-		"form_title" : "Edit Contact Information",
-		"form" : BasicForm(instance=u.users)
-	})
-
-# def branches(request):
-# 	return render(request, 'healthprovider/dashboard/branches.html.j2', context={
-# 		"title" : "Branches",
-# 		"section" : "Branches",
-# 		})
+	return JsonResponse({"status": True})
 
 def specialities(request):
-	''' route for dashboard specialities '''
+	''' route for provider specialities '''
 
-	u = Healthproviders.objects.filter(users__email=request.session['email']).first()
+	u = Provider.objects.filter(poc__email=request.session['email']).first()
 
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
-			model = HealthprovidersSpeciality
+			model = Speciality
 			fields = ('__all__')
-			widgets = {
-				'validity' : forms.TextInput(attrs={
-					'placeholder' : "YYYY-MM-DD"
-				})
-			}
 
-	EditFormSet = forms.modelformset_factory(HealthprovidersSpeciality, fields=('__all__'), extra=0)
+	EditFormSet = forms.modelformset_factory(Speciality, fields=('__all__'), extra=0)
 
 	if request.method == "POST":
 		_forms = []
@@ -111,19 +119,56 @@ def specialities(request):
 		for form in _forms:
 			if form.is_valid():
 				d = form.save(commit=False)
-				d.healthproviders = u
 				d.save()
+				u.specialities.add(d)
 			else:
 				print("errors :", form.errors)
 
 
-	edit_forms = EditFormSet(queryset=HealthprovidersSpeciality.objects.filter(healthproviders__healthproviders_id=u.healthproviders_id))
+	edit_forms = EditFormSet(queryset=u.specialities.all())
+	
 	return render(request, 'healthprovider/dashboard/speciality.html.j2', context={
-		"title": "Specialities Dashboard",
+		"title": "Specialities",
 		"form" : SpecialityForm(),
 		"edit_forms": edit_forms
 	})
 
+def clinicians(request):
+	''' route for provider clinicians '''
+
+	u = Provider.objects.filter(poc__email=request.session['email']).first()
+
+	class ClinicianForm(forms.ModelForm):
+		class Meta:
+			model = Clinician
+			fields = ('__all__')
+
+	EditFormSet = forms.modelformset_factory(Clinician, fields=('__all__'), extra=0)
+
+	if request.method == "POST":
+		_forms = []
+		if request.POST['data_type'] == "add":
+			c = ClinicianForm(request.POST, request.FILES)
+			_forms.append(c)
+		elif request.POST['data_type'] == "update":
+			c = EditFormSet(request.POST, request.FILES)
+			_forms += c.forms
+
+		for form in _forms:
+			if form.is_valid():
+				d = form.save(commit=False)
+				d.save()
+				u.clinicians.add(d)
+			else:
+				print("errors :", form.errors)
+
+	edit_forms = EditFormSet(queryset=u.clinicians.all())
+	
+	return render(request, 'healthprovider/dashboard/clinician.html.j2', context={
+		"title": "Clinicians",
+		"form" : ClinicianForm(),
+		"edit_forms": edit_forms
+	})
 
 def facilities(request):
 	''' route for dashboard facilities '''
@@ -167,27 +212,13 @@ def facilities(request):
 		"edit_forms": edit_forms
 	})
 
-# def offerings(request):
-# 	return render(request, 'healthprovider/dashboard/offerings.html.j2', context={
-# 		"title" : "Offerings",
-# 		"section" : "Offerings",
-# 		})
-
-# def special_health_checks(request):
-# 	return render(request, 'healthprovider/dashboard/special_health_checks.html.j2', context={
-# 		"title" : "Special Health Checks",
-# 		"section" : "Special Health Checks",
-# 		})
-
-# def plans(request):
-# 	return render(request, 'healthprovider/dashboard/plans.html.j2', context={
-# 		"title" : "Plans",
-# 		"section" : "Plans",
-# 		})
-
-def doctors_list(request):
+def appointments(request):
 	''' route for dahsboard doctors list '''
 
-	return render(request, 'healthprovider/dashboard/doctors_list.html.j2', context={
-		"title": "Doctors Appointment List",
+	u = Provider.objects.filter(poc__email=request.session['email']).first()
+	appointments = Appointment.objects.filter(provider=u).all().order_by('clinician')
+
+	return render(request, 'healthprovider/dashboard/appointment.html.j2', context={
+		"title": "Appointment List",
+		"appointments": appointments,
 	})
