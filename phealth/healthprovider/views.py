@@ -2,7 +2,8 @@ from django.shortcuts import render
 from phealth.utils import match_role, signin, redirect
 from django.http import JsonResponse
 from django import forms
-from api.models import User, Provider, Speciality, Clinician
+from api.models import User, Provider, Speciality, Clinician, \
+						Appointment
 
 # Create your views here.
 
@@ -62,7 +63,7 @@ def SignUp(request):
 def SignIn(request):
 	if request.method == "GET":
 		return render(request, 'common/signin.html.j2', context={
-			"title" : "Health Provider Login",
+			"title" : "Healthprovider Login",
 			"route" : "/healthprovider",
 			"color" : "primary"
 			})
@@ -84,16 +85,14 @@ def dashboard(request):
 		print(u)
 
 	return render(request, 'healthprovider/dashboard/home.html.j2', context={
-		"title": "Dashboard Home",
+		"title": "Home",
 		"form_title" : "Edit Basic Information",
 		"form" : UserForm(instance=p.poc)
 	})
 
-def contact_details(request):
-	return JsonResponse({'status': True})
-
 def branches(request):
 	''' route for provider branches '''
+
 	return JsonResponse({"status": True})
 
 def specialities(request):
@@ -129,13 +128,13 @@ def specialities(request):
 	edit_forms = EditFormSet(queryset=u.specialities.all())
 	
 	return render(request, 'healthprovider/dashboard/speciality.html.j2', context={
-		"title": "Speciality",
+		"title": "Specialities",
 		"form" : SpecialityForm(),
 		"edit_forms": edit_forms
 	})
 
 def clinicians(request):
-	''' route for provider specialities '''
+	''' route for provider clinicians '''
 
 	u = Provider.objects.filter(poc__email=request.session['email']).first()
 
@@ -166,7 +165,7 @@ def clinicians(request):
 	edit_forms = EditFormSet(queryset=u.clinicians.all())
 	
 	return render(request, 'healthprovider/dashboard/clinician.html.j2', context={
-		"title": "Clinician",
+		"title": "Clinicians",
 		"form" : ClinicianForm(),
 		"edit_forms": edit_forms
 	})
@@ -213,27 +212,13 @@ def facilities(request):
 		"edit_forms": edit_forms
 	})
 
-# def offerings(request):
-# 	return render(request, 'healthprovider/dashboard/offerings.html.j2', context={
-# 		"title" : "Offerings",
-# 		"section" : "Offerings",
-# 		})
-
-# def special_health_checks(request):
-# 	return render(request, 'healthprovider/dashboard/special_health_checks.html.j2', context={
-# 		"title" : "Special Health Checks",
-# 		"section" : "Special Health Checks",
-# 		})
-
-# def plans(request):
-# 	return render(request, 'healthprovider/dashboard/plans.html.j2', context={
-# 		"title" : "Plans",
-# 		"section" : "Plans",
-# 		})
-
-def doctors_list(request):
+def appointments(request):
 	''' route for dahsboard doctors list '''
 
-	return render(request, 'healthprovider/dashboard/doctors_list.html.j2', context={
-		"title": "Doctors Appointment List",
+	u = Provider.objects.filter(poc__email=request.session['email']).first()
+	appointments = Appointment.objects.filter(provider=u).all().order_by('clinician')
+
+	return render(request, 'healthprovider/dashboard/appointment.html.j2', context={
+		"title": "Appointment List",
+		"appointments": appointments,
 	})
