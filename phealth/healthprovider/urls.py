@@ -9,7 +9,6 @@ dashboard_routes = [
 	url(r'^$', views.dashboard, name='dashboard_home'),
 	url(r'^branches/?$', views.branches, name='branches'),
 	url(r'^specialities/?$', views.specialities, name='specialities'),
-	url(r'^facilities/?$', views.facilities, name='facilities'),
 	url(r'^clinicians/?$', views.clinicians, name='clinicians'),
 	url(r'^appointments/?$', views.appointments, name='appointments'),
 ]

@@ -486,9 +486,9 @@ class Appointment(models.Model):
 	create_on = models.DateTimeField(default=current_timestamp)
 	date = models.DateField()
 	time = models.TimeField()
-	status = models.CharField(default='pending', max_length=40)
-	under = models.OneToOneField('Clinician', on_delete=models.DO_NOTHING, null=True, blank=True)
-	provider = models.OneToOneField('Provider', on_delete=models.DO_NOTHING, null=True, blank=True)
+	status = models.CharField(choices=status_options, default='pending', max_length=40)
+	under = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
+	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Testimonial(models.Model):

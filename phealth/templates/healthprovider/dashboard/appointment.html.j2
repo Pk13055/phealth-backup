@@ -2,60 +2,39 @@
 {% load static %}
 {% load bootstrap %}
 {% block content %}
-<section class="row text-center">
+<div class="row text-center">
 	<h3>{{ title }}</h3>
-</section>
-<section>
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			<h3 class="panel-title">Dr. ABC DEF</h3>
+</div>
+
+{% for status, data in appointments %}
+<section class="row" id="{{ status }}">
+	<div class="panel panel-{{ data.color }}">
+		<div class="panel-heading text-center">
+			<h3 class="panel-title">{{ status }}</h3>
 		</div>
-		<div class="panel-body">
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-			</p>
-		</div>
-		<div class="container">
-			<div class="well well-lg">
-				<h4>Mr. Health Seeker 1</h4>
-				<p>
-					<span class="far fa-calendar-alt"></span>
-					dd/mm/yyyy
-					<br/>
-					<span class="far fa-clock"></span>
-					hh:mm A - hh:mm A
-				</p>
-				<button type="submit" class="btn btn-success">Accept</button>
-				<button type="submit" class="btn btn-danger">Reject</button>
+		<div class="panel-body hidey">
+			{% for appointment in data.queryset %}
+			<div class="col-md-3">
+				<div class="well">
+					<span class="label label-{{ data.color }}">{{ status }}</span>
+					<h4>Dr. {{ appointment.under.user.name  }}</h4>
+					<p>
+						{{ appointment.time }}
+						{{ appointment.date }}
+					</p>
+				</div>
 			</div>
-			<div class="well well-lg">
-				<span class="label label-success">Accepted</span>
-				<h4>Mr. Health Seeker 2</h4>
-				<p>
-					<span class="far fa-calendar-alt"></span>
-					dd/mm/yyyy
-					<br/>
-					<span class="far fa-clock"></span>
-					hh:mm A - hh:mm A
-				</p>
-			</div>
-			<div class="well well-lg">
-				<span class="label label-danger">Rejected</span>
-				<h4>Mr. Health Seeker 3</h4>
-				<p>
-					<span class="far fa-calendar-alt"></span>
-					dd/mm/yyyy
-					<br/>
-					<span class="far fa-clock"></span>
-					hh:mm A - hh:mm A
-				</p>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("section").click('on', function() { 
+			$(this).find("div.hidey").fadeIn();
+			$("section").find("div.hidey").hide(); 
+		});
+	});
+</script>
+{% endfor %}
 {% endblock %}

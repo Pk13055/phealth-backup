@@ -170,55 +170,62 @@ def clinicians(request):
 		"edit_forms": edit_forms
 	})
 
-def facilities(request):
-	''' route for dashboard facilities '''
+# def facilities(request):
+# 	''' route for dashboard facilities '''
 
-	u = Healthproviders.objects.filter(users__email=request.session['email']).first()
+# 	u = Healthproviders.objects.filter(users__email=request.session['email']).first()
 
-	class FacilityForm(forms.ModelForm):
-		class Meta:
-			model = Availablefacilities
-			fields = ('facilities_services', 'facilities')
-			widgets = {
-				'validity' : forms.TextInput(attrs={
-					'placeholder' : "YYYY-MM-DD"
-				})
-			}
+# 	class FacilityForm(forms.ModelForm):
+# 		class Meta:
+# 			model = Availablefacilities
+# 			fields = ('facilities_services', 'facilities')
+# 			widgets = {
+# 				'validity' : forms.TextInput(attrs={
+# 					'placeholder' : "YYYY-MM-DD"
+# 				})
+# 			}
 
-	EditFormSet = forms.modelformset_factory(Availablefacilities, fields=('facilities_services', 'facilities'), extra=0)
+# 	EditFormSet = forms.modelformset_factory(Availablefacilities, fields=('facilities_services', 'facilities'), extra=0)
 
-	if request.method == "POST":
-		_forms = []
-		if request.POST['data_type'] == "add":
-			c = FacilityForm(request.POST, request.FILES)
-			_forms.append(c)
-		elif request.POST['data_type'] == "update":
-			c = EditFormSet(request.POST, request.FILES)
-			_forms += c.forms
+# 	if request.method == "POST":
+# 		_forms = []
+# 		if request.POST['data_type'] == "add":
+# 			c = FacilityForm(request.POST, request.FILES)
+# 			_forms.append(c)
+# 		elif request.POST['data_type'] == "update":
+# 			c = EditFormSet(request.POST, request.FILES)
+# 			_forms += c.forms
 
-		for form in _forms:
-			if form.is_valid():
-				d = form.save(commit=False)
-				d.healthproviders = u
-				d.save()
-			else:
-				print("errors :", form.errors)
+# 		for form in _forms:
+# 			if form.is_valid():
+# 				d = form.save(commit=False)
+# 				d.healthproviders = u
+# 				d.save()
+# 			else:
+# 				print("errors :", form.errors)
 
 
-	edit_forms = EditFormSet(queryset=Availablefacilities.objects.filter(healthproviders__healthproviders_id=u.healthproviders_id))
-	return render(request, 'healthprovider/dashboard/facility.html.j2', context={
-		"title": "Facilities Dashboard",
-		"form" : FacilityForm(),
-		"edit_forms": edit_forms
-	})
+# 	edit_forms = EditFormSet(queryset=Availablefacilities.objects.filter(healthproviders__healthproviders_id=u.healthproviders_id))
+# 	return render(request, 'healthprovider/dashboard/facility.html.j2', context={
+# 		"title": "Facilities Dashboard",
+# 		"form" : FacilityForm(),
+# 		"edit_forms": edit_forms
+# 	})
 
 def appointments(request):
 	''' route for dahsboard doctors list '''
 
-	u = Provider.objects.filter(poc__email=request.session['email']).first()
-	appointments = Appointment.objects.filter(provider=u).all().order_by('clinician')
+	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	states = [('pending', 'warning'), ('confirmed', 'success'), ('cancelled', 'danger'), ('rescheduled', 'info')]
+
+	appointments = {}
+	for state in states:
+		appointments[state[0]] = {
+			'queryset': p.appointment_set.filter(status=state[0]).order_by('date', 'time').all(),
+			'color': state[1],
+		}
 
 	return render(request, 'healthprovider/dashboard/appointment.html.j2', context={
 		"title": "Appointment List",
-		"appointments": appointments,
+		"appointments": appointments.items(),
 	})
