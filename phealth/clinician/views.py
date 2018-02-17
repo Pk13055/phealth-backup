@@ -69,7 +69,8 @@ def speciality(request):
 		b = SpecialityForm(request.POST, request.FILES)
 		if b.is_valid():
 			u.save()
-			speciality = b.save(commit=False)
+			speciality = b.save()
+			# speciality.save()
 			u.specialities.add(speciality)
 		else:
 			v = b
@@ -81,7 +82,7 @@ def speciality(request):
 	})
 
 
-# @match_role("clinician")
+@match_role("clinician")
 def appointments(request):
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
 	apps = Appointment.objects.filter(under=c).all()
@@ -90,32 +91,76 @@ def appointments(request):
 		"appointments": apps
 		})
 
-# @match_role("clinician")
+@match_role("clinician")
 def calender(request):
 	''' dashboard function '''
 	''' handles the calender page for clincian timings
 	and bookings
 	'''
+
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+		
+	if request.method == "POST":
+		print("Form submitted for update")
+		v = request.POST['section']
+		l = [[x, y] for x, y in zip(request.POST.getlist('start_time[]'), request.POST.getlist('end_time[]'))]	
+
+		if v in ['work', 'break']:
+			l = [list(map(lambda x: datetime.datetime.strptime(x, '%H:%M:%S').time(), _)) for _ in l]
+		else:
+			l = [list(map(lambda x: datetime.datetime.strptime(x, '%Y/%m/%d').date(), _)) for _ in l]
+
+		print(l)
+		if v == 'work':
+			c.work_time = l
+		if v == 'break':
+			c.break_time = l
+		if v == 'vacation':
+			c.vacation = l
+
+		print(c.work_timings)
+		c.save()
+		print(c.work_timings)
+
 	work_timings = c.work_timings
 	break_timings = c.break_timings
-	vacations = c.vacations
-	if request.method == "GET":
-		schedule = []
-		for day in ["Sunday", "Monday",
-		 "Tuesday", "Wednesday", "Friday", "Saturday"]:
-		 	cur_day = {
-		 		'day' : day,
-		 		'start' : datetime.datetime.now().time(),
-		 		'end' : datetime.datetime.now().time(),
-		 	}
-		 	schedule.append(cur_day)
-		return render(request, 'clinician/dashboard/calender.html.j2', context={
+	Vacations = c.vacations
+
+
+	schedule = []
+	schedule1 = []
+	vacation = []
+
+	days = ["Sunday", "Monday",
+	 "Tuesday", "Wednesday", "Friday", "Saturday"]
+
+	for day, timings in zip(days, work_timings):
+	 	cur_day = {
+	 		'day' : day,
+	 		'start' : timings[0].isoformat()[:-7],
+	 		'end' : timings[-1].isoformat()[:-7],
+	 	}
+	 	schedule.append(cur_day)
+
+	for day, timings in zip(days, break_timings):
+	 	cur_day = {
+	 		'day' : day,
+	 		'start' : timings[0].isoformat()[:-7],
+	 		'end' : timings[-1].isoformat()[:-7],
+	 	}
+	 	schedule1.append(cur_day)
+
+	for v in Vacations:
+	 	cur_vacation = {
+	 		'start_day' : v[0].isoformat(),
+	 		'end_day'   : v[1].isoformat(),
+	 	}
+	 	vacation.append(cur_vacation)
+
+	return render(request, 'clinician/dashboard/calender.html.j2', context={
 			'title' : "Set your timings",
-			'days' : schedule
+			'work_days' : schedule,
+			'break_days' : schedule1,
+			'vacation_days' : vacation,
 			})
-	elif request.method == "POST":
-		print("Form submitted for update")
-		print(request.POST)
-		return JsonResponse({ 'status' : True })
 
