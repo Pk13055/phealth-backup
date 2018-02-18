@@ -1,3 +1,5 @@
+import random
+
 from django.shortcuts import render
 from phealth.utils import match_role, signin, redirect
 from django.http import JsonResponse
@@ -20,13 +22,13 @@ def SignUp(request):
 
 		class Meta:
 			model = Provider
-			exclude = ('poc', 'specialities')
+			exclude = ('poc', 'specialities', 'active_from')
 
 	if request.method == "POST":
 		print(request.POST, request.FILES)
 		p = ProviderForm(request.POST, request.FILES)
 		u = UserForm(request.POST, request.FILES)
-		print(s.is_valid(), u.is_valid())
+		print(p.is_valid(), u.is_valid())
 		print(request.session['otp'], request.POST['otp'])
 		if p.is_valid() and u.is_valid() and \
 			str(request.POST['otp']) == str(request.session['otp']):
@@ -36,7 +38,7 @@ def SignUp(request):
 			user.role = 'healthprovider'
 			user.password = make_password(user.password)
 			user.save()
-			provider = s.save(commit=False)
+			provider = p.save(commit=False)
 			provider.poc = user
 			provider.save()
 			del request.session['otp']
