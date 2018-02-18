@@ -344,7 +344,7 @@ class Seeker(models.Model):
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	family = models.ManyToManyField("self")
-	appointments = models.ManyToManyField('Appointment')
+	appointments = models.ManyToManyField('Appointment', editable=False)
 	profession = models.CharField(max_length=100, choices=profession_choices)
 	language = models.CharField(max_length=100, choices=language_choices)
 	dob = models.DateField()
