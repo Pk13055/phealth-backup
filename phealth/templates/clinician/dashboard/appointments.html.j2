@@ -21,26 +21,26 @@
 			</p>
 		</div>
 		<div class="container">
+			{% for appointment in appointments %}
 			<form method="POST">
 				{% csrf_token %}
-				{% for appointment in appointments %}
-					<div class="well well-lg">
-						<h4>Patient</h4>
-						<p>
-							<span class="far fa-calendar-alt"></span>
-							{{appointment.0.date}}
-							<br/>
-							<span class="far fa-clock"></span>
-							{{appointment.0.time}}
-						</p>
-						<div class="panel-body">
-							{% csrf_token %}
-							{{ appointment.1 | bootstrap }}
-						</div>
-						<button type="submit" class="btn btn-info" actn = "1">Update</button>
+				<div class="well well-lg">
+					<h4>{{ appointment.0.id }}</h4>
+					<p>
+						<span class="far fa-calendar-alt"></span>
+						{{appointment.0.date}}
+						<br/>
+						<span class="far fa-clock"></span>
+						{{appointment.0.time}}
+					</p>
+					<div class="panel-body">
+						{% csrf_token %}
+						{{ appointment.1 | bootstrap }}
 					</div>
-				{% endfor %}
-			</form>]
+					<button type="submit" value="{{ appointment.0.id }}" name="appointment" class="btn btn-info">Update</button>
+				</div>
+			</form>
+			{% endfor %}
 		</div>
 	</div>
 </div>

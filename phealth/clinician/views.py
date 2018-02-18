@@ -85,7 +85,7 @@ def speciality(request):
 @match_role("clinician")
 def appointments(request):
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	apps = Appointment.objects.filter(under=c).all()
+	apps = Appointment.objects.filter(under=c).all().order_by('id')
 	appointments_arr = []
 	class AppointmentForm(forms.ModelForm):
 
@@ -99,11 +99,12 @@ def appointments(request):
 
 
 	if request.method == 'POST':
-		b = AppointmentForm(request.POST)
+		print(request.POST)
+		b = AppointmentForm(request.POST, request.FILES, instance=Appointment.objects.filter(id=int(request.POST['appointment'])).first())
 		if b.is_valid():
-			c.save()
-			a = b.save(commit=False)
-			a.save()		
+			b.save()
+			print(b)
+
 	return render(request, 'clinician/dashboard/appointments.html.j2', context={
 		"title": "Doctors Appointment List",
 		"appointments": appointments_arr,
