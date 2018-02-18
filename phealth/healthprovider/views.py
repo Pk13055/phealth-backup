@@ -102,39 +102,43 @@ def branches(request):
 def specialities(request):
 	''' route for provider specialities '''
 
-	u = Provider.objects.filter(poc__email=request.session['email']).first()
-
+	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
 			model = Speciality
 			fields = ('__all__')
 
-	EditFormSet = forms.modelformset_factory(Speciality, fields=('__all__'), extra=0)
+	class ProviderForm(forms.ModelForm):
+		class Meta:
+			model = Provider
+			fields = ('specialities',)
+
+		def __init__(self, *args, **kwargs):
+			super(ProviderForm, self).__init__(*args, **kwargs)
+			self.fields['specialities'].widget = forms.CheckboxSelectMultiple()
+			self.fields['specialities'].queryset = Speciality.objects.all()
+
+	edit_form = ProviderForm(instance=p)
 
 	if request.method == "POST":
-		_forms = []
-		if request.POST['data_type'] == "add":
-			c = SpecialityForm(request.POST, request.FILES)
-			_forms.append(c)
-		elif request.POST['data_type'] == "update":
-			c = EditFormSet(request.POST, request.FILES)
-			_forms += c.forms
+		if request.POST['type'] == 'add':
+			s = SpecialityForm(request.POST, request.FILES).save(commit=False)
+			s.save()
+			p.specialities.add(s)
 
-		for form in _forms:
-			if form.is_valid():
-				d = form.save(commit=False)
-				d.save()
-				u.specialities.add(d)
+		if request.POST['type'] == 'edit':
+			h = ProviderForm(request.POST, request.FILES, instance=p)
+			if h.is_valid():
+				h.save()
 			else:
-				print("errors :", form.errors)
+				errors += [h.errors]
+			edit_form = h
 
-
-	edit_forms = EditFormSet(queryset=u.specialities.all())
-	
 	return render(request, 'healthprovider/dashboard/speciality.html.j2', context={
 		"title": "Specialities",
 		"form" : SpecialityForm(),
-		"edit_forms": edit_forms
+		"edit_form": edit_form,
 	})
 
 @match_role("healthprovider")
@@ -149,7 +153,6 @@ def clinicians(request):
 			exclude = ('work_timings', 'break_timings', 'vacations', 'experience', 'user')
 
 	class ProviderForm(forms.ModelForm):
-
 		class Meta:
 			model = Provider
 			fields = ('clinicians',)
