@@ -56,10 +56,11 @@ def dashboard(request):
 		"user_form" : UserForm(instance=v),
 	})
 
-@match_role("clincian")
+@match_role("clinician")
 def speciality(request):
 	u = Clinician.objects.filter(user__email=request.session['email']).first()
 	n = u.specialities.all()
+	print("I was here")
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
 			model = Speciality
