@@ -2,6 +2,7 @@ from django.shortcuts import render
 from phealth.utils import match_role, signin, redirect
 from django.http import JsonResponse
 from django import forms
+from django.contrib.auth.hashers import make_password
 from api.models import User, Provider, Speciality, Clinician, \
 						Appointment
 
@@ -32,7 +33,8 @@ def SignUp(request):
 			user = u.save(commit=False)
 			ip_addr, del_val = getIP(request)
 			if ip_addr: user.last_IP = ip_addr
-			user.role = 'sponsor'
+			user.role = 'healthprovider'
+			user.password = make_password(user.password)
 			user.save()
 			provider = s.save(commit=False)
 			provider.poc = user
@@ -72,7 +74,7 @@ def SignIn(request):
 			return redirect('healthprovider:dashboard_home')
 		return redirect('healthprovider:signin')
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def dashboard(request):
 	''' route for dashboard home '''
 
@@ -90,11 +92,13 @@ def dashboard(request):
 		"form" : UserForm(instance=p.poc)
 	})
 
+@match_role("healthprovider")
 def branches(request):
 	''' route for provider branches '''
 
 	return JsonResponse({"status": True})
 
+@match_role("healthprovider")
 def specialities(request):
 	''' route for provider specialities '''
 
@@ -133,6 +137,7 @@ def specialities(request):
 		"edit_forms": edit_forms
 	})
 
+@match_role("healthprovider")
 def clinicians(request):
 	''' route for provider clinicians '''
 
@@ -170,48 +175,7 @@ def clinicians(request):
 		"edit_forms": edit_forms
 	})
 
-# def facilities(request):
-# 	''' route for dashboard facilities '''
-
-# 	u = Healthproviders.objects.filter(users__email=request.session['email']).first()
-
-# 	class FacilityForm(forms.ModelForm):
-# 		class Meta:
-# 			model = Availablefacilities
-# 			fields = ('facilities_services', 'facilities')
-# 			widgets = {
-# 				'validity' : forms.TextInput(attrs={
-# 					'placeholder' : "YYYY-MM-DD"
-# 				})
-# 			}
-
-# 	EditFormSet = forms.modelformset_factory(Availablefacilities, fields=('facilities_services', 'facilities'), extra=0)
-
-# 	if request.method == "POST":
-# 		_forms = []
-# 		if request.POST['data_type'] == "add":
-# 			c = FacilityForm(request.POST, request.FILES)
-# 			_forms.append(c)
-# 		elif request.POST['data_type'] == "update":
-# 			c = EditFormSet(request.POST, request.FILES)
-# 			_forms += c.forms
-
-# 		for form in _forms:
-# 			if form.is_valid():
-# 				d = form.save(commit=False)
-# 				d.healthproviders = u
-# 				d.save()
-# 			else:
-# 				print("errors :", form.errors)
-
-
-# 	edit_forms = EditFormSet(queryset=Availablefacilities.objects.filter(healthproviders__healthproviders_id=u.healthproviders_id))
-# 	return render(request, 'healthprovider/dashboard/facility.html.j2', context={
-# 		"title": "Facilities Dashboard",
-# 		"form" : FacilityForm(),
-# 		"edit_forms": edit_forms
-# 	})
-
+@match_role("healthprovider")
 def appointments(request):
 	''' route for dahsboard doctors list '''
 

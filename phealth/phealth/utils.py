@@ -12,7 +12,6 @@ from ipware import get_client_ip
 
 # contains all the comon code for utility purposes
 
-
 def match_role(role_type):
 	'''
 		decorator that wraps protected views
@@ -52,7 +51,7 @@ def signin(role, request):
 	status = False
 
 	if u and check_password(password, u.password) and (u.role in role or role in u.role):
-		# u.last_update=datetime.datetime.now()
+		u.last_update=datetime.datetime.now()
 		request.session['email'] = email
 		request.session['role'] = u.role
 		status = True
