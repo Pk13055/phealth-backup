@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from django.contrib.auth.hashers import make_password
 from django import forms
-from django.core.files import File
+from django.core.validators import RegexValidator
 
 from phealth.utils import getIP
 from api.models import User, Sponsor, Seeker, Question
@@ -62,6 +62,7 @@ def SignUp(request):
 			user = u.save(commit=False)
 			ip_addr, del_val = getIP(request)
 			if ip_addr: user.last_IP = ip_addr
+			user.password = make_password(user.password)
 			user.role = 'sponsor'
 			user.save()
 			sponsor = s.save(commit=False)
@@ -143,8 +144,8 @@ def discounts(request):
 		'title' : "Discount cards",
 		})
 
-
-def addUsers(file, request):
+@match_role("sponsor")
+def addUsers(request, file):
 	'''
 		takes in an excel file and returns
 		the list of user objects, along with missed ones
@@ -162,11 +163,25 @@ def addUsers(file, request):
 	ip_addr, del_val = getIP(request)
 	questions = list(Question.objects.all())
 
+	# class UserBulkForm(forms.Form):
+	# 	email = forms.CharField(max_length=150)
+	# 	name = forms.CharField(max_length=150)
+	# 	mobile = forms.CharField(validators=[
+	# 		RegexValidator(
+	# 			regex=r'^(\+\d{1,3}[- ]?)?\d{10}$',
+	# 			message="Invalid Number")], max_length=15)
+	# 	password = forms.CharField(max_length=100)
+	# 	gender = forms.CharField(max_length=1, choices=(
+	# 		('M', 'Male'),
+	# 		('F', 'Female'),
+	# 		('O', 'Other'),))
+	# 	dob = forms.CharField(max_length=10)
+
+
 	# fields => email, name, mobile, password, gender
 	users_obj, seeker_obj = [], []
-	for row, idx in zip(data, range(sh.nrows)):
+	for row, idx in zip(data[1:], range(sh.nrows)):
 		if None in row:
-			print(idx)
 			invalid.append(idx)
 			continue
 		fields = row[1:]
@@ -180,20 +195,33 @@ def addUsers(file, request):
 			'answer' : fields[2],
 			'profession' : 'other',
 			'language' : 'english',
-			'dob' : fields[4],
+			'dob' : datetime.datetime.strptime(fields[4], '%Y-%m-%d').date(),
 		}
-
-		users_obj.append(User(email=data['email'], name=data['name'],
+		user = User(email=data['email'], name=data['name'],
 			mobile=data['mobile'], password=data['password'],
 			gender=data['gender'], role='healthseeker',
-			last_IP=(ip_addr or '127.0.0.1'), last_update=datetime.datetime.now()))
-		seeker_obj.append(Seeker(profession=data['profession'], language=data['language'],
-			dob=data['dob'], user=users_obj[-1]))
+			last_IP=(ip_addr or '127.0.0.1'), last_update=datetime.datetime.now(),
+			question=data['question'], answer=data['answer'])
 		try:
-			users_obj[-1].save()
-			seeker_obj[-1].save()
+			print("Saving user")
+			user.save()
+			users_obj.append(user)
+			print("U :", users_obj[-1])
 		except:
 			invalid.append(idx)
+			continue
+
+		seeker = Seeker(profession=data['profession'], language=data['language'],
+			dob=data['dob'], user=users_obj[-1])
+		try:
+			print("Saving seeker\n\n")
+			seeker.save()
+			seeker_obj.append(seeker)
+			print("S : ", seeker_obj[-1])
+		except:
+			users_obj.pop()
+			invalid.append(idx)
+			continue
 
 		# User.objects.bulk_create(users_obj)
 		# seeker_obj.bulk_create(seeker_obj)
@@ -239,8 +267,6 @@ def user_view(request):
 				return False
 			return True
 
-
-
 	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 	errors = None
 	basic_user = UserForm()
@@ -251,7 +277,6 @@ def user_view(request):
 	if request.method == "POST":
 		# handle all the forms here
 		# with error detection and particular routing
-		print(request.POST)
 		errors = []
 
 		if request.POST['type'] == "single_user":
@@ -287,12 +312,12 @@ def user_view(request):
 			# MANUAL PARSING
 			m = SeekerMultipleForm(request.POST, request.FILES)
 			if m.is_valid():
-				user_list, missed = addUsers(request.FILES['file'], request)
+				user_list, missed = addUsers(request, request.FILES['file'])
 			else:
 				errors += [m.errors]
 			bulk_form = m
 
-	print("errors : ", errors)
+	# print("errors : ", errors)
 	return render(request, 'sponsor/dashboard/users.html.j2', context={
 		'title' : "Add Seeker",
 		'errors' : errors,

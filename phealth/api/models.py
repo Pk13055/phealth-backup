@@ -256,7 +256,7 @@ class User(models.Model):
 	last_update = models.DateTimeField(editable=False)
 	last_IP = models.GenericIPAddressField(editable=False, default='127.0.0.1')
 
-	email = models.EmailField(unique=True)
+	email = models.EmailField()
 	name = models.CharField(max_length=150)
 	mobile = models.CharField(validators=[
 		RegexValidator(
