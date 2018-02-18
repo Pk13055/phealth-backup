@@ -22,7 +22,8 @@ def SignIn(request):
 			return redirect('clinician:dashboard_home')
 		return redirect('clinician:signin')
 
-
+def SignUp(request):
+	return redirect('clinician:signin')
 # Dashboard view functions
 
 @match_role("clinician")
@@ -56,7 +57,7 @@ def dashboard(request):
 		"user_form" : UserForm(instance=v),
 	})
 
-# @match_role("clincian")
+@match_role("clincian")
 def speciality(request):
 	u = Clinician.objects.filter(user__email=request.session['email']).first()
 	n = u.specialities.all()
