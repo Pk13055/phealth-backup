@@ -370,23 +370,23 @@ class Clinician(models.Model):
 		ArrayField(
 			models.TimeField(),
 			size=2),
-		size=7)
+		size=7, null=True, blank=True)
 
 	# [ [start_time, end_time], ... <7 days> ]
 	break_timings = ArrayField(
 		ArrayField(
 			models.TimeField(),
 			size=2),
-		size=7)
+		size=7, null=True, blank=True)
 
 	# [ [start_date, end_date], ... ]
 	vacations = ArrayField(
 		ArrayField(
 			models.DateField(),
-			size=2))
+			size=2), null=True, blank=True)
 
 	education = models.TextField()
-	experience = ArrayField(models.TextField())
+	experience = ArrayField(models.TextField(), null=True, blank=True)
 
 	class Meta:
 		managed = True

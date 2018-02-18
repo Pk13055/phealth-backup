@@ -12,7 +12,7 @@ class UserForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		exclude = ('password',)
+		fields = ('__all__')
 
 def SignUp(request):
 
@@ -141,38 +141,49 @@ def specialities(request):
 def clinicians(request):
 	''' route for provider clinicians '''
 
-	u = Provider.objects.filter(poc__email=request.session['email']).first()
+	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 	class ClinicianForm(forms.ModelForm):
 		class Meta:
 			model = Clinician
-			fields = ('__all__')
+			exclude = ('work_timings', 'break_timings', 'vacations', 'experience', 'user')
 
-	EditFormSet = forms.modelformset_factory(Clinician, fields=('__all__'), extra=0)
+	class ProviderForm(forms.ModelForm):
+
+		class Meta:
+			model = Provider
+			fields = ('clinicians',)
+
+		def __init__(self, *args, **kwargs):
+			super(ProviderForm, self).__init__(*args, **kwargs)
+			self.fields['clinicians'].widget = forms.CheckboxSelectMultiple()
+			self.fields['clinicians'].queryset = p.clinicians.all()
+
+	edit_form = ProviderForm(instance=p)
 
 	if request.method == "POST":
-		_forms = []
-		if request.POST['data_type'] == "add":
-			c = ClinicianForm(request.POST, request.FILES)
-			_forms.append(c)
-		elif request.POST['data_type'] == "update":
-			c = EditFormSet(request.POST, request.FILES)
-			_forms += c.forms
+		if request.POST['type'] == 'add':
+			u = UserForm(request.POST, request.FILES).save(commit=False)
+			u.password = make_password(u.password)
+			u.save()
+			c = ClinicianForm(request.POST, request.FILES).save(commit=False)
+			c.user = u
+			c.save()
+			p.clinicians.add(c)
 
-		for form in _forms:
-			if form.is_valid():
-				d = form.save(commit=False)
-				d.save()
-				u.clinicians.add(d)
+		if request.POST['type'] == 'edit':
+			h = ProviderForm(request.POST, request.FILES, instance=p)
+			if h.is_valid():
+				h.save()
 			else:
-				print("errors :", form.errors)
-
-	edit_forms = EditFormSet(queryset=u.clinicians.all())
+				errors += [h.errors]
+			edit_form = h
 	
 	return render(request, 'healthprovider/dashboard/clinician.html.j2', context={
 		"title": "Clinicians",
-		"form" : ClinicianForm(),
-		"edit_forms": edit_forms
+		"form_user": UserForm(),
+		"form_clinician": ClinicianForm(),
+		"form_clinician_edit": edit_form,
 	})
 
 @match_role("healthprovider")
