@@ -21,20 +21,26 @@
 			</p>
 		</div>
 		<div class="container">
-			{% for appointment in apppointments %}
-				<div class="well well-lg">
-					<h4>Patient</h4>
-					<p>
-						<span class="far fa-calendar-alt"></span>
-						{{appointment.date}}
-						<br/>
-						<span class="far fa-clock"></span>
-						{{appointment.time}}
-					</p>
-					<button type="submit" class="btn btn-success">Accept</button>
-					<button type="submit" class="btn btn-danger">Reject</button>
-				</div>
-			{% endfor %}
+			<form method="POST">
+				{% csrf_token %}
+				{% for appointment in appointments %}
+					<div class="well well-lg">
+						<h4>Patient</h4>
+						<p>
+							<span class="far fa-calendar-alt"></span>
+							{{appointment.0.date}}
+							<br/>
+							<span class="far fa-clock"></span>
+							{{appointment.0.time}}
+						</p>
+						<div class="panel-body">
+							{% csrf_token %}
+							{{ appointment.1 | bootstrap }}
+						</div>
+						<button type="submit" class="btn btn-info" actn = "1">Update</button>
+					</div>
+				{% endfor %}
+			</form>]
 		</div>
 	</div>
 </div>

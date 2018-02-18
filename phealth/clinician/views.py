@@ -45,10 +45,9 @@ def dashboard(request):
 
 	if request.method == "POST":
 		c = ClinicianForm(request.POST, request.FILES, instance=u)
-		b = UserForm(request.POST, request.FILES, instance=u)
+		b = UserForm(request.POST, request.FILES, instance=v)
 		if c.is_valid() and b.is_valid():
-			c.save()
-			b.save()
+			c.save() and b.save()
 
 	return render(request, 'clinician/dashboard/home.html.j2', context={
 		"title": "Dashboard Home",
@@ -87,10 +86,29 @@ def speciality(request):
 def appointments(request):
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
 	apps = Appointment.objects.filter(under=c).all()
+	appointments_arr = []
+	class AppointmentForm(forms.ModelForm):
+
+		class Meta:
+			model = Appointment
+			fields = ('status',)
+
+
+	for appointment in apps:
+	 	appointments_arr.append((appointment, AppointmentForm(instance=appointment)))
+
+
+	if request.method == 'POST':
+		b = AppointmentForm(request.POST)
+		if b.is_valid():
+			c.save()
+			a = b.save(commit=False)
+			a.save()		
 	return render(request, 'clinician/dashboard/appointments.html.j2', context={
 		"title": "Doctors Appointment List",
-		"appointments": apps
+		"appointments": appointments_arr,
 		})
+
 
 @match_role("clinician")
 def calender(request):
@@ -98,7 +116,6 @@ def calender(request):
 	''' handles the calender page for clincian timings
 	and bookings
 	'''
-
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
 		
 	if request.method == "POST":
@@ -164,4 +181,60 @@ def calender(request):
 			'break_days' : schedule1,
 			'vacation_days' : vacation,
 			})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# COME 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
