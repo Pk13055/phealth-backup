@@ -1,53 +1,55 @@
-{% extends 'sponsor/base.html.j2' %}
+{% extends 'base.html.j2' %}
 {% load static %}
 {% load bootstrap %}
-{% block content %}
-<div class="row">
-	<h2>Sponsor Registration</h2>
-	<p class="lead text-muted">Already have an account? Sign in <a href="{% url 'sponsor:signin' %}">here</a>.</p>
-</div>
-<div class="row">
-	<form method="POST" enctype="multipart/form-data">
-		<div class="col-xs-12 col-md-6">
-			<div class="panel panel-success">
-				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
-				<div class="panel-body">
-					{% csrf_token %}
-					{{ user_form | bootstrap }}
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-md-6">
-		<div class="row">
-			<div class="panel panel-danger">
-				<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Sponsor-specific Information</div>
-				<div class="panel-body">
-					{{ sponsor_form | bootstrap }}
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading"><i class="fa fa-bolt fa-lg"></i> OTP Verification</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label class="control-label" for="otp">OTP</label>
-						<input class=" form-control" type="number" name="otp" id="otp" max="999999999" required>
-						{# <button type="button" class="btn btn-default" id="otp_send">Generate OTP</button> #}
+{% block maincontent %}
+<div class="container">
+	<div class="row">
+		<h2>Sponsor Registration</h2>
+		<p class="lead text-muted">Already have an account? Sign in <a href="{{ route }}/signin">here</a>.</p>
+	</div>
+	<div class="row">
+		<form method="POST" enctype="multipart/form-data">
+			<div class="col-xs-12 col-md-6">
+				<div class="panel panel-success">
+					<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
+					<div class="panel-body">
+						{% csrf_token %}
+						{{ user_form | bootstrap }}
 					</div>
 				</div>
 			</div>
-		</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<p class="text-muted">
-					<input type="checkbox" required id="tick" class="form-inline"><label for="tick"> I have read all the details</label>
-				</p>
-				<button class="btn btn-block btn-primary" id="otp_send">Register!</button>
+			<div class="col-xs-12 col-md-6">
+				<div class="row">
+					<div class="panel panel-danger">
+						<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Sponsor-specific Information</div>
+						<div class="panel-body">
+							{{ sponsor_form | bootstrap }}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="panel panel-default">
+						<div class="panel-heading"><i class="fa fa-bolt fa-lg"></i> OTP Verification</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="control-label" for="otp">OTP</label>
+								<input class=" form-control" type="number" name="otp" id="otp" max="999999999" required>
+								{# <button type="button" class="btn btn-default" id="otp_send">Generate OTP</button> #}
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-	</form>
+			<div class="row">
+				<div class="col-xs-12">
+					<p class="text-muted">
+						<input type="checkbox" required id="tick" class="form-inline"><label for="tick"> I have read all the details</label>
+					</p>
+					<button class="btn btn-block btn-primary" id="otp_send">Register!</button>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 <script src="{% static 'sponsor/js/register.js' %}"></script>
 {% endblock %}

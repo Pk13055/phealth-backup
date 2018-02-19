@@ -27,8 +27,6 @@ $(document).ready(function() {
         let mobile = $("input[name='mobile']").val(),
         email = $("input[name='email']").val(),
         csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        sendOTP(email, mobile, csrf_token);
-        $(this).hide();
-        setTimeout(() => { $(this).show(); }, 3000);
+        if(email != "" && mobile != "") sendOTP(email, mobile, csrf_token);
     });
 });

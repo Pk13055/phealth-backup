@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'drf_generators',
     'phealth',
     'common',
+    'site_admin',
 
     'api',
     'sponsor',

@@ -1,10 +1,11 @@
-{% extends 'healthprovider/base.html.j2' %}
+{% extends 'base.html.j2' %}
 {% load static %}
 {% load bootstrap %}
-{% block content %}
+{% block maincontent %}
+<div class="container">
 <div class="row">
 	<h2>Healthprovider Registration</h2>
-	<p class="lead text-muted">Already have an account? Sign in <a href="{% url 'sponsor:signin' %}">here</a>.</p>
+	<p class="lead text-muted">Already have an account? Sign in <a href="{{ route }}/signin">here</a>.</p>
 </div>
 <div class="row">
 	<form method="POST" enctype="multipart/form-data">
@@ -48,6 +49,7 @@
 			</div>
 		</div>
 	</form>
+</div>
 </div>
 <script src="{% static 'sponsor/js/register.js' %}"></script>
 {% endblock %}

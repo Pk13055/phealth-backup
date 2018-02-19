@@ -5,8 +5,8 @@ from phealth.utils import match_role, signin, redirect
 from django.http import JsonResponse
 from django import forms
 from django.contrib.auth.hashers import make_password
-from api.models import User, Provider, Speciality, Clinician, \
-						Appointment
+from api.models import (User, Provider, Speciality,
+	Clinician, Appointment)
 
 # Create your views here.
 
@@ -105,7 +105,7 @@ def specialities(request):
 	''' route for provider specialities '''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
 			model = Speciality
@@ -183,7 +183,7 @@ def clinicians(request):
 			else:
 				errors += [h.errors]
 			edit_form = h
-	
+
 	return render(request, 'healthprovider/dashboard/clinician.html.j2', context={
 		"title": "Clinicians",
 		"form_user": UserForm(),

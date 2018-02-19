@@ -3,13 +3,12 @@ from django.conf.urls import include, url
 
 from . import views
 
-app_name = "salesagent"
+app_name = "site_admin"
 
 dashboard_routes = [
 	url(r'^$', views.dashboard, name='dashboard_home'),
-	url(r'^reseller/?$', views.reseller_register, name='reseller'),
-	url(r'^discounts/?$', views.discounts, name='discounts'),
-
+	url(r'^cms/?$', views.cms, name='cms'),
+	url(r'^tokens/?$', views.tokens, name='tokens'),
 ]
 
 urlpatterns = [

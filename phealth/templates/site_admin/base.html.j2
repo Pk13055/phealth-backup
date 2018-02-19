@@ -1,0 +1,14 @@
+{% extends 'common/dashboard_base.html.j2' %}
+{% load static %}
+{% block mainhead %}
+<link href="{% static 'site_admin/css/style.css' %}" rel="stylesheet" type="text/css">
+<script src="{% static 'site_admin/js/main.js' %}"></script>
+{% block head %}{% endblock %}
+{% endblock %}
+{% block section %}Admin{% endblock section %}
+{% block baseurl %}{% url 'site_admin:dashboard_home' %}{% endblock baseurl %}
+{% block navs %}
+<li><a href="{% url 'site_admin:dashboard_home' %}">Staff</a></li>
+<li><a href="{% url 'site_admin:cms' %}">CMS</a></li>
+<li><a href="{% url 'site_admin:tokens' %}">Cards &amp; Coupons</a></li>
+{% endblock navs %}

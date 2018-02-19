@@ -23,7 +23,10 @@ def SignIn(request):
 		return redirect('clinician:signin')
 
 def SignUp(request):
+	''' no signin functionality for the clinician
+	'''
 	return redirect('clinician:signin')
+
 # Dashboard view functions
 
 @match_role("clinician")
@@ -31,17 +34,18 @@ def dashboard(request):
 	''' route for dashboard home '''
 
 	u = Clinician.objects.filter(user__email=request.session['email']).first()
-	v = u.user 
+	v = u.user
 	class ClinicianForm(forms.ModelForm):
 
 		class Meta:
 			model = Clinician
-			fields = ('education', 'experience') 
+			fields = ('education', 'experience')
 	class UserForm(forms.ModelForm):
 
 		class Meta:
 			model = User
-			fields = ('name', 'email', 'mobile', 'gender', 'question', 'answer', 'profile_pic')
+			fields = ('name', 'email', 'mobile', 'gender',
+			 'question', 'answer', 'profile_pic')
 
 	if request.method == "POST":
 		c = ClinicianForm(request.POST, request.FILES, instance=u)
@@ -77,7 +81,7 @@ def speciality(request):
 			v = b
 
 	return render(request, 'clinician/dashboard/speciality.html.j2', context={
-	 	"title": "Speciality Addition", 
+	 	"title": "Speciality Addition",
 	 	"speciality_form" : v,
 	 	"speciality_list" : n,
 	})
@@ -119,11 +123,11 @@ def calender(request):
 	and bookings
 	'''
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-		
+
 	if request.method == "POST":
 		print("Form submitted for update")
 		v = request.POST['section']
-		l = [[x, y] for x, y in zip(request.POST.getlist('start_time[]'), request.POST.getlist('end_time[]'))]	
+		l = [[x, y] for x, y in zip(request.POST.getlist('start_time[]'), request.POST.getlist('end_time[]'))]
 
 		if v in ['work', 'break']:
 			l = [list(map(lambda x: datetime.datetime.strptime(x, '%H:%M:%S').time(), _)) for _ in l]
@@ -205,7 +209,7 @@ def calender(request):
 
 
 
-# COME 
+# COME
 
 
 
