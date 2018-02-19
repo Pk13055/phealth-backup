@@ -30,12 +30,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for day in work_days %}
+							{% for day in work %}
 							<tr>
 								<td><input type="checkbox"></td>
 								<td>{{ day.day }}</td>
-								<td><input type="time" name="start_time[]" value="{{day.start}}"></td>
-								<td><input type="time" name="end_time[]" value="{{ day.end }}"></td>
+								<td><input type="time" name="timings['{{ day.day }}']" value="{{ day.start }}"></td>
+								<td><input type="time" name="timings['{{ day.day }}']" value="{{ day.end }}"></td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -70,12 +70,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for day in break_days %}
+							{% for day in break %}
 							<tr>
 								<td><input type="checkbox"></td>
 								<td>{# <button type="button" class="add_rows btn btn-default"> #}{# <i class="fa fa-plus"></i> #}</button> {{ day.day }}</td>
-								<td><input type="time" name="start_time[]" value="{{day.start}}"></td>
-								<td><input type="time" name="end_time[]" value="{{ day.end }}"></td>
+								<td><input type="time" name="timings['{{ day.day }}']" value="{{ day.start }}"></td>
+								<td><input type="time" name="timings['{{ day.day }}']" value="{{ day.end }}"></td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -110,11 +110,17 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for vacation in vacation_days %}
 							<tr>
 								<td><input type="checkbox"></td>
-								<td><input type="date" name="start_date[]" value="{{ vacation.start_day }}"></td>
-								<td><input type="date" name="end_date[]" value="{{ vacation.end_day}}"></td>
+								<td><input type="date"></td>
+								<td><input type="date"></td>
+								<td><button type="button" class="delete_rows btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+							</tr>
+							{% for vacation in vacations %}
+							<tr>
+								<td><input type="checkbox"></td>
+								<td><input type="date" name="timings[]" value="{{ vacation.start }}"></td>
+								<td><input type="date" name="timings[]" value="{{ vacation.end }}"></td>
 								<td><button type="button" class="delete_rows btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
 							</tr>
 							{% endfor %}

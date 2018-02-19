@@ -4,9 +4,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from api.models import (Clinician, User, Speciality, Appointment  )
-#  CliniciansExperience, CliniciansSpeciality)
+from querystring_parser import parser
 import datetime
-
 
 # Create your views here.
 
@@ -123,124 +122,54 @@ def calender(request):
 	and bookings
 	'''
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 	if request.method == "POST":
-		print("Form submitted for update")
-		v = request.POST['section']
-		l = [[x, y] for x, y in zip(request.POST.getlist('start_time[]'), request.POST.getlist('end_time[]'))]
-
-		if v in ['work', 'break']:
-			l = [list(map(lambda x: datetime.datetime.strptime(x, '%H:%M:%S').time(), _)) for _ in l]
+		p_dict = parser.parse(request.POST.urlencode())
+		if p_dict['section'] in ['work', 'break']:
+			timings = []
+			if p_dict['section'] == 'work': base_compare = c.work_timings
+			else: base_compare = c.break_timings
+			for day, actual in zip(days, base_compare):
+				try:
+					timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+					 '%H:%M:%S').time(), p_dict['timings'][day])))
+				except KeyError:
+					timings.append(actual)
+			if p_dict['section'] == 'work':
+				c.work_timings = timings
+			else:
+				c.break_timings = timings
 		else:
-			l = [list(map(lambda x: datetime.datetime.strptime(x, '%Y/%m/%d').date(), _)) for _ in l]
-
-		print(l)
-		if v == 'work':
-			c.work_time = l
-		if v == 'break':
-			c.break_time = l
-		if v == 'vacation':
-			c.vacation = l
-
-		print(c.work_timings)
+			try:
+				vacs = p_dict['timings'][""]
+				vacs = [ list(map(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d').date(),
+				 [i, j])) for i, j in zip(vacs[::2], vacs[1::2])]
+				c.vacations = vacs
+			except:
+				pass
 		c.save()
-		print(c.work_timings)
 
-	work_timings = c.work_timings
-	break_timings = c.break_timings
-	Vacations = c.vacations
+	work_timings, break_timings, vacation_timings = [], [], []
 
+	for day, w_t, b_t in zip(days, c.work_timings, c.break_timings):
+		cur_obj = { 'day' : day }
+		cur_obj['start'] = w_t[0].isoformat()
+		cur_obj['end'] = w_t[-1].isoformat()
+		work_timings.append(cur_obj)
+		cur_obj['start'] = b_t[0].isoformat()
+		cur_obj['end'] = b_t[-1].isoformat()
+		break_timings.append(cur_obj)
 
-	schedule = []
-	schedule1 = []
-	vacation = []
-
-	days = ["Sunday", "Monday",
-	 "Tuesday", "Wednesday", "Friday", "Saturday"]
-
-	for day, timings in zip(days, work_timings):
-	 	cur_day = {
-	 		'day' : day,
-	 		'start' : timings[0].isoformat()[:-7],
-	 		'end' : timings[-1].isoformat()[:-7],
-	 	}
-	 	schedule.append(cur_day)
-
-	for day, timings in zip(days, break_timings):
-	 	cur_day = {
-	 		'day' : day,
-	 		'start' : timings[0].isoformat()[:-7],
-	 		'end' : timings[-1].isoformat()[:-7],
-	 	}
-	 	schedule1.append(cur_day)
-
-	for v in Vacations:
-	 	cur_vacation = {
-	 		'start_day' : v[0].isoformat(),
-	 		'end_day'   : v[1].isoformat(),
-	 	}
-	 	vacation.append(cur_vacation)
+	for vacation in c.vacations:
+		vacation_timings.append({
+			'start' : vacation[0].isoformat(),
+			'end' : vacation[-1].isoformat(),
+		})
 
 	return render(request, 'clinician/dashboard/calender.html.j2', context={
 			'title' : "Set your timings",
-			'work_days' : schedule,
-			'break_days' : schedule1,
-			'vacation_days' : vacation,
-			})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# COME
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			'work' : work_timings,
+			'break' : break_timings,
+			'vacations' : vacation_timings,
+		})

@@ -64,7 +64,9 @@ let calenderUI = () => {
 		// clone true for event binding preserve
 		let $ref = $(this).closest("section").find("table tbody"),
 			$row = $($ref.find("tr")[0]).clone(true, true);
-		$row.find("input[type='date']").val("");
+		$row.find("input[type='date']").attr({
+			'name' : "timings[]"
+		}).val("");
 		$ref.append($row);
 	});
 };
