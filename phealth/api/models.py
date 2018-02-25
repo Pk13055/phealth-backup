@@ -246,7 +246,11 @@ class User(models.Model):
 		# secondary roles
 		('salesagent', 'salesagent'), # sells plans from admin
 		('reseller', 'reseller'), # buys healthcards from agents
+
+		# admin based roles and misc
+		('editor', 'editor'), #editor for a given blog
 		('admin', 'admin'), # main admin dashboard
+
 		)
 
 	# whether the user is active or not
@@ -502,3 +506,86 @@ class Testimonial(models.Model):
 	class Meta:
 		managed = True
 		db_table = 'testimonials'
+
+
+class CDN(models.Model):
+	''' static content across the site will
+		be maintained by this table
+	'''
+	id = models.AutoField(primary_key=True)
+	image = models.ImageField(upload_to='cdn')
+	url = models.URLField(null=True, blank=True)
+	code = models.CharField(max_length=30, default='misc')
+	description = models.TextField(null=True, blank=True)
+	date_added = models.DateTimeField(default=current_timestamp, editable=False)
+	date_modified = models.DateTimeField(editable=False)
+
+	def save(self, *args, **kwargs):
+		self.date_modified = current_timestamp()
+		super(CDN, self).save(*args, **kwargs)
+
+	def __str__(self):
+		return "<Content %s | %s >" % (self.image, self.description)
+
+	class Meta:
+		managed = True
+		db_table = 'images'
+
+
+# blog posts
+
+class BlogCategory(models.Model):
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=30)
+	color = models.CharField(max_length=30)
+
+	featured_posts = models.ManyToManyField('Post')
+
+	def __str__(self):
+		return "< Category : %s >" % (self.name)
+
+	class Meta:
+		managed = True
+		db_table = 'blog_categories'
+
+
+class Post(models.Model):
+	'''
+		blog posts will be of this type
+	'''
+
+	id = models.AutoField(primary_key=True)
+	content = models.TextField()
+	title = models.CharField(max_length=50)
+	image = models.ImageField(upload_to='blog', default='default_blog.jpg')
+	url = models.URLField(null=True, blank=True)
+	clicks = models.PositiveSmallIntegerField(default=0)
+	uid = models.UUIDField(default=uuid.uuid4, editable=False)
+	category = models.ForeignKey(BlogCategory, on_delete=models.DO_NOTHING)
+	date_added = models.DateTimeField(default=current_timestamp, editable=False)
+	date_modified = models.DateTimeField(editable=False)
+
+	def __str__(self):
+		return "<Post : %s | %s >" % (self.uid, self.title)
+
+	def save(self, *args, **kwargs):
+		self.date_modified = current_timestamp()
+		super(Post, self).save(*args, **kwargs)
+
+	class Meta:
+		managed = True
+		db_table = 'posts'
+
+
+class BlogComment(models.Model):
+	id = models.AutoField(primary_key=True)
+	text = models.TextField()
+	date_added = models.DateTimeField(default=current_timestamp, editable=False)
+	user = models.ForeignKey(User, on_delete=models.DO_NOTHING, editable=False)
+
+	def __str__(self):
+		return "<Comment %s | %s >" % (self.user.email, self.text[:20] + "...")
+
+	class Meta:
+		managed = True
+		db_table = 'blog_comments'

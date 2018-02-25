@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'site_admin',
 
     'api',
+    'blog',
     'sponsor',
     'clinician',
     'healthprovider',

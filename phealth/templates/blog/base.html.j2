@@ -1,0 +1,15 @@
+{% extends 'base.html.j2' %}
+{% block mainhead %}
+{# add blog styling here  #}
+{% block head %}
+{% endblock head %}
+{% endblock mainhead %}}
+{% block maincontent %}
+<nav>{# add the navbar here #}</nav>
+<main>
+	<div class="container">
+		{% block content %}{% endblock content %}
+	</div>
+</main>
+<footer>{# add the footer here #}</footer>
+{% endblock maincontent %}

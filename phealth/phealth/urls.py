@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^$', common.home_route, name='home'),
     url(r'^api/', include('api.urls', namespace='api')),
     url(r'^common/', include('common.urls', namespace='common')),
+    url(r'^blog/', include('blog.urls', namespace='blog')),
 
     url(r'^admin/', admin.site.urls),
     url(r'^site_admin/', include('site_admin.urls', namespace='site_admin')),
