@@ -48,8 +48,8 @@ def dashboard(request):
 			b.save()
 
 	return render(request, 'reseller/dashboard/home.html.j2', context={
-			'title' : "Basic Details"
-			'form_title' : "Edit basic information"
+			'title' : "Basic Details",
+			'form_title' : "Edit basic information",
 			'user_form' : UserForm(instance = u)
 		})
 
@@ -59,7 +59,7 @@ def view_discounts(request):
 	'''
 	r = Reseller.objects.filter(user__email = request.session['email']).first()
 	discounts = r.discount_cards
-	
+
 	return render(request, 'reseller/dashboard/discounts.html.j2', context={
 			'title' : "Discount Cards",
 		})

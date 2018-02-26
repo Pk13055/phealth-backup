@@ -7,7 +7,7 @@ app_name = "reseller"
 
 dashboard_routes = [
 	url(r'^$', views.dashboard, name='dashboard_home'),
-	url(r'^discounts/?$', views.discounts, name='discounts'),
+	url(r'^discounts/?$', views.view_discounts, name='discounts'),
 ]
 
 urlpatterns = [
