@@ -1,6 +1,28 @@
 {% extends 'reseller/base.html.j2' %}
+{% load static %}
+{% load bootstrap %}
 {% block content %}
 <div class="row">
-	<span>{{ title }}</span>
+	<h2>Reseller Registration</h2>
 </div>
+<div class="row">
+	<form method="POST" enctype="multipart/form-data">
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
+				<div class="panel-body">
+					{% csrf_token %}
+					{{ user_form | bootstrap }}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<button class="btn btn-block btn-primary">Update</button>
+			</div>
+		</div>
+	</form>
+</div>
+{# <script src="{% static 'clinician/js/register.js' %}"></script> #}
 {% endblock %}
+

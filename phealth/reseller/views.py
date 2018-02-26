@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from phealth.utils import signin, match_role
-
+from api.models import Reseller, SalesAgent
 # Create your views here.
 
 
@@ -32,14 +32,34 @@ def SignUp(request):
 def dashboard(request):
 	''' main dashboard route
 	'''
+	r = Reseller.objects.filter(user__email = request.session['email']).first()
+	u = r.user
+	class UserForm(forms.ModelForm):
+
+		class Meta:
+			model = User
+			fields = ('name', 'email', 'mobile', 'gender',
+			 'question', 'answer', 'profile_pic')
+
+	if request.method == 'POST':
+		# c = ClinicianForm(request.POST, request.FILES, instance=u)
+		b = UserForm(request.POST, request.FILES, instance=u)
+		if b.is_valid():
+			b.save()
+
 	return render(request, 'reseller/dashboard/home.html.j2', context={
 			'title' : "Basic Details"
+			'form_title' : "Edit basic information"
+			'user_form' : UserForm(instance = u)
 		})
 
 @match_role("reseller")
-def discounts(request):
+def view_discounts(request):
 	''' route for discount card handling
 	'''
+	r = Reseller.objects.filter(user__email = request.session['email']).first()
+	discounts = r.discount_cards
+	
 	return render(request, 'reseller/dashboard/discounts.html.j2', context={
 			'title' : "Discount Cards",
 		})
