@@ -4,162 +4,43 @@
 {% block content %}
 <div class="row">
 	{{ title }}
+	<section class="featured_blog">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="full_width featured_blog_in featured_blog_in_ceto featured_blog_category">
+						<div style="background: #b713b0eb !important;" class="caption">
+							<h3> {{ category_name }}  </h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="blog_one">
+		<div class="container">
+			<div class="row">
+				{% for post in posts %}
+					<div class="blog_con_ul">
+						<div class="col-md-4 ind_categ">
+							<img src= "{{ post.image }}">
+							{{post.image}}
+							<div class="caption_small">
+								<h3>{{ post.date_added }}</h3>
+								<p>{{ post.title }}</p>
+								<span>{{ post.content | truncatechars:25}}</span>
+								<ul class="share_coment">
+									<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
+									<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
+									<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
+								</ul>
+								<a href="#">Read More</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
 </div>
-<section class="featured_blog">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="full_width featured_blog_in featured_blog_in_ceto featured_blog_category">
-					<div style="background: #b713b0eb !important;" class="caption">
-						<h3> Healthy Eating  </h3>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<section class="blog_one">
-	<div class="container">
-		<div class="row">
-			<div class="blog_con_ul">
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog15.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Cucumber for Sexual Health</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-
-						<a href="#">Read More</a>
-					</div>
-				</div>
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog16.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Get Healthy Now, Ask Me How – X</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-
-						<a href="#">Read More</a>
-					</div>
-				</div>
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog17.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Get Healthy Now, Ask Me How – X</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog18.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Cucumber for Sexual Health</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-
-						<a href="#">Read More</a>
-					</div>
-				</div>
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog19.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Get Healthy Now, Ask Me How – X</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-
-						<a href="#">Read More</a>
-					</div>
-				</div>
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog20.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Get Healthy Now, Ask Me How – X</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog21.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Cucumber for Sexual Health</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog22.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Get Healthy Now, Ask Me How – X</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-
-				<div class="col-md-4 ind_categ">
-					<img src="img/blog/blog23.jpg">
-					<div class="caption_small">
-						<h3>JAN 29th 2018</h3>
-						<p>Get Healthy Now, Ask Me How – X</p>
-						<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-						<ul class="share_coment">
-							<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-							<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-							<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-						</ul>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-	</div>
-</section>
 {% endblock %}

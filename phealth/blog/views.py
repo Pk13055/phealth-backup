@@ -11,24 +11,46 @@ from api.models import Post, BlogCategory, BlogComment, CDN
 
 # common urls
 
+def get_categories():  #gets the categories which need to rendered on all the user side routes
+	return [_['name'] for _ in BlogCategory.objects.values('name')]
+
 def home(request):
 	''' home route '''
+	blog_post_arr = []
+	categories = BlogCategory.objects.all()
+	for category in categories:
+		blog_post_arr.append((category.name, category.featured_posts))	
 	return render(request, 'blog/home.html.j2', context={
 		'title' : "Blog Home",
+		'categories' : get_categories(),
+		'category_posts' : blog_post_arr,
 		})
 
 
 def category(request, category_name):
-	''' category route '''
+	category = BlogCategory.objects.filter(name = category_name).first()
+	print(category)
+	f = category.featured_posts.all()
+	print(f)
+	if request.method == "POST":
+		print(POST)
+
 	return render(request, 'blog/category.html.j2', context={
-		'title' : "Blog Category - " + category_name
+		'title' : "Blog Category - " + category_name,
+		'categories' : get_categories(),
+		'posts' : f,
+		'category_name': category_name.title(),
 		})
 
 
 def post(request, category_name, post_uid):
 	''' post route '''
+	post = Post.objects.filter(uid = post_uid).first()
+	print(post)
 	return render(request, 'blog/post.html.j2', context={
-		'title' : "Post - " + category_name + " :: " + str(post_uid)
+		'title' : "Post - " + category_name + " :: " + str(post_uid),
+		'categories' : get_categories(),
+		'post' : post,
 		})
 
 # admin urls

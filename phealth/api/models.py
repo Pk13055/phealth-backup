@@ -553,7 +553,6 @@ class Post(models.Model):
 	'''
 		blog posts will be of this type
 	'''
-
 	id = models.AutoField(primary_key=True)
 	content = models.TextField()
 	title = models.CharField(max_length=50)

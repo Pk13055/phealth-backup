@@ -3,9 +3,9 @@
 
 {% block mainhead %}
 <link href="{% static 'blog/css/style.css' %}" rel="stylesheet" type="text/css">
-<link href="{% static 'css/style.css' %}" rel="stylesheet">
-<link href="{% static 'css/fontopen.css' %}" rel="stylesheet">
-<link href="{% static 'css/font.css' %}" rel="stylesheet">
+<link href="{% static 'blog/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'blog/css/fontopen.css' %}" rel="stylesheet">
+<link href="{% static 'blog/css/font.css' %}" rel="stylesheet">
 {% block head %}{% endblock %}
 {% endblock mainhead %}
 {% block maincontent %}
@@ -53,10 +53,9 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="blog_nav_in">
-					<li class="purple"><a href="blog_category.html"><span class="fa fa-circle"></span>Healthy Hair</a></li>
-					<li class="orange"><a href="blog_category.html"><span class="fa fa-circle"></span>Healthy Eating</a></li>
-					<li class="blue"><a href="blog_category.html"><span class="fa fa-circle"></span>Healthy Skin</a></li>
-					<li class="green"><a href="blog_category.html"><span class="fa fa-circle"></span>Weight Loss</a></li>
+					{% for category in categories %}
+					<li class="purple"><a href="/blog/{{ category }}"><span class="fa fa-circle"></span>{{ category }}</a></li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
@@ -106,7 +105,6 @@
 									<button class="btn btn-lg" type="submit"><i class="fa fa-envelope" aria-hidden="true"></i></button>
 								</div>
 							</form>
-							<!--<small class="promise"><em>We won't send spam.</em></small>-->
 						</div>
 					</div>
 				</div>
