@@ -15,15 +15,30 @@ def get_categories():  #gets the categories which need to rendered on all the us
 	return [_['name'] for _ in BlogCategory.objects.values('name')]
 
 def home(request):
-	''' home route '''
-	blog_post_arr = []
-	categories = BlogCategory.objects.all()
-	for category in categories:
-		blog_post_arr.append((category.name, category.featured_posts))	
+	''' home route ''' 
+	# c = BlogComment.objec 
+	categories = []
+	for cat in BlogCategory.objects.all():
+		cur_cat = {
+			'name' : cat.name,
+			'color' : cat.color,
+			'featured_posts' : []
+		}
+		for post in cat.featured_posts.all():
+			cur_post = {
+			'uid' : post.uid,
+			'title' : post.title,
+			'image' : post.image,
+			'content' : post.content,
+			'date_added' : post.date_added,
+			}
+			cur_cat['featured_posts'].append(cur_post)
+		categories.append(cur_cat)
+	print(categories)
 	return render(request, 'blog/home.html.j2', context={
 		'title' : "Blog Home",
 		'categories' : get_categories(),
-		'category_posts' : blog_post_arr,
+		'category_posts' : categories,
 		})
 
 
@@ -45,12 +60,40 @@ def category(request, category_name):
 
 def post(request, category_name, post_uid):
 	''' post route '''
-	post = Post.objects.filter(uid = post_uid).first()
-	print(post)
+	# u = User.objects.filter(email=request.session['email']).first()
+	comments = []
+	p = Post.objects.filter(uid=post_uid).first()
+	c = BlogComment.objects.filter(post__uid=post_uid).all()
+	for cat in c:
+		cur_cat = {
+			'text' : cat.text,
+			'name' : cat.user.name,
+		}
+	class BlogCommentForm(forms.ModelForm):
+		class Meta:
+			model = BlogComment
+			fields = ('text',)
+			widgets = {
+				'text' : SummernoteWidget(),
+			}
+
+	post = BlogCommentForm()
+
+	if request.method == 'POST':
+		b = BlogCommentForm(request.POST)
+		if b.is_valid():
+			comment = b.save(commit=False)
+			comment.post = p
+			# comment.user = u\
+			comment.save()
+		post = b
+
+
 	return render(request, 'blog/post.html.j2', context={
 		'title' : "Post - " + category_name + " :: " + str(post_uid),
 		'categories' : get_categories(),
 		'post' : post,
+		'comments' : c,
 		})
 
 # admin urls

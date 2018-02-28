@@ -20,179 +20,60 @@
 		</div>
 	</div>
 </section>
-{% for post in category_posts %}
-	{% if loop.counter mod 4 == 0 %}
-		<section class="blog_one">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="full_width blog_one_one">
-							<h5><span class="fa fa-circle"></span>{{ post.0 }}</h5>
-							<a href="#">View All</a>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<ul class="blog_con_ul">
-							<li class="col-md-6 no_padding_all blog_list_big blog_list_big0ne">
-								<img src="img/blog/blog2.jpg">
-								<div class="caption">
-									<h5>{{ post.1.date_added }}</h5>
-									<p>PRP Therapy: Promising Non-Surgical Treatment for Hair Loss</p>
-									<ul class="share_coment">
-										<li><a href="#"><span class="fa fa-heart"></span>26 LIKES</a></li>
-										<li><a href="#"><span class="fa fa-share"></span>5 Share</a></li>
-										<li><a href="#"><span class="fa fa-comment"></span>3 Comments</a></li>
-									</ul>
-								</div>
-							</li>
-							<li class="col-md-3 no_padding_all blog_list_small">
-								<img src="img/blog/blog3.jpg">
-								<div class="caption_small">
-									<h3>post[1]</h3>
-									<p>Relationships 101: How to get the best out of a Relationship?</p>
-									<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-									<ul class="share_coment">
-										<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-										<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-										<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-									</ul>
-									<a href="#">Read More</a>
-								</div>
-							</li>
-						</ul>
-					</div>
+{% for category in category_posts %}
+<section class="blog_one">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="full_width blog_one_one">
+					<h5><span class="fa fa-circle"></span>{{ category.name }}</h5>
+					<a href="#">View All</a>
 				</div>
 			</div>
-		</section>
-	{% elif loop.counter == 1 %}
-		<section class="blog_one blog_two">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="full_width blog_one_one blog_one_two_head">
-							<h5><span class="fa fa-circle"></span>{{ post.0 }} </h5>
-							<a href="#">View All</a>
+			<div class="col-md-12">
+				<ul class="blog_con_ul">
+					{% for post in category.featured_posts %}
+					{% if loop.first %}
+					<li class="col-md-6 no_padding_all blog_list_big blog_list_big0ne">
+						<img src="http://via.placeholder.com/200x200">
+						<div class="caption" color = "{{category.color}}">
+							<h5>{{post.date_added}}</h5>
+							<p>{{post.title}}</p>
+							<ul class="share_coment">
+								<li><a href="#"><span class="fa fa-heart"></span>26 LIKES</a></li>
+								<li><a href="#"><span class="fa fa-share"></span>5 Share</a></li>
+								<li><a href="#"><span class="fa fa-comment"></span>3 Comments</a></li>
+							</ul>
+						</div>
+					</li>
+					{% endif %}
+					<li class="col-md-3 no_padding_all blog_list_small">
+						<img src="http://via.placeholder.com/350x150">
+						<div class="caption_small">
+							<h3>{{ post.title }}</h3>
+							{# <p>Relationships 101: How to get the best out of a Relationship?</p> #}
+							<span>{{ post.content | safe | truncatechars:25 }}</span>
+										{# <ul class="share_coment">
+											<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
+											<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
+											<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
+										</ul> #}
+										<a href="{% url 'blog:post' category_name=category.name post_uid=post.uid %}">Read More</a>
+									</div>
+								</li>
+								{% endfor %}
+							</ul>
 						</div>
 					</div>
-					<div class="col-md-12">
-						<ul class="blog_con_ul">
-							<li class="col-md-3 no_padding_all blog_list_small margin_0">
-								<img src="img/blog/blog4.jpg">
-								<div class="caption_small">
-									<h3>{{ post.1.date_added }}</h3>
-									<p>{{ post.1.title }}</p>
-									<span>{{post.1.content | truncatechars:25 }}</span>
-									<ul class="share_coment">
-										<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-										<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-										<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-									</ul>
-									<a href="#">Read More</a>
-								</div>
-							</li>
-							<li class="col-md-6 no_padding_all blog_list_big">
-								<img src="img/blog/blog7.jpg">
-								<div class="caption caption_tow">
-									<h5>Jan 29th 2018</h5>
-									<p>Diet Tips Every "Bride-to-Be" <br>Needs to Follow</p>
-									<ul class="share_coment">
-										<li><a href="#"><span class="fa fa-heart"></span>26 LIKES</a></li>
-										<li><a href="#"><span class="fa fa-share"></span>5 Share</a></li>
-										<li><a href="#"><span class="fa fa-comment"></span>3 Comments</a></li>
-									</ul>
-								</div>
-							</li>
-						</ul>
-					</div>
 				</div>
-			</div>
-		</section>
-	{% elif loop.counter == 2 %}
-		<section class="blog_one blog_three">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="full_width blog_one_two">
-							<h5><span class="fa fa-circle"></span> Healthy Hair </h5>
-							<a href="#">View All</a>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<ul class="blog_con_ul">
-							<li class="col-md-6 no_padding_all blog_list_big blog_list_big0ne blog_list_bigtwo">
-								<img src="img/blog/blog8.jpg">
-								<div class="caption">
-									<h5>Jan 29th 2018</h5>
-									<p>PRP Therapy: Promising Non-Surgical Treatment for Hair Loss</p>
-									<ul class="share_coment">
-										<li><a href="#"><span class="fa fa-heart"></span>26 LIKES</a></li>
-										<li><a href="#"><span class="fa fa-share"></span>5 Share</a></li>
-										<li><a href="#"><span class="fa fa-comment"></span>3 Comments</a></li>
-									</ul>
-								</div>
-							</li>
-							<li class="col-md-3 no_padding_all blog_list_small">
-								<img src="img/blog/blog9.jpg">
-								<div class="caption_small">
-									<h3>JAN 29th 2018</h3>
-									<p>Relationships 101: How to get the best out of a Relationship?</p>
-									<span>Here are 20 of the most important tips for your Do not use an anti-dandruff shampoo for </span>
-									<ul class="share_coment">
-										<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-										<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-										<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-									</ul>
-									<a href="#">Read More</a>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</section>
-	{% else %}
-		<section class="blog_one blog_four">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="full_width blog_one_one blog_one_four_head">
-							<h5><span class="fa fa-circle"></span> Healthy Eating </h5>
-							<a href="#">View All</a>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<ul class="blog_con_ul">
-							<li class="col-md-3 no_padding_all blog_list_small margin_0">
-								<img src="img/blog/blog13.jpg">
-								<div class="caption_small">
-									<h3>JAN 29th 2018</h3>
-									<p>Cucumber for Sexual Health</p>
-									<span>Cucumber has shown to be great for sexual stamina. I was reading an article about erectile dysfunction an</span>
-									<ul class="share_coment">
-										<li><a href="#"><i class="fa fa-heart"></i>26 LIKES</a></li>
-										<li><a href="#"><i class="fa fa-share"></i>5 Share</a></li>
-										<li><a href="#"><i class="fa fa-comment"></i>3 Comments</a></li>
-									</ul>
-									<a href="#">Read More</a>
-								</div>
-							</li>
-							<li class="col-md-6 no_padding_all blog_list_big">
-								<img src="img/blog/blog11.jpg">
-								<div class="caption caption_tow">
-									<h5>Jan 29th 2018</h5>
-									<p>Diet Tips Every "Bride-to-Be" <br>Needs to Follow</p>
-									<ul class="share_coment">
-										<li><a href="#"><span class="fa fa-heart"></span>26 LIKES</a></li>
-										<li><a href="#"><span class="fa fa-share"></span>5 Share</a></li>
-										<li><a href="#"><span class="fa fa-comment"></span>3 Comments</a></li>
-									</ul>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</section>
-	{% endif %}
+			</section>
+			{# {% endif %} #}
+			{% endfor %}
+			{% endblock %}
+{# 
+{% for category in categories %}
+
 {% endfor %}
-{% endblock %}
+
+
+ #}
