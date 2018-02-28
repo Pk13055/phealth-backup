@@ -513,7 +513,7 @@ class CDN(models.Model):
 		be maintained by this table
 	'''
 	id = models.AutoField(primary_key=True)
-	image = models.ImageField(upload_to='cdn')
+	image = models.ImageField(upload_to='cdn', blank=True, null=True)
 	url = models.URLField(null=True, blank=True)
 	code = models.CharField(max_length=30, default='misc')
 	description = models.TextField(null=True, blank=True)

@@ -1,8 +1,24 @@
 {% extends 'blog/base.html.j2' %}
+{% load bootstrap %}
 {% block head %}
 {% endblock %}
 {% block content %}
 <div class="row">
 	{{ title }}
+	<div class="panel panel-danger">
+		<form method="POST" action="{% url 'blog:ads' %}">
+			<div class="panel-body">
+				{% csrf_token %}
+				{{ form_ad | bootstrap }}
+				<select class="form-control" name="code">
+					<option value="ad_home_page">Home Page Ad</option>
+					<option value="ad_category_page">Category Page Ad</option>
+				</select>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-block btn-danger" type="submit"><i class="fa fa-plus fa-lg"></i> Add!</button>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock %}

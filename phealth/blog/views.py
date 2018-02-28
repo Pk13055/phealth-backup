@@ -2,10 +2,11 @@ from django import forms
 from django.shortcuts import render
 from django.http import Http404
 from django_summernote.widgets import SummernoteWidget
-from api.models import Post, BlogCategory, BlogComment
+from api.models import Post, BlogCategory, BlogComment, CDN
 from django_tables2 import RequestConfig
 from api.models import BlogCategory, BlogComment, Post
 from .tables import PostTable
+from django import forms
 
 # Create your views here.
 
@@ -120,6 +121,29 @@ def statistics(request):
 
 def ads(request):
 	''' ads route '''
+	class AdForm(forms.ModelForm):
+		
+		class Meta:
+
+			model = CDN
+			fields = ('image',)
+
+	form_ad = AdForm()
+
+	if request.method == 'POST':
+		print('inside POST function')
+		print(request.POST)
+
+		a = AdForm(request.POST, request.FILES)
+
+		if a.is_valid():
+			ad = a.save(commit=False)
+			ad.code = request.POST['code'][0]
+			ad.save()
+		else:
+			print('Form entries not valid')
+
 	return render(request, 'blog/admin/ads.html.j2', context={
-		'title' : "Ads"
+		'title' : "Ads",
+		'form_ad': form_ad,
 		})
