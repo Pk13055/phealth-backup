@@ -561,6 +561,7 @@ class Post(models.Model):
 	url = models.URLField(null=True, blank=True)
 	clicks = models.PositiveSmallIntegerField(default=0, editable=False)
 	uid = models.UUIDField(default=uuid.uuid4, editable=False)
+	comment_count = models.PositiveSmallIntegerField(default=0, editable=False)
 	category = models.ForeignKey(BlogCategory, on_delete=models.DO_NOTHING)
 	date_added = models.DateTimeField(default=current_timestamp, editable=False)
 	date_modified = models.DateTimeField(editable=False)
@@ -583,6 +584,11 @@ class BlogComment(models.Model):
 	date_added = models.DateTimeField(default=current_timestamp, editable=False)
 	user = models.ForeignKey(User, on_delete=models.DO_NOTHING, editable=False)
 	post = models.ForeignKey(Post, on_delete=models.DO_NOTHING, editable=False)
+
+	def save(self, *args, **kwargs):
+		self.post.comment_count += 1
+		self.post.save()
+		super(BlogComment, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return "<Comment %s | %s >" % (self.user.email, self.text[:20] + "...")
