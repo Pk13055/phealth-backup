@@ -18,6 +18,6 @@ urlpatterns = [
 	url(r'^$', views.home, name='home'),
 	url(r'^admin/', include(admin_urls)),
 	path('<str:category_name>/', views.category, name='category'),
-	path('<str:category_name>/<uuid:post_uid>/', views.post, name='home'),
+	path('<str:category_name>/<uuid:post_uid>/', views.post, name='post'),
 ]
 

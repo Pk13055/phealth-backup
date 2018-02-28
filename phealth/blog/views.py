@@ -1,12 +1,11 @@
+import json
 from django import forms
 from django.shortcuts import render
 from django.http import Http404
 from django_summernote.widgets import SummernoteWidget
-from api.models import Post, BlogCategory, BlogComment, CDN
 from django_tables2 import RequestConfig
-from api.models import BlogCategory, BlogComment, Post
 from .tables import PostTable
-from django import forms
+from api.models import Post, BlogCategory, BlogComment, CDN
 
 # Create your views here.
 
@@ -115,14 +114,41 @@ def edit_post(request, post_uid):
 
 def statistics(request):
 	''' statistics route '''
+	cats = BlogCategory.objects.all()
+	posts = Post.objects.values_list('uid', 'title', 'clicks',
+		'category', 'date_added', 'date_modified')
+	categories = []
+	for cat in cats:
+		cur_posts = posts.filter(category=cat.id)
+		current_cat = {
+			'title' : cat.name,
+			'color' : cat.color,
+			'clicks' : sum([_['clicks'] for _ in
+				cur_posts.values('clicks')]),
+			'posts' : []
+		}
+		for post in cur_posts:
+			uid, title, clicks, category, date_added, date_modified = post
+			current_cat['posts'].append({
+				'uid' : str(uid),
+				'title' :  title,
+				'clicks' :  clicks,
+				'category' :  cat.name,
+				'date_added' : date_added,
+				'date_modified' : date_modified,
+				})
+		categories.append(current_cat)
+
 	return render(request, 'blog/admin/statistics.html.j2', context={
-		'title' : "Statistics"
+		'title' : "Statistics",
+		'sections' : categories,
+		'colors' : ['success', 'info', 'warning', 'danger']
 		})
 
 def ads(request):
 	''' ads route '''
 	class AdForm(forms.ModelForm):
-		
+
 		class Meta:
 
 			model = CDN

@@ -1,8 +1,44 @@
 {% extends 'blog/base.html.j2' %}
+{% load tags %}
 {% block head %}
+<style>
+	section .btn {
+		color: black;
+		border: 2px solid black;
+	}
+</style>
 {% endblock %}
 {% block content %}
 <div class="row">
-	{{ title }}
+	<h2>{{ title | title }}</h2>
 </div>
+{% for section in sections %}
+<section class="row" id="{{ section.title | make_css }}">
+	<div class="row well">
+		<h3>{{ section.title | title }} <small>{{ section.clicks }} Clicks</small></h3>
+	</div>
+	<div class="row">
+		{% for post in section.posts %}
+		{% with color=colors|random %}
+		<div class="col-xs-12 col-md-3">
+			<div class="panel panel-{{ color }}">
+				<div class="panel-heading"><h4><a href="{% url 'blog:post' category_name=post.category post_uid=post.uid %}" target="_blank" class="btn btn-primary"><i class="fa fa-link fa-lg"></i></a> {{ post.title }}</h4></div>
+				<div class="panel-body">
+					<p class="lead">Date modified : {{ post.date_modified | date }}</p>
+					<p class="text-muted">Date added : {{ post.date_added | date }}</p>
+				</div>
+				<div class="panel-footer">
+					<span class="label label-{{ color }}">{{ post.clicks }} clicks</span>
+				</div>
+			</div>
+		</div>
+		{% endwith %}
+		{% empty %}
+		<div class="col-xs-12 well">
+			<h3 class="text-muted">No posts yet!</h3>
+		</div>
+		{% endfor %}
+	</div>
+</section>
+{% endfor %}
 {% endblock %}

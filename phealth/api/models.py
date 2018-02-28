@@ -582,6 +582,7 @@ class BlogComment(models.Model):
 	text = models.TextField()
 	date_added = models.DateTimeField(default=current_timestamp, editable=False)
 	user = models.ForeignKey(User, on_delete=models.DO_NOTHING, editable=False)
+	post = models.ForeignKey(Post, on_delete=models.DO_NOTHING, editable=False)
 
 	def __str__(self):
 		return "<Comment %s | %s >" % (self.user.email, self.text[:20] + "...")
