@@ -1,8 +1,10 @@
 {% extends 'blog/base.html.j2' %}
+{% load table_tags %}
 {% block head %}
 {% endblock %}
 {% block content %}
 <div class="row">
 	{{ title }}
+	{% render_table posts %}
 </div>
 {% endblock %}

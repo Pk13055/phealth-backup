@@ -542,7 +542,7 @@ class BlogCategory(models.Model):
 	featured_posts = models.ManyToManyField('Post', null=True, blank=True)
 
 	def __str__(self):
-		return "< Category : %s >" % (self.name)
+		return "<Category: %s>" % (self.name)
 
 	class Meta:
 		managed = True
