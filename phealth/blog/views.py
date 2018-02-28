@@ -1,15 +1,12 @@
 from django import forms
 from django.shortcuts import render
-<<<<<<< 67d710edcb35ab17a3cf4c636e1ff4ba12d2e154
 from django.http import Http404
 from django_summernote.widgets import SummernoteWidget
 from api.models import Post, BlogCategory, BlogComment
-=======
 from django_tables2 import RequestConfig
 from api.models import BlogCategory, BlogComment, Post
 from .tables import PostTable
 
->>>>>>> adds blog posts route using datatables
 # Create your views here.
 
 # common urls
