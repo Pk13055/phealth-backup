@@ -539,7 +539,7 @@ class BlogCategory(models.Model):
 	name = models.CharField(max_length=30)
 	color = models.CharField(max_length=30)
 
-	featured_posts = models.ManyToManyField('Post')
+	featured_posts = models.ManyToManyField('Post', null=True, blank=True)
 
 	def __str__(self):
 		return "< Category : %s >" % (self.name)
@@ -559,7 +559,7 @@ class Post(models.Model):
 	title = models.CharField(max_length=50)
 	image = models.ImageField(upload_to='blog', default='default_blog.jpg')
 	url = models.URLField(null=True, blank=True)
-	clicks = models.PositiveSmallIntegerField(default=0)
+	clicks = models.PositiveSmallIntegerField(default=0, editable=False)
 	uid = models.UUIDField(default=uuid.uuid4, editable=False)
 	category = models.ForeignKey(BlogCategory, on_delete=models.DO_NOTHING)
 	date_added = models.DateTimeField(default=current_timestamp, editable=False)

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'bootstrapform',
+    'django_summernote',
 
     'rest_framework',
     'drf_generators',
@@ -176,12 +177,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR
+STATIC_ROOT = os.path.join(os.getcwd(), '..', 'static')
 
 STATICFILES_DIR = (
 	BASE_DIR,
 	os.path.join(BASE_DIR, 'static', os.sep),
 )
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.getcwd(), '..', 'media')

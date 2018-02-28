@@ -1,6 +1,8 @@
+from django import forms
 from django.shortcuts import render
-from api.models import BlogCategory, BlogComment, Post
-
+from django.http import Http404
+from django_summernote.widgets import SummernoteWidget
+from api.models import Post, BlogCategory, BlogComment
 # Create your views here.
 
 # common urls
@@ -29,8 +31,38 @@ def post(request, category_name, post_uid):
 
 def edit_category(request):
 	''' edit_category route '''
+
+	class CategoryForm(forms.ModelForm):
+
+		featured_posts = forms.ModelMultipleChoiceField(
+			widget=forms.CheckboxSelectMultiple,
+			required=False, queryset=None)
+
+		def __init__(self, *args, **kwargs):
+			super(CategoryForm, self).__init__(*args, **kwargs)
+			self.fields['featured_posts'].queryset = Post.objects.filter(category=self.instance)
+
+		class Meta:
+			model = BlogCategory
+			fields = ('id', 'name', 'color', 'featured_posts',)
+
+
+	EditForm = forms.modelformset_factory(model=BlogCategory, form=CategoryForm, extra=0)
+	form_set = EditForm()
+
+	if request.method == "POST":
+		edit_formset = EditForm(request.POST, request.FILES)
+		if edit_formset.is_valid():
+			edit_formset.save()
+		else:
+			print(edit_formset.errors)
+
+		form_set = edit_formset
+
 	return render(request, 'blog/admin/edit_category.html.j2', context={
-		'title' : "Edit Category"
+		'title' : "Edit Categories",
+		'edit_set' : form_set,
+		'colors' : ['success', 'info', 'warning', 'danger']
 		})
 
 
@@ -43,8 +75,31 @@ def edit_posts(request):
 
 def edit_post(request, post_uid):
 	''' edit_post route '''
+	try:
+		p = Post.objects.get(uid=post_uid)
+	except:
+		raise Http404
+
+	class EditPostForm(forms.ModelForm):
+
+		class Meta:
+			model = Post
+			fields = ('__all__')
+			widgets = {
+				'content' : SummernoteWidget()
+			}
+
+	edit_form = EditPostForm(instance=p)
+
+	if request.method == "POST":
+		form = EditPostForm(request.POST, request.FILES, instance=p)
+		if form.is_valid():
+			form.save()
+		edit_form = form
+
 	return render(request, 'blog/admin/edit_post.html.j2', context={
-		'title' : "Edit Post - " + str(post_uid)
+		'title' : "Blog - Edit Post",
+		'post' : edit_form
 		})
 
 

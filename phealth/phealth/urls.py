@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from common import views as common
+from . import settings
 
 urlpatterns = [
+
+    url(r'^summernote/', include('django_summernote.urls')),
 
     url(r'^$', common.home_route, name='home'),
     url(r'^api/', include('api.urls', namespace='api')),
@@ -34,4 +38,4 @@ urlpatterns = [
     url(r'^sponsor/', include('sponsor.urls', namespace='sponsor')),
     url(r'^reseller/', include('reseller.urls', namespace='reseller')),
     url(r'^salesagent/', include('salesagent.urls', namespace='salesagent')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
