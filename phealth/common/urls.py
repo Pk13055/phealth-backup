@@ -15,4 +15,5 @@ urlpatterns = [
 	url(r'^signout/?$', views.logout, name='signout'),
 	url(r'^payment/', include(payment_routes)),
 	url(r'^otp/?$', views.send_OTP, name='otp'),
+	path('autocomplete/<str:category>/<str:query>/', views.autocomplete, name='autocomplete')
 ]

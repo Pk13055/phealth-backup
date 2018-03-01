@@ -42,7 +42,7 @@ def signin(role, request):
 	email = request.POST['username']
 	password = request.POST['password']
 	try:
-		u = User.objects.get(email=email)
+		u = User.objects.filter(email=email).first()
 	except:
 		return False
 

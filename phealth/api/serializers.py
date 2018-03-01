@@ -26,14 +26,6 @@ class CitySerializer(HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class DistrictSerializer(HyperlinkedModelSerializer):
-
-    class Meta:
-        model = District
-        depth = 6
-        fields = '__all__'
-
-
 class AddressSerializer(HyperlinkedModelSerializer):
 
     class Meta:
@@ -182,5 +174,37 @@ class TestimonialSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Testimonial
+        depth = 6
+        fields = '__all__'
+
+
+class CDNSerializer(HyperlinkedModelSerializer):
+
+    class Meta:
+        model = CDN
+        depth = 6
+        fields = '__all__'
+
+
+class BlogCategorySerializer(HyperlinkedModelSerializer):
+
+    class Meta:
+        model = BlogCategory
+        depth = 6
+        fields = '__all__'
+
+
+class PostSerializer(HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Post
+        depth = 6
+        fields = '__all__'
+
+
+class BlogCommentSerializer(HyperlinkedModelSerializer):
+
+    class Meta:
+        model = BlogComment
         depth = 6
         fields = '__all__'

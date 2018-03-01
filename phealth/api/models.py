@@ -74,21 +74,22 @@ class City(models.Model):
 		db_table = 'cities'
 
 
-class District(models.Model):
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=60)
-	code = models.CharField(max_length=5)
-	city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
+# class District(models.Model):
+# 	id = models.AutoField(primary_key=True)
+# 	name = models.CharField(max_length=60)
+# 	code = models.CharField(max_length=5)
+# 	city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
 
-	class Meta:
-		managed = True
-		db_table = 'districts'
+# 	class Meta:
+# 		managed = True
+# 		db_table = 'districts'
 
 class Address(models.Model):
 	''' address, can be of the user or any other model
 	'''
 	id = models.AutoField(primary_key=True)
-	district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+	city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
+	# district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
 	latitude = models.FloatField(blank=True, null=True)
 	longitude = models.FloatField(blank=True, null=True)
 	pincode = models.CharField(max_length=9)
@@ -389,6 +390,48 @@ class Clinician(models.Model):
 			models.DateField(),
 			size=2), null=True, blank=True)
 
+	def check_availability(self, from_date, to_date):
+		''' given from and to, check whether the clinician
+			is available for the given period.
+			@param from_date -> datetime.date
+			@param to_date -> datetime.date
+			@return boolean
+		'''
+		try:
+			if not isinstance(from_date, datetime.date):
+				from_date = datetime.datetime.strptime(from_date, '%Y-%m-%d').date()
+			if not isinstance(to_date, datetime.date):
+				to_date = datetime.datetime.strptime(to_date, '%Y-%m-%d').date()
+		except:
+			return False
+
+		if to_date < from_date: return False
+		for date_slot in self.vacations:
+			start_date, end_date = date_slot
+			if from_date >= start_date and to_date <= end_date:
+				return False
+		return True
+
+	def check_session(self, session):
+		'''
+			given a session, check if a doctor is available in that session
+			@param session -> str "morning"/"afternoon"/"evening"
+			@return True/False
+		'''
+		get_time = lambda x: datetime.datetime.strptime(x, '%H:%M').time()
+		session_timings = {
+			'morning' : get_time('11:00'),
+			'afternoon' : get_time('16:00'),
+			'evening' : get_time('21:00'),
+			'night' : get_time('23:59'),
+		}
+
+		if session not in session_timings: return False
+		for time_slot in self.work_timings:
+			if time_slot[0] <= session_timings[session] <= time_slot[1]:
+				return True
+		return False
+
 	education = models.TextField()
 	experience = ArrayField(models.TextField(), null=True, blank=True)
 
@@ -403,6 +446,7 @@ class Provider(models.Model):
 	id = models.AutoField(primary_key=True)
 	clinicians = models.ManyToManyField(Clinician)
 	address = models.OneToOneField(Address, on_delete=models.DO_NOTHING)
+	name = models.CharField(max_length=100, default="Generic Hospital")
 	poc = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	parent_provider = models.OneToOneField("self", on_delete=models.DO_NOTHING, null=True, blank=True)
 	is_branch = models.BooleanField(default=False)

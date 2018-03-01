@@ -1,16 +1,19 @@
 import datetime
 import hashlib
 from random import randint
+import requests
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.template.context_processors import csrf
-from phealth import utils
-from api.models import User
+from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
-import requests
+from rest_framework.serializers import ModelSerializer
+from rest_framework.renderers import JSONRenderer
+from api.models import User, Speciality, Address
+from phealth import utils
 
 # Create your views here.
 
@@ -46,6 +49,7 @@ def payment_init(request):
 		})
 
 @require_POST
+@csrf_exempt
 def send_OTP(request):
 	''' takes a given OTP value from the
 	session and sends to a specified mobile number
@@ -55,9 +59,16 @@ def send_OTP(request):
 	try:
 		mobile = request.POST['mobile']
 		email = request.POST['email']
-		otp = request.session['otp']
+		if 'generate' in request.POST:
+			otp = randint(1, 99999)
+			request.session['otp'] = otp
+		else:
+			otp = request.session['otp']
 	except:
-		return JsonResponse({ 'status' : "Invalid Request" })
+		return JsonResponse({
+			'status' : False,
+			'data' : ["Invalid Request"]
+			})
 
 	# # Email sending
 	# try:
@@ -81,6 +92,50 @@ def send_OTP(request):
 		if r.status_code != 200:
 			raise Exception("Invalid params")
 	except Exception as e:
-		return JsonResponse({ 'status' : "SMS failed to send | %s" % str(e) })
+		return JsonResponse({
+			'status' : False,
+			'data' : ["SMS failed to send | %s" % str(e)]
+			})
 
-	return JsonResponse({ 'status' : "OTP sent successfully!" })
+	return JsonResponse({
+		'status' : True,
+		'data' : [str(otp)]
+		})
+
+
+@require_POST
+@csrf_exempt
+def autocomplete(request, category, query):
+	''' route takes partial string and returns
+		relevant data
+	'''
+	final_data = None
+	queryset = None
+	if category == 'condition':
+		queryset = Speciality.objects.filter(name__icontains=query).all()
+		if queryset:
+			model_type = Speciality
+	elif category == 'location' or category == 'city':
+		queryset = Address.objects.filter(Q(extra__icontains=query) |
+			Q(city__name__icontains=query) | Q(city__state__name__icontains=query)).all()
+		if queryset:
+			model_type = Address
+
+	if queryset:
+		class DataSerializer(ModelSerializer):
+			class Meta:
+				model = model_type
+				depth = 5
+				fields = '__all__'
+		data = DataSerializer(queryset, many=True)
+		# final_data = JSONRenderer().render(data.data).decode()
+		final_data = data.data
+		return JsonResponse({
+			'status' : True,
+			'data' : final_data,
+			})
+
+	return JsonResponse({
+		'status' : False,
+		'data' : [],
+		})

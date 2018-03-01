@@ -1,14 +1,25 @@
 from rest_framework.routers import DefaultRouter
-from api import views
+from django.urls import path, include
+from django.conf.urls import include, url
+
+from . import views
 
 app_name = "api"
+
+custom_apis = [
+	path('doctors/', views.doctors_list, name='doctors_list'),
+	path('appointment/', views.make_appointment, name='book_appointment'),
+]
+
+urlpatterns = [
+	url(r'^custom/', include(custom_apis)),
+]
 
 router = DefaultRouter()
 
 router.register(r'country', views.CountryViewSet)
 router.register(r'state', views.StateViewSet)
 router.register(r'city', views.CityViewSet)
-router.register(r'district', views.DistrictViewSet)
 router.register(r'address', views.AddressViewSet)
 router.register(r'coupon', views.CouponViewSet)
 router.register(r'testcategory', views.TestCategoryViewSet)
@@ -28,5 +39,9 @@ router.register(r'reseller', views.ResellerViewSet)
 router.register(r'salesagent', views.SalesAgentViewSet)
 router.register(r'appointment', views.AppointmentViewSet)
 router.register(r'testimonial', views.TestimonialViewSet)
+router.register(r'cdn', views.CDNViewSet)
+router.register(r'blogcategory', views.BlogCategoryViewSet)
+router.register(r'post', views.PostViewSet)
+router.register(r'blogcomment', views.BlogCommentViewSet)
 
-urlpatterns = router.urls
+urlpatterns += router.urls

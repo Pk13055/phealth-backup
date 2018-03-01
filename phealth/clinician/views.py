@@ -134,6 +134,12 @@ def calender(request):
 				try:
 					timings.append(list(map(lambda x: datetime.datetime.strptime(x,
 					 '%H:%M:%S').time(), p_dict['timings'][day])))
+				except ValueError:
+					try:
+						timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+					 	'%H:%M').time(), p_dict['timings'][day])))
+					except KeyError:
+						timings.append(actual)
 				except KeyError:
 					timings.append(actual)
 			if p_dict['section'] == 'work':
@@ -154,11 +160,11 @@ def calender(request):
 
 	for day, w_t, b_t in zip(days, c.work_timings, c.break_timings):
 		cur_obj = { 'day' : day }
-		cur_obj['start'] = w_t[0].isoformat()
-		cur_obj['end'] = w_t[-1].isoformat()
+		cur_obj['start'] = w_t[0].isoformat().split('.')[0][:5]
+		cur_obj['end'] = w_t[-1].isoformat().split('.')[0][:5]
 		work_timings.append(cur_obj)
-		cur_obj['start'] = b_t[0].isoformat()
-		cur_obj['end'] = b_t[-1].isoformat()
+		cur_obj['start'] = b_t[0].isoformat().split('.')[0][:5]
+		cur_obj['end'] = b_t[-1].isoformat().split('.')[0][:5]
 		break_timings.append(cur_obj)
 
 	for vacation in c.vacations:
