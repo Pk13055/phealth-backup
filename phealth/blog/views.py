@@ -115,7 +115,6 @@ def edit_category(request):
 			model = BlogCategory
 			fields = ('id', 'name', 'color', 'featured_posts',)
 
-
 	EditForm = forms.modelformset_factory(model=BlogCategory, form=CategoryForm, extra=0)
 	form_set = EditForm()
 
