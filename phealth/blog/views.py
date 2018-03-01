@@ -1,6 +1,6 @@
 import json
 from django import forms
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 from django_summernote.widgets import SummernoteWidget
 from django_tables2 import RequestConfig
@@ -15,8 +15,8 @@ def get_categories():  #gets the categories which need to rendered on all the us
 	return [_['name'] for _ in BlogCategory.objects.values('name')]
 
 def home(request):
-	''' home route ''' 
-	# c = BlogComment.objec 
+	''' home route '''
+	# c = BlogComment.objec
 	categories = []
 	for cat in BlogCategory.objects.all():
 		cur_cat = {
@@ -236,4 +236,28 @@ def ads(request):
 	return render(request, 'blog/admin/ads.html.j2', context={
 		'title' : "Ads",
 		'form_ad': form_ad,
+		})
+
+def add_post(request):
+	''' addition of a new post '''
+	class PostForm(forms.ModelForm):
+		class Meta:
+			model = Post
+			fields = ('title', 'content', 'url', 'category', 'image',)
+			widgets = {
+				'content' : SummernoteWidget()
+			}
+
+	add_post = PostForm()
+
+	if request.method == "POST":
+		a_form = PostForm(request.POST, request.FILES)
+		if a_form.is_valid():
+			new_post = a_form.save()
+			return redirect('blog:post', category_name=new_post.category.name, post_uid=new_post.uid)
+		add_post = a_form
+
+	return render(request, 'blog/admin/add_post.html.j2', context={
+		'title' : "Add new Post",
+		'post' : add_post
 		})

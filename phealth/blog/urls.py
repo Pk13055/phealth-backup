@@ -9,6 +9,7 @@ admin_urls = [
 	url(r'^$', views.statistics, name='dashboard_home'),
 	url(r'categories/?$', views.edit_category, name='edit_category'),
 	url(r'posts/?$', views.edit_posts, name='edit_posts'),
+	url(r'posts/add/?$', views.add_post, name='add_post'),
 	path('posts/<uuid:post_uid>/', views.edit_post, name='edit_post'),
 	url(r'statistics/?$', views.statistics, name='statistics'),
 	url(r'ads/?$', views.ads, name='ads'),

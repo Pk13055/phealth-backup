@@ -1,0 +1,24 @@
+{% extends 'blog/base.html.j2' %}
+{% load bootstrap %}
+{% block head %}
+{% endblock %}
+{% block content %}
+<div class="row"><h3>Add Post</h3></div>
+<div class="row">
+	<form method="POST" enctype="multipart/form-data">
+		<div class="panel panel-info">
+			<div class="panel-heading">{{ post.title | bootstrap }}</div>
+			<div class="panel-body">
+				{% csrf_token %}
+				{{ post.category | bootstrap }}
+				{{ post.content | bootstrap | safe }}
+				{{ post.image | bootstrap }}
+				{{ post.url | bootstrap }}
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-info"><i class="fa fa-edit fa-lg"></i> Add</button>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}
