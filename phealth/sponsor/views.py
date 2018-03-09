@@ -126,7 +126,7 @@ def dashboard(request):
 		errors = [u.errors, s.errors]
 		print(errors)
 
-	return render(request, 'sponsor/dashboard/basic_details.html.j2', context={
+	return render(request, 'sponsor/dashboard/index.html.j2', context={
 		"title": "Basic details",
 		'user_form' : user_form,
 		'sponsor_form' : sponsor_form,
