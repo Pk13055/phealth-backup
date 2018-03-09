@@ -133,6 +133,19 @@ def dashboard(request):
 		'errors' : errors
 	})
 
+@match_role("sponsor")
+def payments_new(request):
+
+	return render(request, 'sponsor/dashboard/payment_new.html.j2', context={
+
+	})
+
+@match_role("sponsor")
+def payments_view(request):
+
+	return render(request, 'sponsor/dashboard/payment_view.html.j2', context={
+
+	})
 
 @match_role("sponsor")
 def discounts(request):

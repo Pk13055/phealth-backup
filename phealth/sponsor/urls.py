@@ -6,7 +6,9 @@ from . import views
 app_name = "sponsor"
 
 dashboard_urls = [
-	url(r'^$', views.dashboard, name='dashboard_home'), # basic details
+	url(r'^$', views.dashboard, name='dashboard_home'), # home
+    url(r'^payments/new/?$', views.payments_new, name='payments_new'), # payments new
+    url(r'^payments/view/?$', views.payments_view, name='payments_view'), # payments view
 	url(r'^users/?$', views.user_view, name='users'), # user addition
 	url(r'^discounts/?$', views.discounts, name='discounts'), # discountcard details
 ]
