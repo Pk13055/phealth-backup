@@ -1,0 +1,98 @@
+{% extends 'sponsor/dashboard/base.html.j2' %}
+{% load static %}
+
+{% block content %}
+	<div class="container-fluid">
+		<div class="row bg-title">
+			<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+				<h4 class="page-title">Dashboard 1</h4>
+			</div>
+			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+				<ol class="breadcrumb">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="#">Organization Details</a></li>
+				</ol>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						My Account 
+					</div>
+					<div class="progress">
+						<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
+					</div> 
+					<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<form action="#" class="form-horizontal">
+								<div class="form-body">
+									<h3 class="box-title">Organization Details</h3>
+									
+									<hr class="m-t-0 m-b-40">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label col-md-3">Operating Hours</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control" placeholder="Operating Hours" name="operatinghours" id="operatinghours"> 
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label col-md-3">Oprtaing Location</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control" id="oprtainglocation" placeholder="Oprtaing Location" name="oprtainglocation">
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label col-md-3">Service Required Location</label>
+												<div class="col-md-9">
+													<select name="businessregtype" class="form-control" >
+														<option value="">Select from List</option>
+														<option value="1">All</option>
+														<option value="2">Specific</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label col-md-3">If Specific Select Location</label>
+												<div class="col-md-9">
+													<select name="groupsize" class="form-control" >
+														<option value="">Select Specific Location</option>
+														<option value="1">Secbad</option>
+														<option value="2">Madhapur</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+									
+								</div>
+								<div class="form-actions">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="row">
+												<div class="col-md-offset-10 col-md-2">
+													<button type="submit" class="btn btn-success">Save</button>
+													<button type="button" class="btn btn-default">Cancel</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6"> </div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -134,20 +134,6 @@ def dashboard(request):
 	})
 
 @match_role("sponsor")
-def payments_new(request):
-
-	return render(request, 'sponsor/dashboard/payment_new.html.j2', context={
-
-	})
-
-@match_role("sponsor")
-def payments_view(request):
-
-	return render(request, 'sponsor/dashboard/payment_view.html.j2', context={
-
-	})
-
-@match_role("sponsor")
 def discounts(request):
 	''' route for dashboard discounts '''
 
@@ -341,3 +327,59 @@ def user_view(request):
 		'existing_multiple' : existing_multiple,
 		'bulk_form' : bulk_form
 		})
+
+# new routes
+
+# account details
+
+def basic(request):
+
+	return render(request, 'sponsor/dashboard/account/basic.html.j2', context={
+
+	})
+
+def contact(request):
+
+	return render(request, 'sponsor/dashboard/account/contact.html.j2', context={
+
+	})
+
+def organization(request):
+
+	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
+
+	})
+
+# payments
+
+def payments_new(request):
+
+	return render(request, 'sponsor/dashboard/payments/new.html.j2', context={
+
+	})
+
+def payments_add(request):
+
+	return render(request, 'sponsor/dashboard/payments/add.html.j2', context={
+		
+	})
+
+def payments_view(request):
+
+	return render(request, 'sponsor/dashboard/payments/view.html.j2', context={
+		
+	})
+
+# participants
+
+def participants_new(request):
+
+	return render(request, 'sponsor/dashboard/participants/new.html.j2', context={
+		
+	})
+
+def participants_view(request):
+
+	return render(request, 'sponsor/dashboard/participants/view.html.j2', context={
+		
+	})

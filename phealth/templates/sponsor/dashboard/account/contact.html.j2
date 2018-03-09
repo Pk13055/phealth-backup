@@ -1,0 +1,166 @@
+{% extends 'sponsor/dashboard/base.html.j2' %}
+{% load static %}
+
+{% block content %}
+	<div class="container-fluid">
+		<div class="row bg-title">
+			<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+				<h4 class="page-title">Dashboard 1</h4>
+			</div>
+			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+				<ol class="breadcrumb">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="#">Contact Details</a></li>
+				</ol>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						My Account 
+					</div>
+					<div class="progress">
+						<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
+					</div> 
+					<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<form action="#" class="form-horizontal">
+								<div class="form-body">
+									<h3 class="box-title">Contact Details</h3>
+									<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addcontact">Add New Contact Person</button>
+									<div class="modal fade" id="addcontact" role="dialog">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">New Contact Details</h4>
+												</div>
+												<div class="modal-body">
+													<div class="row">
+														<div class="col-sm-4">
+															<h3>Use My current Location</h3>
+															<button id="find_btn" class="btn btn-default">Get My Current Location</button>
+														</div>
+														<div class="col-sm-4">
+															<h3>Point Location from Map</h3>
+															<div class="row" data-example>
+																<div class="form-group">
+																	<input class="placepicker form-control" data-map-container-id="collapseOne" />
+																</div>
+																<div id="collapseOne" class="collapse">
+																	<div class="placepicker-map thumbnail"></div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-4">
+															<h3>Enter Address Manually</h3>
+															<div data-example>
+																<div class="form-group">
+																	<input class="placepicker form-control" placeholder="Enter a location" data-latitude-input="#latitude" data-longitude-input="#longitude" />
+																</div>
+															</div>
+														</div>
+													</div>
+													<hr class="m-t-0 m-b-40">
+													<div class="row">
+														<div class="col-md-offset-1 col-sm-10">
+															<div class="form-group">
+																<div id="result"></div>
+															</div>
+															<div class="form-group">
+																<label for="latitude">Latitude:</label>
+																<input type="text" class="form-control" id="latitude" placeholder="Enter latitude" name="latitude">
+															</div>
+															<div class="form-group">
+																<label for="longitude">Longitude:</label>
+																<input type="text" class="form-control" id="longitude" placeholder="Enter longitude" name="longitude">
+															</div>
+															<div class="form-group">
+																<label for="image">Upload Photos</label>
+																<input type="file" class="form-control" id="image" placeholder="Upload image" name="image" multiple="true">
+															</div>
+															<div class="form-group">
+																<label for="contactperson">Contact Person</label>
+																<input type="text" class="form-control" id="contactperson" placeholder="Enter Fullname" name="contactperson">
+															</div>
+															<div class="form-group">
+																<label for="phone">Phone No</label>
+																<input type="text" class="form-control" id="phone" placeholder="Enter Fullname" name="phone">
+															</div>
+															<div class="form-group">
+																<label for="LandMark">Land Mark</label>
+																<input type="text" class="form-control" id="LandMark" placeholder="Land Mark" name="LandMark">
+															</div>
+															<div class="form-group">
+																<label for="buildingname">buildingname</label>
+																<input type="text" class="form-control" id="buildingname" placeholder="Building Name" name="BuildingName">
+															</div>
+															<div class="form-group">
+																<label for="H.No./FlatNo.">H.No./FlatNo.</label>
+																<input type="text" class="form-control" id="H.No./FlatNo." placeholder="H. No. / Flat No." name="H.No./Flat No.">
+															</div>
+															<div class="form-group">
+																<label for="pincode">pincode</label>
+																<input type="text" class="form-control" id="pincode" placeholder="PIN Code" name="pincode">
+															</div>
+														</div>                            
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="submit" class="btn btn-success">Add</button>
+													<button type="button" class="btn btn-default" data-dismiss="modal">Cancel & Close </button>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">	
+										<div class="col-sm-12">
+											<div class="white-box">
+												<h3 class="box-title m-b-0">Contact Person's</h3>
+												<p class="text-muted m-b-30">Use Data tablels here</p>
+												<div class="table-responsive">
+													<table id="myTable" class="table table-striped">
+														<thead>
+															<tr>
+																<th>Name</th>
+																<th>Designation</th>
+																<th>Branch/Location</th>
+																<th>Mobile</th>
+																<th>Email Id</th>
+																<th>Action</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>Nixon</td>
+																<td>System Architect</td>
+																<td>Madhapur,Hyderabad</td>
+																<td>9491457801</td>
+																<td>rajesh@mbrinformatics.com</td>
+																<td><button class="btn btn-success">Update</button><button class="btn btn-danger"> Delete</button></td>
+															</tr>
+															<tr>
+																<td>Nixon</td>
+																<td>System Architect</td>
+																<td>Madhapur,Hyderabad</td>
+																<td>9491457801</td>
+																<td>rajesh@mbrinformatics.com</td>
+																<td><button class="btn btn-success">Update</button><button class="btn btn-danger"> Delete</button></td>
+															</tr>														
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
