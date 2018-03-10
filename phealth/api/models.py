@@ -458,8 +458,9 @@ class Provider(models.Model):
 		db_table = 'providers'
 
 
-class Sponsor(models.Model):
-	''' the sponsor who can bulk register users as seekers
+class Organization(models.Model):
+	'''
+		comprises the org of a given sponsor
 	'''
 
 	org_type_choices = (
@@ -479,12 +480,21 @@ class Sponsor(models.Model):
 		)
 
 	id = models.AutoField(primary_key=True)
-	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-	org_name = models.CharField(max_length=50)
-	org_size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
-	org_type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	name = models.CharField(max_length=50)
+	size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
+	type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	location = models.OneToOneField(Address, on_delete=models.DO_NOTHING)
+
+
+class Sponsor(models.Model):
+	''' the sponsor who can bulk register users as seekers
+	'''
+
+	id = models.AutoField(primary_key=True)
+	user = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='poc')
+	organization = models.OneToOneField(Organization, on_delete=models.DO_NOTHING)
+	pocs = models.ManyToManyField(User, blank=True, null=True, related_name='pocs')
 	users = models.ManyToManyField(Seeker, blank=True, null=True)
-	# add extra fields after consulting
 
 	class Meta:
 		managed = True
