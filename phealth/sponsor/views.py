@@ -17,6 +17,9 @@ from phealth.utils import getIP, get_sponsor
 from api.models import User, Sponsor, Seeker, Question, Transaction, DiscountCard,\
 						HealthCheckup
 
+from querystring_parser import parser
+
+
 import xlrd
 
 # Create your views here.
@@ -341,11 +344,33 @@ def user_view(request):
 # account details
 
 def basic(request):
-
+	s = Sponsor.objects.filter(user__email=request.session['email']).first()
+	o  = s.organization
+	if request.method == "POST":
+		print(request.POST)
+		# b_dict = parser.parse(request.POST.urlencode())
+		o.name = request.POST['org_name']
+		o.size = request.POST['groupsize']
+		o.type = request.POST['businessregtype']
+		s.user.role = request.POST['designation']
+		s.user.name = request.POST.get('name', False)
+		s.user.mobile = request.POST['mobileno']
+		s.user.email = request.POST['email']
+		o.save()
+		s.save()
+		# print(b_dict)
 	return render(request, 'sponsor/dashboard/account/basic.html.j2', context={
 		'title': 'Basic Details',
 		'sponsor': get_sponsor(request.session['email']),
+		'poc_name': s.user.name,
+		'designation': s.user.role,
+		'orgname': o.name,
+		'orgtype': o.type,
+		'orgsize': o.size,
+		'mobileno': s.user.mobile,
+		'email' : s.user.email,
 	})
+
 
 class POCTable(Datatable):
 	class Meta:
@@ -373,11 +398,26 @@ class POCTableView(DatatableView):
 		sp = get_sponsor(self.request.session['email'])
 		return sp.pocs.all()
 
-def organization(request):
+def contact(request):
+	if request.method == "POST":
+		print(request)
+		c_dict = parser.parse(request.POST.urlencode())
+		print(c_dict)
+	return render(request, 'sponsor/dashboard/account/contact.html.j2', context={
+'title': 'POC',
+		'sponsor': get_sponsor(request.session['email']),
+	})
 
+
+def organization(request):
+	if request.method == "POST":
+		print(request)
+	s = Sponsor.objects.filter(user__email=request.session['email']).first()
+	o  = s.organization
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
 		'title': 'Organization',
 		'sponsor': get_sponsor(request.session['email']),
+		'operatinglocation':o.location
 	})
 
 # payments

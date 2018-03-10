@@ -26,7 +26,8 @@
 							</div> 
 					<div class="panel-wrapper collapse in" aria-expanded="true">
 						<div class="panel-body">
-							<form action="contact.html" class="form-horizontal">
+							<form class="form-horizontal" method="POST" action="{% url 'sponsor:basic' %}">
+								{% csrf_token %}
 								<div class="form-body">
 									<h3 class="box-title">Basic Details</h3>
 									
@@ -36,7 +37,7 @@
 											<div class="form-group">
 												<label class="control-label col-md-3">Organization Name</label>
 												<div class="col-md-9">
-													<input type="text" class="form-control" placeholder="Organization Name"> 
+													<input type="text" class="form-control" placeholder="Organization Name" name="org_name" value="{{orgname}}"> 
 												</div>
 											</div>
 										</div>
@@ -44,7 +45,7 @@
 											<div class="form-group">
 												<label class="control-label col-md-3">Contact Person</label>
 												<div class="col-md-9">
-													<input type="text" class="form-control" id="contactperson" placeholder="Display as provided in instant registration" name="contactperson">
+													<input type="text" class="form-control" id="contactperson" placeholder="{{poc_name}}" name="{{poc_name}}" value="{{poc_name}}">
 												</div>
 											</div>
 										</div>
@@ -52,12 +53,12 @@
 												<div class="form-group">
 													<label class="control-label col-md-3">Type of Organization </label>
 													<div class="col-md-9">
-														<select name="businessregtype" class="form-control" >
-															<option value="">Select Organization</option>
-															<option value="1">Corporates</option>
-															<option value="2">Educational Institutions</option>
-															<option value="3">NGO's</option>
-															<option value="4">Gated Communities</option>
+														<select name="businessregtype" class="form-control" value="{{ orgtype }}">
+															<option value="{{ orgtype }}">{{ orgtype }}</option>
+															<option value="corporates">Corporates</option>
+															<option value="college">Educational Institutions</option>
+															<option value="ngo">NGO's</option>
+															<option value="community">Gated Communities</option>
 														</select>
 													</div>
 												</div>
@@ -66,14 +67,14 @@
 												<div class="form-group">
 													<label class="control-label col-md-3">Group Size</label>
 													<div class="col-md-9">
-														<select name="groupsize" class="form-control" >
-															<option value="">Select from List</option>
-															<option value="1">50-100</option>
-															<option value="2">100-500</option>
-															<option value="3">500-1000</option>
-															<option value="4">1000-5000</option>
-															<option value="4">5000-10000</option>
-															<option value="4">Above 10000</option>
+														<select name="groupsize" class="form-control" value="{{ orgsize }}" >
+															<option value="{{ orgsize }}">{{ orgsize }}</option>
+															<option value="50-100">50-100</option>
+															<option value="100-500">100-500</option>
+															<option value="500-1000">500-1000</option>
+															<option value="1000-5000">1000-5000</option>
+															<option value="5000-10000">5000-10000</option>
+															<option value="10000+">Above 10000</option>
 														</select>
 													</div>
 												</div>
@@ -82,7 +83,7 @@
 												<div class="form-group">
 													<label  class="control-label col-md-3" >Designation</label>
 													<div class="col-md-9">
-														<input type="text" class="form-control" id="designation" placeholder="Display as provided in instant registration" name="designation">
+														<input type="text" class="form-control" id="designation" placeholder="{{designation}}" name="designation" value="{{designation}}">
 													</div>
 												</div>
 											</div>
@@ -90,7 +91,7 @@
 												<div class="form-group">
 													<label  class="control-label col-md-3" >Mobile No</label>
 													<div class="col-md-9">
-														<input type="number" class="form-control" id="mobileno" placeholder="mobileno" name="mobileno">
+														<input type="number" class="form-control" id="mobileno" placeholder="{{mobileno}}" name="mobileno" value="{{ mobileno }}">
 													</div>
 												</div>
 											</div>
@@ -98,7 +99,7 @@
 												<div class="form-group">
 													<label  class="control-label col-md-3" >Email ID</label>
 													<div class="col-md-9">
-														<input type="text" class="form-control" id="email" placeholder="Display as provided in instant registration" name="email">
+														<input type="text" class="form-control" id="email" placeholder="{{email}}" name="email" value="{{email}}">
 													</div>
 												</div>
 											</div>
