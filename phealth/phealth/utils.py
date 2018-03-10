@@ -12,6 +12,10 @@ from ipware import get_client_ip
 
 # contains all the comon code for utility purposes
 
+def get_sponsor(email):
+	sponsor = Sponsor.objects.filter(user__email=email).first()
+	return sponsor
+
 def match_role(role_type):
 	'''
 		decorator that wraps protected views

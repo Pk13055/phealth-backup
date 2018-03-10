@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password
 from django import forms
 from django.core.validators import RegexValidator
 
-from phealth.utils import getIP
+from phealth.utils import getIP, get_sponsor
 from api.models import User, Sponsor, Seeker, Question
 
 import xlrd
@@ -127,10 +127,11 @@ def dashboard(request):
 		print(errors)
 
 	return render(request, 'sponsor/dashboard/index.html.j2', context={
-		"title": "Basic details",
+		"title": "Dashboard Home",
 		'user_form' : user_form,
 		'sponsor_form' : sponsor_form,
-		'errors' : errors
+		'errors' : errors,
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 @match_role("sponsor")
@@ -335,19 +336,22 @@ def user_view(request):
 def basic(request):
 
 	return render(request, 'sponsor/dashboard/account/basic.html.j2', context={
-
+		'title': 'Basic Details',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 def contact(request):
 
 	return render(request, 'sponsor/dashboard/account/contact.html.j2', context={
-
+'title': 'POC',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 def organization(request):
 
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
-
+'title': 'Organization',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 # payments
@@ -355,19 +359,22 @@ def organization(request):
 def payments_new(request):
 
 	return render(request, 'sponsor/dashboard/payments/new.html.j2', context={
-
+'title': 'Payments',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 def payments_add(request):
 
 	return render(request, 'sponsor/dashboard/payments/add.html.j2', context={
-		
+		'title': 'Payments',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 def payments_view(request):
 
 	return render(request, 'sponsor/dashboard/payments/view.html.j2', context={
-		
+		'title': 'Payments',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 # participants
@@ -375,11 +382,13 @@ def payments_view(request):
 def participants_new(request):
 
 	return render(request, 'sponsor/dashboard/participants/new.html.j2', context={
-		
+		'title': 'Participants',
+		'sponsor': get_sponsor(request.session['email']),
 	})
 
 def participants_view(request):
 
 	return render(request, 'sponsor/dashboard/participants/view.html.j2', context={
-		
+		'title': 'Participants',
+		'sponsor': get_sponsor(request.session['email']),
 	})
