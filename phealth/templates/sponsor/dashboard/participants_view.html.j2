@@ -20,43 +20,7 @@
                     <h3 class="box-title m-b-0">Partipants</h3>
                     <p class="text-muted m-b-30">View or update participants</p>
                     <div class="table-responsive">
-                        <table id="myTable" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Sr.No</th>
-                                    <th>HealthSeekerID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Mobile</th>
-                                    <th>Designation</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>CLICK0125</td>
-                                    <td>Rajesh</td>
-                                    <td>rajesh@gmail.com</td>
-                                    <td>96545464541</td>
-                                    <td>System Architect</td>
-                                    <td>
-                                        <button class="btn btn-danger">Remove from List</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>CLICK0126</td>
-                                    <td>Raju</td>
-                                    <td>raju@gmail.com</td>
-                                    <td>88545464541</td>
-                                    <td>System Architect</td>
-                                    <td>
-                                        <button class="btn btn-danger">Remove from List</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {{ datatable }}
                     </div>
                 </div>
             </div>
@@ -76,54 +40,9 @@
 <script src="http://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="http://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="http://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<!-- end - This is for export functionality only -->
 <script>
-$(document).ready(function() {
-    $('#myTable').DataTable();
-    $(document).ready(function() {
-        var table = $('#example').DataTable({
-            "columnDefs": [{
-                "visible": false,
-                "targets": 2
-            }],
-            "order": [
-                [2, 'asc']
-            ],
-            "displayLength": 25,
-            "drawCallback": function(settings) {
-                var api = this.api();
-                var rows = api.rows({
-                    page: 'current'
-                }).nodes();
-                var last = null;
-                api.column(2, {
-                    page: 'current'
-                }).data().each(function(group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                        last = group;
-                    }
-                });
-            }
-        });
-        // Order by the grouping
-        $('#example tbody').on('click', 'tr.group', function() {
-            var currentOrder = table.order()[0];
-            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                table.order([2, 'desc']).draw();
-            } else {
-                table.order([2, 'asc']).draw();
-            }
-        });
-    });
-});
-$('#example23').DataTable({
-    dom: 'Bfrtip',
-    buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-    ]
-});
-
+    // Page javascript
+    datatableview.auto_initialize = true;
 </script>
 {% endblock script %}
 {% endblock content %}

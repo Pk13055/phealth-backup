@@ -1,6 +1,11 @@
 {% extends 'sponsor/dashboard/base.html.j2' %}
 {% load static %}
-
+{% load bootstrap %}
+{% block script %}
+<script>
+    datatableview.auto_initialize = true;
+</script>
+{% endblock script %}
 {% block content %}
     <div class="container-fluid">
         <div class="row bg-title">
@@ -9,59 +14,15 @@
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
-                    <li><a href="index.html">Dashboard</a></li>
-                    <li><a href="#">View / Update Participants</a></li>
+                    <li><a href="{% url 'sponsor:dashboard_home' %}">Dashboard</a></li>
+                    <li class="active"><a href="{% url 'sponsor:participants_view' %}">View / Update Participants</a></li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /row -->
         <div class="row">
-            <div class="col-sm-12">
-                <div class="white-box">
-                    <h3 class="box-title m-b-0">Partipants</h3>
-                    <p class="text-muted m-b-30">View or update participants</p>
-                    <div class="table-responsive">
-                        <table id="myTable" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Sr.No</th>
-                                    <th>HealthSeekerID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Mobile</th>
-                                    <th>Designation</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>CLICK0125</td>
-                                    <td>Rajesh</td>
-                                    <td>rajesh@gmail.com</td>
-                                    <td>96545464541</td>
-                                    <td>System Architect</td>
-                                    <td><button class="btn btn-danger">Remove from List</button></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>CLICK0126</td>
-                                    <td>Raju</td>
-                                    <td>raju@gmail.com</td>
-                                    <td>88545464541</td>
-                                    <td>System Architect</td>
-                                    <td><button class="btn btn-danger">Remove from List</button></td>
-                                </tr>
-                                
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
+            {{ datatable }}
         </div>
-        
     </div>
 {% endblock %}

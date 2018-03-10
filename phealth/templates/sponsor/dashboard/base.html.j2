@@ -1,10 +1,8 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
-
 <!--    35:17 GMT -->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,7 +29,16 @@
     <!-- Custom CSS -->
     <link href="{% static 'common/dashboard/css/style.css' %}" rel="stylesheet">
     <!-- color CSS -->
+    <script src="{% static 'common/dashboard/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <link href="{% static 'common/dashboard/css/colors/default.css' %}" id="theme" rel="stylesheet">
+    <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/datatableview.min.js' %}"></script>
+    <script>
+        datatableview.auto_initialize = true;
+    </script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -41,13 +48,11 @@
 </head>
 
 <body class="fix-header">
-
     <div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
         </svg>
     </div>
-
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header">
@@ -65,10 +70,7 @@
                 <!-- Search input and Toggle icon -->
                 <ul class="nav navbar-top-links navbar-left">
                     <li><a href="javascript:void(0)" class="open-close waves-effect waves-light"><i class="ti-menu"></i></a></li>
-                    
                     <!-- .Task dropdown -->
-                    
-                    
                 </ul>
                 <ul class="nav navbar-top-links navbar-right pull-right">
                     <li class="dropdown">
@@ -95,13 +97,11 @@
             <!-- /.navbar-top-links -->
             <!-- /.navbar-static-side -->
         </nav>
-
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav slimscrollsidebar">
                 <div class="sidebar-head">
                     <h3><span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span> <span class="hide-menu">Navigation</span></h3> </div>
                 <div class="user-profile">
-                    
                 </div>
                 <ul class="nav" id="side-menu">
                     <li><a href="{% url 'sponsor:dashboard_home' %}" class="waves-effect"><i class="mdi mdi-av-timer fa-fw"></i> <span class="hide-menu"> Dashboard </span></a></li>
@@ -127,18 +127,11 @@
                 </ul>
             </div>
         </div>
-
         <div id="page-wrapper">
-            {% block content %}
-            {% endblock %}
-
+            {% block content %} {% endblock %}
             <footer class="footer text-center"> 2018 &copy; Phealth </footer>
         </div>
     </div>
-
-    <script src="{% static 'common/dashboard/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <!-- Menu Plugin JavaScript -->
     <script src="{% static 'common/dashboard/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js' %}"></script>
     <!--slimscroll JavaScript -->
@@ -159,8 +152,5 @@
     <script src="{% static 'common/dashboard/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
     <!--Style Switcher -->
     <script src="{% static 'common/dashboard/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
-
-    {% block script %}
-    {% endblock %}
-
+    {% block script %} {% endblock %}
 </body>

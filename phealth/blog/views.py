@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from django_summernote.widgets import SummernoteWidget
 from django_tables2 import RequestConfig
-from .tables import PostTable
+# from .tables import PostTable
 from api.models import Post, BlogCategory, BlogComment, CDN
 
 # Create your views here.

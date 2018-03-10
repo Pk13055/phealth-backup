@@ -18,11 +18,11 @@
 			<div class="col-md-12">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						My Account 
+						My Account
 					</div>
 					<div class="progress">
 						<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
-					</div> 
+					</div>
 					<div class="panel-wrapper collapse in" aria-expanded="true">
 						<div class="panel-body">
 							<form action="#" class="form-horizontal">
@@ -104,53 +104,24 @@
 																<label for="pincode">pincode</label>
 																<input type="text" class="form-control" id="pincode" placeholder="PIN Code" name="pincode">
 															</div>
-														</div>                            
+														</div>
 													</div>
 												</div>
 												<div class="modal-footer">
 													<button type="submit" class="btn btn-success">Add</button>
-													<button type="button" class="btn btn-default" data-dismiss="modal">Cancel & Close </button>
+													<button type="button" class="btn btn-default" data-dismiss="modal">Cancel &amp; Close </button>
 												</div>
 											</div>
 										</div>
 									</div>
-									
-									<div class="row">	
+
+									<div class="row">
 										<div class="col-sm-12">
 											<div class="white-box">
 												<h3 class="box-title m-b-0">Contact Person's</h3>
 												<p class="text-muted m-b-30">Use Data tablels here</p>
 												<div class="table-responsive">
-													<table id="myTable" class="table table-striped">
-														<thead>
-															<tr>
-																<th>Name</th>
-																<th>Designation</th>
-																<th>Branch/Location</th>
-																<th>Mobile</th>
-																<th>Email Id</th>
-																<th>Action</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr>
-																<td>Nixon</td>
-																<td>System Architect</td>
-																<td>Madhapur,Hyderabad</td>
-																<td>9491457801</td>
-																<td>rajesh@mbrinformatics.com</td>
-																<td><button class="btn btn-success">Update</button><button class="btn btn-danger"> Delete</button></td>
-															</tr>
-															<tr>
-																<td>Nixon</td>
-																<td>System Architect</td>
-																<td>Madhapur,Hyderabad</td>
-																<td>9491457801</td>
-																<td>rajesh@mbrinformatics.com</td>
-																<td><button class="btn btn-success">Update</button><button class="btn btn-danger"> Delete</button></td>
-															</tr>														
-														</tbody>
-													</table>
+													{{ datatable }}
 												</div>
 											</div>
 										</div>

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'datatableview',
     'bootstrapform',
     'django_summernote',
 
@@ -59,8 +60,6 @@ INSTALLED_APPS = [
     'phealth',
     'common',
     'site_admin',
-    'django_tables2',
-    'table',
 
     'api',
     'blog',

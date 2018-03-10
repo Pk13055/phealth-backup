@@ -1,15 +1,20 @@
 import random
 import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import JsonResponse
 from phealth.utils import match_role, signin
 from django.contrib.auth.hashers import make_password
 from django import forms
 from django.core.validators import RegexValidator
+from django.views.generic.base import TemplateView
+from datatableview.views import DatatableView, XEditableDatatableView
+from datatableview import Datatable
+# from datatableview.cache import cache_types
+import datatableview
 
 from phealth.utils import getIP, get_sponsor
-from api.models import User, Sponsor, Seeker, Question
+from api.models import User, Sponsor, Seeker, Question, Transaction
 
 import xlrd
 
@@ -164,18 +169,18 @@ def addUsers(request, file):
 	questions = list(Question.objects.all())
 
 	# class UserBulkForm(forms.Form):
-	# 	email = forms.CharField(max_length=150)
-	# 	name = forms.CharField(max_length=150)
-	# 	mobile = forms.CharField(validators=[
-	# 		RegexValidator(
-	# 			regex=r'^(\+\d{1,3}[- ]?)?\d{10}$',
-	# 			message="Invalid Number")], max_length=15)
-	# 	password = forms.CharField(max_length=100)
-	# 	gender = forms.CharField(max_length=1, choices=(
-	# 		('M', 'Male'),
-	# 		('F', 'Female'),
-	# 		('O', 'Other'),))
-	# 	dob = forms.CharField(max_length=10)
+	#   email = forms.CharField(max_length=150)
+	#   name = forms.CharField(max_length=150)
+	#   mobile = forms.CharField(validators=[
+	#       RegexValidator(
+	#           regex=r'^(\+\d{1,3}[- ]?)?\d{10}$',
+	#           message="Invalid Number")], max_length=15)
+	#   password = forms.CharField(max_length=100)
+	#   gender = forms.CharField(max_length=1, choices=(
+	#       ('M', 'Male'),
+	#       ('F', 'Female'),
+	#       ('O', 'Other'),))
+	#   dob = forms.CharField(max_length=10)
 
 
 	# fields => email, name, mobile, password, gender
@@ -340,26 +345,71 @@ def basic(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
-def contact(request):
+class POCTable(Datatable):
+	class Meta:
+		model = User
+		exclude = ['IP', ]
+		columns = ['id', 'mobile', 'name', 'email']
+		ordering = ['-id']
+		# cache_type = cache_types.DEFAULT
+		structure_template = 'datatableview/bootstrap_structure.html'
 
-	return render(request, 'sponsor/dashboard/account/contact.html.j2', context={
-'title': 'POC',
-		'sponsor': get_sponsor(request.session['email']),
-	})
+class POCTableView(DatatableView):
+	model = User
+	datatable_class = POCTable
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'POCs'
+		context['sponsor'] = get_sponsor(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'sponsor/dashboard/account/contact.html.j2'
+
+	def get_queryset(self):
+		sp = get_sponsor(self.request.session['email'])
+		return sp.pocs.all()
 
 def organization(request):
 
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
-'title': 'Organization',
+		'title': 'Organization',
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
 # payments
 
+class PaymentsTable(Datatable):
+	class Meta:
+		model = Transaction
+		exclude = ['IP', ]
+		# columns = ['id', 'mobile', 'name', 'email']
+		ordering = ['-id']
+		# cache_type = cache_types.DEFAULT
+		structure_template = 'datatableview/bootstrap_structure.html'
+
+class PaymentsTableView(DatatableView):
+	model = Transaction
+	datatable_class = PaymentsTable
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'Payments - View'
+		context['sponsor'] = get_sponsor(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'sponsor/dashboard/payments/view.html.j2'
+
+	def get_queryset(self):
+		sp = get_sponsor(self.request.session['email'])
+		return Transaction.objects.filter(receiver=sp.user)
+
 def payments_new(request):
 
 	return render(request, 'sponsor/dashboard/payments/new.html.j2', context={
-'title': 'Payments',
+		'title': 'Payments',
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
@@ -370,14 +420,34 @@ def payments_add(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
-def payments_view(request):
-
-	return render(request, 'sponsor/dashboard/payments/view.html.j2', context={
-		'title': 'Payments',
-		'sponsor': get_sponsor(request.session['email']),
-	})
 
 # participants
+
+class ParticipantsTable(Datatable):
+	class Meta:
+		model = User
+		exclude = ['last_IP', 'password', 'question',]
+		columns = ['id', 'mobile', 'name', 'email']
+		ordering = ['-id']
+		# cache_type = cache_types.DEFAULT
+		structure_template = 'datatableview/bootstrap_structure.html'
+
+class ParticipantsTableView(DatatableView):
+	model = User
+	datatable_class = ParticipantsTable
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'Participants - View'
+		context['sponsor'] = get_sponsor(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'sponsor/dashboard/participants/view.html.j2'
+
+	def get_queryset(self):
+		sp = get_sponsor(self.request.session['email'])
+		return User.objects.filter(seeker__in=sp.users.all())
 
 def participants_new(request):
 
@@ -386,9 +456,3 @@ def participants_new(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
-def participants_view(request):
-
-	return render(request, 'sponsor/dashboard/participants/view.html.j2', context={
-		'title': 'Participants',
-		'sponsor': get_sponsor(request.session['email']),
-	})

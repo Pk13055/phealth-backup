@@ -11,16 +11,16 @@ dashboard_urls = [
 
     # account
     url(r'^account/basic/?$', views.basic, name='basic'),
-    url(r'^account/pocs/?$', views.contact, name='contact'),
+    url(r'^account/pocs/?$', views.POCTableView.as_view(), name='contact'),
     url(r'^account/organization/?$', views.organization, name='organization'),
 
     # payments
-    url(r'^payments/?$', views.payments_view, name='payments_view'),
+    url(r'^payments/?$', views.PaymentsTableView.as_view(), name='payments_view'),
     url(r'^payments/new/?$', views.payments_new, name='payments_new'),
     url(r'^payments/add/?$', views.payments_add, name='payments_add'),
 
     # participants
-    url(r'^participants/?$', views.participants_view, name='participants_view'),
+    url(r'^participants/?$', views.ParticipantsTableView.as_view(), name='participants_view'),
     url(r'^participants/new/?$', views.participants_new, name='participants_new'),
 ]
 
