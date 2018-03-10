@@ -268,6 +268,7 @@ def user_view(request):
 			if not init_validity: return init_validity
 			f = self.cleaned_data['file']
 			if f.name.rsplit('.')[-1] not in ['xlsx', 'xls']:
+				print("hello error")
 				self.add_error('file', "Invalid file")
 				return False
 			return True
@@ -320,19 +321,19 @@ def user_view(request):
 				user_list, missed = addUsers(request, request.FILES['file'])
 			else:
 				errors += [m.errors]
+				# print(errors)
 			bulk_form = m
 
 	# print("errors : ", errors)
-	return render(request, 'sponsor/dashboard/users.html.j2', context={
-		'title' : "Add Seeker",
+	return render(request, 'sponsor/dashboard/participants/new.html.j2', context={
+		'title' : "Participants",
+		'sponsor': get_sponsor(request.session['email']),
 		'errors' : errors,
-		'single_user' : {
-			'basic_user' : basic_user,
-			'seeker_specific': seeker_specific
-			},
-		'existing_multiple' : existing_multiple,
+		'basic_user' : basic_user,
+		'seeker_specific': seeker_specific,
+		# 'existing_multiple' : existing_multiple,
 		'bulk_form' : bulk_form
-		})
+	})
 
 # new routes
 

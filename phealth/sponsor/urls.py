@@ -21,7 +21,7 @@ dashboard_urls = [
 
     # participants
     url(r'^participants/?$', views.ParticipantsTableView.as_view(), name='participants_view'),
-    url(r'^participants/new/?$', views.participants_new, name='participants_new'),
+    url(r'^participants/new/?$', views.user_view, name='participants_new'),
 ]
 
 urlpatterns = [
