@@ -14,7 +14,8 @@ from datatableview import Datatable
 import datatableview
 
 from phealth.utils import getIP, get_sponsor
-from api.models import User, Sponsor, Seeker, Question, Transaction
+from api.models import User, Sponsor, Seeker, Question, Transaction, DiscountCard,\
+						HealthCheckup
 
 import xlrd
 
@@ -408,10 +409,14 @@ class PaymentsTableView(DatatableView):
 		return Transaction.objects.filter(receiver=sp.user)
 
 def payments_new(request):
+	discounts = DiscountCard.objects.all()
+	checkups = HealthCheckup.objects.all()
 
 	return render(request, 'sponsor/dashboard/payments/new.html.j2', context={
 		'title': 'Payments',
 		'sponsor': get_sponsor(request.session['email']),
+		'discounts': discounts,
+		'checkups': checkups,
 	})
 
 def payments_add(request):

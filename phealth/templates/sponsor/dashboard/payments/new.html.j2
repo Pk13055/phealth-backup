@@ -34,122 +34,27 @@
 									<div id="discountcardstab" class="tab-pane active">
 										<h3 class="box-title">Pay by selecting the Discount Card</h3>
 										<div class="row">
+											{% for discount in discounts %}
 											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img1.jpg">
+												<!-- <img class="img-responsive" alt="user" src=""> -->
 												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.599</a></div>
-													<h3 class="m-t-20 m-b-20">Free Basic Health Check (For all 2 Members) - Plan Your Parentinghood</h3>
+													<div class="text-muted">
+														<!-- <span class="m-r-10"> Actual Amount Rs.599</span> -->
+														<a class="text-muted m-l-10" href="#">Amount Rs. {{ discount.price }}</a>
+													</div>
+													<h3 class="m-t-20 m-b-20">{{ discount.name }}</h3>
 													<p>
-													<li>
-														Special Counselling By GynacologistDiabetes Screening
-													</li>
-													<li>
-														Hypertension Screening
-													</li>
-													<li>
-														BMI & Family Physician Consultation
-													</li>
-													<li>
-														Oral Health Screening
-													</li>
-													<li>
-														Vision Health Screening
-													</li>
-													<li>
-														Dieat & Fitness Advice
-													</li>
+														<ul>
+															{% for checkup in discount.health_checkups.all %}
+															<li>{{ checkup.title }}</li>
+															{% endfor %}
+														</ul>
 													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
+													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodaldiscount{{ discount.id }}">View Details</button>
+													<a href="{% url 'sponsor:payments_add' %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
 												</div>
 											</div>
-											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img1.jpg">
-												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.599</a></div>
-													<h3 class="m-t-20 m-b-20">Free Basic Health Check (For all 2 Members) - Plan Your Parentinghood</h3>
-													<p>
-													<li>
-														Special Counselling By GynacologistDiabetes Screening
-													</li>
-													<li>
-														Hypertension Screening
-													</li>
-													<li>
-														BMI & Family Physician Consultation
-													</li>
-													<li>
-														Oral Health Screening
-													</li>
-													<li>
-														Vision Health Screening
-													</li>
-													<li>
-														Dieat & Fitness Advice
-													</li>
-													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
-												</div>
-											</div>
-											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img1.jpg">
-												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.599</a></div>
-													<h3 class="m-t-20 m-b-20">Free Basic Health Check (For all 2 Members) - Plan Your Parentinghood</h3>
-													<p>
-													<li>
-														Special Counselling By GynacologistDiabetes Screening
-													</li>
-													<li>
-														Hypertension Screening
-													</li>
-													<li>
-														BMI & Family Physician Consultation
-													</li>
-													<li>
-														Oral Health Screening
-													</li>
-													<li>
-														Vision Health Screening
-													</li>
-													<li>
-														Dieat & Fitness Advice
-													</li>
-													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
-												</div>
-											</div>
-											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img1.jpg">
-												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.599</a></div>
-													<h3 class="m-t-20 m-b-20">Free Basic Health Check (For all 2 Members) - Plan Your Parentinghood</h3>
-													<p>
-													<li>
-														Special Counselling By GynacologistDiabetes Screening
-													</li>
-													<li>
-														Hypertension Screening
-													</li>
-													<li>
-														BMI & Family Physician Consultation
-													</li>
-													<li>
-														Oral Health Screening
-													</li>
-													<li>
-														Vision Health Screening
-													</li>
-													<li>
-														Dieat & Fitness Advice
-													</li>
-													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
-												</div>
-											</div>
+											{% endfor %}
 										</div>
 										<div class="form-actions">
 											<div class="row">
@@ -167,122 +72,27 @@
 									<div id="healthcheckstab" class="tab-pane">
 										<h3 class="box-title">Pay by selecting the Health Check Package</h3>
 										<div class="row">
+											{% for checkup in checkups %}
 											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img2.jpg">
+												<!-- <img class="img-responsive" alt="user" src="plugins/images/big/img2.jpg"> -->
 												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.499</a></div>
-													<h3 class="m-t-20 m-b-20">ClickHealth Comprehensive Heart Check-Up</h3>
+													<div class="text-muted">
+														<!-- <span class="m-r-10"> Actual Amount Rs.599</span> -->
+														<a class="text-muted m-l-10" href="#">Amount Rs. {{ checkup.price }}</a>
+													</div>
+													<h3 class="m-t-20 m-b-20">{{ checkup.title }}</h3>
 													<p>
-													<li>
-														Infection Marker
-													</li>
-													<li>
-														Cancer Screening
-													</li>
-													<li>
-														Diabetes Screening
-													</li>
-													<li>
-														Kidney Function Screening
-													</li>
-													<li>
-														Cholesterol Levels Screening
-													</li>
-													<li>
-														Liver Function Screening
-													</li>
+														<ul>
+															{% for test in checkup.tests.all %}
+															<li>{{ test.name }}</li>
+															{% endfor %}
+														</ul>
 													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
+													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodalcheckup">View Details</button>
+													<a href="{% url 'sponsor:payments_add' %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
 												</div>
 											</div>
-											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img2.jpg">
-												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.499</a></div>
-													<h3 class="m-t-20 m-b-20">ClickHealth Comprehensive Heart Check-Up</h3>
-													<p>
-													<li>
-														Infection Marker
-													</li>
-													<li>
-														Cancer Screening
-													</li>
-													<li>
-														Diabetes Screening
-													</li>
-													<li>
-														Kidney Function Screening
-													</li>
-													<li>
-														Cholesterol Levels Screening
-													</li>
-													<li>
-														Liver Function Screening
-													</li>
-													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
-												</div>
-											</div>
-											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img2.jpg">
-												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.499</a></div>
-													<h3 class="m-t-20 m-b-20">ClickHealth Comprehensive Heart Check-Up</h3>
-													<p>
-													<li>
-														Infection Marker
-													</li>
-													<li>
-														Cancer Screening
-													</li>
-													<li>
-														Diabetes Screening
-													</li>
-													<li>
-														Kidney Function Screening
-													</li>
-													<li>
-														Cholesterol Levels Screening
-													</li>
-													<li>
-														Liver Function Screening
-													</li>
-													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
-												</div>
-											</div>
-											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<img class="img-responsive" alt="user" src="plugins/images/big/img2.jpg">
-												<div class="white-box">
-													<div class="text-muted"><span class="m-r-10"> Actual Amount Rs.599</span> <a class="text-muted m-l-10" href="#"> Final Amount Rs.499</a></div>
-													<h3 class="m-t-20 m-b-20">ClickHealth Comprehensive Heart Check-Up</h3>
-													<p>
-													<li>
-														Infection Marker
-													</li>
-													<li>
-														Cancer Screening
-													</li>
-													<li>
-														Diabetes Screening
-													</li>
-													<li>
-														Kidney Function Screening
-													</li>
-													<li>
-														Cholesterol Levels Screening
-													</li>
-													<li>
-														Liver Function Screening
-													</li>
-													</p>
-													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodal">View Details</button>
-													<a href="payment_new_add.html"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
-												</div>
-											</div>
+											{% endfor %}
 										</div>
 										<div class="form-actions">
 											<div class="row">
@@ -304,16 +114,26 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="viewdetailsmodal" role="dialog">
+		{% for discount in discounts %}
+		<div class="modal fade" id="viewdetailsmodaldiscount{{ discount.id }}" role="dialog">
 			<div class="modal-dialog">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Detailed view of selected</h4>
+						<h4 class="modal-title">{{ discount.name }}</h4>
 					</div>
 					<div class="modal-body">
-						<p>Image and content here</p>
+						<p>
+							{{ discount.description|safe }}
+						</p>
+						<p>
+							<ul>
+								{% for checkup in discount.health_checkups.all %}
+								<li>{{ checkup.title }}</li>
+								{% endfor %}
+							</ul>
+						</p>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -321,7 +141,34 @@
 				</div>
 			</div>
 		</div>
-		<!-- /.container-fluid -->
-		<footer class="footer text-center"> 2018 &copy; Clickhealth </footer>
+		{% endfor %}
+		{% for checkup in checkups %}
+		<div class="modal fade" id="viewdetailsmodalcheckup{{ discount.id }}" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">{{ checkup.title }}</h4>
+					</div>
+					<div class="modal-body">
+						<p>
+							{{ checkup.description|safe }}
+						</p>
+						<p>
+							<ul>
+								{% for test in checkup.tests.all %}
+								<li>{{ test.name }}</li>
+								{% endfor %}
+							</ul>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
 	</div>
 {% endblock %}
