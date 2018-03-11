@@ -14,12 +14,8 @@ from datatableview import Datatable
 import datatableview
 
 from phealth.utils import getIP, get_sponsor
-from api.models import User, Sponsor, Seeker, Question, Transaction, DiscountCard,\
-						HealthCheckup
-
+from api.models import User, Sponsor, Seeker, Question, Transaction, DiscountCard, HealthCheckup
 from querystring_parser import parser
-
-
 import xlrd
 
 # Create your views here.
@@ -408,16 +404,18 @@ def contact(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
-
 def organization(request):
 	if request.method == "POST":
-		print(request)
+		print(request.POST)
 	s = Sponsor.objects.filter(user__email=request.session['email']).first()
-	o  = s.organization
+	o = s.organization
+	o.location = request.POST['operatinglocation']
+	o.save()
+	s.save()
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
 		'title': 'Organization',
 		'sponsor': get_sponsor(request.session['email']),
-		'operatinglocation':o.location
+		'operatinglocation': o.location,
 	})
 
 # payments
