@@ -1,22 +1,25 @@
 import random
 import datetime
+import xlrd
 
 from django.shortcuts import render, redirect, reverse
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from phealth.utils import match_role, signin
 from django.contrib.auth.hashers import make_password
 from django import forms
 from django.core.validators import RegexValidator
+from django.core import serializers
 from django.views.generic.base import TemplateView
 from datatableview.views import DatatableView, XEditableDatatableView
 from datatableview import Datatable
 # from datatableview.cache import cache_types
 import datatableview
+from querystring_parser import parser
 
 from phealth.utils import getIP, get_sponsor
-from api.models import User, Sponsor, Seeker, Question, Transaction, DiscountCard, HealthCheckup
-from querystring_parser import parser
-import xlrd
+from common.views import send_OTP
+from api.models import (User, Sponsor, Seeker, Question, Transaction, DiscountCard,
+						HealthCheckup, Organization)
 
 # Create your views here.
 
@@ -42,7 +45,7 @@ def SignIn(request):
 			"color": "warning"
 		})
 	elif request.method == "POST":
-		if signin("sponsor", request):
+		if signin(["sponsor", "poc"], request):
 			return redirect('sponsor:dashboard_home')
 		return redirect('sponsor:signin')
 
@@ -50,55 +53,79 @@ def SignIn(request):
 def SignUp(request):
 	''' route for the signup of a new sponsor
 	'''
+	status = False
 	class SponsorForm(forms.ModelForm):
-
 		class Meta:
-			model = Sponsor
-			exclude = ('user',)
+			model = User
+			fields = ('email', 'name', 'mobile',
+				'password', 'gender', 'question', 'answer')
+			widgets = {
+				'password' : forms.PasswordInput()
+			}
 
+	class OrganizationForm(forms.ModelForm):
+		class Meta:
+			model = Organization
+			exclude = ('address',)
+
+	class OTPForm(forms.Form):
+		otp = forms.CharField(max_length=10)
+
+		def __init__(self, *args, **kwargs):
+			self.request = kwargs.pop('request', None)
+			super().__init__(*args, **kwargs)
+
+		def is_valid(self):
+			init_validity = super().is_valid()
+			if not init_validity: return False
+			f = self.cleaned_data['otp']
+			if str(f) != str(self.request.session['otp']):
+				self.add_error('otp', "Invalid OTP")
+				return False
+			return True
+
+	sponsor_form = SponsorForm()
+	otp_form = OTPForm()
 	if request.method == "POST":
-		print(request.POST, request.FILES)
-		s = SponsorForm(request.POST, request.FILES)
-		u = UserForm(request.POST, request.FILES)
-		print(s.is_valid(), u.is_valid())
-		print(request.session['otp'], request.POST['otp'])
-		if s.is_valid() and u.is_valid() and \
-			str(request.POST['otp']) == str(request.session['otp']):
-			user = u.save(commit=False)
-			ip_addr, del_val = getIP(request)
-			if ip_addr: user.last_IP = ip_addr
-			user.password = make_password(user.password)
-			user.role = 'sponsor'
-			user.save()
-			sponsor = s.save(commit=False)
-			sponsor.user = user
-			sponsor.save()
-			del request.session['otp']
-			return redirect('sponsor:signin')
-		user_form = u
-		sponsor_form = s
-		errors = [u.errors, s.errors, "OTP did not match!"]
-		print(errors)
-
-	elif request.method == "GET":
-		user_form = UserForm()
-		sponsor_form = SponsorForm()
-		errors = None
-
-	if 'otp' not in request.session:
-		request.session['otp'] = random.randint(1, 9999)
+		if "is_otp" in request.POST:
+			status = True
+			otp_form = OTPForm(request.POST, request=request)
+			if otp_form.is_valid():
+				del request.session['otp']
+				return redirect('sponsor:signin')
+			else:
+				print(otp_form.errors)
+		else:
+			org_form = OrganizationForm(request.POST, request.FILES, prefix="org")
+			sponsor_form = SponsorForm(request.POST, request.FILES)
+			print(org_form.is_valid(), sponsor_form.is_valid())
+			if org_form.is_valid() and sponsor_form.is_valid():
+				organization = org_form.save()
+				poc = sponsor_form.save(commit=False)
+				poc.role = 'sponsor'
+				poc.last_update = datetime.datetime.now()
+				poc.save()
+				sponsor = Sponsor(user=poc, organization=organization)
+				sponsor.save()
+				sponsor.pocs.add(poc)
+				# request.POST['generate'] = True
+				x = send_OTP(request, True)
+				del x
+				print(request.session)
+				status = True
+			else:
+				print(org_form.errors, sponsor_form.errors)
 
 	return render(request, 'sponsor/registration.html.j2', context={
 		'title' : "Sponsor Registration",
-		'route': "/sponsor",
-		'user_form' : user_form,
 		'sponsor_form' : sponsor_form,
-		'errors' : errors
+		'otp_form' : otp_form,
+		'validated' : True
 	})
 
 # Dashboard routes
 
-@match_role("sponsor")
+# @match_role("sponsor")
 def dashboard(request):
 	''' route for dashboard home '''
 
@@ -139,17 +166,17 @@ def dashboard(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
-@match_role("sponsor")
-def discounts(request):
-	''' route for dashboard discounts '''
+# # @match_role("sponsor")
+# def discounts(request):
+# 	''' route for dashboard discounts '''
 
-	u = Sponsor.objects.filter(user__email=request.session['email']).first()
+# 	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 
-	return render(request, 'sponsor/dashboard/discountcards.html.j2', context={
-		'title' : "Discount cards",
-		})
+# 	return render(request, 'sponsor/dashboard/discountcards.html.j2', context={
+# 		'title' : "Discount cards",
+# 		})
 
-@match_role("sponsor")
+# @match_role("sponsor")
 def addUsers(request, file):
 	'''
 		takes in an excel file and returns
@@ -233,7 +260,7 @@ def addUsers(request, file):
 	return seeker_obj, invalid
 
 
-@match_role("sponsor")
+# @match_role("sponsor")
 def user_view(request):
 	'''
 		route for adding and viewing users
@@ -446,7 +473,14 @@ class PaymentsTableView(DatatableView):
 		sp = get_sponsor(self.request.session['email'])
 		return Transaction.objects.filter(receiver=sp.user)
 
+
 def payments_new(request):
+	'''
+		route to display catalog of new discount cards and payments
+
+	'''
+
+	if 'coupon' in request.session: del request.session['coupon']
 	discounts = DiscountCard.objects.all()
 	checkups = HealthCheckup.objects.all()
 
@@ -457,11 +491,45 @@ def payments_new(request):
 		'checkups': checkups,
 	})
 
-def payments_add(request):
+
+def payments_add(request, type, package_id):
+	'''
+		add a new payment once a package has been selected
+
+	'''
+	if type == "healthcheck":
+		try:
+			dis_type = HealthCheckup.objects.get(uid=package_id)
+		except:
+			raise Http404("Invalid UID")
+	elif type == "discountcard":
+		try:
+			dis_type = DiscountCard.objects.get(uid=package_id)
+		except:
+			raise Http404("Invalid UID")
+	else:
+		raise Http404("Invalid Type")
+
+	if request.method == "POST":
+		if 'coupon' in request.session:
+			print("C : ", request.session['coupon'])
+		p_data = parser.parse(request.POST.urlencode())
+		request.session['users'] = p_data['can_id']
+		request.session['pack_type'] = type
+		request.session['pack_id'] = dis_type.id
+		return redirect('common:payment_init')
+
+	sponsor = get_sponsor(request.session['email'])
+	candidates = [_.user for _ in sponsor.users.all()]
+	fields = ('pk', 'email', 'name', 'mobile', 'gender',)
+	candidates = serializers.serialize("python", candidates, fields=fields)
 
 	return render(request, 'sponsor/dashboard/payments/add.html.j2', context={
 		'title': 'Payments',
-		'sponsor': get_sponsor(request.session['email']),
+		'sponsor': sponsor,
+		'candidates' : candidates,
+		'card' : dis_type,
+		'fields' : fields
 	})
 
 

@@ -46,12 +46,12 @@
 													<p>
 														<ul>
 															{% for checkup in discount.health_checkups.all %}
-															<li>{{ checkup.title }}</li>
+															<li>{{ checkup.name }}</li>
 															{% endfor %}
 														</ul>
 													</p>
 													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodaldiscount{{ discount.id }}">View Details</button>
-													<a href="{% url 'sponsor:payments_add' %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
+													<a href="{% url 'sponsor:payments_add' type='discountcard'  package_id=discount.uid %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select &amp; Pay</button></a>
 												</div>
 											</div>
 											{% endfor %}
@@ -80,7 +80,7 @@
 														<!-- <span class="m-r-10"> Actual Amount Rs.599</span> -->
 														<a class="text-muted m-l-10" href="#">Amount Rs. {{ checkup.price }}</a>
 													</div>
-													<h3 class="m-t-20 m-b-20">{{ checkup.title }}</h3>
+													<h3 class="m-t-20 m-b-20">{{ checkup.name }}</h3>
 													<p>
 														<ul>
 															{% for test in checkup.tests.all %}
@@ -89,7 +89,7 @@
 														</ul>
 													</p>
 													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodalcheckup">View Details</button>
-													<a href="{% url 'sponsor:payments_add' %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select & Pay</button></a>
+													<a href="{% url 'sponsor:payments_add' type='healthcheck' package_id=checkup.uid %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select &amp; Pay</button></a>
 												</div>
 											</div>
 											{% endfor %}
@@ -130,7 +130,7 @@
 						<p>
 							<ul>
 								{% for checkup in discount.health_checkups.all %}
-								<li>{{ checkup.title }}</li>
+								<li>{{ checkup.name }}</li>
 								{% endfor %}
 							</ul>
 						</p>
@@ -149,7 +149,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">{{ checkup.title }}</h4>
+						<h4 class="modal-title">{{ checkup.name }}</h4>
 					</div>
 					<div class="modal-body">
 						<p>
