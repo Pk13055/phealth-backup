@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!--    35:17 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <title>Phealth Clinician Dashboard</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Menu CSS -->
+    <link href="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <!-- toast CSS -->
+    <link href="plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
+    <!-- morris CSS -->
+    <link href="plugins/bower_components/morrisjs/morris.css" rel="stylesheet">
+    <!-- chartist CSS -->
+    <link href="plugins/bower_components/chartist-js/dist/chartist.min.css" rel="stylesheet">
+    <link href="plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <!-- Calendar CSS -->
+    <link href="plugins/bower_components/calendar/dist/fullcalendar.css" rel="stylesheet" />
+    <!-- animation CSS -->
+    <link href="css/animate.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="css/colors/default.css" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="fix-header">
+    <!-- ============================================================== -->
+    <!-- Preloader -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Wrapper -->
+    <!-- ============================================================== -->
+    <div id="wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header">
+                <div class="top-left-part">
+                    <!-- Logo -->
+                    <a class="logo" href="index.html">
+                        <!-- Logo icon image, you can use font-icon also --><b>
+                        <!--This is dark logo icon--><img src="plugins/images/admin-logo.png" alt="home" class="dark-logo" /><!--This is light logo icon--><img src="plugins/images/admin-logo-dark.png" alt="home" class="light-logo" />
+                     </b>
+                        <!-- Logo text image you can use text also --><span class="hidden-xs">
+                        <!--This is dark logo text--><img src="plugins/images/admin-text.png" alt="home" class="dark-logo" /><!--This is light logo text--><img src="plugins/images/admin-text-dark.png" alt="home" class="light-logo" />
+                     </span> </a>
+                </div>
+                <!-- /Logo -->
+                <!-- Search input and Toggle icon -->
+                <ul class="nav navbar-top-links navbar-left">
+                    <li><a href="javascript:void(0)" class="open-close waves-effect waves-light"><i class="ti-menu"></i></a></li>
+                    
+                    <!-- .Task dropdown -->
+                    
+                    
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+                    <li>
+                        <form role="search" class="app-search hidden-sm hidden-xs m-r-10">
+                            <input type="text" placeholder="Search..." class="form-control"> <a href="#"><i class="fa fa-search"></i></a> </form>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Clinician</b><span class="caret"></span> </a>
+                        <ul class="dropdown-menu dropdown-user animated flipInY">
+                            <li>
+                                <div class="dw-user-box">
+                                    <div class="u-img"><img src="plugins/images/users/varun.jpg" alt="user" /></div>
+                                    <div class="u-text">
+                                        <h4>Organization</h4>
+                                        <p class="text-muted">name</p><a href="basic.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                </div>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="basic.html"><i class="ti-user"></i> My Profile</a></li>
+                            <li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- /.navbar-top-links -->
+            <!-- /.navbar-static-side -->
+        </nav>
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav slimscrollsidebar">
+                <div class="sidebar-head">
+                    <h3><span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span> <span class="hide-menu">Navigation</span></h3> </div>
+                <div class="user-profile">
+                    
+                </div>
+                <ul class="nav" id="side-menu">
+					<li><a href="index.html" class="waves-effect"><i class="mdi mdi-av-timer fa-fw"></i> <span class="hide-menu"> Dashboard </span></a></li>
+					<li>
+						<a href="#" class="waves-effect"><i class="mdi mdi-settings fa-fw" data-icon="v"></i> <span class="hide-menu"> My Account <span class="fa arrow"></span> </span></a>
+						<ul class="nav nav-second-level">
+							<li> <a href="basic.html"><i class=" fa-fw"></i><span class="hide-menu">Basic Details</span></a> </li>
+							<li> <a href="professionaldetails.html"><i class=" fa-fw"></i><span class="hide-menu">Professional Information</span></a> </li>
+							<li> <a href="education.html"><i class=" fa-fw"></i><span class="hide-menu">Education & Trainings</span></a> </li>
+							<li> <a href="consultation.html"><i class=" fa-fw"></i><span class="hide-menu">Consultation Fee</span></a> </li>
+							<li> <a href="offerings.html"><i class=" fa-fw"></i><span class="hide-menu">Offerings</span></a> </li>
+							<li> <a href="conditions.html"><i class=" fa-fw"></i><span class="hide-menu">Conditions Treated</span></a> </li>
+							<li> <a href="procedures.html"><i class=" fa-fw"></i><span class="hide-menu">Procedures</span></a> </li>
+							<li> <a href="experience.html"><i class=" fa-fw"></i><span class="hide-menu">Experience</span></a> </li>
+							<li> <a href="awards.html"><i class=" fa-fw"></i><span class="hide-menu">Awards & Recognitions</span></a> </li>
+							<li> <a href="registration.html"><i class=" fa-fw"></i><span class="hide-menu">Registrations</span></a> </li>
+							<li> <a href="memberships.html"><i class=" fa-fw"></i><span class="hide-menu">Memberships</span></a> </li>
+						</ul>
+					</li>
+					<li>
+						<a href="#" class="waves-effect"><i class="mdi mdi-calendar fa-fw" data-icon="v"></i> <span class="hide-menu"> Calender Configure <span class="fa arrow"></span> </span></a>
+						<ul class="nav nav-second-level">
+							<li> <a href="worktime.html"><i class=" fa-fw"></i><span class="hide-menu">Work TIme</span></a> </li>
+							<li> <a href="breaktime.html"><i class=" fa-fw"></i><span class="hide-menu">Break Time</span></a> </li>
+							<li> <a href="vacationtime.html"><i class=" fa-fw"></i><span class="hide-menu">Vacation Time</span></a> </li>
+						</ul>
+					</li>
+					<li>
+						<a href="#" class="waves-effect"><i class="mdi mdi-calendar-clock fa-fw" data-icon="v"></i> <span class="hide-menu">Appointments<span class="fa arrow"></span> </span></a>
+						<ul class="nav nav-second-level">
+							<li> <a href="daily.html"><i class=" fa-fw"></i><span class="hide-menu">Daily</span></a> </li>
+							<li> <a href="weekly.html"><i class=" fa-fw"></i><span class="hide-menu">Weekly</span></a> </li>
+							<li> <a href="monthly.html"><i class=" fa-fw"></i><span class="hide-menu">Monthly</span></a> </li>
+						</ul>
+					</li>
+				</ul>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">Clinician Dashboard</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <ol class="breadcrumb">
+                            <li><a href="#">Dashboard</a></li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                <!-- ============================================================== -->
+                <!-- Different data widgets -->
+                <!-- ============================================================== -->
+                <!-- .row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="white-box" style="padding: 10px;margin-bottom: 10px; background: #46658c;">
+                            <h3 class="box-title" style="color: white">Todays Appointments Reports</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Booked</h3>
+                            <ul class="list-inline two-part">
+                               
+                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Cancelled</h3>
+                            <ul class="list-inline two-part">
+                               
+                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Confirmed</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">869</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Rescheduled</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">911</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Arrived</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Consultation Completed</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="white-box" style="padding: 10px;margin-bottom: 10px; background: #46658c;">
+                            <h3 class="box-title" style="color: white">This Month Appointments Reports</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Booked</h3>
+                            <ul class="list-inline two-part">
+                               
+                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Cancelled</h3>
+                            <ul class="list-inline two-part">
+                               
+                                <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Confirmed</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">869</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Rescheduled</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">911</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Arrived</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Consultation Completed</h3>
+                            <ul class="list-inline two-part">
+                                
+                                <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--/.row -->
+                <!--row -->
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-md-12 col-lg-8 col-sm-12 col-xs-12">
+                        <div class="white-box">
+                            <h3 class="box-title">Yearly Consultation Reports</h3>
+                            <ul class="list-inline text-right">
+                                <li>
+                                    <h5><i class="fa fa-circle m-r-5 text-info"></i>Consultation Completed</h5> </li>
+                                <li>
+                                    <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Cancelled</h5> </li>
+                            </ul>
+                            <div id="ct-visits" style="height: 405px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4 col-sm-12 col-xs-12">
+                        <div class="panel">
+                            <div class="p-20">
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                        <h4 class="m-b-0">Total Appointments Monthly</h4>
+                                    </div>
+                                    <div class="col-xs-4 p-20">
+                                        <select class="form-control">
+                                            <option>DEC</option>
+                                            <option>JAN</option>
+                                            <option>FEB</option>
+                                            <option>MAR</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer bg-extralight">
+                                <ul class="earning-box">
+                                    <li>
+                                        <div class="er-row">
+                                            <div class="er-text">
+                                                <h3>Booked</h3></div>
+                                            <div class="er-count "><span class="counter">500</span></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="er-row">
+                                            <div class="er-text">
+                                                <h3>Cancelled</h3></div>
+                                            <div class="er-count "><span class="counter">460</span></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="er-row">
+                                            <div class="er-text">
+                                                <h3>Confirmed</h3></div>
+                                            <div class="er-count "><span class="counter">600</span></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="er-row">
+                                            <div class="er-text">
+                                                <h3>Rescheduled</h3></div>
+                                            <div class="er-count "><span class="counter">200</span></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="er-row">
+                                            <div class="er-text">
+                                                <h3>Completed</h3></div>
+                                            <div class="er-count "><span class="counter">4600</span></div>
+                                        </div>
+                                    </li>
+                                    <li class="center">
+                                        <a class="btn btn-rounded btn-info btn-block p-10">View Complete Appointments</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Recent comment, table & feed widgets -->
+                <!-- ============================================================== -->
+                
+                <!-- ============================================================== -->
+                <!-- calendar widgets -->
+                <!-- ============================================================== -->
+                
+                <!-- ============================================================== -->
+                <!-- start right sidebar -->
+                <!-- ============================================================== -->
+                
+                <!-- ============================================================== -->
+                <!-- end right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2018 &copy; Phealth </footer>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Menu Plugin JavaScript -->
+    <script src="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
+    <!--slimscroll JavaScript -->
+    <script src="js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="js/waves.js"></script>
+    <!--Counter js -->
+    <script src="plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+    <script src="plugins/bower_components/counterup/jquery.counterup.min.js"></script>
+    <!-- chartist chart -->
+    <script src="plugins/bower_components/chartist-js/dist/chartist.min.js"></script>
+    <script src="plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+    <!-- Sparkline chart JavaScript -->
+    <script src="plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="js/custom.min.js"></script>
+    <script src="js/dashboard1.js"></script>
+    <script src="plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+    <!--Style Switcher -->
+    <script src="plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>
+</body>
+
+
+</html>
