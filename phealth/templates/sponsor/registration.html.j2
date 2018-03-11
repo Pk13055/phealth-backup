@@ -1,145 +1,165 @@
+{% load static %} {% load bootstrap %}
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>P Health</title>
-		<link href="register/bootstrap.min.css" rel="stylesheet">
-		<link href="register/style.css" rel="stylesheet">
-		<link href="register/fontopen.css" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<style>
-			body {
-			background: #f6f6f6;
-			}
-            label > input{ /* HIDE RADIO */
-  visibility: hidden; /* Makes input not-clickable */
-  position: absolute; /* Remove input from document flow */
-}
-label > input + img{ /* IMAGE STYLES */
-  cursor:pointer;
-  border:2px solid transparent;
-}
-label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
-  border:2px solid #2758a5;
-}
-            .dclass{
-                position: absolute;
-            }
-            .radioimage{
-                    margin: 10px 50px;
-            }
-            
-            
-		</style>
-	</head>
-	<body>
-		<nav class="navbar navbar-default navbar-fixed-top inner_nav_menu">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>P Health</title>
+	<link href="{% static 'common/dashboard/register/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'common/dashboard/register/style.css' %}" rel="stylesheet">
+	<link href="{% static 'common/dashboard/register/fontopen.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+	body {
+		background: #f6f6f6;
+	}
+
+	label>input {
+		/* HIDE RADIO */
+		visibility: hidden;
+		/* Makes input not-clickable */
+		position: absolute;
+		/* Remove input from document flow */
+	}
+
+	label>input+img {
+		/* IMAGE STYLES */
+		cursor: pointer;
+		border: 2px solid transparent;
+	}
+
+	label>input:checked+img {
+		/* (RADIO CHECKED) IMAGE STYLES */
+		border: 2px solid #2758a5;
+	}
+
+	.dclass {
+		position: absolute;
+	}
+
+	.radioimage {
+		margin: 10px 50px;
+	}
+
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top inner_nav_menu">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="index.html"><img src="register/logo1.png"></a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<!-- <ul class="nav navbar-nav">
+				</button>
+				<a class="navbar-brand" href="index.html"><img src="{% static 'common/dashboard/register/logo1.png' %}"></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<!-- <ul class="nav navbar-nav">
 						<li><a href="#"><span class="call_span"><i class="fa fa-phone" aria-hidden="true"></i></span>Call Us : 040-12345678</a></li>
-						</ul>-->
-					<ul class="nav navbar-nav navbar-right custom_nav nav_inner">
-						<li class="call_li_menu" style="margin-right: 20px;"><a href="#"><span class="call_span"><i class="fa fa-phone" aria-hidden="true"></i></span>Call Us : 040-12345678</a></li>
-						<li><a href="#">For Corporates</a></li>
-						<li><a href="#">For Health Providers</a></li>
-						<li><a href="#">Contact</a></li>
-						<li>
-							<ul class="use_menu nav navbar-nav">
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user-o"></span></a>
-									<ul class="dropdown-menu">
-										<li><a href="#">Account Settings <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
-										<li class="divider"></li>
-										<li><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
-										<li class="divider"></li>
-										<li><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
-										<li class="divider"></li>
-										<li><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
-										<li class="divider"></li>
-										<li><a href="#">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
-									</ul>
-								</li>
-							</ul>
-						</li>
+					</ul>-->
+				<ul class="nav navbar-nav navbar-right custom_nav nav_inner">
+					<li class="call_li_menu" style="margin-right: 20px;"><a href="#"><span class="call_span"><i class="fa fa-phone" aria-hidden="true"></i></span>Call Us : 040-12345678</a></li>
+					<li><a href="#">For Corporates</a></li>
+					<li><a href="#">For Health Providers</a></li>
+					<li><a href="#">Contact</a></li>
+					<li>
+						<ul class="use_menu nav navbar-nav">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user-o"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Account Settings <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
+									<li class="divider"></li>
+									<li><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
+									<li class="divider"></li>
+									<li><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
+									<li class="divider"></li>
+									<li><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
+									<li class="divider"></li>
+									<li><a href="#">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="nav_second">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<ul>
+						<li class="active"><a href="#"><span class="fa fa-calendar"></span>Appointments</a></li>
+						<li><a href="#"><span class="fa fa-heartbeat"></span>Health Checks</a></li>
+						<li><a href="#"><span class="fa fa-credit-card"></span>Discount Cards</a></li>
+						<li><a href="#"><span class="fa fa-gift"></span>Gift Health</a></li>
+						<li><a href="#"><span class="fa fa-phone"></span>Service Providers</a></li>
 					</ul>
 				</div>
 			</div>
-		</nav>
-		<div class="nav_second">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<ul>
-							<li class="active"><a href="#"><span class="fa fa-calendar"></span>Appointments</a></li>
-							<li><a href="#"><span class="fa fa-heartbeat"></span>Health Checks</a></li>
-							<li><a href="#"><span class="fa fa-credit-card"></span>Discount Cards</a></li>
-							<li><a href="#"><span class="fa fa-gift"></span>Gift Health</a></li>
-							<li><a href="#"><span class="fa fa-phone"></span>Service Providers</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
 		</div>
+	</div>
+	<form method="POST">
+		{% csrf_token %}
+		{% if not validated %}
 		<section class="login_section">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-offset-2 col-md-8">
 						<div class="panel panel-primary">
 							<div class="panel-heading ">
-								<h3 >Sponsor Registration</h3>
+								<h3>Sponsor Registration</h3>
 							</div>
 							<div class="panel-body">
 								<div class="form-group">
-									<label for="organizationname"> Organization Name</label>
-									<input type="text" class="form-control" id="organizationname" placeholder="Enter Name of the Orgnization" name="organizationname">
+									<label for="org-name"> Organization Name</label>
+									<input type="text" class="form-control" id="org-name" placeholder="Enter Name of the Orgnization" name="org-name">
 								</div>
 								<div class="form-group">
-									<label class="radioimage" >Type of Organization </label>
-                                    <br>
-                                    <label class="radioimage"><input type="radio" name="fb" value="Corporates"  name="businessregtype"/><img style="width:100px; margin:0 auto" src="register/corporates.jpg"> <p class="dclass" style="text-align:center;">Corporates</p></label>
-                                    <label class="radioimage"><input type="radio" name="fb" value="EducationalInstitutions"  name="businessregtype"/><img style="width:100px; margin:0 auto" src="register/education.png"><p class="dclass" style="text-align:center;">Educational <br>Institutions</p></label>
-                                    <label class="radioimage"><input type="radio" name="fb" value="NGO"  name="businessregtype"/><img style="width:100px; margin:0 auto" src="register/ngo.png"><p class="dclass" style="text-align:center;">NGO's</p></label>
-                                    <label class="radioimage"><input type="radio" name="fb" value="Gated"  name="businessregtype"/><img style="width:100px; margin:0 auto" src="register/communities.png"><p class="dclass" style="text-align:center;">Gated Communities</p></label>
-									
+									<label class="radioimage">Type of Organization </label>
+									<br>
+									<label class="radioimage">
+										<input type="radio" name="org-type" value="corporate" /><img style="width:100px; margin:0 auto" src="{% static 'common/dashboard/register/corporates.jpg' %}">
+										<p class="dclass" style="text-align:center;">Corporates</p>
+									</label>
+									<label class="radioimage">
+										<input type="radio" name="org-type" value="college" /><img style="width:100px; margin:0 auto" src="{% static 'common/dashboard/register/education.png' %}">
+										<p class="dclass" style="text-align:center;">Educational
+											<br>Institutions</p>
+									</label>
+									<label class="radioimage">
+										<input type="radio" name="org-type" value="ngo" /><img style="width:100px; margin:0 auto" src="{% static 'common/dashboard/register/ngo.png' %}">
+										<p class="dclass" style="text-align:center;">NGO's</p>
+									</label>
+									<label class="radioimage">
+										<input type="radio" name="org-type" value="community" /><img style="width:100px; margin:0 auto" src="{% static 'common/dashboard/register/communities.png' %}">
+										<p class="dclass" style="text-align:center;">Gated Communities</p>
+									</label>
 								</div>
 								<div class="form-group">
-									<label >Group Size</label>
-									<select name="groupsize" class="form-control" >
+									<label>Group Size</label>
+									<select name="org-size" class="form-control" required>
 										<option value="">Select Group Size</option>
-										<option value="1">50-100</option>
-										<option value="2">100-500</option>
-										<option value="3">500-1000</option>
-										<option value="4">1000-5000</option>
-										<option value="4">5000-10000</option>
-										<option value="4">Above 10000</option>
+										<option value="50-100">50-100</option>
+										<option value="100-500">100-500</option>
+										<option value="500-1000">500-1000</option>
+										<option value="1000-5000">1000-5000</option>
+										<option value="5000-10000">5000-10000</option>
+										<option value="10000+">Above 10000</option>
 									</select>
 								</div>
-								<div class="form-group">
-									<label >Mobile:</label>
-									<input type="Number" class="form-control" id="number" placeholder="Number" name="number">
-								</div>
-								<div class="form-group">
-									<label>Email:</label>
-									<input type="Email" class="form-control" id="email" placeholder="email" name="Email">
-								</div>
+								{{ sponsor_form | bootstrap }}
 								<div class="checkbox">
-									<label><input type="checkbox" name="remember" checked> By Signing Up I accept All Terms & Conditions</label>
+									<input type="checkbox" checked required>
+									<label>By Signing Up I accept All Terms &amp; Conditions</label>
 								</div>
-                                <div class="form-group">
-									<a href="otp.html"><button class="btn btn-primary" style="    background-color: #337ab7 !important;
-    border-color: #2e6da4 !important;">Register</button></a>
+								<div class="form-group">
+									<button class="btn btn-primary" type="submit" style="background-color: #337ab7 !important; border-color: #2e6da4 !important;">Register</button>
 								</div>
 							</div>
 						</div>
@@ -147,72 +167,86 @@ label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 				</div>
 			</div>
 		</section>
-		<footer>
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="full-widrth">
-							<h4>About us</h4>
-							<p>Lorem Ipsum is simply dummy text of the printing<br> and typesetting industry. Lorem Ipsum has<br> been the industry's standard dummy text</p>
-							<img src="register/logo.png">
-						</div>
+		{% else %}
+		<section class="row otp_section">
+			<div class="panel-body">
+				{{ otp_form | bootstrap }}
+				<div class="form-group">
+					<button class="btn btn-primary" type="submit" name="is_otp" value="1" style="background-color: #337ab7 !important; border-color: #2e6da4 !important;">Verify &amp; Continue</button>
+				</div>
+			</div>
+		</section>
+		{% endif %}
+	</form>
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="full-widrth">
+						<h4>About us</h4>
+						<p>Lorem Ipsum is simply dummy text of the printing
+							<br> and typesetting industry. Lorem Ipsum has
+							<br> been the industry's standard dummy text</p>
+						<img src="{% static 'common/dashboard/register/logo.png' %}">
 					</div>
-					<div class="col-md-2">
-						<div class="full-widrth">
-							<h4>Quick Links</h4>
-							<ul>
-								<li><a href="#">How it works</a></li>
-								<li><a href="#">Our Team</a></li>
-								<li><a href="#">Vision</a></li>
-							</ul>
-						</div>
+				</div>
+				<div class="col-md-2">
+					<div class="full-widrth">
+						<h4>Quick Links</h4>
+						<ul>
+							<li><a href="#">How it works</a></li>
+							<li><a href="#">Our Team</a></li>
+							<li><a href="#">Vision</a></li>
+						</ul>
 					</div>
-					<div class="col-md-3">
-						<div class="full-widrth">
-							<h4>Contact Us</h4>
-							<p>#658, 3rd Floor, Ayyappa Socitey, Madhapur, Hyderabad, 500081, Telangana </p>
-							<p>+91 8686768612,</p>
-							<p>contact@mbrinformatics.com</p>
-						</div>
+				</div>
+				<div class="col-md-3">
+					<div class="full-widrth">
+						<h4>Contact Us</h4>
+						<p>#658, 3rd Floor, Ayyappa Socitey, Madhapur, Hyderabad, 500081, Telangana </p>
+						<p>+91 8686768612,</p>
+						<p>contact@mbrinformatics.com</p>
 					</div>
-					<div class="col-md-3">
-						<div class="full-widrth">
-							<h4>Subscribe Us</h4>
-							<div class="row">
-								<div class="col-md-12">
-									<form action="#">
-										<div class="input-group">
-											<input class="btn btn-lg" name="email" id="email" type="email" placeholder="Your Email Address" required>
-											<button class="btn btn-lg" type="submit"><i class="fa fa-envelope" aria-hidden="true"></i></button>
-										</div>
-									</form>
-									<!--<small class="promise"><em>We won't send spam.</em></small>-->
-								</div>
+				</div>
+				<div class="col-md-3">
+					<div class="full-widrth">
+						<h4>Subscribe Us</h4>
+						<div class="row">
+							<div class="col-md-12">
+								<form action="#">
+									<div class="input-group">
+										<input class="btn btn-lg" name="email" id="email" type="email" placeholder="Your Email Address" required>
+										<button class="btn btn-lg" type="submit"><i class="fa fa-envelope" aria-hidden="true"></i></button>
+									</div>
+								</form>
+								<!--<small class="promise"><em>We won't send spam.</em></small>-->
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</footer>
-		<div class="footer_bottom">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<ul>
-							<li><a href="#">Teram of Conditions</a></li>
-							<li><a href="#">How it Works</a></li>
-							<li><a href="#">Cancellation & Refund</a></li>
-							<li><a href="#">Disclaime</a></li>
-						</ul>
-					</div>
-					<div class="col-md-6">
-						<p>Copyright © 2017  MBR Informatics, All Rights Reserved.</p>
-					</div>
+		</div>
+	</footer>
+	<div class="footer_bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<ul>
+						<li><a href="#">Teram of Conditions</a></li>
+						<li><a href="#">How it Works</a></li>
+						<li><a href="#">Cancellation &amp; Refund</a></li>
+						<li><a href="#">Disclaime</a></li>
+					</ul>
+				</div>
+				<div class="col-md-6">
+					<p>Copyright © 2017 MBR Informatics, All Rights Reserved.</p>
 				</div>
 			</div>
 		</div>
-		<script src="register/jquery.min.js"></script>
-		<script src="register/bootstrap.min.js"></script>
-		
-	</body>
+	</div>
+	<script src="{% static 'common/dashboard/register/jquery.min.js' %}"></script>
+	<script src="{% static 'common/dashboard/register/bootstrap.min.js' %}"></script>
+	<script src="{% static 'common/dashboard/register/register.js' %}"></script>
+</body>
+
 </html>
