@@ -111,12 +111,21 @@ class Coupon(models.Model):
 	id = models.AutoField(primary_key=True)
 	uid = models.UUIDField(default=uuid.uuid4, editable=False)
 
+	type_choices = (
+		('percentage', '%'),
+		('amount', 'Rs'),
+		)
 	name = models.CharField(max_length=30)
 	quantity = models.PositiveSmallIntegerField()
-	validty = models.BooleanField(default=True)
+	validity = models.BooleanField(default=True)
 	expiry = models.DateField()
+	amount = models.PositiveSmallIntegerField(default=0)
+	type = models.CharField(choices=type_choices, max_length=30, default='amount')
 
 	date_added = models.DateTimeField(default=current_timestamp, editable=False)
+
+	def __str__(self):
+		return "<Coupon %s | Q : %d | %d %s >" % (self.name, self.quantity, self.amount, self.type)
 
 	class Meta:
 		managed = True
@@ -173,7 +182,8 @@ class HealthCheckup(models.Model):
 		Sold by admins to sales agents ONLY
 	'''
 	id = models.AutoField(primary_key=True)
-	title = models.CharField(max_length=40, unique=True)
+	uid = models.UUIDField(default=uuid.uuid4, editable=False)
+	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField()
 	price = models.PositiveSmallIntegerField(default=0)
 	image = models.ImageField(upload_to='health_checks')
@@ -244,7 +254,9 @@ class User(models.Model):
 		('healthseeker', 'healthseeker'), # actual user
 		('clinician', 'clinician'), # actual doctor
 		('sponsor', 'sponsor'), # group user setting
+
 		# secondary roles
+		('poc', 'poc'), # sponsor poc
 		('salesagent', 'salesagent'), # sells plans from admin
 		('reseller', 'reseller'), # buys healthcards from agents
 
@@ -354,6 +366,7 @@ class Seeker(models.Model):
 	language = models.CharField(max_length=100, choices=language_choices)
 	dob = models.DateField()
 
+	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
 
 	def __str__(self):
 		return "<Seeker : %s >" % self.user.email
@@ -483,7 +496,7 @@ class Organization(models.Model):
 	name = models.CharField(max_length=50)
 	size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
 	type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
-	location = models.OneToOneField(Address, on_delete=models.DO_NOTHING)
+	location = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Sponsor(models.Model):

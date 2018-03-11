@@ -17,7 +17,7 @@ dashboard_urls = [
     # payments
     url(r'^payments/?$', views.PaymentsTableView.as_view(), name='payments_view'),
     url(r'^payments/new/?$', views.payments_new, name='payments_new'),
-    url(r'^payments/add/?$', views.payments_add, name='payments_add'),
+    path('payments/add/<str:type>/<uuid:package_id>/', views.payments_add, name='payments_add'),
 
     # participants
     url(r'^participants/?$', views.ParticipantsTableView.as_view(), name='participants_view'),
