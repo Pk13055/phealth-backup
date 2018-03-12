@@ -416,14 +416,25 @@ class POCTable(Datatable):
 		# cache_type = cache_types.DEFAULT
 		structure_template = 'datatableview/bootstrap_structure.html'
 
+class POCForm(forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ('__all__')
+		widgets = {
+			'password' : forms.PasswordInput()
+		}
+
 class POCTableView(DatatableView):
 	model = User
 	datatable_class = POCTable
-
+	
 	def get_context_data(self, **kwargs):
+		poc_form = POCForm()
+
 		context = super().get_context_data(**kwargs)
 		context['title'] = 'POCs'
 		context['sponsor'] = get_sponsor(self.request.session['email'])
+		context['poc_form'] = poc_form
 		return context
 
 	def get_template_names(self):
@@ -434,13 +445,29 @@ class POCTableView(DatatableView):
 		return sp.pocs.all()
 
 @match_role("sponsor")
+def add_poc(request):
+	if request.method  == "POST":
+		poc = POCForm(request.POST, request.FILES)
+		s = Sponsor.objects.filter(user__email=request.session['email']).first()
+
+		if poc.is_valid():
+			p = poc.save()
+			s.pocs.add(p)
+			s.save()
+		else:
+			# errors += [poc.errors]
+			print('error in commiting')
+
+	return redirect('sponsor:contact')
+
+@match_role("sponsor")
 def contact(request):
 	if request.method == "POST":
 		print(request)
 		c_dict = parser.parse(request.POST.urlencode())
 		print(c_dict)
 	return render(request, 'sponsor/dashboard/account/contact.html.j2', context={
-'title': 'POC',
+		'title': 'POC',
 		'sponsor': get_sponsor(request.session['email']),
 	})
 

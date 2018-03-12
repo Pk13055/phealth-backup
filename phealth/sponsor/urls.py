@@ -12,6 +12,7 @@ dashboard_urls = [
     # account
     url(r'^account/basic/?$', views.basic, name='basic'),
     url(r'^account/pocs/?$', views.POCTableView.as_view(), name='contact'),
+    url(r'^account/pocs/add?$', views.add_poc, name='add_poc'),    
     url(r'^account/organization/?$', views.organization, name='organization'),
 
     # payments

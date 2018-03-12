@@ -21,3 +21,4 @@ tests/report/
 *.png
 *.pdf
 *.jpeg
+.vscode
