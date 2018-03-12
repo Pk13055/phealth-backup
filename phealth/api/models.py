@@ -283,7 +283,7 @@ class User(models.Model):
 	gender = models.CharField(max_length=1, choices=(
 		('M', 'Male'),
 		('F', 'Female'),
-		('O', 'Other'),))
+		('O', 'Other'),), default="F")
 
 	question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
 	answer = models.CharField(max_length=100)
@@ -362,8 +362,8 @@ class Seeker(models.Model):
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	family = models.ManyToManyField("self")
 	appointments = models.ManyToManyField('Appointment', editable=False)
-	profession = models.CharField(max_length=100, choices=profession_choices)
-	language = models.CharField(max_length=100, choices=language_choices)
+	profession = models.CharField(max_length=100, choices=profession_choices, default="other")
+	language = models.CharField(max_length=100, choices=language_choices, default="other")
 	dob = models.DateField()
 
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)

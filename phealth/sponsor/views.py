@@ -302,6 +302,12 @@ def user_view(request):
 
 	u = Sponsor.objects.filter(user__email=request.session['email']).first()
 	errors = None
+
+	class UserForm(forms.ModelForm):
+		class Meta:
+			model = User
+			fields = ('email', 'name', 'mobile',)
+
 	basic_user = UserForm()
 	seeker_specific = SeekerForm()
 	existing_multiple = SponsorForm(instance=u)
@@ -314,20 +320,25 @@ def user_view(request):
 
 		if request.POST['type'] == "single_user":
 			b = UserForm(request.POST, request.FILES)
-			s = SeekerForm(request.POST, request.FILES)
-			if b.is_valid() and s.is_valid():
+			# s = SeekerForm(request.POST, request.FILES)
+			# if b.is_valid() and s.is_valid():
+			if b.is_valid():
 				user = b.save(commit=False)
 				ip_addr, del_val = getIP(request)
 				user.role = 'healthseeker'
-				user.password = make_password(user.password)
+				user.password = make_password(user.mobile)
+				user.question = Question.objects.first()
+				user.answer = "default"
 				user.save()
-				seeker = s.save(commit=False)
+				# seeker = s.save(commit=False)
+				seeker = Seeker(user=user, dob=datetime.datetime.now().date())
 				seeker.user = user
 				seeker.save()
+				u.users.add(seeker)
 			else:
 				basic_user = b
-				seeker_specific = s
-				errors += [b.errors, s.errors]
+				# seeker_specific = s
+				errors += [b.errors]
 
 		elif request.POST['type'] == "existing_multiple":
 			# code for adding the multiple existing users
@@ -357,7 +368,7 @@ def user_view(request):
 		'sponsor': get_sponsor(request.session['email']),
 		'errors' : errors,
 		'basic_user' : basic_user,
-		'seeker_specific': seeker_specific,
+		# 'seeker_specific': seeker_specific,
 		# 'existing_multiple' : existing_multiple,
 		'bulk_form' : bulk_form
 	})

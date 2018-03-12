@@ -22,28 +22,28 @@
 				<div class="panel-heading">
 					Add New Participants
 				</div>
-				
+
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
 						<div class="form-body">
-							
+
 							<ul class="nav nav-pills m-b-30 pull-right">
 								<li class="active"> <a href="#singleusertab" data-toggle="tab" aria-expanded="true">Add Single User</a> </li>
 								<li class=""> <a href="#bulkusertab" data-toggle="tab" aria-expanded="false">Upload Bulk Participants</a> </li>
 							</ul>
 							<h3 class="box-title">&nbsp;</h3>
-							
+
 							<hr class="m-t-0 m-b-40">
-							
-							
-							
+
+
+
 							<div class="tab-content br-n pn">
 								<div id="singleusertab" class="tab-pane active">
 
 									<form method="POST">
 										{% csrf_token %}
 										{{ basic_user|bootstrap }}
-										{{ seeker_specific|bootstrap }}
+										{# {{ seeker_specific|bootstrap }} #}
 
 										<div class="form-actions">
 											<div class="row">
@@ -58,11 +58,11 @@
 											</div>
 										</div>
 									</form>
-									
+
 								</div>
 								<div id="bulkusertab" class="tab-pane">
 									<form method="POST" class="form-horizontal" enctype="multipart/form-data">
-										
+
 										<div class="row">
 
 											<div class="col-md-6 col-md-offset-3">
@@ -85,17 +85,17 @@
 													</div>
 												</div>
 											</div>
-											
-											
+
+
 
 										</div>
 									</form>
 								</div>
-								
+
 							</div>
-							
-							
-							
+
+
+
 						</div>
 					</div>
 				</div>
