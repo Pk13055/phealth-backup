@@ -125,7 +125,7 @@ def SignUp(request):
 
 # Dashboard routes
 
-# @match_role("sponsor")
+@match_role("sponsor")
 def dashboard(request):
 	''' route for dashboard home '''
 
@@ -166,7 +166,7 @@ def dashboard(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
-# # @match_role("sponsor")
+# @match_role("sponsor")
 # def discounts(request):
 # 	''' route for dashboard discounts '''
 
@@ -176,7 +176,7 @@ def dashboard(request):
 # 		'title' : "Discount cards",
 # 		})
 
-# @match_role("sponsor")
+@match_role("sponsor")
 def addUsers(request, file):
 	'''
 		takes in an excel file and returns
@@ -260,7 +260,7 @@ def addUsers(request, file):
 	return seeker_obj, invalid
 
 
-# @match_role("sponsor")
+@match_role("sponsor")
 def user_view(request):
 	'''
 		route for adding and viewing users
@@ -366,6 +366,7 @@ def user_view(request):
 
 # account details
 
+@match_role("sponsor")
 def basic(request):
 	s = Sponsor.objects.filter(user__email=request.session['email']).first()
 	o  = s.organization
@@ -421,6 +422,7 @@ class POCTableView(DatatableView):
 		sp = get_sponsor(self.request.session['email'])
 		return sp.pocs.all()
 
+@match_role("sponsor")
 def contact(request):
 	if request.method == "POST":
 		print(request)
@@ -431,6 +433,7 @@ def contact(request):
 		'sponsor': get_sponsor(request.session['email']),
 	})
 
+@match_role("sponsor")
 def organization(request):
 	if request.method == "POST":
 		print(request.POST)
@@ -474,6 +477,7 @@ class PaymentsTableView(DatatableView):
 		return Transaction.objects.filter(receiver=sp.user)
 
 
+@match_role("sponsor")
 def payments_new(request):
 	'''
 		route to display catalog of new discount cards and payments
@@ -492,6 +496,7 @@ def payments_new(request):
 	})
 
 
+@match_role("sponsor")
 def payments_add(request, type, package_id):
 	'''
 		add a new payment once a package has been selected
@@ -561,6 +566,7 @@ class ParticipantsTableView(DatatableView):
 		sp = get_sponsor(self.request.session['email'])
 		return User.objects.filter(seeker__in=sp.users.all())
 
+@match_role("sponsor")
 def participants_new(request):
 
 	return render(request, 'sponsor/dashboard/participants/new.html.j2', context={

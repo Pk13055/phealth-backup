@@ -53,7 +53,6 @@ def signin(role, request):
 	client_ip, is_routable = getIP(request)
 	if client_ip is not None: u.last_IP = client_ip
 	status = False
-
 	if u and check_password(password, u.password) and (u.role in role or role in u.role):
 		u.last_update=datetime.datetime.now()
 		request.session['email'] = email
