@@ -19,7 +19,7 @@ from querystring_parser import parser
 from phealth.utils import getIP, get_sponsor
 from common.views import send_OTP
 from api.models import (User, Sponsor, Seeker, Question, Transaction, DiscountCard,
-						HealthCheckup, Organization)
+						HealthCheckup, Organization, Address)
 
 # Create your views here.
 
@@ -473,17 +473,27 @@ def contact(request):
 
 @match_role("sponsor")
 def organization(request):
-	if request.method == "POST":
-		print(request.POST)
+	class AddressForm(forms.ModelForm):
+		class Meta:
+			model = Address
+			fields = ('city', 'pincode', 'extra')
+		
 	s = Sponsor.objects.filter(user__email=request.session['email']).first()
 	o = s.organization
-	o.location = request.POST['operatinglocation']
-	o.save()
-	s.save()
+
+	if request.method == "POST":
+		address = AddressForm(request.POST)
+
+		if address.is_valid():
+			a = address.save()
+			o.location = a
+			o.save()
+			s.save()
+
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
 		'title': 'Organization',
 		'sponsor': get_sponsor(request.session['email']),
-		'operatinglocation': o.location,
+		'address_form': AddressForm(instance=o.location) 
 	})
 
 # payments

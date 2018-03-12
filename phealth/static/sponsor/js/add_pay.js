@@ -21,13 +21,8 @@ var verify_coupon = () => {
         });
     },
     calculate_new = () => {
-<<<<<<< Updated upstream
         let total = $("table#participants tbody").find("input.add_card:checked"),
             new_cost = total.length * parseFloat($("th#single_price").text());
-=======
-    	let total = $("table#participants tbody").find("input.add_card:checked"),
-    	new_cost = total.length * parseFloat($("th#single_price").text());
->>>>>>> Stashed changes
         $("th#multi_price").text(new_cost);
         $("th#no_can").text(total.length);
     };
