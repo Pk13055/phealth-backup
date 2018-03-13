@@ -1,8 +1,5 @@
  $(document).ready(function () {
      "use strict";
-     // toat popup js
-
-
      //ct-visits
      new Chartist.Line('#ct-visits', {
          labels: ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'],

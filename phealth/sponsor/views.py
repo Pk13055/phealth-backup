@@ -103,6 +103,7 @@ def SignUp(request):
 				organization = org_form.save()
 				poc = sponsor_form.save(commit=False)
 				poc.role = 'sponsor'
+				poc.password = make_password(poc.password)
 				poc.last_update = datetime.datetime.now()
 				poc.save()
 				sponsor = Sponsor(user=poc, organization=organization)
@@ -111,8 +112,8 @@ def SignUp(request):
 				# request.POST['generate'] = True
 				x = send_OTP(request, True)
 				del x
-				print(request.session)
 				status = True
+				print(request.session)
 			else:
 				print(org_form.errors, sponsor_form.errors)
 
@@ -120,7 +121,7 @@ def SignUp(request):
 		'title' : "Sponsor Registration",
 		'sponsor_form' : sponsor_form,
 		'otp_form' : otp_form,
-		'validated' : True
+		'validated' : status
 	})
 
 # Dashboard routes
@@ -427,7 +428,7 @@ class POCForm(forms.ModelForm):
 class POCTableView(DatatableView):
 	model = User
 	datatable_class = POCTable
-	
+
 	def get_context_data(self, **kwargs):
 		poc_form = POCForm()
 
@@ -477,7 +478,7 @@ def organization(request):
 		class Meta:
 			model = Address
 			fields = ('city', 'pincode', 'extra')
-		
+
 	s = Sponsor.objects.filter(user__email=request.session['email']).first()
 	o = s.organization
 
@@ -493,7 +494,7 @@ def organization(request):
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
 		'title': 'Organization',
 		'sponsor': get_sponsor(request.session['email']),
-		'address_form': AddressForm(instance=o.location) 
+		'address_form': AddressForm(instance=o.location)
 	})
 
 # payments
