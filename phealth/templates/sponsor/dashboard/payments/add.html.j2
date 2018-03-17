@@ -1,0 +1,129 @@
+{% extends 'sponsor/dashboard/base.html.j2' %} {% load static %} {% block script %}
+<script src="{% static 'sponsor/js/add_pay.js' %}"></script>
+{% endblock script %} {% block content %}
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Payments</h4>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'sponsor:dashboard_home' %}">Dashboard</a></li>
+                <li><a href="{% url 'sponsor:payments_new' %}">Select Discount card/ Health Checks</a></li>
+                <li><a href="{{ request.path }}">Add New Payment</a></li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <img class="img-responsive" alt="user" src="{% static 'common/dashboard/plugins/images/big/health1.png' %}" style="margin: auto;width: 50%;border: 1px solid #41b3f9;padding: 10px;">
+                <div class="panel-heading">ClickHealth Check</div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <table class="table">
+                            <tr>
+                                <th>No of Participants</th>
+                                <th colspan="2" id="no_can"></th>
+                            </tr>
+                            <tr>
+                                <th class="label">{{ card.uid }}</th>
+                                <th>{{ card.name }}</th>
+                                <th id="single_price">{{ card.price }}</th>
+                            </tr>
+                            <tr>
+                                <th>Total Payment</th>
+                                <th>Rs.</th>
+                                <th id="multi_price"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">
+                                    <button class="btn btn-info">Self Payed</button>
+                                </th>
+                                <th>
+                                    <button class="btn btn-success" onclick="$('form#candidates').submit();">Pay Now</button>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href="#collapse1">Have A Coupon ? Click Here</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse1" class="panel-collapse collapse">
+                                    <form id="coupon_form">
+                                        <div class="panel-body">
+                                            <div class="col-md-12">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4">Coupon Code</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" name="coupon" placeholder="Enter Coupon Code" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="form-actions">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-md-offset-6 col-md-2">
+                                                                <button type="button" onclick="verify_coupon();" class="btn btn-success">Apply Coupon</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6"> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="box-title m-b-0">Partipants</h3>
+                <p class="text-muted m-b-30">Select the participants to pay</p>
+                <div class="table-responsive">
+                    <form id="candidates" method="POST">
+                        <table class="table table-striped table-responsive table-hoverable" id="participants">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" class="all_check">
+                                    </th>
+                                    {% for field in fields %} {% if field != 'pk' %}
+                                    <th>{{ field | title }}</th>
+                                    {% endif %} {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% csrf_token %}
+                                {% for candidate in candidates %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="add_card">
+                                    </td>
+                                    <input type="hidden" class="can_id" name="can_id" value="{{ candidate.pk }}"> {% for field, value in candidate.fields.items %}
+                                    <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% empty %}
+                                <tr>Add some candidates first!</tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

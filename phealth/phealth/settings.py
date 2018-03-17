@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'datatableview',
     'bootstrapform',
     'django_summernote',
 
@@ -59,8 +60,6 @@ INSTALLED_APPS = [
     'phealth',
     'common',
     'site_admin',
-    'django_tables2',
-    'table',
 
     'api',
     'blog',
@@ -180,7 +179,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(os.getcwd(), '..', 'static')
+STATIC_ROOT = os.path.join(os.getcwd(), 'static')
 
 STATICFILES_DIR = (
 	BASE_DIR,
@@ -188,4 +187,4 @@ STATICFILES_DIR = (
 )
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.getcwd(), '..', 'media')
+MEDIA_ROOT = os.path.join(os.getcwd(), 'media')

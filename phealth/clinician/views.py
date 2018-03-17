@@ -179,3 +179,131 @@ def calender(request):
 			'break' : break_timings,
 			'vacations' : vacation_timings,
 		})
+
+# NEW ROUTES
+
+def new_home(request):
+	''' new dashboard home '''
+	return render(request, 'clinician/dashboard/new_home.html.j2', context={
+		'title' : "Clinician Home",
+		})
+
+# appointment routes
+
+def appointment_daily(request):
+	''' appointment stats '''
+	return render(request, 'clinician/dashboard/appointments/daily.html.j2', context={
+		'title' : "appointment - Daily",
+		})
+
+def appointment_weekly(request):
+	''' appointment stats '''
+	return render(request, 'clinician/dashboard/appointments/weekly.html.j2', context={
+		'title' : "appointment - weekly",
+		})
+
+def appointment_monthly(request):
+	''' appointment stats '''
+	return render(request, 'clinician/dashboard/appointments/monthly.html.j2', context={
+		'title' : "appointment - monthly",
+		})
+
+# timings routes
+
+def timing_work(request):
+	''' timing routes for clinician '''
+	return render(request, 'clinician/dashboard/timings/worktime.html.j2', context={
+		'title' : "timing - work",
+		})
+
+def timing_break(request):
+	''' timing routes for clinician '''
+	return render(request, 'clinician/dashboard/timings/breaktime.html.j2', context={
+		'title' : "timing - break",
+		})
+
+def timing_vacation(request):
+	''' timing routes for clinician '''
+	return render(request, 'clinician/dashboard/timings/vacationtime.html.j2', context={
+		'title' : "timing - vacation",
+		})
+
+# account routes
+
+def basic_details(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/basic.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def professional_info(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/professionaldetails.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def education_training(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/education.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def consultation_fee(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/consultation.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def offerings(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/offerings.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def conditions_treated(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/conditions.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def procedures(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/procedures.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def experience(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def awards_recognition(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/awards.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def registrations(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/registration.html.j2', context={
+		'title' : "Account - ",
+		})
+
+
+def memberships(request):
+	''' account route for '''
+	return render(request, 'clinician/dashboard/account/memberships.html.j2', context={
+		'title' : "Account - ",
+		})
+
+

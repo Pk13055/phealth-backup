@@ -1,0 +1,120 @@
+{% extends 'sponsor/dashboard/base.html.j2' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">Dashboard 1</h4> </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <ol class="breadcrumb">
+                    <li><a href="#">Dashboard</a></li>
+                </ol>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <!-- ============================================================== -->
+        <!-- Different data widgets -->
+        <!-- ============================================================== -->
+        <!-- .row -->
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Total Participants</h3>
+                    <ul class="list-inline two-part">
+                        
+                        <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Total Payments</h3>
+                    <ul class="list-inline two-part">
+                        
+                        <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">869</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Pending Payments</h3>
+                    <ul class="list-inline two-part">
+                        
+                        <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">911</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Customized cards / Health checks</h3>
+                    <ul class="list-inline two-part">
+                        
+                        <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--/.row -->
+        <!--row -->
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-md-12 col-lg-8 col-sm-12 col-xs-12">
+                <div class="white-box">
+                    <h3 class="box-title">Yearly Payment History</h3>
+                    <ul class="list-inline text-right">
+                        <li>
+                            <h5><i class="fa fa-circle m-r-5 text-info"></i>Discount Cards</h5> </li>
+                        <li>
+                            <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Health Checks</h5> </li>
+                    </ul>
+                    <div id="ct-visits" style="height: 405px;"></div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4 col-sm-12 col-xs-12">
+                <div class="panel">
+                    <div class="p-20">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <h4 class="m-b-0">Total Payments</h4>
+                                <h2 class="m-t-0 font-medium">Rs.580.50</h2>
+                            </div>
+                            <div class="col-xs-4 p-20">
+                                <select class="form-control">
+                                    <option>DEC</option>
+                                    <option>JAN</option>
+                                    <option>FEB</option>
+                                    <option>MAR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer bg-extralight">
+                        <ul class="earning-box">
+                            <li>
+                                <div class="er-row">
+                                    <div class="er-text">
+                                        <h3>Discount Cards</h3><span class="text-muted">(Participents: 255)10-11-2016</span></div>
+                                    <div class="er-count ">Rs.<span class="counter">4600</span></div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="er-row">
+                                    <div class="er-text">
+                                        <h3>Health Checks</h3><span class="text-muted">(Participents: 100)10-11-2016</span></div>
+                                    <div class="er-count ">Rs.<span class="counter">5500</span></div>
+                                </div>
+                            </li>
+                            
+                            <li class="center">
+                                <a class="btn btn-rounded btn-info btn-block p-10">View Payment History</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

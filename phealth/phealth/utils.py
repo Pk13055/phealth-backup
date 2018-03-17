@@ -12,6 +12,10 @@ from ipware import get_client_ip
 
 # contains all the comon code for utility purposes
 
+def get_sponsor(email):
+	sponsor = Sponsor.objects.filter(user__email=email).first()
+	return sponsor
+
 def match_role(role_type):
 	'''
 		decorator that wraps protected views
@@ -55,8 +59,8 @@ def signin(role, request):
 	client_ip, is_routable = getIP(request)
 	if client_ip is not None: u.last_IP = client_ip
 	status = False
-	if u and check_password(password,u.password) and (u.role in role or role in u.role):
-		print("in")
+
+	if u and check_password(password, u.password) and (u.role in role or role in u.role):
 		u.last_update=datetime.datetime.now()
 		request.session['email'] = email
 		request.session['role'] = u.role

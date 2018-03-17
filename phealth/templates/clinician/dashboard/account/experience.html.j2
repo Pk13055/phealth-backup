@@ -1,0 +1,149 @@
+{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %}
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Dashboard 1</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="index.html">Dashboard</a></li>
+				<li><a href="#">Basic Details</a></li>
+			</ol>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					My Account
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
+				</div>
+				<div class="panel-wrapper collapse in" aria-expanded="true">
+					<div class="panel-body">
+						<form action="awards.html" class="form-horizontal">
+							<div class="form-body">
+								<h3 class="box-title">Experience</h3>
+								<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addcontact">Add Experience</button>
+								<div class="modal fade" id="addcontact" role="dialog">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+												<h4 class="modal-title">Add Experience</h4>
+											</div>
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="institution" class="col-md-3">Institution </label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" name="institution" id="institution">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="designation_id" class="col-md-3">Designation </label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" name="designation_id" id="designation_id">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<p>Working Period</p>
+														<div class="form-group">
+															<label for="workfrom" class="col-md-3">From </label>
+															<div class="col-md-9">
+																<input type="date" class="form-control" id="workfrom" name="workfrom">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<br>
+														<br>
+														<div class="form-group">
+															<label for="workto" class="col-md-3">To</label>
+															<div class="col-md-9">
+																<input type="date" class="form-control" id="workto" name="workto">
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<hr>
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="submit" class="btn btn-success">Add</button>
+												<button type="button" class="btn btn-default" data-dismiss="modal">Cancel & Close </button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="white-box">
+											<h3 class="box-title m-b-0">Experience Details</h3>
+											<div class="table-responsive">
+												<table id="myTable" class="table table-striped">
+													<thead>
+														<tr>
+															<th>Institution</th>
+															<th>Designation</th>
+															<th>From</th>
+															<th>To</th>
+															<th>Action</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Nixon</td>
+															<td>System Architect</td>
+															<td>Madhapur,Hyderabad</td>
+															<td>9491457801</td>
+															<td>
+																<button class="btn btn-success">Update</button>
+																<button class="btn btn-danger"> Delete</button>
+															</td>
+														</tr>
+														<tr>
+															<td>Nixon</td>
+															<td>System Architect</td>
+															<td>Madhapur,Hyderabad</td>
+															<td>9491457801</td>
+															<td>
+																<button class="btn btn-success">Update</button>
+																<button class="btn btn-danger"> Delete</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-md-offset-10 col-md-2">
+												<button type="submit" class="btn btn-success">Next</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6"> </div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /.container-fluid -->
+{% endblock content %}

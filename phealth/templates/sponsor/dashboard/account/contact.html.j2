@@ -1,0 +1,73 @@
+{% extends 'sponsor/dashboard/base.html.j2' %}
+{% load static %}
+{% load bootstrap %}
+
+{% block content %}
+	<div class="container-fluid">
+		<div class="row bg-title">
+			<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+				<h4 class="page-title">Dashboard 1</h4>
+			</div>
+			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+				<ol class="breadcrumb">
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="#">Contact Details</a></li>
+				</ol>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						My Account
+					</div>
+					<div class="progress">
+						<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
+					</div>
+					<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<form class="form-horizontal" method="POST" action="{% url 'sponsor:add_poc' %}">
+								{% csrf_token %}
+								<div class="form-body">
+									<h3 class="box-title">Contact Details</h3>
+									<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addcontact">Add New Contact Person</button>
+									<div class="modal fade" id="addcontact" role="dialog">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">New Contact Details</h4>
+												</div>
+												<div class="modal-body">
+													<div style="padding: 0px 20px;">
+														{{ poc_form|bootstrap }}
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="submit" class="btn btn-success">Add</button>
+													<button type="button" class="btn btn-default" data-dismiss="modal">Cancel &amp; Close </button>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="white-box">
+												<h3 class="box-title m-b-0">Contact Person's</h3>
+												<p class="text-muted m-b-30">Use Data tablels here</p>
+												<div class="table-responsive">
+													{{ datatable }}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

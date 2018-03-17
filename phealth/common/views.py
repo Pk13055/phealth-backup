@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
 from rest_framework.serializers import ModelSerializer
 from rest_framework.renderers import JSONRenderer
-from api.models import User, Speciality, Address
+from api.models import User, Speciality, Address, Coupon
 from phealth import utils
 
 # Create your views here.
@@ -50,7 +50,7 @@ def payment_init(request):
 
 @require_POST
 @csrf_exempt
-def send_OTP(request):
+def send_OTP(request, gen=False):
 	''' takes a given OTP value from the
 	session and sends to a specified mobile number
 	and email
@@ -59,7 +59,7 @@ def send_OTP(request):
 	try:
 		mobile = request.POST['mobile']
 		email = request.POST['email']
-		if 'generate' in request.POST:
+		if 'generate' in request.POST or gen:
 			otp = randint(1, 99999)
 			request.session['otp'] = otp
 		else:
@@ -138,4 +138,25 @@ def autocomplete(request, category, query):
 	return JsonResponse({
 		'status' : False,
 		'data' : [],
+		})
+
+@require_POST
+@csrf_exempt
+def verify_coupon(request):
+	status = False
+	data = {}
+	if 'coupon' in request.POST:
+		code = request.POST['coupon']
+		c = Coupon.objects.filter(name=str(code)).first()
+		if c and c.validity and c.expiry > datetime.datetime.now().date()\
+		 and c.quantity and 'coupon' not in request.session:
+			request.session['coupon'] = c.id
+			data['type'] = c.type
+			data['amount'] = c.amount
+			status = True
+	else:
+		status = False
+	return JsonResponse({
+		'status' : status,
+		'data' : data
 		})

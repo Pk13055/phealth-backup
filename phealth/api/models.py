@@ -111,12 +111,21 @@ class Coupon(models.Model):
 	id = models.AutoField(primary_key=True)
 	uid = models.UUIDField(default=uuid.uuid4, editable=False)
 
+	type_choices = (
+		('percentage', '%'),
+		('amount', 'Rs'),
+		)
 	name = models.CharField(max_length=30)
 	quantity = models.PositiveSmallIntegerField()
-	validty = models.BooleanField(default=True)
+	validity = models.BooleanField(default=True)
 	expiry = models.DateField()
+	amount = models.PositiveSmallIntegerField(default=0)
+	type = models.CharField(choices=type_choices, max_length=30, default='amount')
 
 	date_added = models.DateTimeField(default=current_timestamp, editable=False)
+
+	def __str__(self):
+		return "<Coupon %s | Q : %d | %d %s >" % (self.name, self.quantity, self.amount, self.type)
 
 	class Meta:
 		managed = True
@@ -173,7 +182,8 @@ class HealthCheckup(models.Model):
 		Sold by admins to sales agents ONLY
 	'''
 	id = models.AutoField(primary_key=True)
-	title = models.CharField(max_length=40, unique=True)
+	uid = models.UUIDField(default=uuid.uuid4, editable=False)
+	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField()
 	price = models.PositiveSmallIntegerField(default=0)
 	image = models.ImageField(upload_to='health_checks')
@@ -244,7 +254,9 @@ class User(models.Model):
 		('healthseeker', 'healthseeker'), # actual user
 		('clinician', 'clinician'), # actual doctor
 		('sponsor', 'sponsor'), # group user setting
+
 		# secondary roles
+		('poc', 'poc'), # sponsor poc
 		('salesagent', 'salesagent'), # sells plans from admin
 		('reseller', 'reseller'), # buys healthcards from agents
 
@@ -271,7 +283,7 @@ class User(models.Model):
 	gender = models.CharField(max_length=1, choices=(
 		('M', 'Male'),
 		('F', 'Female'),
-		('O', 'Other'),))
+		('O', 'Other'),), default="F")
 
 	question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
 	answer = models.CharField(max_length=100)
@@ -350,10 +362,11 @@ class Seeker(models.Model):
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	family = models.ManyToManyField("self")
 	appointments = models.ManyToManyField('Appointment', editable=False)
-	profession = models.CharField(max_length=100, choices=profession_choices)
-	language = models.CharField(max_length=100, choices=language_choices)
+	profession = models.CharField(max_length=100, choices=profession_choices, default="other")
+	language = models.CharField(max_length=100, choices=language_choices, default="other")
 	dob = models.DateField()
 
+	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
 
 	def __str__(self):
 		return "<Seeker : %s >" % self.user.email
@@ -458,8 +471,9 @@ class Provider(models.Model):
 		db_table = 'providers'
 
 
-class Sponsor(models.Model):
-	''' the sponsor who can bulk register users as seekers
+class Organization(models.Model):
+	'''
+		comprises the org of a given sponsor
 	'''
 
 	org_type_choices = (
@@ -479,12 +493,21 @@ class Sponsor(models.Model):
 		)
 
 	id = models.AutoField(primary_key=True)
-	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-	org_name = models.CharField(max_length=50)
-	org_size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
-	org_type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	name = models.CharField(max_length=50)
+	size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
+	type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	location = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, blank=True)
+
+
+class Sponsor(models.Model):
+	''' the sponsor who can bulk register users as seekers
+	'''
+
+	id = models.AutoField(primary_key=True)
+	user = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='poc')
+	organization = models.OneToOneField(Organization, on_delete=models.DO_NOTHING)
+	pocs = models.ManyToManyField(User, blank=True, null=True, related_name='pocs')
 	users = models.ManyToManyField(Seeker, blank=True, null=True)
-	# add extra fields after consulting
 
 	class Meta:
 		managed = True
