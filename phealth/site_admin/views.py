@@ -5,17 +5,19 @@ from phealth.utils import signin, match_role
 
 
 def SignIn(request):
+
 	'''
 		signin route for the sales agent
 
 	'''
 	if request.method == "GET":
 		return render(request, 'common/signin.html.j2', context={
-			"title": "Admin Login",
+			"title": "Administrator Login",
 			"route": "/site_admin",
 			"color": "default"
 		})
 	elif request.method == "POST":
+		print(request.POST)
 		if signin("admin", request):
 			return redirect('site_admin:dashboard_home')
 		return redirect('site_admin:signin')
