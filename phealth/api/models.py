@@ -401,7 +401,7 @@ class Clinician(models.Model):
 	vacations = ArrayField(
 		ArrayField(
 			models.DateField(),
-			size=2), null=True, blank=True)
+			size=2), null=True, blank=True, default=[])
 
 	def check_availability(self, from_date, to_date):
 		''' given from and to, check whether the clinician

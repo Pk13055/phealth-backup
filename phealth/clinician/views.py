@@ -6,6 +6,7 @@ from phealth.utils import match_role, signin
 from api.models import (Clinician, User, Speciality, Appointment  )
 from querystring_parser import parser
 import datetime
+import json
 
 # Create your views here.
 
@@ -184,126 +185,294 @@ def calender(request):
 
 def new_home(request):
 	''' new dashboard home '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/new_home.html.j2', context={
 		'title' : "Clinician Home",
+		'clinician' : c,
 		})
 
 # appointment routes
 
 def appointment_daily(request):
 	''' appointment stats '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/appointments/daily.html.j2', context={
 		'title' : "appointment - Daily",
+		'clinician' : c,
 		})
 
 def appointment_weekly(request):
 	''' appointment stats '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/appointments/weekly.html.j2', context={
 		'title' : "appointment - weekly",
+		'clinician' : c,
 		})
 
 def appointment_monthly(request):
 	''' appointment stats '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/appointments/monthly.html.j2', context={
 		'title' : "appointment - monthly",
+		'clinician' : c,
 		})
 
 # timings routes
 
+
+@match_role("clinician")
 def timing_work(request):
-	''' timing routes for clinician '''
+	''' work timing routes for clinician '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
+	work_timings = c.work_timings
+	days = ["Sunday", "Monday", "Tuesday", "Wednesday",
+	"Thursday", "Friday", "Saturday"]
+	assert(len(days) == len(work_timings))
+	if request.method == "POST":
+		p_dict = parser.parse(request.POST.urlencode())
+		timings = []
+		base_compare = c.work_timings
+		for day, actual in zip(days, base_compare):
+			try:
+				timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+				 '%H:%M:%S').time(), p_dict['timings'][day])))
+			except ValueError:
+				print("BT")
+				try:
+					timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+				 	'%H:%M').time(), p_dict['timings'][day])))
+				except KeyError:
+					print("BT")
+					timings.append(actual)
+			except KeyError:
+				print("BT")
+				timings.append(actual)
+
+		c.work_timings = timings
+		c.save()
+
+
+	work_timings = []
+
+	for day, w_t in zip(days, c.work_timings):
+		cur_obj = { 'day' : day }
+		cur_obj['start'] = w_t[0].isoformat().split('.')[0][:5]
+		cur_obj['end'] = w_t[-1].isoformat().split('.')[0][:5]
+		work_timings.append(cur_obj)
+
 	return render(request, 'clinician/dashboard/timings/worktime.html.j2', context={
-		'title' : "timing - work",
+		'title' : "Timings - Work timings",
+		'clinician' : c,
+		'timings' : work_timings,
 		})
 
+
+@match_role("clinician")
 def timing_break(request):
-	''' timing routes for clinician '''
+	''' break timings routes for clinician '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
+	days = ["Sunday", "Monday", "Tuesday", "Wednesday",
+		"Thursday", "Friday", "Saturday"]
+
+	if request.method == "POST":
+		p_dict = parser.parse(request.POST.urlencode())
+		timings = []
+		base_compare = c.break_timings
+		for day, actual in zip(days, base_compare):
+			try:
+				timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+				 '%H:%M:%S').time(), p_dict['timings'][day])))
+			except ValueError:
+				try:
+					timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+				 	'%H:%M').time(), p_dict['timings'][day])))
+				except KeyError:
+					timings.append(actual)
+			except KeyError:
+				timings.append(actual)
+		c.break_timings = timings
+		try:
+			c.save()
+		except:
+			pass
+
+	break_timings = []
+
+	for day, b_t in zip(days, c.break_timings):
+		cur_obj = { 'day' : day }
+		cur_obj['start'] = b_t[0].isoformat().split('.')[0][:5]
+		cur_obj['end'] = b_t[-1].isoformat().split('.')[0][:5]
+		break_timings.append(cur_obj)
+
+
 	return render(request, 'clinician/dashboard/timings/breaktime.html.j2', context={
-		'title' : "timing - break",
+		'title' : "Timings -  break",
+		'clinician' : c,
+		'timings' : break_timings
 		})
 
+
+@match_role("clinician")
 def timing_vacation(request):
-	''' timing routes for clinician '''
+	''' vacations dates routes for clinician '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
+	if request.method == "POST":
+		p_dict = parser.parse(request.POST.urlencode())
+		try:
+			vacs = p_dict['timings'][""]
+			vacs = [ list(map(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d').date(),
+			 [i, j])) for i, j in zip(vacs[::2], vacs[1::2])]
+			c.vacations = vacs
+		except:
+			pass
+
+	vacation_timings = []
+	for vacation in c.vacations:
+		vacation_timings.append({
+			'start' : vacation[0].isoformat(),
+			'end' : vacation[-1].isoformat(),
+		})
+
 	return render(request, 'clinician/dashboard/timings/vacationtime.html.j2', context={
-		'title' : "timing - vacation",
+		'title' : "Timings -  vacation",
+		'clinician' : c,
+		'timings' : vacation_timings,
 		})
 
 # account routes
 
 def basic_details(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/basic.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def professional_info(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/professionaldetails.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def education_training(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/education.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def consultation_fee(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/consultation.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def offerings(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/offerings.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def conditions_treated(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/conditions.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def procedures(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/procedures.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def experience(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def awards_recognition(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/awards.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def registrations(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/registration.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 
 def memberships(request):
 	''' account route for '''
+
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	return render(request, 'clinician/dashboard/account/memberships.html.j2', context={
 		'title' : "Account - ",
+		'clinician' : c,
 		})
 
 

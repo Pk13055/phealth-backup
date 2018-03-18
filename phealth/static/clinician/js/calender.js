@@ -69,11 +69,23 @@ let calenderUI = () => {
 		}).val("");
 		$ref.append($row);
 	});
+
+	// remove a vacation row
+	$("table tbody tr td").on('click', 'button.del_vacation', function() {
+		// delete the given row clicked
+		$(this).closest("tr").remove();
+	});
+
+
+	$("table tbody tr td").on('click', 'button.en_row', function() {
+		// new tick functionality
+		$(this).closest("tr").find(":checkbox").click();
+	});
 };
 
 $(document).ready(function() {
 	// disable default behaviour for forms
-	$("form").on('submit', function(e) { e.preventDefault(); })
+	// $("form").on('submit', function(e) { e.preventDefault(); })
 	// all the page calender functions
 	calenderUI();
 });
