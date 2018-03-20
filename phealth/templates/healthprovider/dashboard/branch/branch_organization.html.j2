@@ -1,0 +1,154 @@
+{% extends "healthprovider/dashboard/base.html.j2" %} 
+{% load static %} 
+{% block content %}
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Manage Branches</h4>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">View / Update Branches</a>
+                </li>
+            </ol>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /row -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <div class="row">
+                    {% include 'healthprovider/dashboard/branch/sub_nav.html.j2' %}
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="classbasic">
+                            <h3 class="box-title">Pay by selecting the Health Check Package</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Operating Hours</label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" placeholder="Operating Hours" name="operatinghours" id="operatinghours">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Oprtaing Location</label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" id="oprtainglocation" placeholder="Oprtaing Location" name="oprtainglocation">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Service Required Location</label>
+                                        <div class="col-md-9">
+                                            <select name="businessregtype" class="form-control">
+                                                <option value="">Select from List</option>
+                                                <option value="1">All</option>
+                                                <option value="2">Specific</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">If Specific Select Location</label>
+                                        <div class="col-md-9">
+                                            <select name="groupsize" class="form-control">
+                                                <option value="">Select Specific Location</option>
+                                                <option value="1">Secbad</option>
+                                                <option value="2">Madhapur</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-offset-10 col-md-2">
+                                                <button type="submit" class="btn btn-success">Save & Go</button>
+                                                <button type="button" class="btn btn-default">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}
+{% block static %}
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "columnDefs": [{
+                    "visible": false,
+                    "targets": 2
+                }],
+                "order": [
+                    [2, 'asc']
+                ],
+                "displayLength": 25,
+                "drawCallback": function (settings) {
+                    var api = this.api();
+                    var rows = api.rows({
+                        page: 'current'
+                    }).nodes();
+                    var last = null;
+                    api.column(2, {
+                        page: 'current'
+                    }).data().each(function (group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                '<tr class="group"><td colspan="5">' +
+                                group + '</td></tr>');
+                            last = group;
+                        }
+                    });
+                }
+            });
+            // Order by the grouping
+            $('#example tbody').on('click', 'tr.group', function () {
+                var currentOrder = table.order()[0];
+                if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
+                    table.order([2, 'desc']).draw();
+                } else {
+                    table.order([2, 'asc']).draw();
+                }
+            });
+        });
+    });
+    $('#example23').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
+</script>
+{% endblock static %}

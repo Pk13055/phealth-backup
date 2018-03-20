@@ -1,0 +1,62 @@
+{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %}
+<div class="row bg-title">
+	<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+		<h4 class="page-title">Dashboard 1</h4>
+	</div>
+	<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+		<ol class="breadcrumb">
+			<li>
+				<a href="index.html">Dashboard</a>
+			</li>
+			<li>
+				<a href="#">Contact Details</a>
+			</li>
+		</ol>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				Facilities
+			</div>
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+				    aria-valuemax="100" style="width: 30%;">
+					<span class="sr-only">60% Complete</span>
+				</div>
+			</div>
+			<div class="panel-wrapper collapse in" aria-expanded="true">
+				<div class="panel-body">
+					<div class="panel-wrapper collapse in" aria-expanded="true">
+						<div class="panel-body">
+							<div class="checkbox">
+								<input id="checkbox2" type="checkbox">
+								<label for="checkbox2">Out Patient</label>
+							</div>
+							<div class="checkbox">
+								<input id="checkbox2" type="checkbox">
+								<label for="checkbox2">In Patient</label>
+							</div>
+							<div class="checkbox">
+								<input id="checkbox2" type="checkbox">
+								<label for="checkbox2">Insurance / Corporate Recognations</label>
+							</div>
+							<div class="checkbox">
+								<input id="checkbox2" type="checkbox">
+								<label for="checkbox2">Diagnostics/ Tests</label>
+							</div>
+							<form action="offerings.html">
+								<div class="pull-right">
+									<button type="submit" class="btn btn-success">Save & Go</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

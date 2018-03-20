@@ -1,0 +1,75 @@
+{% extends "healthprovider/dashboard/base.html.j2" %} 
+{% load static %} 
+{% block content %}
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Manage Clinician</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Dashboard</a>
+            </li>
+            <li>
+                <a href="#">View / Manage Clinician </a>
+            </li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Manage Clinician
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="white-box">
+                        <h3 class="box-title m-b-0"> View / Manage Clinician </h3>
+                        <div class="table-responsive">
+                            <table id="myTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Doctor Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Speciality</th>
+                                        <th>Action</th>
+                                        <th>Access Dashboard</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Rajesh</td>
+                                        <td>rajesh@mbrinformatics.com</td>
+                                        <td>9491457801</td>
+                                        <td>Physician</td>
+                                        <td>aa</td>
+                                        <td>
+                                            <button class="btn btn-success">Access</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Rajesh</td>
+                                        <td>rajesh@mbrinformatics.com</td>
+                                        <td>9491457801</td>
+                                        <td>Physician</td>
+                                        <td>aa</td>
+                                        <td>
+                                            <button class="btn btn-success">Access</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
