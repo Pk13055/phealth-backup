@@ -4,9 +4,21 @@
 .marextra {
 	margin: 2px;
 }
+
+a.datatable-btn {
+	color: white;
+}
+
+a.datatable-btn:hover {
+	color: white;
+}
+
+a.datatable-btn:active {
+	color: white;
+}
 </style>
 <script>
-
+	datatableview.auto_initialize = false;
 </script>
 {% endblock styles %}
 {% block content %}
@@ -97,7 +109,9 @@
 <script src="{% static 'plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
 <!-- end - This is for export functionality only -->
 <script>
-
+$(document).ready(function() {
+	datatableview.initialize($('table.datatable'));
+});
 </script>
 <!-- Clock Plugin JavaScript -->
 <script src="{% static 'common/dashboard/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js' %}"></script>

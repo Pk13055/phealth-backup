@@ -8,7 +8,7 @@ import datetime
 import json
 from datatableview.views import DatatableView, XEditableDatatableView
 from datatableview.helpers import make_xeditable 
-from datatableview import Datatable, ValuesDatatable, DateTimeColumn
+from datatableview import Datatable, ValuesDatatable, DateTimeColumn, TextColumn
 
 # Create your views here.
 
@@ -197,28 +197,63 @@ def new_home(request):
 
 # appointment routes
 
-class AppointmentTableView(XEditableDatatableView):
+class AppointmentTableView(DatatableView):
 	model = Appointment
 
 	class datatable_class(Datatable):
 		time_parsed = DateTimeColumn('Time', None, processor='get_time')
+		date_parsed = DateTimeColumn('Date', None, processor='get_date')
+		status_new = TextColumn('Status', None, processor='get_status_raw')
+		button = TextColumn('Confirm/Cancel', None, processor='get_button_raw')
 
 		class Meta:
-			columns = ['date', 'time_parsed', 'status', 'provider']
+			columns = ['date_parsed', 'time_parsed', 'provider', 'status_new', 'button']
 			labels = {
 				'date': 'Date',
-				'status': 'Status',
 				'provider': 'Provider',
 			}
 			processors = {
 				'provider': 'get_provider_name',
-				'time_parsed': 'get_time',
-				'status': make_xeditable,
 			}
+
+		def get_button_raw(self, instance, **kwargs):
+			if instance.status == 'pending':
+				return '''
+				<p>
+					<a href="/clinician/dashboard/appointments/confirm/{}" class="datatable-btn btn btn-success" role="button">Confirm</a>
+					<a href="/clinician/dashboard/appointments/cancel/{}" class="datatable-btn btn btn-danger" role="button">Cancel</a>
+				</p>
+				'''.format(instance.id, instance.id)
+			
+			return 'NA'
+
+		def get_status_raw(self, instance, **kwargs):
+			if instance.status == 'confirmed':
+				return '''
+				<p>
+					<a href="#" class="datatable-btn btn btn-success disabled" role="button">Confirmed</a>
+				</p>
+				'''
+			
+			elif instance.status == 'cancelled':
+				return '''
+				<p>
+					<a href="#" class="datatable-btn btn btn-danger disabled" role="button">Cancelled</a>
+				</p>
+				'''
+			
+			return '''
+			<p>
+				<a href="#" class="datatable-btn btn btn-warning disabled" role="button">Pending</a>
+			</p>
+			'''
 
 		def get_provider_name(self, instance, **kwargs):
 			return instance.provider.name
 		
+		def get_date(self, instance, **kwargs):
+			return instance.date.strftime('%d-%m-%Y')
+
 		def get_time(self, instance, **kwargs):
 			time = instance.time
 			m = 'PM' if int(time.hour / 12) else 'AM'
@@ -234,19 +269,43 @@ class AppointmentTableView(XEditableDatatableView):
 		return 'clinician/dashboard/appointments/daily.html.j2'
 
 	def get_queryset(self):
+		today = datetime.date.today()
 		c = get_clinician(self.request.session['email'])
-		return Appointment.objects.filter(under=c)
+		return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
 
+def confirm_appointment(request, id):
+	c = get_clinician(request.session['email'])
+	a = Appointment.objects.filter(id=id).first()
+	
+	if a.under == c:
+		a.status = 'confirmed'
+		a.save()
+	else:
+		# add appropriate error handling
+		print("*** Authorization failed ***")
+
+	return redirect('clinician:appointment_daily')
+
+def cancel_appointment(request, id):
+	c = get_clinician(request.session['email'])
+	a = Appointment.objects.filter(id=id).first()
+	
+	if a.under == c:
+		a.status = 'cancelled'
+		a.save()
+	else:
+		# add appropriate error handling
+		print("*** Authorization failed ***")
+
+	return redirect('clinician:appointment_daily')
 
 def appointment_weekly(request):
 	''' appointment stats '''
 
 	today = datetime.date.today()
-
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
 	
 	days = []
-
 	for d in range(7):
 		day = today + datetime.timedelta(days=d)
 		days.append({
@@ -275,7 +334,6 @@ def appointment_monthly(request):
 		})
 
 # timings routes
-
 
 @match_role("clinician")
 def timing_work(request):
