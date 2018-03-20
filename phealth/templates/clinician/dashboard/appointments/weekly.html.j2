@@ -16,112 +16,46 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="white-box">
-				<div class="row row-in">
-					<div class="col-lg-3 col-sm-6 row-in-br">
-						<div class="input-group">
-							<input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy"> <span class="input-group-addon"><i class="icon-calender"></i></span>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6  col-lg-offset-3 col-sm-offset-6 b-0">
-						<div class="form-group">
-							<div class="col-md-9">
-								<select name="Obstetrician" class="form-control">
-									<option value="" disabled="" selected="">Select Status</option>
-									<option value="urologist">urologist</option>
-									<option value="Cardiologist">Cardiologist</option>
-									<option value="Dermatologist">Dermatologist</option>
-									<option value="Surgery">Surgery</option>
-									<option value="neurologist">neurologist</option>
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-4 col-xs-12">
-						<button class="btn btn-block btn-info btn-rounded">Filter</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-12">
 			<div class="panel panel-info">
 				<div class="panel-heading">
 					Weekly Appointments View
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<div class="form-body">
-							<div class="demo-popover">
-								<div class="container">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="col-md-3 ">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Sunday</h3>
-													<div class="popover-content">
-														<p>Cancel 1</p>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Monday</h3>
-													<div class="popover-content">
-														<p>Scheduled 5</p>
-														<p>Cancel 6</p>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Tuesday</h3>
-													<div class="popover-content">
-														<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam.</p>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Wednesday</h3>
-													<div class="popover-content">
-														<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam.</p>
-													</div>
-												</div>
-											</div>
+						<div class="container-fluid">
+							{% for day in days %}
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel">
+										<div class="panel-heading">
+											<strong>
+												{{ day.name }}
+											</strong>
+											{{ day.date }}
 										</div>
-									</div>
-									<br>
-									<div class="row">
-										<div class="col-md-12">
-											<div class="col-md-3 ">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Thursday</h3>
-													<div class="popover-content">
-														<p>Cancel 1</p>
+										<div class="panel-wrapper collapse in" aria-expanded="true">
+											<div class="panel-body" style="background-color: #edf1f6">
+												<div class="row text-center">
+													<div class="col-md-4">
+														<div class="alert alert-success" role="alert">
+															Confirmed
+															<br/>
+															<h2 style="color: white;"><strong>{{ day.n_confirmed }}</strong></h2>
+														</div>
 													</div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Friday</h3>
-													<div class="popover-content">
-														<p>Scheduled 5</p>
-														<p>Cancel 6</p>
+													<div class="col-md-4">
+														<div class="alert alert-warning" role="alert">
+															Pending
+															<br/>
+															<h2 style="color: white;"><strong>{{ day.n_pending }}</strong></h2>
+														</div>
 													</div>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<button type="button" class="btn btn-primary popover-primary sr-only"> Primary </button>
-												<div class="popover top btn_pop">
-													<h3 class="popover-title">Saturday   </h3>
-													<div class="popover-content">
-														<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam.</p>
+													<div class="col-md-4">
+														<div class="alert alert-danger" role="alert">
+															Cancelled
+															<br/>
+															<h2 style="color: white;"><strong>{{ day.n_cancelled }}</strong></h2>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -129,6 +63,7 @@
 									</div>
 								</div>
 							</div>
+							{% endfor %}
 						</div>
 					</div>
 				</div>

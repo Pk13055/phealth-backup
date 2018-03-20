@@ -5,6 +5,9 @@
 	margin: 2px;
 }
 </style>
+<script>
+
+</script>
 {% endblock styles %}
 {% block content %}
 <div class="container-fluid">
@@ -20,36 +23,7 @@
 			</ol>
 		</div>
 	</div>
-	<form action="{% url 'clinician:appointment_daily' %}" method="POST">
-		{% csrf_token %}
 		<div class="row">
-			<div class="col-md-12">
-				<div class="white-box">
-					<div class="row row-in">
-						<div class="col-lg-3 col-sm-6 row-in-br">
-							<div class="input-group">
-								<input type="date" name="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy">
-							</div>
-						</div>
-						<div class="col-lg-3 col-sm-6  col-lg-offset-3 col-sm-offset-6 b-0">
-							<div class="form-group">
-								<div class="col-md-9">
-									<select name="status" class="form-control">
-										<option value="all" selected="">all</option>
-										<option value="pending">pending</option>
-										<option value="confirmed">confirmed</option>
-										<option value="cancelled">cancelled</option>
-										<option value="rescheduled">rescheduled</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-sm-4 col-xs-12">
-							<button type="submit" class="btn btn-block btn-info btn-rounded">Filter</button>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="col-md-12">
 				<div class="panel panel-info">
 					<div class="panel-heading">
@@ -123,13 +97,6 @@
 <script src="{% static 'plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
 <!-- end - This is for export functionality only -->
 <script>
-$(document).ready(function() {
-	$(document).ready(function() {
-		$('#myTable').DataTable({
-		});
-	});
-});
-
 
 </script>
 <!-- Clock Plugin JavaScript -->

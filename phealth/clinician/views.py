@@ -197,7 +197,7 @@ def new_home(request):
 
 # appointment routes
 
-class AppointmentTableView(DatatableView):
+class AppointmentTableView(XEditableDatatableView):
 	model = Appointment
 
 	class datatable_class(Datatable):
@@ -213,6 +213,7 @@ class AppointmentTableView(DatatableView):
 			processors = {
 				'provider': 'get_provider_name',
 				'time_parsed': 'get_time',
+				'status': make_xeditable,
 			}
 
 		def get_provider_name(self, instance, **kwargs):
@@ -240,12 +241,28 @@ class AppointmentTableView(DatatableView):
 def appointment_weekly(request):
 	''' appointment stats '''
 
+	today = datetime.date.today()
+
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	
+	days = []
+
+	for d in range(7):
+		day = today + datetime.timedelta(days=d)
+		days.append({
+			'name': day.strftime('%A'),
+			'date': day.strftime('%d-%m-%Y'),
+			'n_pending': c.appointment_set.filter(date=day).filter(status='pending').count(),
+			'n_confirmed': c.appointment_set.filter(date=day).filter(status='confirmed').count(),
+			'n_cancelled': c.appointment_set.filter(date=day).filter(status='cancelled').count(),			
+		})
+
 
 	return render(request, 'clinician/dashboard/appointments/weekly.html.j2', context={
 		'title' : "appointment - weekly",
 		'clinician' : c,
-		})
+		'days': days
+	})
 
 def appointment_monthly(request):
 	''' appointment stats '''

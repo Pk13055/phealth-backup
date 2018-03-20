@@ -32,7 +32,6 @@
 	<!-- Bootstrap Core JavaScript -->
 	<script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 	<link href="{% static 'common/dashboard/css/colors/default.css' %}" id="theme" rel="stylesheet">
-	{% block styles %} {% endblock %}
 	<!-- <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/> 
@@ -40,8 +39,8 @@
 	<script src="{% static 'js/datatableview.min.js' %}"></script>
 	<script>
 	datatableview.auto_initialize = true;
-
 	</script>
+	{% block styles %} {% endblock %}
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
