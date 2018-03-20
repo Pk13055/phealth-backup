@@ -16,6 +16,10 @@ def get_sponsor(email):
 	sponsor = Sponsor.objects.filter(user__email=email).first()
 	return sponsor
 
+def get_clinician(email):
+	clinician = Clinician.objects.filter(user__email=email).first()
+	return clinician
+
 def match_role(role_type):
 	'''
 		decorator that wraps protected views

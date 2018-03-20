@@ -20,110 +20,48 @@
 			</ol>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="white-box">
-				<div class="row row-in">
-					<div class="col-lg-3 col-sm-6 row-in-br">
-						<div class="input-group">
-							<input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy"> <span class="input-group-addon"><i class="icon-calender"></i></span>
-						</div>
-					</div>
-					<div class="col-lg-3 col-sm-6  col-lg-offset-3 col-sm-offset-6 b-0">
-						<div class="form-group">
-							<div class="col-md-9">
-								<select name="Obstetrician" class="form-control">
-									<option value="" disabled="" selected="">Select Status</option>
-									<option value="urologist">urologist</option>
-									<option value="Cardiologist">Cardiologist</option>
-									<option value="Dermatologist">Dermatologist</option>
-									<option value="Surgery">Surgery</option>
-									<option value="neurologist">neurologist</option>
-								</select>
+	<form action="{% url 'clinician:appointment_daily' %}" method="POST">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-md-12">
+				<div class="white-box">
+					<div class="row row-in">
+						<div class="col-lg-3 col-sm-6 row-in-br">
+							<div class="input-group">
+								<input type="date" name="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy">
 							</div>
 						</div>
-					</div>
-					<div class="col-lg-3 col-sm-4 col-xs-12">
-						<button class="btn btn-block btn-info btn-rounded">Filter</button>
+						<div class="col-lg-3 col-sm-6  col-lg-offset-3 col-sm-offset-6 b-0">
+							<div class="form-group">
+								<div class="col-md-9">
+									<select name="status" class="form-control">
+										<option value="all" selected="">all</option>
+										<option value="pending">pending</option>
+										<option value="confirmed">confirmed</option>
+										<option value="cancelled">cancelled</option>
+										<option value="rescheduled">rescheduled</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-sm-4 col-xs-12">
+							<button type="submit" class="btn btn-block btn-info btn-rounded">Filter</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-md-12">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					Appointments View Daywise
-				</div>
-				<div class="panel-wrapper collapse in" aria-expanded="true">
+			<div class="col-md-12">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						Appointments View Daywise
+					</div>
 					<div class="panel-body">
-						<div class="white-box">
-							<div class="table-responsive">
-								<table id="myTable" class="table table-striped">
-									<thead>
-										<tr>
-											<th>Sr.No</th>
-											<th>Date</th>
-											<th>Slot</th>
-											<th>DoctorName</th>
-											<th>PatientID</th>
-											<th>PatientName</th>
-											<th>Speciality</th>
-											<th>Source</th>
-											<th>Visit Type</th>
-											<th>Remarks</th>
-											<th>Booked Date</th>
-											<th>Status</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>1</td>
-											<td>22-03-2018</td>
-											<td>10:00 AM</td>
-											<td>Edinburgh</td>
-											<td>P00015461</td>
-											<td>Umesh</td>
-											<td>Fever</td>
-											<td>Web</td>
-											<td>1st</td>
-											<td>full of fever</td>
-											<td>20-03-2018</td>
-											<td>Booked</td>
-											<td>
-												<button class="btn btn-success  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-check"></i></span>CONFIRM</button>
-												<button class="btn btn-danger  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-times"></i></span>CANCEL</button>
-												<button class="btn btn-info  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-history"></i></span>RESCHEDULE</button>
-											</td>
-										</tr>
-										<tr>
-											<td>1</td>
-											<td>22-03-2018</td>
-											<td>10:00 AM</td>
-											<td>Edinburgh</td>
-											<td>P00015461</td>
-											<td>Umesh</td>
-											<td>Fever</td>
-											<td>Web</td>
-											<td>1st</td>
-											<td>full of fever</td>
-											<td>20-03-2018</td>
-											<td>Booked</td>
-											<td>
-												<button class="btn btn-success  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-check"></i></span>CONFIRM</button>
-												<button class="btn btn-danger  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-times"></i></span>CANCEL</button>
-												<button class="btn btn-info  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-history"></i></span>RESCHEDULE</button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
+						{{ datatable }}
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 	<div class="right-sidebar">
 		<div class="slimscrollright">
 			<div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
@@ -186,50 +124,12 @@
 <!-- end - This is for export functionality only -->
 <script>
 $(document).ready(function() {
-	$('#myTable').DataTable();
 	$(document).ready(function() {
-		var table = $('#example').DataTable({
-			"columnDefs": [{
-				"visible": false,
-				"targets": 2
-			}],
-			"order": [
-				[2, 'asc']
-			],
-			"displayLength": 25,
-			"drawCallback": function(settings) {
-				var api = this.api();
-				var rows = api.rows({
-					page: 'current'
-				}).nodes();
-				var last = null;
-				api.column(2, {
-					page: 'current'
-				}).data().each(function(group, i) {
-					if (last !== group) {
-						$(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-						last = group;
-					}
-				});
-			}
-		});
-		// Order by the grouping
-		$('#example tbody').on('click', 'tr.group', function() {
-			var currentOrder = table.order()[0];
-			if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-				table.order([2, 'desc']).draw();
-			} else {
-				table.order([2, 'asc']).draw();
-			}
+		$('#myTable').DataTable({
 		});
 	});
 });
-$('#example23').DataTable({
-	dom: 'Bfrtip',
-	buttons: [
-		'copy', 'csv', 'excel', 'pdf', 'print'
-	]
-});
+
 
 </script>
 <!-- Clock Plugin JavaScript -->
@@ -292,7 +192,7 @@ $('.input-daterange-datepicker').daterangepicker({
 });
 $('.input-daterange-timepicker').daterangepicker({
 	timePicker: true,
-	format: 'MM/DD/YYYY h:mm A',
+	format: 'MM/DD/YYYY h:mm A',clinician/dashboard/base.html.j2
 	timePickerIncrement: 30,
 	timePicker12Hour: true,
 	timePickerSeconds: false,

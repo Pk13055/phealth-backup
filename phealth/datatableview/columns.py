@@ -390,6 +390,7 @@ class Column(six.with_metaclass(ColumnMetaclass)):
         Renders a simple ``<th>`` element with ``data-name`` attribute.  All items found in the
         ``self.attributes`` dict are also added as dom attributes.
         """
+
         return mark_safe(u"""<th data-name="{name_slug}"{attrs}>{label}</th>""".format(**{
             'name_slug': slugify(self.label),
             'attrs': self.attributes,

@@ -6,7 +6,8 @@ from . import views
 app_name = "clinician"
 
 appointment_routes = [
-	url(r'^daily/?$', views.appointment_daily, name='appointment_daily'),
+	url(r'^daily/?$', views.AppointmentTableView.as_view(), name='appointment_daily'),
+	path('daily/<str:date>/<str:status>/', views.AppointmentTableView.as_view(), name='appointment_daily'),
 	url(r'^weekly/?$', views.appointment_weekly, name='appointment_weekly'),
 	url(r'^monthly/?$', views.appointment_monthly, name='appointment_monthly'),
 ]

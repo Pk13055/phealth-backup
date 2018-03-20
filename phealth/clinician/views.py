@@ -1,12 +1,14 @@
-
 from django import forms
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from phealth.utils import match_role, signin
-from api.models import (Clinician, User, Speciality, Appointment  )
+from phealth.utils import match_role, signin, get_clinician
+from api.models import (Clinician, User, Speciality, Appointment)
 from querystring_parser import parser
 import datetime
 import json
+from datatableview.views import DatatableView, XEditableDatatableView
+from datatableview.helpers import make_xeditable 
+from datatableview import Datatable, ValuesDatatable, DateTimeColumn
 
 # Create your views here.
 
@@ -195,15 +197,45 @@ def new_home(request):
 
 # appointment routes
 
-def appointment_daily(request):
-	''' appointment stats '''
+class AppointmentTableView(DatatableView):
+	model = Appointment
 
-	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	class datatable_class(Datatable):
+		time_parsed = DateTimeColumn('Time', None, processor='get_time')
 
-	return render(request, 'clinician/dashboard/appointments/daily.html.j2', context={
-		'title' : "appointment - Daily",
-		'clinician' : c,
-		})
+		class Meta:
+			columns = ['date', 'time_parsed', 'status', 'provider']
+			labels = {
+				'date': 'Date',
+				'status': 'Status',
+				'provider': 'Provider',
+			}
+			processors = {
+				'provider': 'get_provider_name',
+				'time_parsed': 'get_time',
+			}
+
+		def get_provider_name(self, instance, **kwargs):
+			return instance.provider.name
+		
+		def get_time(self, instance, **kwargs):
+			time = instance.time
+			m = 'PM' if int(time.hour / 12) else 'AM'
+			return '{}:{} {}'.format(time.hour % 12, time.minute, m)
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'Appointments'
+		context['clinician'] = get_clinician(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'clinician/dashboard/appointments/daily.html.j2'
+
+	def get_queryset(self):
+		c = get_clinician(self.request.session['email'])
+		return Appointment.objects.filter(under=c)
+
 
 def appointment_weekly(request):
 	''' appointment stats '''
