@@ -323,6 +323,7 @@ def appointment_weekly(request):
 		'days': days
 	})
 
+
 def appointment_monthly(request):
 	''' appointment stats '''
 
@@ -354,15 +355,12 @@ def timing_work(request):
 				timings.append(list(map(lambda x: datetime.datetime.strptime(x,
 				 '%H:%M:%S').time(), p_dict['timings'][day])))
 			except ValueError:
-				print("BT")
 				try:
 					timings.append(list(map(lambda x: datetime.datetime.strptime(x,
 				 	'%H:%M').time(), p_dict['timings'][day])))
 				except KeyError:
-					print("BT")
 					timings.append(actual)
 			except KeyError:
-				print("BT")
 				timings.append(actual)
 
 		c.work_timings = timings

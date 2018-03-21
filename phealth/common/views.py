@@ -1,5 +1,6 @@
 import datetime
 import hashlib
+import dateutil
 from random import randint
 import requests
 
@@ -10,9 +11,10 @@ from django.template.context_processors import csrf
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from rest_framework.renderers import JSONRenderer
-from api.models import User, Speciality, Address, Coupon
+from api.models import User, Speciality, Address, Coupon, Appointment
 from phealth import utils
 
 # Create your views here.
@@ -160,3 +162,37 @@ def verify_coupon(request):
 		'status' : status,
 		'data' : data
 		})
+
+
+@csrf_exempt
+def appointment_list(request):
+	''' route to retrieve appointment data | start and end as get params '''
+	status = 1
+
+	get_time = lambda x: dateutil.parser.parse(x)
+
+	if request.method == "GET":
+		from_date = request.GET.get('start', False)
+		to_date = request.GET.get('end', False)
+	elif request.method == "POST":
+		from_date = request.POST.get('start', False)
+		to_date = request.POST.get('end', False)
+
+	if not from_date and not to_date:
+		status = 0
+		return JsonResponse([], safe=False)
+
+	class AppointmentSerializer(ModelSerializer):
+		title = serializers.CharField(source='status')
+		start = serializers.DateTimeField(source='from_timestamp')
+		end = serializers.DateTimeField(source='to_timestamp')
+		className = serializers.CharField(source='css_class')
+		# add additional information here later
+		class Meta:
+			model = Appointment
+			fields = ('id', 'start', 'end', 'title', 'className')
+
+	q = Appointment.objects.filter(from_timestamp__gte=from_date, to_timestamp__lte=to_date)
+	data = AppointmentSerializer(q, many=True)
+	
+	return JsonResponse(data.data, safe=False)

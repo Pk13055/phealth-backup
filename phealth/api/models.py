@@ -20,6 +20,9 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User as admin_user
 from django.contrib.postgres.fields import ArrayField, HStoreField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # functions for default
 def current_timestamp():
@@ -553,13 +556,44 @@ class Appointment(models.Model):
 		('cancelled', 'cancelled'),
 		('rescheduled', 'rescheduled'),
 		)
+	
+	CSS_options = (
+        ('event-info', 'Info'),
+        ('event-success', 'Success'),
+        ('event-warning', 'Warning'),
+        ('event-special', 'Special'),
+    )
+
+	# indexing and meta fields
 	id = models.AutoField(primary_key=True)
-	create_on = models.DateTimeField(default=current_timestamp)
+	create_on = models.DateTimeField(default=current_timestamp, editable=False)
+	date_modified = models.DateTimeField(default=current_timestamp, editable=False)
+	
 	date = models.DateField()
 	time = models.TimeField()
+	duration = models.PositiveIntegerField(default=30)
 	status = models.CharField(choices=status_options, default='pending', max_length=40)
 	under = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
 	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
+	
+	# calendar config fields
+	from_timestamp = models.DateTimeField(default=current_timestamp, editable=False)
+	to_timestamp = models.DateTimeField(default=current_timestamp, editable=False)
+	css_class = models.CharField(max_length=20, choices=CSS_options, editable=False, default='event-info')
+
+	def __str__(self):
+		return "<A: %s -> %s >" % (self.date, self.time)
+
+	def save(self, *args, **kwargs):
+		self.date_modified = current_timestamp()
+
+		self.from_timestamp = datetime.datetime.combine(self.date, self.time)
+		self.to_timestamp = self.from_timestamp + datetime.timedelta(minutes=self.duration)
+
+		ops, css = [_[0] for _ in self.status_options], [_[0] for _ in self.CSS_options]
+		self.css_class = css[ops.index(self.status)]
+
+		super(Appointment, self).save(*args, **kwargs)
 
 
 class Testimonial(models.Model):

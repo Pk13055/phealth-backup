@@ -27,26 +27,39 @@
 	<link href="{% static 'common/dashboard/css/animate.css' %}" rel="stylesheet">
 	<!-- Custom CSS -->
 	<link href="{% static 'common/dashboard/css/style.css' %}" rel="stylesheet">
+	
 	<!-- color CSS -->
+	<link href="{% static 'common/dashboard/css/colors/default.css' %}" id="theme" rel="stylesheet">
+
+	
+	<!-- Custom (functionality) JS/CSS -->
+
 	<script src="{% static 'common/dashboard/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-	<link href="{% static 'common/dashboard/css/colors/default.css' %}" id="theme" rel="stylesheet">
-	<!-- <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+	
+	
+	<!-- FullCalendar Files -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.print.css" media='print'> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
+	
+	<!-- DataTables files -->
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/> 
 	<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.js"></script>
 	<script src="{% static 'js/datatableview.min.js' %}"></script>
-	<script>
-	datatableview.auto_initialize = true;
-	</script>
-	{% block styles %} {% endblock %}
+	<script> datatableview.auto_initialize = true;</script>
+	
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+	<![endif]-->
+	
+	{% block styles %} {% endblock %}
+	
 </head>
 
 <body class="fix-header">
@@ -164,7 +177,7 @@
 	<!-- Custom Theme JavaScript -->
 	<script src="{% static 'common/dashboard/js/custom.min.js' %}"></script>
 	<script src="{% static 'common/dashboard/js/dashboard1.js' %}"></script>
-	{# <script src="{% static 'common/dashboard/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script> #}
+	<script src="{% static 'common/dashboard/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
 	<!--Style Switcher -->
 	<script src="{% static 'common/dashboard/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
 	{% block script %} {% endblock %}

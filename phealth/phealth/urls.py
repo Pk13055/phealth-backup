@@ -23,7 +23,7 @@ from . import settings
 urlpatterns = [
 
     url(r'^summernote/', include('django_summernote.urls')),
-
+    
     url(r'^$', common.home_route, name='home'),
     url(r'^api/', include('api.urls', namespace='api')),
     url(r'^common/', include('common.urls', namespace='common')),

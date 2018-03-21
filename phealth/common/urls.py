@@ -16,5 +16,6 @@ urlpatterns = [
 	url(r'^payment/', include(payment_routes)),
 	url(r'^otp/?$', views.send_OTP, name='otp'),
 	url(r'^coupon/?$', views.verify_coupon, name='verify_coupon'),
+	url(r'^appointment_list/?$', views.appointment_list, name='appointment_list'),
 	path('autocomplete/<str:category>/<str:query>/', views.autocomplete, name='autocomplete')
 ]
