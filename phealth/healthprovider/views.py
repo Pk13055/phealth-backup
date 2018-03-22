@@ -602,7 +602,6 @@ def payment_view(request):
 
 # Clinician Routes
 
-
 # @match_role("healthprovider")
 def clinician_new(request):
 	''' route for clinician - new  '''
@@ -615,13 +614,52 @@ def clinician_new(request):
 	})
 
 	
-# @match_role("healthprovider")
-def clinician_view(request):
-	''' route for clinician - view  '''
+# # @match_role("healthprovider")
+# def clinician_view(request):
+# 	''' route for clinician - view  '''
 	
-	p = Provider.objects.filter(poc__email=request.session['email']).first()
+# 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
-	return render(request, 'healthprovider/dashboard/clinician/view.html.j2', context={
-		'title' : "clinician - view",
-	})
+# 	return render(request, 'healthprovider/dashboard/clinician/view.html.j2', context={
+# 		'title' : "clinician - view",
+# 	})
+
+class ClinicianTableView(DatatableView):
+	model = Clinician
+
+	class datatable_class(Datatable):
+		user_name = TextColumn('Doctor\'s Name', None, processor='get_clinician_name')
+		user_email = TextColumn('Email', None, processor='get_clinician_email')
+		user_mobile = TextColumn('Mobile', None, processor='get_clinician_mobile')
+		specialities_parsed = TextColumn('Specialities', None, processor='get_specialities')
+
+		class Meta:
+			columns = ['user_name', 'user_email', 'user_mobile', 'specialities_parsed']
+			
+		def get_clinician_name(self, instance, **kwargs):
+			return instance.user.name
+
+		def get_clinician_email(self, instance, **kwargs):
+			return instance.user.email
+
+		def get_clinician_mobile(self, instance, **kwargs):
+			return instance.user.mobile
+		
+		def get_specialities(self, instance, **kwargs):
+			# need to work on this
+			# return instance.specialities
+			return 'Speciality'
+			
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'Clinicians'
+		context['healthprovider'] = get_provider(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'healthprovider/dashboard/clinicians/view.html.j2'
+
+	def get_queryset(self):
+		p = get_provider(self.request.session['email'])
+		return p.clinicians.all()

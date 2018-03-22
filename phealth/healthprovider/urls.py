@@ -47,7 +47,7 @@ payment_routes = [
 
 clinician_routes = [
 	url(r'^new/?$', views.clinician_new, name="clinician_new"),
-	url(r'^view/?$', views.clinician_view, name="clinician_view"),
+	url(r'^view/?$', views.ClinicianTableView.as_view(), name="clinician_view"),
 ]
 
 # dashboard routes
