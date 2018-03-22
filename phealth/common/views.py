@@ -1,21 +1,24 @@
 import datetime
 import hashlib
-import dateutil
 from random import randint
-import requests
 
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.template.context_processors import csrf
-from django.db.models import Q
-from django.views.decorators.http import require_POST
+import dateutil
+import requests
 from django.core.mail import send_mail
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.template.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.http import require_POST
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
 from rest_framework.renderers import JSONRenderer
-from api.models import User, Speciality, Address, Coupon, Appointment
+from rest_framework.serializers import ModelSerializer
+
+from api.models import (Address, Appointment, Clinician, Coupon, Provider,
+                        Speciality, User)
 from phealth import utils
+from phealth.utils import match_role
 
 # Create your views here.
 
@@ -165,11 +168,25 @@ def verify_coupon(request):
 
 
 @csrf_exempt
+@match_role(["clinician", "healthprovider", "poc"])
 def appointment_list(request):
 	''' route to retrieve appointment data | start and end as get params '''
+	
 	status = 1
-
 	get_time = lambda x: dateutil.parser.parse(x)
+	init_set = Appointment.objects
+	
+	# filter initial appointment set according to user type
+	u = User.objects.filter(email=request.session['email']).first()
+	if u.role == "clinician":
+		c = Clinician.objects.filter(user=u).first()
+		init_set = c.appointment_set
+	elif u.role == "healthprovider":
+		p = Provider.objects.filter(poc=u).first()
+		init_set = p.appointment_set
+	elif u.role == "poc":
+		pass
+		
 
 	if request.method == "GET":
 		from_date = request.GET.get('start', False)
@@ -192,7 +209,7 @@ def appointment_list(request):
 			model = Appointment
 			fields = ('id', 'start', 'end', 'title', 'className')
 
-	q = Appointment.objects.filter(from_timestamp__gte=from_date, to_timestamp__lte=to_date)
+	q = init_set.filter(from_timestamp__gte=from_date, to_timestamp__lte=to_date)
 	data = AppointmentSerializer(q, many=True)
 	
 	return JsonResponse(data.data, safe=False)

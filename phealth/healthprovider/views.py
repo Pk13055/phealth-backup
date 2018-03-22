@@ -556,7 +556,7 @@ def appointment_monthly(request):
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
-	return render(request, 'healthprovider/dashboard/appointment/monthly.html.j2', context={
+	return render(request, 'healthprovider/dashboard/appointments/monthly.html.j2', context={
 		'title' : "appointment - monthly",
 	})
 

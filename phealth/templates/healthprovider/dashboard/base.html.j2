@@ -30,24 +30,35 @@
     <link href="{% static 'common/dashboard/css/style.css' %}" rel="stylesheet">
     <!-- color CSS -->
     <link href="{% static 'common/dashboard/css/colors/default.css' %}" id="theme" rel="stylesheet">
+
+    <!-- Custom (functionality) JS/CSS -->
+
+    <script src="{% static 'common/dashboard/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+
+    <!-- FullCalendar Files -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.print.css" media='print'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
+
+    <!-- DataTables files -->
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"
+    />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.js"></script>
+    <script src="{% static 'js/datatableview.min.js' %}"></script>
+    <script>
+        datatableview.auto_initialize = true;
+    </script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-    <script src="{% static 'common/dashboard/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-
-    <!-- DataTables files -->
-	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/> 
-	<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.js"></script>
-	<script src="{% static 'js/datatableview.min.js' %}"></script>
-	<script> datatableview.auto_initialize = true;</script>
-    
     {% block styles %} {% endblock styles %}
 </head>
 
@@ -64,18 +75,14 @@
                     <!-- Logo -->
                     <a class="logo" href="{% url 'healthprovider:dashboard_home' %}">
                         <!--This is dark logo icon-->
-                        <img src="{% static 'common/dashboard/plugins/images/admin-logo.png' %}" alt="home" class="dark-logo"
-                        />
+                        <img src="{% static 'common/dashboard/plugins/images/admin-logo.png' %}" alt="home" class="dark-logo" />
                         <!--This is light logo icon-->
-                        <img src="{% static 'common/dashboard/plugins/images/admin-logo-dark.png' %}" alt="home" class="light-logo"
-                        />
+                        <img src="{% static 'common/dashboard/plugins/images/admin-logo-dark.png' %}" alt="home" class="light-logo" />
                         </b>
                         <!--This is dark logo text-->
-                        <img src="{% static 'common/dashboard/plugins/images/admin-text.png' %}" alt="home" class="dark-logo"
-                        />
+                        <img src="{% static 'common/dashboard/plugins/images/admin-text.png' %}" alt="home" class="dark-logo" />
                         <!--This is light logo text-->
-                        <img src="{% static 'common/dashboard/plugins/images/admin-text-dark.png' %}" alt="home" class="light-logo"
-                        />
+                        <img src="{% static 'common/dashboard/plugins/images/admin-text-dark.png' %}" alt="home" class="light-logo" />
                         </span>
                     </a>
                 </div>
@@ -89,8 +96,7 @@
                 <ul class="nav navbar-top-links navbar-right pull-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
-                            <img src="{% static 'common/dashboard/plugins/images/users/varun.jpg' %}" alt="user-img" width="36"
-                                class="img-circle">
+                            <img src="{% static 'common/dashboard/plugins/images/users/varun.jpg' %}" alt="user-img" width="36" class="img-circle">
                             <b class="hidden-xs">Health Provider</b>
                             <span class="caret"></span>
                         </a>
@@ -98,8 +104,7 @@
                             <li>
                                 <div class="dw-user-box">
                                     <div class="u-img">
-                                        <img src="{% static 'common/dashboard/plugins/images/users/varun.jpg' %}" alt="user"
-                                        />
+                                        <img src="{% static 'common/dashboard/plugins/images/users/varun.jpg' %}" alt="user" />
                                     </div>
                                     <div class="u-text">
                                         <h4>Organization</h4>
