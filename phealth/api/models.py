@@ -230,6 +230,7 @@ class Speciality(models.Model):
 		db_table = 'specialities'
 
 
+
 # user associated
 
 class Question(models.Model):
@@ -268,7 +269,31 @@ class User(models.Model):
 		('admin', 'admin'), # main admin dashboard
 
 		)
+	
+	basic_education_choices = (
 
+		('10', '10'),
+		('10+2', '10+2'),
+
+		)
+
+	post_graduate_choices = (
+		('none', 'none'),
+		('pg', 'pg'),
+		('pglist', 'pglist'),
+		)
+
+	diploma_choices = (
+		('none', 'none'),
+		('diploma', 'diploma'),
+		('diplomalist', 'diplomalist'),
+		)
+
+	super_speciality_choices = (
+		('none','none'),
+		('super_speciality1', 'super_speciality1'),
+		('super_speciality2', 'super_speciality2'),
+		)
 	# whether the user is active or not
 	status = models.NullBooleanField(default=True, editable=False)
 	role = models.CharField(choices=role_choices, editable=False, max_length=30)
@@ -292,6 +317,16 @@ class User(models.Model):
 	answer = models.CharField(max_length=100)
 	profile_pic = models.ImageField(upload_to='profile_pics',
 	 default='default_profile.jpg')
+
+	#NEW FIELDS ADDED FOR EDUCATION OF USER
+	basic_education = models.CharField(choices=basic_education_choices, max_length=30, default='10')
+	post_graduate = models.CharField(choices=post_graduate_choices, max_length=30, default='none')
+	diploma = models.CharField(choices=diploma_choices, max_length=30, default='none')
+	super_speciality = models.CharField(choices=super_speciality_choices, max_length=30, default='none')
+	other_trainings = models.TextField(default="TEST")
+	other_degrees = models.TextField(default="TEST1")
+
+	
 
 	def __str__(self):
 		return str(self.email)
@@ -450,6 +485,16 @@ class Clinician(models.Model):
 
 	education = models.TextField()
 	experience = ArrayField(models.TextField(), null=True, blank=True)
+
+	##NEW ROUTES ADDED
+	offerings = ArrayField(models.TextField(), null=True, blank=True)
+	conditions_treated = ArrayField(models.TextField(), null=True, blank=True)
+	procedures = ArrayField(models.TextField(), null=True, blank=True)
+	awards = ArrayField(models.TextField(), null=True, blank=True)
+	fee = models.PositiveSmallIntegerField(default=0)
+	amount = models.PositiveSmallIntegerField(default=0)
+	discount = models.PositiveSmallIntegerField(default=0)
+	discount_sub = models.PositiveSmallIntegerField(default=0)
 
 	class Meta:
 		managed = True

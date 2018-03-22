@@ -1,4 +1,4 @@
-{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %}
+{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %} {% load bootstrap %}
 <div class="container-fluid">
 	<div class="row bg-title">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -23,81 +23,15 @@
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<form action="consultation.html" class="form-horizontal">
+						<form class="form-horizontal" method="POST">
 							<div class="form-body">
-								<h3 class="box-title">Education & Trainings</h3>
+								<h3 class="box-title">Education &amp; Trainings</h3>
 								<hr class="m-t-0 m-b-40">
 								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="qualification_id" class="col-md-3">Basic </label>
-											<div class="col-md-9">
-												<select name="qualification_id[]" class="form-control">
-													<option value="Select from List">Select from List</option>
-													<option value="">10</option>
-													<option value="">10+2</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="qualification_id" class="col-md-3">Diploma </label>
-											<div class="col-md-9">
-												<select name="qualification_id[]" id="qualification_id[]" class="form-control">
-													<option value="Select from List">Select from List</option>
-													<option value="">Diploma</option>
-													<option value="">Diploma List</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="qualification_id" class="col-md-3">Post Graduation </label>
-											<div class="col-md-9">
-												<select name="qualification_id[]" id="qualification_id[]" class="form-control">
-													<option value="Select from List">Select from List</option>
-													<option value="">Pg</option>
-													<option value="">Pg list</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="qualification_id" class="col-md-3">Super Speciality </label>
-											<div class="col-md-9">
-												<select name="qualification_id[]" id="qualification_id[]" class="form-control">
-													<option value="Select from List">Select from List</option>
-													<option value="">Speciality List</option>
-													<option value="">Speciality List</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="otherdegree" class="col-md-3">Others Degrees</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="otherdegree" id="otherdegree">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="othertraining" class="col-md-3">Others Trainings</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="othertraining" id="othertraining">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="Upload file" class="col-md-3">Upload Photo </label>
-											<div class="col-md-9">
-												<input type="File" class="form-control" name="image" id="image">
-											</div>
+									<div class="row">
+										<div class="panel-body">
+											{% csrf_token %}
+											{{ form | bootstrap }}
 										</div>
 									</div>
 									<div class="row">
@@ -110,7 +44,7 @@
 									<div class="col-md-12">
 										<div class="row">
 											<div class="col-md-offset-10 col-md-2">
-												<button type="submit" class="btn btn-success">Save & Go</button>
+												<button type="submit" class="btn btn-success">Save &amp; Go</button>
 												<button type="button" class="btn btn-default">Cancel</button>
 											</div>
 										</div>

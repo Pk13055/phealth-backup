@@ -6,28 +6,20 @@
 	<h2>Clinician Registration</h2>
 </div>
 <div class="row">
-	<div class="dropdown">
-		<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" color="black">
-			Speciality
-		</button>
-		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-			{% for speciality in speciality_list %}
-			<a class="dropdown-item" href="#">
-				<div class="well well-lg">
-					<h4>{{speciality.name}}</h4>
-					<p>
-						{{speciality.description}}
-					</p>
-				</div>
-			</a>
-			{% endfor %}
-		</div>
-	</div>
+	{% for speciality in speciality_list %}
+		<a class="dropdown-item" href="#">
+			<div class="well well-lg">
+				<h4>{{speciality.name}}</h4>
+				<p>
+					{{speciality.description}}
+				</p>
+			</div>
+		</a>
+	{% endfor %}
 </div>
 <form method="POST">
 	<div class="row">
 		<div class="panel panel-success">
-			<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i>Speciality Information</div>
 			<div class="panel-body">
 				{% csrf_token %}
 				{{ speciality_form | bootstrap }}

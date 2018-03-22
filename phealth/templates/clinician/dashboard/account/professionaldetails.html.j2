@@ -1,4 +1,5 @@
 {% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %}
+{% load bootstrap %}
 <div class="container-fluid">
 	<div class="row bg-title">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -13,7 +14,7 @@
 		<!-- /.col-lg-12 -->
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12">	
 			<div class="panel panel-info">
 				<div class="panel-heading">
 					My Account
@@ -23,39 +24,30 @@
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<form action="education.html" class="form-horizontal">
-							<div class="form-body">
-								<h3 class="box-title">Professional Information</h3>
-								<hr class="m-t-0 m-b-40">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for=" Speciality" class="col-md-3"> Speciality</label>
-											<div class="col-md-9">
-												<select name="Obstetrician" class="form-control">
-													<option value="" disabled="" selected="">Select Speciality</option>
-													<option value="urologist">urologist</option>
-													<option value="Cardiologist">Cardiologist</option>
-													<option value="Dermatologist">Dermatologist</option>
-													<option value="Surgery">Surgery</option>
-													<option value="neurologist">neurologist</option>
-												</select>
-											</div>
-										</div>
-									</div>
+						<div class="row">
+							{% for speciality in speciality_list %}
+							<a class="dropdown-item" href="#">
+								<div class="well well-lg">
+									<h4>{{speciality.name}}</h4>
+									<p>
+										{{speciality.description}}
+									</p>
+								</div>
+							</a>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="row">
+						<form method="POST">
+							<div class="panel panel-success">
+								<div class="panel-body">
+									{% csrf_token %}
+									{{ speciality_form | bootstrap }}
 								</div>
 							</div>
-							<div class="form-actions">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="row">
-											<div class="col-md-offset-10 col-md-2">
-												<button type="submit" class="btn btn-success">Save & Go</button>
-												<button type="button" class="btn btn-default">Cancel</button>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6"> </div>
+							<div class="row">
+								<div class="col-xs-12">
+									<button class="btn btn-block btn-primary"><i class="fa fa-add fa-lg"></i> Add</button>
 								</div>
 							</div>
 						</form>
