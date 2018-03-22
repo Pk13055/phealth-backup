@@ -23,63 +23,25 @@
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<form action="conditions.html" class="form-horizontal">
-							<div class="form-body">
-								<h3 class="box-title">Offerings</h3>
-								<hr class="m-t-0 m-b-40">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="checkbox">
-											<input id="checkbox2" type="checkbox">
-											<label for="checkbox2">
-												Anaesthesiology & Emergency Medicine
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox3" type="checkbox">
-											<label for="checkbox3">
-												Ayurvedic
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox4" type="checkbox">
-											<label for="checkbox4">
-												Cardio Thorasic Surgery
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox5" type="checkbox">
-											<label for="checkbox5">
-												Cochlar Implant Surgery
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox6" type="checkbox">
-											<label for="checkbox6">
-												Cardiology
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox6" type="checkbox">
-											<label for="checkbox6">
-												Cosmetology - Beutycare
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox7" type="checkbox">
-											<label for="checkbox7">
-												Dermatology - Skincare
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox8" type="checkbox">
-											<label for="checkbox8">
-												Diet & Nutrition
-											</label>
-										</div>
+						<div class="form-body">
+							<h3 class="box-title">Offerings</h3>
+							<hr class="m-t-0 m-b-40">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="checkbox">
+										{% for offering in offerings %}
+										<input id="checkbox2" type="checkbox">
+										<label for="checkbox2">
+											{{offering}}
+										</label>
+										{% endfor %}
 									</div>
 								</div>
 							</div>
+						</div>
+						<form method="POST">
+							{% csrf_token %}
+							<input type="text" name="offering">Add Offering</input>
 							<div class="form-actions">
 								<div class="row">
 									<div class="col-md-12">
@@ -90,7 +52,6 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-6"> </div>
 								</div>
 							</div>
 						</form>
@@ -100,5 +61,6 @@
 		</div>
 	</div>
 </div>
+
 <!-- /.container-fluid -->
 {% endblock content %}

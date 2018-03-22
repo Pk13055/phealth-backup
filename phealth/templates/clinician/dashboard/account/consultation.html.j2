@@ -1,4 +1,4 @@
-{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %}
+{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %} {% load bootstrap %}
 <div class="container-fluid">
 	<div class="row bg-title">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -28,44 +28,10 @@
 								<h3 class="box-title">Consultation Fee</h3>
 								<hr class="m-t-0 m-b-40">
 								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="consultationfee" class="col-md-3">Consultation Fee</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="consultationfee" id="consultationfee">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="discount1st" class="col-md-3">Discount for 1st Consultation</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="discount1st" id="discount1st">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="discountsubsequent" class="col-md-3">Discount for Subsequent Consultation</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="discountsubsequent" id="discountsubsequent">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="activefrom" class="col-md-3">Active From</label>
-											<div class="col-md-9">
-												<input type="date" class="form-control" name="activefrom" id="activefrom">
-											</div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="activeto" class="col-md-3">Active To</label>
-											<div class="col-md-9">
-												<input type="date" class="form-control" name="activeto" id="activeto">
-											</div>
+									<div class="row">
+										<div class="panel-body">
+											{% csrf_token %}
+											{{ form | bootstrap }}
 										</div>
 									</div>
 									<div class="row">

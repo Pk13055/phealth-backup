@@ -66,7 +66,7 @@ def dashboard(request):
 def speciality(request):
 	u = Clinician.objects.filter(user__email=request.session['email']).first()
 	n = u.specialities.all()
-	print("I was here")
+	# print("I was here")
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
 			model = Speciality
@@ -463,32 +463,69 @@ def basic_details(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	u = c.user
+	class UserForm(forms.ModelForm):
+		class Meta:
+			model = User
+			fields = ('name', 'gender')
+
+	if request.method == "POST":
+		b = UserForm(request.POST, instance=u)
+		if b.is_valid():
+			b.save()
 
 	return render(request, 'clinician/dashboard/account/basic.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'form' : UserForm(instance=u),
 		})
 
 
 def professional_info(request):
-	''' account route for '''
-
-	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	u = Clinician.objects.filter(user__email=request.session['email']).first()
+	n = u.specialities.all()
+	# print("I was here")
+	class SpecialityForm(forms.ModelForm):
+		class Meta:
+			model = Speciality
+			fields = ('name', 'description',)
+	v = SpecialityForm()
+	if request.method == "POST":
+		b = SpecialityForm(request.POST, request.FILES)
+		if b.is_valid():
+			u.save()
+			speciality = b.save()
+			# speciality.save()
+			u.specialities.add(speciality)
+		else:
+			v = b
 
 	return render(request, 'clinician/dashboard/account/professionaldetails.html.j2', context={
-		'title' : "Account - ",
-		'clinician' : c,
-		})
+	 	"title": "Account - ",
+	 	"speciality_form" : v,
+	 	"speciality_list" : n,
+	})
+
 
 
 def education_training(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	u = c.user
+	class EducationForm(forms.ModelForm):
+		class Meta:
+			model = User
+			fields = ('basic_education','post_graduate', 'diploma', 'super_speciality', 'other_trainings', 'other_degrees', 'profile_pic')
+	if request.method == "POST":
+		e = EducationForm(request.POST, request.FILES, instance=u)
+		if e.is_valid():
+			e.save()		
 
 	return render(request, 'clinician/dashboard/account/education.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'form' : EducationForm(instance=u),
 		})
 
 
@@ -496,10 +533,20 @@ def consultation_fee(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	u = c.user
+	class FeeForm(forms.ModelForm):
+		class Meta:
+			model = Clinician
+			fields = ('fee', 'amount', 'discount', 'discount_sub')
+	if request.method == "POST":
+		f = FeeForm(request.POST, request.FILES, instance=u)
+		if f.is_valid():
+			f.save()
 
 	return render(request, 'clinician/dashboard/account/consultation.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'form' : FeeForm(instance=u),
 		})
 
 
@@ -507,10 +554,16 @@ def offerings(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-
+	o = c.offerings
+	if request.method == "POST":
+		print(request.POST)
+		print(c.offerings)
+		c.offerings.append(request.POST['offering'])
+		c.save()
 	return render(request, 'clinician/dashboard/account/offerings.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'offerings' : o,
 		})
 
 
@@ -518,10 +571,20 @@ def conditions_treated(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	ct = c.conditions_treated
+	if request.method == "POST":
+		print(request.POST)
+		print(c.conditions_treated)
+		if c.conditions_treated == None:
+			c.conditions_treated = [request.POST['condition']]
+		else:
+			c.conditions_treated.append(request.POST['condition'])
+		c.save()
 
 	return render(request, 'clinician/dashboard/account/conditions.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'conditions_treated' : ct,
 		})
 
 
@@ -529,10 +592,21 @@ def procedures(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	p = c.procedures
+
+	if request.method == "POST":
+		print(request.POST)
+		print(c.procedures)
+		if c.procedures == None:
+			c.procedures = [request.POST['procedure']]
+		else:
+			c.procedures.append(request.POST['procedure'])
+		c.save()
 
 	return render(request, 'clinician/dashboard/account/procedures.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'procedures' : p,
 		})
 
 
@@ -540,10 +614,21 @@ def experience(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	e = c.experience
+
+	if request.method == "POST":
+		print(request.POST)
+		print(c.experience)
+		if c.experience == None:
+			c.experience = [request.POST['experience']]
+		else:
+			c.experience.append(request.POST['experience'])
+		c.save()	
 
 	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'experiences': e,
 		})
 
 

@@ -23,34 +23,24 @@
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<form action="experience.html" class="form-horizontal">
-							<div class="form-body">
-								<h3 class="box-title">Procedures</h3>
-								<p>Procedures / Surgeries Performed</p>
-								<hr class="m-t-0 m-b-40">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="checkbox">
-											<input id="checkbox2" type="checkbox">
-											<label for="checkbox2">
-												Surgery1
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox3" type="checkbox">
-											<label for="checkbox3">
-												Surgery2
-											</label>
-										</div>
-										<div class="checkbox">
-											<input id="checkbox4" type="checkbox">
-											<label for="checkbox4">
-												Surgery3
-											</label>
-										</div>
+						<div class="form-body">
+							<h3 class="box-title">Procedures</h3>
+							<p>Procedures / Surgeries Performed</p>
+							<hr class="m-t-0 m-b-40">
+							<div class="row">
+								<div class="col-md-12">
+									{% for procedure in procedures %}
+									<div class="checkbox">
+										<input id="checkbox2" type="checkbox">
+										<label for="checkbox2"> {{procedure}}</label>
 									</div>
+									{% endfor %}
 								</div>
 							</div>
+						</div>
+						<form method="POST">
+							{% csrf_token %}
+							<input type="text" name="procedure">Add Procedure</input>
 							<div class="form-actions">
 								<div class="row">
 									<div class="col-md-12">
