@@ -36,6 +36,14 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!-- DataTables files -->
+	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/> 
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.js"></script>
+	<script src="{% static 'js/datatableview.min.js' %}"></script>
+	<script> datatableview.auto_initialize = true;</script>
+    
     {% block styles %} {% endblock styles %}
 </head>
 

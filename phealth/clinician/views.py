@@ -202,12 +202,11 @@ class AppointmentTableView(DatatableView):
 
 	class datatable_class(Datatable):
 		time_parsed = DateTimeColumn('Time', None, processor='get_time')
-		date_parsed = DateTimeColumn('Date', None, processor='get_date')
 		status_new = TextColumn('Status', None, processor='get_status_raw')
 		button = TextColumn('Confirm/Cancel', None, processor='get_button_raw')
 
 		class Meta:
-			columns = ['date_parsed', 'time_parsed', 'provider', 'status_new', 'button']
+			columns = ['date', 'time_parsed', 'provider', 'status_new', 'button']
 			labels = {
 				'date': 'Date',
 				'provider': 'Provider',
@@ -251,9 +250,6 @@ class AppointmentTableView(DatatableView):
 		def get_provider_name(self, instance, **kwargs):
 			return instance.provider.name
 		
-		def get_date(self, instance, **kwargs):
-			return instance.date.strftime('%d-%m-%Y')
-
 		def get_time(self, instance, **kwargs):
 			time = instance.time
 			m = 'PM' if int(time.hour / 12) else 'AM'
@@ -271,7 +267,8 @@ class AppointmentTableView(DatatableView):
 	def get_queryset(self):
 		today = datetime.date.today()
 		c = get_clinician(self.request.session['email'])
-		return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
+		# return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
+		return Appointment.objects.order_by('time', 'date').filter(under=c)
 
 def confirm_appointment(request, id):
 	c = get_clinician(request.session['email'])
@@ -283,6 +280,7 @@ def confirm_appointment(request, id):
 	else:
 		# add appropriate error handling
 		print("*** Authorization failed ***")
+		return JsonResponse({'status': 'Auth Error'})
 
 	return redirect('clinician:appointment_daily')
 
@@ -296,6 +294,7 @@ def cancel_appointment(request, id):
 	else:
 		# add appropriate error handling
 		print("*** Authorization failed ***")
+		return JsonResponse({'status': 'Auth Error'})
 
 	return redirect('clinician:appointment_daily')
 

@@ -31,9 +31,12 @@ branch_routes = [
 ]
 
 appointment_routes = [
-	url(r'^daily/?$', views.appointment_daily, name="appointment_daily"),
+	url(r'^daily/?$', views.AppointmentTableView.as_view(), name="appointment_daily"),
 	url(r'^weekly/?$', views.appointment_weekly, name="appointment_weekly"),
 	url(r'^monthly/?$', views.appointment_monthly, name="appointment_monthly"),
+	path('confirm/<int:id>/', views.confirm_appointment, name='confirm_appointment'),
+	path('cancel/<int:id>/', views.cancel_appointment, name='cancel_appointment'),
+
 ]
 
 payment_routes = [

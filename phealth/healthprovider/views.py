@@ -1,4 +1,5 @@
 import random
+import datetime
 
 from django import forms
 from django.contrib.auth.hashers import make_password
@@ -6,7 +7,11 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 from api.models import Appointment, Clinician, Provider, Speciality, User
-from phealth.utils import match_role, redirect, signin
+from phealth.utils import match_role, redirect, signin, get_provider
+
+from datatableview.views import DatatableView, XEditableDatatableView
+from datatableview.helpers import make_xeditable 
+from datatableview import Datatable, ValuesDatatable, DateTimeColumn, TextColumn
 
 # Create your views here.
 
@@ -415,27 +420,132 @@ def branch_speciality(request):
 
 # Appointment Routes
 
+class AppointmentTableView(DatatableView):
+	model = Appointment
 
-# @match_role("healthprovider")
-def appointment_daily(request):
-	''' route for appointment - daily  '''
+	class datatable_class(Datatable):
+		time_parsed = DateTimeColumn('Time', None, processor='get_time')
+		status_new = TextColumn('Status', None, processor='get_status_raw')
+		button = TextColumn('Confirm/Cancel', None, processor='get_button_raw')
 
-	p = Provider.objects.filter(poc__email=request.session['email']).first()
+		class Meta:
+			columns = ['date', 'time_parsed', 'provider', 'status_new', 'button']
+			labels = {
+				'date': 'Date',
+				'provider': 'Provider',
+			}
+			processors = {
+				'provider': 'get_provider_name',
+			}
+
+		def get_button_raw(self, instance, **kwargs):
+			if instance.status == 'pending':
+				return '''
+				<p>
+					<a href="/healthprovider/dashboard/appointments/confirm/{}" class="datatable-btn btn btn-success" role="button">Confirm</a>
+					<a href="/healthprovider/dashboard/appointments/cancel/{}" class="datatable-btn btn btn-danger" role="button">Cancel</a>
+				</p>
+				'''.format(instance.id, instance.id)
+			
+			return 'NA'
+
+		def get_status_raw(self, instance, **kwargs):
+			if instance.status == 'confirmed':
+				return '''
+				<p>
+					<a href="#" class="datatable-btn btn btn-success disabled" role="button">Confirmed</a>
+				</p>
+				'''
+			
+			elif instance.status == 'cancelled':
+				return '''
+				<p>
+					<a href="#" class="datatable-btn btn btn-danger disabled" role="button">Cancelled</a>
+				</p>
+				'''
+			
+			return '''
+			<p>
+				<a href="#" class="datatable-btn btn btn-warning disabled" role="button">Pending</a>
+			</p>
+			'''
+
+		def get_provider_name(self, instance, **kwargs):
+			return instance.provider.name
+		
+		def get_time(self, instance, **kwargs):
+			time = instance.time
+			m = 'PM' if int(time.hour / 12) else 'AM'
+			return '{}:{} {}'.format(time.hour % 12, time.minute, m)
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'Appointments'
+		context['healthprovider'] = get_provider(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'healthprovider/dashboard/appointments/daily.html.j2'
+
+	def get_queryset(self):
+		today = datetime.date.today()
+		p = get_provider(self.request.session['email'])
+		# return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
+		return Appointment.objects.order_by('time', 'date').filter(provider=p)
+
+def confirm_appointment(request, id):
+	p = get_provider(request.session['email'])
+	a = Appointment.objects.filter(id=id).first()
 	
-	return render(request, 'healthprovider/dashboard/appointment/daily.html.j2', context={
-		'title' : "appointment - daily",
-	})
+	# return JsonResponse({'provider': a.provider.id, 'user': p.id})
+
+	if a.provider == p:
+		a.status = 'confirmed'
+		a.save()
+	else:
+		# add appropriate error handling
+		print("*** Authorization failed ***")
+		return JsonResponse({'status': 'Auth Error'})
+
+	return redirect('healthprovider:appointment_daily')
+
+def cancel_appointment(request, id):
+	p = get_provider(request.session['email'])
+	a = Appointment.objects.filter(id=id).first()
+	
+	if a.provider == p:
+		a.status = 'cancelled'
+		a.save()
+	else:
+		# add appropriate error handling
+		print("*** Authorization failed ***")
+		return JsonResponse({'status': 'Auth Error'})
+
+	return redirect('healthprovider:appointment_daily')
+
 
 
 # @match_role("healthprovider")
 def appointment_weekly(request):
 	''' route for appointment - weekly  '''
-	
+
+	today = datetime.date.today()
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	
+	days = []
+	for d in range(7):
+		day = today + datetime.timedelta(days=d)
+		days.append({
+			'name': day.strftime('%A'),
+			'date': day.strftime('%d-%m-%Y'),
+			'n_pending': p.appointment_set.filter(date=day).filter(status='pending').count(),
+			'n_confirmed': p.appointment_set.filter(date=day).filter(status='confirmed').count(),
+			'n_cancelled': p.appointment_set.filter(date=day).filter(status='cancelled').count(),			
+		})
 
-
-	return render(request, 'healthprovider/dashboard/appointment/weekly.html.j2', context={
-		'title' : "appointment - weekly",
+	return render(request, 'healthprovider/dashboard/appointments/weekly.html.j2', context={
+		'title': "appointment - weekly",
+		'days': days
 	})
 
 

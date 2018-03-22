@@ -20,6 +20,10 @@ def get_clinician(email):
 	clinician = Clinician.objects.filter(user__email=email).first()
 	return clinician
 
+def get_provider(email):
+	provider = Provider.objects.filter(poc__email=email).first()
+	return provider
+
 def match_role(role_type):
 	'''
 		decorator that wraps protected views

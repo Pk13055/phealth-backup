@@ -1,0 +1,199 @@
+{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %}
+{% block styles %}
+<style>
+.marextra {
+	margin: 2px;
+}
+
+a.datatable-btn {
+	color: white;
+}
+
+a.datatable-btn:hover {
+	color: white;
+}
+
+a.datatable-btn:active {
+	color: white;
+}
+</style>
+<script>
+	datatableview.auto_initialize = false;
+</script>
+{% endblock styles %}
+{% block content %}
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Appointments View Daywise</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="index.html">Dashboard</a></li>
+				<li><a href="#">Appointments</a></li>
+				<li><a href="#">Daily Details</a></li>
+			</ol>
+		</div>
+	</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						Appointments View Daywise
+					</div>
+					<div class="panel-body">
+						{{ datatable }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="right-sidebar">
+		<div class="slimscrollright">
+			<div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+			<div class="r-panel-body">
+				<ul id="themecolors" class="m-t-20">
+					<li><b>With Light sidebar</b></li>
+					<li><a href="javascript:void(0)" data-theme="default" class="default-theme">1</a></li>
+					<li><a href="javascript:void(0)" data-theme="green" class="green-theme">2</a></li>
+					<li><a href="javascript:void(0)" data-theme="gray" class="yellow-theme">3</a></li>
+					<li><a href="javascript:void(0)" data-theme="blue" class="blue-theme">4</a></li>
+					<li><a href="javascript:void(0)" data-theme="purple" class="purple-theme">5</a></li>
+					<li><a href="javascript:void(0)" data-theme="megna" class="megna-theme">6</a></li>
+					<li><b>With Dark sidebar</b></li>
+					<br/>
+					<li><a href="javascript:void(0)" data-theme="default-dark" class="default-dark-theme">7</a></li>
+					<li><a href="javascript:void(0)" data-theme="green-dark" class="green-dark-theme">8</a></li>
+					<li><a href="javascript:void(0)" data-theme="gray-dark" class="yellow-dark-theme">9</a></li>
+					<li><a href="javascript:void(0)" data-theme="blue-dark" class="blue-dark-theme">10</a></li>
+					<li><a href="javascript:void(0)" data-theme="purple-dark" class="purple-dark-theme">11</a></li>
+					<li><a href="javascript:void(0)" data-theme="megna-dark" class="megna-dark-theme working">12</a></li>
+				</ul>
+				<ul class="m-t-20 all-demos">
+					<li><b>Choose other demos</b></li>
+				</ul>
+				<ul class="m-t-20 chatonline">
+					<li><b>Chat option</b></li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/john.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+					</li>
+					<li>
+						<a href="javascript:void(0)"><img src="plugins/images/users/pawandeep.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+{% block script %}
+<!-- Date Picker Plugin JavaScript -->
+<script src="{% static 'plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<!-- end - This is for export functionality only -->
+<script>
+$(document).ready(function() {
+	datatableview.initialize($('table.datatable'));
+});
+</script>
+<!-- Clock Plugin JavaScript -->
+<script src="{% static 'common/dashboard/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js' %}"></script>
+<!-- Color Picker Plugin JavaScript -->
+<script src="{% static 'common/dashboard/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asColor.js' %}"></script>
+<script src="{% static 'common/dashboard/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asGradient.js' %}"></script>
+<script src="{% static 'common/dashboard/plugins/bower_components/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js' %}"></script>
+<!-- Date Picker Plugin JavaScript -->
+<script src="{% static 'common/dashboard/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<!-- Date range Plugin JavaScript -->
+<script src="{% static 'common/dashboard/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+<script src="{% static 'common/dashboard/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script>
+// Clock pickers
+$('#single-input').clockpicker({
+	placement: 'bottom',
+	align: 'left',
+	autoclose: true,
+	'default': 'now'
+});
+$('.clockpicker').clockpicker({
+	donetext: 'Done',
+}).find('input').change(function() {
+	console.log(this.value);
+});
+$('#check-minutes').click(function(e) {
+	// Have to stop propagation here
+	e.stopPropagation();
+	input.clockpicker('show').clockpicker('toggleView', 'minutes');
+});
+if (/mobile/i.test(navigator.userAgent)) {
+	$('input').prop('readOnly', true);
+}
+// Colorpicker
+$(".colorpicker").asColorPicker();
+$(".complex-colorpicker").asColorPicker({
+	mode: 'complex'
+});
+$(".gradient-colorpicker").asColorPicker({
+	mode: 'gradient'
+});
+// Date Picker
+jQuery('.mydatepicker, #datepicker').datepicker();
+jQuery('#datepicker-autoclose').datepicker({
+	autoclose: true,
+	todayHighlight: true
+});
+jQuery('#date-range').datepicker({
+	toggleActive: true
+});
+jQuery('#datepicker-inline').datepicker({
+	todayHighlight: true
+});
+// Daterange picker
+$('.input-daterange-datepicker').daterangepicker({
+	buttonClasses: ['btn', 'btn-sm'],
+	applyClass: 'btn-danger',
+	cancelClass: 'btn-inverse'
+});
+$('.input-daterange-timepicker').daterangepicker({
+	timePicker: true,
+	format: 'MM/DD/YYYY h:mm A',clinician/dashboard/base.html.j2
+	timePickerIncrement: 30,
+	timePicker12Hour: true,
+	timePickerSeconds: false,
+	buttonClasses: ['btn', 'btn-sm'],
+	applyClass: 'btn-danger',
+	cancelClass: 'btn-inverse'
+});
+$('.input-limit-datepicker').daterangepicker({
+	format: 'MM/DD/YYYY',
+	minDate: '06/01/2015',
+	maxDate: '06/30/2015',
+	buttonClasses: ['btn', 'btn-sm'],
+	applyClass: 'btn-danger',
+	cancelClass: 'btn-inverse',
+	dateLimit: {
+		days: 6
+	}
+});
+
+</script>
+<!--Style Switcher -->
+<script src="{% static 'common/dashboard/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+{% endblock script %}
