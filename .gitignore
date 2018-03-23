@@ -17,8 +17,5 @@ tests/.coverage
 build/
 tests/report/
 .envrc
-*.jpg
-*.png
 *.pdf
-*.jpeg
 .vscode
