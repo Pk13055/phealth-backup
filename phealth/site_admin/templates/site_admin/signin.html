@@ -1,0 +1,158 @@
+{% extends 'site_admin/base_signin.html' %}
+{% load staticfiles %}
+{% block mainhead %}
+	{% endblock %}
+{% block maincontent %}
+	<nav class="navbar navbar-default navbar-fixed-top inner_nav_menu">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index.html"><img src="{% static '/images/logo1.png' %}" alt="image"></a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<!-- <ul class="nav navbar-nav">
+						<li><a href="#"><span class="call_span"><i class="fa fa-phone" aria-hidden="true"></i></span>Call Us : 040-12345678</a></li>
+						</ul>-->
+					<ul class="nav navbar-nav navbar-right custom_nav nav_inner">
+						<li class="call_li_menu" style="margin-right: 20px;"><a href="#"><span class="call_span"><i class="fa fa-phone" aria-hidden="true"></i></span>Call Us : 040-12345678</a></li>
+						<li><a href="#">For Corporates</a></li>
+						<li><a href="#">For Health Providers</a></li>
+						<li><a href="#">Contact</a></li>
+						<li>
+							<ul class="use_menu nav navbar-nav">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user-o"></span></a>
+									<ul class="dropdown-menu">
+										<li><a href="#">Account Settings <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
+										<li class="divider"></li>
+										<li><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
+										<li class="divider"></li>
+										<li><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
+										<li class="divider"></li>
+										<li><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
+										<li class="divider"></li>
+										<li><a href="#">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+			<div class="nav_second">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<ul>
+							<li class="active"><a href="#"><span class="fa fa-calendar"></span>Appointments</a></li>
+							<li><a href="#"><span class="fa fa-heartbeat"></span>Health Checks</a></li>
+							<li><a href="#"><span class="fa fa-credit-card"></span>Discount Cards</a></li>
+							<li><a href="#"><span class="fa fa-gift"></span>Gift Health</a></li>
+							<li><a href="#"><span class="fa fa-phone"></span>Service Providers</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<section class="login_section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-8">
+						<div class="panel panel-primary">
+							<div class="panel-heading ">
+								<h3 >{{title}}</h3>
+							</div>
+							<form method="post">{%csrf_token%}
+							<div class="panel-body">
+								<div class="form-group">
+									<label for="email"> Email ID / Username</label>
+									<input type="text" class="form-control" id="email" placeholder="Enter Email ID / Username" name="username">
+								</div>
+
+                                <div class="form-group">
+									<label for="password"> Confirm Password</label>
+									<input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+								</div>
+
+                                <div class="form-group">
+									<button class="btn btn-primary" style="background-color: #337ab7 !important;
+    border-color: #2e6da4 !important;" type="submit">Submit</button></a>
+								</div>
+							</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="full-widrth">
+							<h4>About us</h4>
+							<p>Lorem Ipsum is simply dummy text of the printing<br> and typesetting industry. Lorem Ipsum has<br> been the industry's standard dummy text</p>
+							<img src="{% static '/images/logo.png''%}">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="full-widrth">
+							<h4>Quick Links</h4>
+							<ul>
+								<li><a href="#">How it works</a></li>
+								<li><a href="#">Our Team</a></li>
+								<li><a href="#">Vision</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="full-widrth">
+							<h4>Contact Us</h4>
+							<p>#658, 3rd Floor, Ayyappa Socitey, Madhapur, Hyderabad, 500081, Telangana </p>
+							<p>+91 8686768612,</p>
+							<p>contact@mbrinformatics.com</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="full-widrth">
+							<h4>Subscribe Us</h4>
+							<div class="row">
+								<div class="col-md-12">
+									<form action="#">
+										<div class="input-group">
+											<input class="btn btn-lg" name="email" id="email" type="email" placeholder="Your Email Address" required>
+											<button class="btn btn-lg" type="submit"><i class="fa fa-envelope" aria-hidden="true"></i></button>
+										</div>
+									</form>
+									<!--<small class="promise"><em>We won't send spam.</em></small>-->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<div class="footer_bottom">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<ul>
+							<li><a href="#">Teram of Conditions</a></li>
+							<li><a href="#">How it Works</a></li>
+							<li><a href="#">Cancellation & Refund</a></li>
+							<li><a href="#">Disclaime</a></li>
+						</ul>
+					</div>
+					<div class="col-md-6">
+						<p>Copyright © 2017  MBR Informatics, All Rights Reserved.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}

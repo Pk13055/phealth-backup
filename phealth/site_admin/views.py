@@ -11,7 +11,7 @@ def SignIn(request):
 
 	'''
 	if request.method == "GET":
-		return render(request, 'common/signin.html.j2', context={
+		return render(request, 'site_admin/signin.html', context={
 			"title": "Administrator Login",
 			"route": "/site_admin",
 			"color": "default"
