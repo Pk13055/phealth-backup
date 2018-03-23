@@ -3,6 +3,10 @@ from phealth.utils import signin, match_role
 
 # Create your views here.
 
+def cms_add(request):
+    return render(request, 'site_admin/cms_add.html', {})
+
+
 
 def SignIn(request):
 
@@ -11,7 +15,7 @@ def SignIn(request):
 
 	'''
 	if request.method == "GET":
-		return render(request, 'site_admin/signin.html', context={
+		return render(request, 'site_admin/login.html', context={
 			"title": "Administrator Login",
 			"route": "/site_admin",
 			"color": "default"

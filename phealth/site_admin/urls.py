@@ -12,6 +12,7 @@ dashboard_routes = [
 ]
 
 urlpatterns = [
+    url(r'^cms_add/', views.cms_add, name='cms_add'),
     url(r'^signup/?$', views.SignUp, name='signup'),
     url(r'^signin/?$', views.SignIn, name='signin'),
     url(r'^dashboard/', include(dashboard_routes)),
