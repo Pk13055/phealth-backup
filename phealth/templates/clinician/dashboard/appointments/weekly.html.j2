@@ -1,5 +1,4 @@
-{% extends "clinician/dashboard/base.html.j2" %} {% load static %}
-{% block content %}
+{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %}
 <div class="container-fluid">
 	<div class="row bg-title">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -7,9 +6,15 @@
 		</div>
 		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<ol class="breadcrumb">
-				<li><a href="index.html">Dashboard</a></li>
-				<li><a href="#">Appointments</a></li>
-				<li><a href="#">Weekly Appointments View</a></li>
+				<li>
+					<a href="index.html">Dashboard</a>
+				</li>
+				<li>
+					<a href="#">Appointments</a>
+				</li>
+				<li>
+					<a href="#">Weekly Appointments View</a>
+				</li>
 			</ol>
 		</div>
 		<!-- /.col-lg-12 -->
@@ -23,8 +28,17 @@
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
 						<div class="container-fluid">
+							<div class="row" style="margin: 2rem auto;">
+								<div class="col-sm-12">
+									<div class="col-xs-12 lead">Filter : </div>
+									<div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-warning filter-btn" data-target="all">All</div>
+									<div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-success filter-btn" data-target="success">Confirmed</div>
+									<div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-info filter-btn" data-target="info">Pending</div>
+									<div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-danger filter-btn" data-target="warning">Cancelled</div>
+								</div>
+							</div>
 							<div class="row">
-							{% for day in days %}
+								{% for day in days %}
 								<div class="col-md-6">
 									<div class="panel">
 										<div class="panel-heading">
@@ -37,24 +51,30 @@
 											<div class="panel-body" style="background-color: #edf1f6">
 												<div class="row text-center">
 													<div class="col-md-4">
-														<div class="alert alert-success" role="alert">
+														<div class="alert alert-success event-success" role="alert">
 															Confirmed
 															<br/>
-															<h2 style="color: white;"><strong>{{ day.n_confirmed }}</strong></h2>
+															<h2 style="color: white;">
+																<strong>{{ day.n_confirmed }}</strong>
+															</h2>
 														</div>
 													</div>
 													<div class="col-md-4">
-														<div class="alert alert-warning" role="alert">
+														<div class="alert alert-warning event-info" role="alert">
 															Pending
 															<br/>
-															<h2 style="color: white;"><strong>{{ day.n_pending }}</strong></h2>
+															<h2 style="color: white;">
+																<strong>{{ day.n_pending }}</strong>
+															</h2>
 														</div>
 													</div>
 													<div class="col-md-4">
-														<div class="alert alert-danger" role="alert">
+														<div class="alert alert-danger event-warning" role="alert">
 															Cancelled
 															<br/>
-															<h2 style="color: white;"><strong>{{ day.n_cancelled }}</strong></h2>
+															<h2 style="color: white;">
+																<strong>{{ day.n_cancelled }}</strong>
+															</h2>
 														</div>
 													</div>
 												</div>
@@ -62,7 +82,7 @@
 										</div>
 									</div>
 								</div>
-							{% endfor %}
+								{% endfor %}
 							</div>
 						</div>
 					</div>
@@ -72,144 +92,6 @@
 	</div>
 </div>
 <!-- /.container-fluid -->
-{% endblock content %}
-{% block script %}
-<!--slimscroll JavaScript -->
-<script src="{% static 'common/dashboard/js/jquery.slimscroll.js' %}"></script>
-<!--Wave Effects -->
-<script src="{% static 'common/dashboard/js/waves.js' %}"></script>
-<!-- Custom Theme JavaScript -->
-<script src="{% static 'common/dashboard/js/custom.min.js' %}"></script>
-<script src="{% static 'common/dashboard/plugins/bower_components/datatables/jquery.dataTables.min.js' %}"></script>
-<!-- Date Picker Plugin JavaScript -->
-<script src="{% static 'common/dashboard/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
-<script>
-$(document).ready(function() {
-	$('#myTable').DataTable();
-	$(document).ready(function() {
-		var table = $('#example').DataTable({
-			"columnDefs": [{
-				"visible": false,
-				"targets": 2
-			}],
-			"order": [
-				[2, 'asc']
-			],
-			"displayLength": 25,
-			"drawCallback": function(settings) {
-				var api = this.api();
-				var rows = api.rows({
-					page: 'current'
-				}).nodes();
-				var last = null;
-				api.column(2, {
-					page: 'current'
-				}).data().each(function(group, i) {
-					if (last !== group) {
-						$(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-						last = group;
-					}
-				});
-			}
-		});
-		// Order by the grouping
-		$('#example tbody').on('click', 'tr.group', function() {
-			var currentOrder = table.order()[0];
-			if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-				table.order([2, 'desc']).draw();
-			} else {
-				table.order([2, 'asc']).draw();
-			}
-		});
-	});
-});
-$('#example23').DataTable({
-	dom: 'Bfrtip',
-	buttons: [
-		'copy', 'csv', 'excel', 'pdf', 'print'
-	]
-});
-
-</script>
-<!-- Clock Plugin JavaScript -->
-<script src="{% static 'common/dashboard/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js' %}"></script>
-<!-- Color Picker Plugin JavaScript -->
-<script src="{% static 'common/dashboard/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asColor.js' %}"></script>
-<script src="{% static 'common/dashboard/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asGradient.js' %}"></script>
-<script src="{% static 'common/dashboard/plugins/bower_components/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js' %}"></script>
-<!-- Date Picker Plugin JavaScript -->
-<script src="{% static 'common/dashboard/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
-<!-- Date range Plugin JavaScript -->
-<script src="{% static 'common/dashboard/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
-<script src="{% static 'common/dashboard/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-<script>
-// Clock pickers
-$('#single-input').clockpicker({
-	placement: 'bottom',
-	align: 'left',
-	autoclose: true,
-	'default': 'now'
-});
-$('.clockpicker').clockpicker({
-	donetext: 'Done',
-}).find('input').change(function() {
-	console.log(this.value);
-});
-$('#check-minutes').click(function(e) {
-	// Have to stop propagation here
-	e.stopPropagation();
-	input.clockpicker('show').clockpicker('toggleView', 'minutes');
-});
-if (/mobile/i.test(navigator.userAgent)) {
-	$('input').prop('readOnly', true);
-}
-// Colorpicker
-$(".colorpicker").asColorPicker();
-$(".complex-colorpicker").asColorPicker({
-	mode: 'complex'
-});
-$(".gradient-colorpicker").asColorPicker({
-	mode: 'gradient'
-});
-// Date Picker
-jQuery('.mydatepicker, #datepicker').datepicker();
-jQuery('#datepicker-autoclose').datepicker({
-	autoclose: true,
-	todayHighlight: true
-});
-jQuery('#date-range').datepicker({
-	toggleActive: true
-});
-jQuery('#datepicker-inline').datepicker({
-	todayHighlight: true
-});
-// Daterange picker
-$('.input-daterange-datepicker').daterangepicker({
-	buttonClasses: ['btn', 'btn-sm'],
-	applyClass: 'btn-danger',
-	cancelClass: 'btn-inverse'
-});
-$('.input-daterange-timepicker').daterangepicker({
-	timePicker: true,
-	format: 'MM/DD/YYYY h:mm A',
-	timePickerIncrement: 30,
-	timePicker12Hour: true,
-	timePickerSeconds: false,
-	buttonClasses: ['btn', 'btn-sm'],
-	applyClass: 'btn-danger',
-	cancelClass: 'btn-inverse'
-});
-$('.input-limit-datepicker').daterangepicker({
-	format: 'MM/DD/YYYY',
-	minDate: '06/01/2015',
-	maxDate: '06/30/2015',
-	buttonClasses: ['btn', 'btn-sm'],
-	applyClass: 'btn-danger',
-	cancelClass: 'btn-inverse',
-	dateLimit: {
-		days: 6
-	}
-});
-
-</script>
+{% endblock content %} {% block script %}
+<script src="{% static 'common/dashboard/js/cal.js' %}"></script>
 {% endblock script %}

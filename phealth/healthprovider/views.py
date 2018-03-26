@@ -1,17 +1,18 @@
-import random
 import datetime
+import random
 
+from datatableview import (Datatable, DateTimeColumn, TextColumn,
+                           ValuesDatatable)
+from datatableview.helpers import make_xeditable
+from datatableview.views import DatatableView, XEditableDatatableView
 from django import forms
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 
 from api.models import Appointment, Clinician, Provider, Speciality, User
-from phealth.utils import match_role, redirect, signin, get_provider
-
-from datatableview.views import DatatableView, XEditableDatatableView
-from datatableview.helpers import make_xeditable 
-from datatableview import Datatable, ValuesDatatable, DateTimeColumn, TextColumn
+from phealth.utils import get_provider, match_role, redirect, signin
 
 # Create your views here.
 
@@ -217,7 +218,7 @@ def appointments(request):
 
 # NEW ROUTES
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def dashboard_home(request):
 	''' route for dashboard home  '''
 	
@@ -231,7 +232,7 @@ def dashboard_home(request):
 # account routes
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def account_basic(request):
 	''' route for account - basic  '''
 	
@@ -243,7 +244,7 @@ def account_basic(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def account_contact(request):
 	''' route for account - contact  '''
 	
@@ -255,7 +256,7 @@ def account_contact(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def account_speciality(request):
 	''' route for account - speciality  '''
 	
@@ -267,7 +268,7 @@ def account_speciality(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def account_facilities(request):
 	''' route for account - facilities  '''
 	
@@ -279,7 +280,7 @@ def account_facilities(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def account_offerings(request):
 	''' route for account - offerings  '''
 	
@@ -291,7 +292,7 @@ def account_offerings(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def account_special_checks(request):
 	''' route for account - special_checks  '''
 	
@@ -306,7 +307,7 @@ def account_special_checks(request):
 # Branch Routes
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_new(request):
 	''' route for branch - new  '''
 	
@@ -318,7 +319,7 @@ def branch_new(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_view(request):
 	''' route for branch - view  '''
 	
@@ -333,7 +334,7 @@ def branch_view(request):
 # branch update routes
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_basic(request):
 	''' route for branch update - branch_basic'''
 
@@ -345,7 +346,7 @@ def branch_basic(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_contact(request):
 	''' route for branch update - branch_contact'''
 
@@ -357,7 +358,7 @@ def branch_contact(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_facilities(request):
 	''' route for branch update - branch_facilities'''
 
@@ -369,7 +370,7 @@ def branch_facilities(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_healthcheck(request):
 	''' route for branch update - branch_healthcheck'''
 
@@ -381,7 +382,7 @@ def branch_healthcheck(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_offerings(request):
 	''' route for branch update - branch_offerings'''
 
@@ -393,7 +394,7 @@ def branch_offerings(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_organization(request):
 	''' route for branch update - branch_organization'''
 
@@ -405,7 +406,7 @@ def branch_organization(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def branch_speciality(request):
 	''' route for branch update - branch_speciality'''
 
@@ -420,6 +421,7 @@ def branch_speciality(request):
 
 # Appointment Routes
 
+@method_decorator(match_role("clinician"), name="dispatch")
 class AppointmentTableView(DatatableView):
 	model = Appointment
 
@@ -493,6 +495,8 @@ class AppointmentTableView(DatatableView):
 		# return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
 		return Appointment.objects.order_by('time', 'date').filter(provider=p)
 
+
+@match_role("healthprovider")
 def confirm_appointment(request, id):
 	p = get_provider(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
@@ -509,6 +513,8 @@ def confirm_appointment(request, id):
 
 	return redirect('healthprovider:appointment_daily')
 
+
+@match_role("healthprovider")
 def cancel_appointment(request, id):
 	p = get_provider(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
@@ -524,8 +530,7 @@ def cancel_appointment(request, id):
 	return redirect('healthprovider:appointment_daily')
 
 
-
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def appointment_weekly(request):
 	''' route for appointment - weekly  '''
 
@@ -549,7 +554,7 @@ def appointment_weekly(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def appointment_monthly(request):
 	''' route for appointment - monthly  '''
 	
@@ -564,7 +569,7 @@ def appointment_monthly(request):
 # Payment Routes
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def payment_new(request):
 	''' route for payment - new  '''
 	
@@ -576,7 +581,7 @@ def payment_new(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def payment_add(request):
 	''' route for payment - add  '''
 	
@@ -588,7 +593,7 @@ def payment_add(request):
 	})
 
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def payment_view(request):
 	''' route for payment - view  '''
 	
@@ -602,29 +607,20 @@ def payment_view(request):
 
 # Clinician Routes
 
-# @match_role("healthprovider")
+@match_role("healthprovider")
 def clinician_new(request):
 	''' route for clinician - new  '''
 	
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
-	return render(request, 'healthprovider/dashboard/clinician/new.html.j2', context={
+	return render(request, 'healthprovider/dashboard/clinicians/new.html.j2', context={
 		'title' : "clinician - new",
 	})
 
 	
-# # @match_role("healthprovider")
-# def clinician_view(request):
-# 	''' route for clinician - view  '''
-	
-# 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
-
-# 	return render(request, 'healthprovider/dashboard/clinician/view.html.j2', context={
-# 		'title' : "clinician - view",
-# 	})
-
+@method_decorator(match_role("healthprovider"), name="dispatch")
 class ClinicianTableView(DatatableView):
 	model = Clinician
 

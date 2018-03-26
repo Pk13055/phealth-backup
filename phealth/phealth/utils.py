@@ -2,7 +2,7 @@ import datetime
 import hashlib
 from random import randint
 import requests
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.urls import reverse
@@ -53,22 +53,21 @@ def signin(role, request):
 	'''
 	email = request.POST['username']
 	password = request.POST['password']
+	print(password)
+	
+	# implemented type should only support list
+	if not isinstance(role, (list, str,)):
+		raise Http404("Signin functionality for type not implemented")
 
-	try:
-		u = User.objects.filter(email=email).first()
-		password1 = check_password(password, u.password)
-		print(password1)
+	if not isinstance(role, list): role = [role]
 
-	except:
-		return False
-
-
+	u = User.objects.filter(email=email).first()
 
 	client_ip, is_routable = getIP(request)
 	if client_ip is not None: u.last_IP = client_ip
 	status = False
 
-	if u and password == u.password and (u.role in role or role in u.role):
+	if u and check_password(password, u.password) and (u.role in role or role in u.role):
 		u.last_update=datetime.datetime.now()
 		request.session['email'] = email
 		request.session['role'] = u.role

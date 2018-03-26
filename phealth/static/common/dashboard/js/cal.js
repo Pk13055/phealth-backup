@@ -4,6 +4,24 @@ const spinnerClass = 'fa fa-spinner faa-spin animated';
 
 $(document).ready(function(){
     
+    // initialize the filters
+    $("div.filter-btn").on('click', function() {
+        let target = $(this).attr("data-target");
+        
+        $("td a.fc-event").hide();
+        $("div[role='alert']").hide();
+        
+        if(target == "all") {
+            $("td a.fc-event").fadeIn();
+            $("div[role='alert']").fadeIn();
+        }
+        else {
+            $("a.event-" + target).fadeIn();
+            $("div[role='alert'].event-" + target).fadeIn();
+        }
+    });
+    
+
     // //initialize time input widgets for setting appointment
     // $('#setEventModal .time').timepicker({
     //     timeFormat: 'H:i',

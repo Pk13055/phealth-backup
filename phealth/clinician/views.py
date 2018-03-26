@@ -1,14 +1,18 @@
-from django import forms
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from phealth.utils import match_role, signin, get_clinician
-from api.models import (Clinician, User, Speciality, Appointment)
-from querystring_parser import parser
 import datetime
 import json
+
+from datatableview import (Datatable, DateTimeColumn, TextColumn,
+                           ValuesDatatable)
+from datatableview.helpers import make_xeditable
 from datatableview.views import DatatableView, XEditableDatatableView
-from datatableview.helpers import make_xeditable 
-from datatableview import Datatable, ValuesDatatable, DateTimeColumn, TextColumn
+from django import forms
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from querystring_parser import parser
+
+from api.models import Appointment, Clinician, Speciality, User
+from phealth.utils import get_clinician, match_role, signin
 
 # Create your views here.
 
@@ -185,6 +189,7 @@ def calender(request):
 
 # NEW ROUTES
 
+@match_role("clinician")
 def new_home(request):
 	''' new dashboard home '''
 
@@ -197,6 +202,7 @@ def new_home(request):
 
 # appointment routes
 
+@method_decorator(match_role("clinician"), name="dispatch")
 class AppointmentTableView(DatatableView):
 	model = Appointment
 
@@ -270,6 +276,8 @@ class AppointmentTableView(DatatableView):
 		# return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
 		return Appointment.objects.order_by('time', 'date').filter(under=c)
 
+
+@match_role("clinician")
 def confirm_appointment(request, id):
 	c = get_clinician(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
@@ -284,6 +292,8 @@ def confirm_appointment(request, id):
 
 	return redirect('clinician:appointment_daily')
 
+
+@match_role("clinician")
 def cancel_appointment(request, id):
 	c = get_clinician(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
@@ -298,6 +308,8 @@ def cancel_appointment(request, id):
 
 	return redirect('clinician:appointment_daily')
 
+
+@match_role("clinician")
 def appointment_weekly(request):
 	''' appointment stats '''
 
@@ -323,6 +335,8 @@ def appointment_weekly(request):
 	})
 
 
+
+@match_role("clinician")
 def appointment_monthly(request):
 	''' appointment stats '''
 
@@ -334,6 +348,7 @@ def appointment_monthly(request):
 		})
 
 # timings routes
+
 
 @match_role("clinician")
 def timing_work(request):
@@ -459,6 +474,7 @@ def timing_vacation(request):
 
 # account routes
 
+@match_role("clinician")
 def basic_details(request):
 	''' account route for '''
 
@@ -481,6 +497,7 @@ def basic_details(request):
 		})
 
 
+@match_role("clinician")
 def professional_info(request):
 	u = Clinician.objects.filter(user__email=request.session['email']).first()
 	n = u.specialities.all()
@@ -508,6 +525,7 @@ def professional_info(request):
 
 
 
+@match_role("clinician")
 def education_training(request):
 	''' account route for '''
 
@@ -529,6 +547,7 @@ def education_training(request):
 		})
 
 
+@match_role("clinician")
 def consultation_fee(request):
 	''' account route for '''
 
@@ -550,6 +569,7 @@ def consultation_fee(request):
 		})
 
 
+@match_role("clinician")
 def offerings(request):
 	''' account route for '''
 
@@ -567,6 +587,7 @@ def offerings(request):
 		})
 
 
+@match_role("clinician")
 def conditions_treated(request):
 	''' account route for '''
 
@@ -588,6 +609,7 @@ def conditions_treated(request):
 		})
 
 
+@match_role("clinician")
 def procedures(request):
 	''' account route for '''
 
@@ -610,6 +632,7 @@ def procedures(request):
 		})
 
 
+@match_role("clinician")
 def experience(request):
 	''' account route for '''
 
@@ -632,6 +655,7 @@ def experience(request):
 		})
 
 
+@match_role("clinician")
 def awards_recognition(request):
 	''' account route for '''
 
@@ -643,6 +667,7 @@ def awards_recognition(request):
 		})
 
 
+@match_role("clinician")
 def registrations(request):
 	''' account route for '''
 
@@ -654,6 +679,7 @@ def registrations(request):
 		})
 
 
+@match_role("clinician")
 def memberships(request):
 	''' account route for '''
 
@@ -663,5 +689,3 @@ def memberships(request):
 		'title' : "Account - ",
 		'clinician' : c,
 		})
-
-
