@@ -24,7 +24,8 @@
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<form action="registration.html" class="form-horizontal">
+						<form class="form-horizontal" method="POST">
+							{% csrf_token %}
 							<div class="form-body">
 								<h3 class="box-title">Awards</h3>
 								<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addcontact">Add Awards</button>
@@ -61,14 +62,6 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-md-6">
-														<div class="form-group">
-															<label for="Upload" class="col-md-3">Upload</label>
-															<div class="col-md-9">
-																<input type="file" class="form-control" name="upload" id="upload">
-															</div>
-														</div>
-													</div>
 													<div class="row">
 														<hr>
 													</div>
@@ -92,31 +85,16 @@
 															<th>Award/Recognistion</th>
 															<th>Recognised By</th>
 															<th>Year</th>
-															<th>Upload</th>
-															<th>Action</th>
 														</tr>
 													</thead>
 													<tbody>
+														{% for award in awards %}
 														<tr>
-															<td>Nixon</td>
-															<td>System Architect</td>
-															<td>Madhapur,Hyderabad</td>
-															<td>9491457801</td>
-															<td>
-																<button class="btn btn-success">Update</button>
-																<button class="btn btn-danger"> Delete</button>
-															</td>
+															<td>{{award.award}}</td>
+															<td>{{award.recognisedby}}</td>
+															<td>{{award.year_2}}</td>
 														</tr>
-														<tr>
-															<td>Nixon</td>
-															<td>System Architect</td>
-															<td>Madhapur,Hyderabad</td>
-															<td>9491457801</td>
-															<td>
-																<button class="btn btn-success">Update</button>
-																<button class="btn btn-danger"> Delete</button>
-															</td>
-														</tr>
+														{% endfor %}
 													</tbody>
 												</table>
 											</div>

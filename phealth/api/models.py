@@ -495,6 +495,8 @@ class Clinician(models.Model):
 	amount = models.PositiveSmallIntegerField(default=0)
 	discount = models.PositiveSmallIntegerField(default=0)
 	discount_sub = models.PositiveSmallIntegerField(default=0)
+	registrations = ArrayField(models.TextField(), null=True, blank=True)
+	memberships = ArrayField(models.TextField(), null=True, blank=True)
 
 	class Meta:
 		managed = True

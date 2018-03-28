@@ -501,7 +501,6 @@ def basic_details(request):
 def professional_info(request):
 	u = Clinician.objects.filter(user__email=request.session['email']).first()
 	n = u.specialities.all()
-	# print("I was here")
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
 			model = Speciality
@@ -512,7 +511,6 @@ def professional_info(request):
 		if b.is_valid():
 			u.save()
 			speciality = b.save()
-			# speciality.save()
 			u.specialities.add(speciality)
 		else:
 			v = b
@@ -635,35 +633,45 @@ def procedures(request):
 @match_role("clinician")
 def experience(request):
 	''' account route for '''
-
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
 	e = c.experience
 
 	if request.method == "POST":
-		print(request.POST)
-		print(c.experience)
-		if c.experience == None:
-			c.experience = [request.POST['experience']]
-		else:
-			c.experience.append(request.POST['experience'])
-		c.save()	
-
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		e.append(s)
+		c.save()
+	
+	del e[0]
+	x = [json.loads(r) for r in e]
 	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
-		'experiences': e,
+		'experiences': x,
 		})
 
 
 @match_role("clinician")
 def awards_recognition(request):
 	''' account route for '''
-
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	if not c.awards:
+		c.awards = []
 
+	if request.method == "POST":
+		print(request.POST)
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		c.awards.append(s) 
+		c.save()
+
+	x = [json.loads(r) for r in c.awards]
 	return render(request, 'clinician/dashboard/account/awards.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'awards' : x
 		})
 
 
@@ -672,10 +680,23 @@ def registrations(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	if not c.registrations:
+		c.registrations = []
+
+	if request.method == "POST":
+		print(request.POST)
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		c.registrations.append(s) 
+		c.save()
+
+	x = [json.loads(r) for r in c.registrations]
 
 	return render(request, 'clinician/dashboard/account/registration.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'registrations': x,
 		})
 
 
@@ -684,8 +705,21 @@ def memberships(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	if not c.memberships:
+		c.memberships = []
+
+	if request.method == "POST":
+		print(request.POST)
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		c.memberships.append(s) 
+		c.save()
+
+	x = [json.loads(r) for r in c.memberships]
 
 	return render(request, 'clinician/dashboard/account/memberships.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
+		'memberships': x,
 		})

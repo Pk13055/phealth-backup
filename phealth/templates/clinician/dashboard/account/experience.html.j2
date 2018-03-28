@@ -1,4 +1,4 @@
-{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %}
+{% extends "clinician/dashboard/base.html.j2" %} {% load static %} {% block content %} 
 <div class="container-fluid">
 	<div class="row bg-title">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -23,7 +23,8 @@
 				</div>
 				<div class="panel-wrapper collapse in" aria-expanded="true">
 					<div class="panel-body">
-						<form action="awards.html" class="form-horizontal">
+						<form class="form-horizontal" method="POST">
+							{% csrf_token %}
 							<div class="form-body">
 								<h3 class="box-title">Experience</h3>
 								<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addcontact">Add Experience</button>
@@ -95,30 +96,19 @@
 															<th>Designation</th>
 															<th>From</th>
 															<th>To</th>
-															<th>Action</th>
+															
 														</tr>
 													</thead>
 													<tbody>
+														{%for experience in experiences %}
 														<tr>
-															<td>Nixon</td>
-															<td>System Architect</td>
-															<td>Madhapur,Hyderabad</td>
-															<td>9491457801</td>
-															<td>
-																<button class="btn btn-success">Update</button>
-																<button class="btn btn-danger"> Delete</button>
-															</td>
+															<td>{{experience.institution}}</td>
+															<td>{{experience.designation_id}}</td>
+															<td>{{experience.workfrom}}</td>
+															<td>{{experience.workto}}</td>
+															
 														</tr>
-														<tr>
-															<td>Nixon</td>
-															<td>System Architect</td>
-															<td>Madhapur,Hyderabad</td>
-															<td>9491457801</td>
-															<td>
-																<button class="btn btn-success">Update</button>
-																<button class="btn btn-danger"> Delete</button>
-															</td>
-														</tr>
+														{% endfor %}
 													</tbody>
 												</table>
 											</div>
