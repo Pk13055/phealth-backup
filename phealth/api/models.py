@@ -516,7 +516,9 @@ class Provider(models.Model):
 	active_from = models.DateField()
 	specialities = models.ManyToManyField(Speciality)
 	## New Fields added
-	# facilities = 
+	facilities = ArrayField(models.TextField(), null=True, blank=True)
+	offerings = ArrayField(models.TextField(), null=True, blank=True)
+	special_checks = ArrayField(models.TextField(), null=True, blank=True)
 
 	class Meta:
 		managed = True

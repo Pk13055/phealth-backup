@@ -1,6 +1,6 @@
 import datetime
 import random
-
+import json
 from datatableview import (Datatable, DateTimeColumn, TextColumn,
                            ValuesDatatable)
 from datatableview.helpers import make_xeditable
@@ -304,10 +304,23 @@ def account_facilities(request):
 	''' route for account - facilities  '''
 	
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	if not p.facilities:
+		p.facilities = []
+
+	if request.method == "POST":
+		print(request.POST)
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		p.facilities.append(s) 
+		p.save()
+
+	x = [json.loads(r) for r in p.facilities]
 
 
 	return render(request, 'healthprovider/dashboard/account/facilities.html.j2', context={
 		'title' : "account - facilities",
+		'facilities' : x,
 	})
 
 
@@ -316,10 +329,23 @@ def account_offerings(request):
 	''' route for account - offerings  '''
 	
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	if not p.offerings:
+		p.offerings = []
+
+	if request.method == "POST":
+		print(request.POST)
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		p.offerings.append(s) 
+		p.save()
+
+	x = [json.loads(r) for r in p.offerings]
 
 
 	return render(request, 'healthprovider/dashboard/account/offerings.html.j2', context={
 		'title' : "account - offerings",
+		'offerings': x,
 	})
 
 
@@ -328,10 +354,23 @@ def account_special_checks(request):
 	''' route for account - special_checks  '''
 	
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	if not p.special_checks:
+		p.special_checks = []
+
+	if request.method == "POST":
+		print(request.POST)
+		r = request.POST.dict()
+		del r['csrfmiddlewaretoken']
+		s = json.dumps(r)
+		p.special_checks.append(s) 
+		p.save()
+
+	x = [json.loads(r) for r in p.special_checks]
 
 
 	return render(request, 'healthprovider/dashboard/account/special_checks.html.j2', context={
 		'title' : "account - special_checks",
+		'special_checks': x,
 	})
 
 
