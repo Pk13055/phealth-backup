@@ -235,12 +235,28 @@ def dashboard_home(request):
 @match_role("healthprovider")
 def account_basic(request):
 	''' route for account - basic  '''
-	
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	user = p.poc
+	class ProviderForm(forms.ModelForm):
+		class Meta:
+			model = Provider
+			fields = ('name',)
+	class UserForm(forms.ModelForm):
+		class Meta:
+			model = User
+			fields = ('name', 'email', 'mobile')
+	if request.method == "POST":
+		c = ProviderForm(request.POST, instance=p)
+		b = UserForm(request.POST, instance=p.poc)
+		if c.is_valid() and b.is_valid():
+			print("came here")
+			c.save() and b.save()
 
 
 	return render(request, 'healthprovider/dashboard/account/basic.html.j2', context={
 		'title' : "account - Basic",
+		'provider_form' : ProviderForm(instance=p),
+		'user_form' : UserForm(instance=p.poc),
 	})
 
 
@@ -260,11 +276,26 @@ def account_contact(request):
 def account_speciality(request):
 	''' route for account - speciality  '''
 	
-	p = Provider.objects.filter(poc__email=request.session['email']).first()
-
+	u = Provider.objects.filter(poc__email=request.session['email']).first()
+	s = u.specialities.all()
+	class SpecialityForm(forms.ModelForm):
+		class Meta:
+			model = Speciality
+			fields = ('name', 'description',)
+	v = SpecialityForm()
+	if request.method == "POST":
+		b = SpecialityForm(request.POST, request.FILES)
+		if b.is_valid():
+			u.save()
+			speciality = b.save()
+			u.specialities.add(speciality)
+		else:
+			v = b
 
 	return render(request, 'healthprovider/dashboard/account/speciality.html.j2', context={
 		'title' : "account - speciality",
+	 	"speciality_form" : v,
+	 	"speciality_list" : s,
 	})
 
 

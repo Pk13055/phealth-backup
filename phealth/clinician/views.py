@@ -556,14 +556,14 @@ def consultation_fee(request):
 			model = Clinician
 			fields = ('fee', 'amount', 'discount', 'discount_sub')
 	if request.method == "POST":
-		f = FeeForm(request.POST, request.FILES, instance=u)
+		f = FeeForm(request.POST, request.FILES, instance=c)
 		if f.is_valid():
 			f.save()
 
 	return render(request, 'clinician/dashboard/account/consultation.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
-		'form' : FeeForm(instance=u),
+		'form' : FeeForm(instance=c),
 		})
 
 
@@ -572,6 +572,8 @@ def offerings(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	if not c.offerings:
+		c.offerings = []
 	o = c.offerings
 	if request.method == "POST":
 		print(request.POST)
@@ -634,6 +636,8 @@ def procedures(request):
 def experience(request):
 	''' account route for '''
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
+	if not c.experience:
+		c.experience = []
 	e = c.experience
 
 	if request.method == "POST":
@@ -643,7 +647,7 @@ def experience(request):
 		e.append(s)
 		c.save()
 	
-	del e[0]
+	# del e[0]
 	x = [json.loads(r) for r in e]
 	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
 		'title' : "Account - ",

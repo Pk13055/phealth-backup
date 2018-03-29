@@ -1,4 +1,4 @@
-{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %}
+{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %} {% load bootstrap %}
 <div class="row bg-title">
 	<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 		<h4 class="page-title">Dashboard 1</h4>
@@ -7,9 +7,6 @@
 		<ol class="breadcrumb">
 			<li>
 				<a href="index.html">Dashboard</a>
-			</li>
-			<li>
-				<a href="#">Contact Details</a>
 			</li>
 		</ol>
 	</div>
@@ -23,52 +20,39 @@
 			</div>
 			<div class="progress">
 				<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-				    aria-valuemax="100" style="width: 30%;">
-					<span class="sr-only">60% Complete</span>
-				</div>
-			</div>
-			<div class="panel-wrapper collapse in" aria-expanded="true">
-				<div class="panel-body">
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Anaesthesiology & Emergency Medicine</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Ayurvedic</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Cardio Thorasic Surgery</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Cochlar Implant Surgery</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Cardiology</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Cosmetology - Beutycare</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Dermatology - Skincare</label>
-					</div>
-					<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">Diet & Nutrition</label>
-					</div>
-					<form action="facilities.html">
-						<div class="pull-right">
-							<button type="submit" class="btn btn-success">Save & Go</button>
-						</div>
-					</form>
-				</div>
+				aria-valuemax="100" style="width: 30%;">
+				<span class="sr-only">60% Complete</span>
 			</div>
 		</div>
+		<div class="row">
+			{% for speciality in speciality_list %}
+			<a class="dropdown-item" href="#">
+				<div class="well well-lg">
+					<h4>{{speciality.name}}</h4>
+					<p>
+						{{speciality.description}}
+					</p>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
+		<form method="POST">
+			<div class="row">
+				<div class="panel panel-success">
+					<div class="panel-body">
+						{% csrf_token %}
+						{{ speciality_form | bootstrap }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<button class="btn btn-block btn-primary"><i class="fa fa-add fa-lg"></i> Add</button>
+				</div>
+			</div>
+		</form>
 	</div>
+</div>
+</div>
 </div>
 {% endblock content %}

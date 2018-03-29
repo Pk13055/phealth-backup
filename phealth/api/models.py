@@ -515,6 +515,8 @@ class Provider(models.Model):
 	is_branch = models.BooleanField(default=False)
 	active_from = models.DateField()
 	specialities = models.ManyToManyField(Speciality)
+	## New Fields added
+	# facilities = 
 
 	class Meta:
 		managed = True
