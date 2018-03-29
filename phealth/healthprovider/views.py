@@ -7,7 +7,7 @@ from datatableview.helpers import make_xeditable
 from datatableview.views import DatatableView, XEditableDatatableView
 from django import forms
 from django.contrib.auth.hashers import make_password
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 
@@ -680,12 +680,23 @@ def payment_view(request):
 @match_role("healthprovider")
 def clinician_new(request):
 	''' route for clinician - new  '''
-	
-	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
+	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	user_form = UserForm()
+
+	if request.method == 'POST':
+		u = UserForm(request.POST, request.FILES)
+		if u.is_valid():
+			user = u.save()
+			c = Clinician()
+			c.user = user
+			c.save()
+			p.clinicians.add(c)
+			p.save()
 
 	return render(request, 'healthprovider/dashboard/clinicians/new.html.j2', context={
-		'title' : "clinician - new",
+		'title': "clinician - new",
+		'form': user_form,
 	})
 
 	
