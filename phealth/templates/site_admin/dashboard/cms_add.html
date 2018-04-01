@@ -1,0 +1,123 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+			<div class="container-fluid">
+				<div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage CMS</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">Add CMS</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+                                    CMS
+                            </div>
+
+							<div class="panel-wrapper collapse in" aria-expanded="true">
+								<div class="panel-body">
+									<form action="cms_view.html" class="form-horizontal">
+										<div class="form-body">
+											<h3 class="box-title">Add New Content</h3>
+                                            <p>The code starts with IMG is for Image and rest of the things for content and both</p>
+											<hr class="m-t-0 m-b-40">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Code</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control" placeholder="Code Name">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Code Descrption</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control" id="codedescrption" placeholder="Ex: Where it need to be updated" name="codedescrption">
+														</div>
+													</div>
+												</div>
+
+													<div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Image</label>
+															<div class="col-md-9">
+																<input type="file" class="form-control" id="image" placeholder="image" name="image">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Title</label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" id="title" placeholder="Enter The Title" name="title">
+															</div>
+														</div>
+													</div>
+                                                    <div class="col-md-12">
+														<div class="form-group">
+															<label  class="control-label col-md-1" >Content</label>
+															<div class="col-md-11">
+                                                                <textarea class="form-control summernote" name="content" id="content"> </textarea>
+															</div>
+														</div>
+													</div>
+
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >External or Internal Link</label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" id="email" placeholder="Display as provided in instant registration" name="email">
+															</div>
+														</div>
+													</div>
+                                                    <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Sort by</label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" id="Sort_by" placeholder="Display as provided in instant registration" name="Sort_by">
+															</div>
+														</div>
+													</div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Status</label>
+															<div class="col-md-9">
+                                                                <select class="form-control" name="status" id="status" >
+                                                                    <option value="1">Active</option>
+                                                                    <option value="0">Inactive</option>
+                                                                </select>
+															</div>
+														</div>
+													</div>
+                                            </div>
+
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="row">
+															<div class="col-md-offset-10 col-md-2">
+																<button type="submit" class="btn btn-success">Add</button>
+																<button type="button" class="btn btn-default">Cancel</button>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6"> </div>
+												</div>
+											</div>
+									</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+{% endblock content %}

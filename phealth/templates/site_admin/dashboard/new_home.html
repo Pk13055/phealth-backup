@@ -1,0 +1,201 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Clinician Dashboard</h4> </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Dashboard</a></li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box" style="padding: 10px;margin-bottom: 10px; background: #46658c;">
+                <h3 class="box-title" style="color: white">Todays Appointments Reports</h3>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Booked</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Cancelled</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Confirmed</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">869</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Rescheduled</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">911</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Arrived</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Consultation Completed</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="white-box" style="padding: 10px;margin-bottom: 10px; background: #46658c;">
+                <h3 class="box-title" style="color: white">This Month Appointments Reports</h3>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Booked</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Cancelled</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-success"></i> <span class="counter text-success">659</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Confirmed</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-purple"></i> <span class="counter text-purple">869</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Rescheduled</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">911</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Arrived</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <div class="white-box analytics-info">
+                <h3 class="box-title">Consultation Completed</h3>
+                <ul class="list-inline two-part">
+                    <li class="text-right"><i class="ti-arrow-down text-danger"></i> <span class="text-danger">1</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--/.row -->
+    <!--row -->
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-md-12 col-lg-8 col-sm-12 col-xs-12">
+            <div class="white-box">
+                <h3 class="box-title">Yearly Consultation Reports</h3>
+                <ul class="list-inline text-right">
+                    <li>
+                        <h5><i class="fa fa-circle m-r-5 text-info"></i>Consultation Completed</h5> </li>
+                    <li>
+                        <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Cancelled</h5> </li>
+                </ul>
+                <div id="ct-visits" style="height: 405px;"></div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-4 col-sm-12 col-xs-12">
+            <div class="panel">
+                <div class="p-20">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h4 class="m-b-0">Total Appointments Monthly</h4>
+                        </div>
+                        <div class="col-xs-4 p-20">
+                            <select class="form-control">
+                                <option>DEC</option>
+                                <option>JAN</option>
+                                <option>FEB</option>
+                                <option>MAR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer bg-extralight">
+                    <ul class="earning-box">
+                        <li>
+                            <div class="er-row">
+                                <div class="er-text">
+                                    <h3>Booked</h3></div>
+                                <div class="er-count "><span class="counter">500</span></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="er-row">
+                                <div class="er-text">
+                                    <h3>Cancelled</h3></div>
+                                <div class="er-count "><span class="counter">460</span></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="er-row">
+                                <div class="er-text">
+                                    <h3>Confirmed</h3></div>
+                                <div class="er-count "><span class="counter">600</span></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="er-row">
+                                <div class="er-text">
+                                    <h3>Rescheduled</h3></div>
+                                <div class="er-count "><span class="counter">200</span></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="er-row">
+                                <div class="er-text">
+                                    <h3>Completed</h3></div>
+                                <div class="er-count "><span class="counter">4600</span></div>
+                            </div>
+                        </li>
+                        <li class="center">
+                            <a class="btn btn-rounded btn-info btn-block p-10">View Complete Appointments</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
