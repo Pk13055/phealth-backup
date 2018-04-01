@@ -1,5 +1,4 @@
-{% extends "healthprovider/dashboard/base.html.j2" %} 
-{% load static %} 
+{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %}
 {% block content %}
 <div class="row bg-title">
     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -8,16 +7,14 @@
     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <ol class="breadcrumb">
             <li>
-                <a href="index.html">Dashboard</a>
+                <a href="{% url 'healthprovider:dashboard_home' %}">Dashboard</a>
             </li>
             <li>
-                <a href="#">View / Update Branches</a>
+                <a href="{% url 'healthprovider:branch_view' %}">View / Update Branches</a>
             </li>
         </ol>
     </div>
-    <!-- /.col-lg-12 -->
 </div>
-<!-- /row -->
 <div class="row">
     <div class="col-sm-12">
         <div class="white-box">
@@ -28,53 +25,38 @@
                 <table id="myTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Sr.No</th>
                             <th>Branch ID</th>
-                            <th>Full Name of Branch</th>
-                            <th>View / Update</th>
+                            <th>Branch Name</th>
+                            <!-- <th>View / Update</th> -->
                             <th>Delete from the List</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for branch in branches %}
                         <tr>
-                            <td>1</td>
-                            <td>CLICK0125</td>
-                            <td>Rajesh</td>
+                            <td>{{ branch.id }}</td>
+                            <td>{{ branch.name }}</td>
                             <td>
-                                <a href="{% url 'healthprovider:branch_basic_update' %}">
-                                    <button class="btn btn-info">View and Update</button>
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">Remove from List</button>
+                                <button type="button" class="btn btn-danger del_branch" onclick="deleteBranch();" data-target="{{ branch.id }}">Delete</button>
                             </td>
                         </tr>
+                        {% empty %}
                         <tr>
-                            <td>2</td>
-                            <td>CLICK0126</td>
-                            <td>Raju</td>
-                            <td>
-                                <a href="{% url 'healthprovider:branch_basic_update' %}">
-                                    <button class="btn btn-info">View and Update</button>
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">Remove from List</button>
-                            </td>
+                            <td colspan="4">No branches!</td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-{% endblock content %} 
-{% block script %}
+{% endblock content %} {% block script %}
 <script>
     $(document).ready(function () {
         $('#myTable').DataTable();
         $(document).ready(function () {
-            var table = $('#example').DataTable({
+            var table = $('#myTable').DataTable({
                 "columnDefs": [{
                     "visible": false,
                     "targets": 2
@@ -94,7 +76,7 @@
                     }).data().each(function (group, i) {
                         if (last !== group) {
                             $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="5">' + group +
+                                '<tr class="group"><td colspan="4">' + group +
                                 '</td></tr>');
                             last = group;
                         }
@@ -102,7 +84,7 @@
                 }
             });
             // Order by the grouping
-            $('#example tbody').on('click', 'tr.group', function () {
+            $('#myTable tbody').on('click', 'tr.group', function () {
                 var currentOrder = table.order()[0];
                 if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
                     table.order([2, 'desc']).draw();
@@ -112,11 +94,25 @@
             });
         });
     });
-    $('#example23').DataTable({
+    $('#myTable').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
+    let deleteBranch = () => {
+        if(confirm("Are you sure you want to proceed? ALL data associated with this healthprovider will be DELETED."))
+            $.ajax({
+                url: window.location.pathname,
+                method: "POST",
+                data: {
+                    b_id: $("button.del_branch").attr("data-target")
+                },
+                success: function(response) {
+                    alert(response);
+                    window.location.reload();
+                }
+            })
+    }
 </script>
 {% endblock script %}
