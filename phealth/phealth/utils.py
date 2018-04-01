@@ -1,14 +1,15 @@
 import datetime
 import hashlib
 from random import randint
+
 import requests
-from django.http import JsonResponse, Http404
+from django.contrib.auth.hashers import check_password, make_password
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
-from django.contrib.auth.hashers import make_password, check_password
 from django.urls import reverse
-from api.models import *
 from ipware import get_client_ip
 
+from api.models import *
 
 # contains all the comon code for utility purposes
 
@@ -54,7 +55,7 @@ def signin(role, request):
 	email = request.POST['username']
 	password = request.POST['password']
 	print(password)
-	
+
 	# implemented type should only support list
 	if not isinstance(role, (list, str,)):
 		raise Http404("Signin functionality for type not implemented")
@@ -115,3 +116,23 @@ def generate_payment_data(request, to, amount, product_info, test=False):
 		return PAYU_BASE_URL, data
 
 	return None
+
+def perdelta(start, end, delta):
+	'''
+		function that generates a list of date/time/datetime
+	'''
+	t = 'datetime'
+	if isinstance(start, datetime.time):
+		start = datetime.datetime.combine(datetime.datetime.now().date(), start)
+		end = datetime.datetime.combine(datetime.datetime.now().date(), end)
+		t = 'time'
+	elif isinstance(start, datetime.date):
+		start = datetime.datetime.combine(start, datetime.datetime.now().time())
+		end = datetime.datetime.combine(end, datetime.datetime.now().time())
+		t = 'date'
+	curr = start
+	timings = []
+	while curr <= end:
+		timings.append(curr.time() if t == 'time' else curr.date() if t == 'date' else curr)
+		curr += delta
+	return timings
