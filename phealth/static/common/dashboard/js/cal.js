@@ -85,7 +85,6 @@ $(document).ready(function(){
             data: {action:'get'},
             method: 'POST',
             success: function(response) {
-                console.log(response);
             },
             fail: function(){
                 alert("An error occured while fetching events");

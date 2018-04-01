@@ -1,6 +1,4 @@
-{% extends "healthprovider/dashboard/base.html.j2" %} 
-{% load static %} 
-{% block content %}
+{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %}
 <div class="row bg-title">
 	<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 		<h4 class="page-title">Manage Branches</h4>
@@ -8,60 +6,48 @@
 	<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 		<ol class="breadcrumb">
 			<li>
-				<a href="index.html">Dashboard</a>
+				<a href="{% url 'healthprovider:dashboard_home' %}">Dashboard</a>
 			</li>
 			<li>
-				<a href="#">Basic Details</a>
+				<a href="{% url 'healthprovider:branch_new' %}">Add Branch</a>
 			</li>
 		</ol>
 	</div>
-	<!-- /.col-lg-12 -->
 </div>
 <div class="row">
-	<div class="col-md-12">
+	<form class="col-xs-12" method="POST">
 		<div class="panel panel-info">
-			<div class="panel-heading">
-				Add Branch
-			</div>
-
+			<div class="panel-heading">Add Branch</div>
 			<div class="panel-body">
-
+				{% csrf_token %}
 				<div class="form-group">
 					<label class="radioimage">Type of Provider </label>
 					<br>
 					<label class="radioimage">
-						<input type="radio" name="fb" value="Corporates" name="businessregtype" />
+						<input type="radio" name="type" value="clinic">
 						<img src="{% static 'common/dashboard/register/clinic.png' %}" height="40px" width="40px">
 						<p class="dclass">Clinic</p>
 					</label>
 					<label class="radioimage">
-						<input type="radio" name="fb" value="EducationalInstitutions" name="businessregtype" />
+						<input type="radio" name="type" value="hospital">
 						<img src="{% static 'common/dashboard/register/hospital.png' %}" height="40px" width="40px">
 						<p class="dclass">Hospital</p>
 					</label>
 					<label class="radioimage">
-						<input type="radio" name="fb" value="NGO" name="businessregtype" />
+						<input type="radio" name="type" value="diagnostic_centre">
 						<img src="{% static 'common/dashboard/register/ngo.png' %}" height="40px" width="40px">
 						<p class="dclass">Diagnostic Center</p>
 					</label>
-
-
 				</div>
 				<div class="form-group">
-					<label for="organizationname"> Full Name</label>
-					<input type="text" class="form-control" id="organizationname" placeholder="Clinic/Hospital/Diagnostics" name="organizationname">
+					<label for="name"> Full Name</label>
+					<input type="text" class="form-control" id="name" placeholder="Clinic/Hospital/Diagnostics" name="name">
 				</div>
-				<!--<div class="checkbox">
-						<input id="checkbox2" type="checkbox">
-						<label for="checkbox2">By Signing Up I accept All Terms & Conditions</label>
-					</div>-->
 				<div class="form-group">
-					<a href="#">
-						<button class="btn btn-success pull-right">Save & Go</button>
-					</a>
+					<button class="btn btn-success pull-right" type="submit">Save & Go</button>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 </div>
 {% endblock content %}

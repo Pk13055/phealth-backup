@@ -8,10 +8,10 @@
     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <ol class="breadcrumb">
             <li>
-                <a href="index.html">Dashboard</a>
+                <a href="{% url 'healthprovider:dashboard_home' %}">Dashboard</a>
             </li>
             <li>
-                <a href="#">View / Update Payments</a>
+                <a href="{% url 'healthprovider:payment_view' %}">View / Update Payments</a>
             </li>
         </ol>
     </div>
@@ -24,28 +24,32 @@
             <h3 class="box-title m-b-0">Payments</h3>
             <p class="text-muted m-b-30">View or update Payments</p>
             <div class="table-responsive">
-                <table id="myTable" class="table table-striped">
+                <table id="payTable" class="table table-striped">
                     <thead>
                         <tr>
                             <th>Sr.No</th>
-                            <th>Plan Name</th>
+                            <th>Timestamp</th>
+                            <th>Receiver</th>
+                            <th>Receiver email</th>
                             <th>Amount</th>
-                            <th>Date</th>
+                            <th>UID</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for transaction in transactions %}
                         <tr>
-                            <td>1</td>
-                            <td>CLICK0125</td>
-                            <td>350</td>
-                            <td>25-01-2018</td>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ transaction.timestamp }}</td>
+                            <td>{{ transaction.receiver.name }}</td>
+                            <td>{{ transaction.receiver.email }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.uid }}</td>
                         </tr>
+                        {% empty %}
                         <tr>
-                            <td>2</td>
-                            <td>CLICK0126</td>
-                            <td>500</td>
-                            <td>25-01-2018</td>
+                            <td colspan="6">No records to show!</td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -56,7 +60,7 @@
 {% block script %}
 <script>
     $(document).ready(function () {
-        $('#myTable').DataTable();
+        $('#payTable').DataTable();
         $(document).ready(function () {
             var table = $('#example').DataTable({
                 "columnDefs": [{
@@ -96,7 +100,7 @@
             });
         });
     });
-    $('#example23').DataTable({
+    $('#payTable').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'

@@ -1,17 +1,20 @@
 import datetime
-import random
 import json
+import random
+
 from datatableview import (Datatable, DateTimeColumn, TextColumn,
                            ValuesDatatable)
 from datatableview.helpers import make_xeditable
 from datatableview.views import DatatableView, XEditableDatatableView
 from django import forms
 from django.contrib.auth.hashers import make_password
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
-from api.models import Appointment, Clinician, Provider, Speciality, User
+from api.models import (Appointment, Clinician, Provider, Speciality,
+                        Transaction, User)
 from phealth.utils import get_provider, match_role, redirect, signin
 
 # Create your views here.
@@ -221,7 +224,7 @@ def appointments(request):
 @match_role("healthprovider")
 def dashboard_home(request):
 	''' route for dashboard home  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
@@ -263,7 +266,7 @@ def account_basic(request):
 @match_role("healthprovider")
 def account_contact(request):
 	''' route for account - contact  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
@@ -275,7 +278,7 @@ def account_contact(request):
 @match_role("healthprovider")
 def account_speciality(request):
 	''' route for account - speciality  '''
-	
+
 	u = Provider.objects.filter(poc__email=request.session['email']).first()
 	s = u.specialities.all()
 	class SpecialityForm(forms.ModelForm):
@@ -302,7 +305,7 @@ def account_speciality(request):
 @match_role("healthprovider")
 def account_facilities(request):
 	''' route for account - facilities  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 	if not p.facilities:
 		p.facilities = []
@@ -312,7 +315,7 @@ def account_facilities(request):
 		r = request.POST.dict()
 		del r['csrfmiddlewaretoken']
 		s = json.dumps(r)
-		p.facilities.append(s) 
+		p.facilities.append(s)
 		p.save()
 
 	x = [json.loads(r) for r in p.facilities]
@@ -327,7 +330,7 @@ def account_facilities(request):
 @match_role("healthprovider")
 def account_offerings(request):
 	''' route for account - offerings  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 	if not p.offerings:
 		p.offerings = []
@@ -337,7 +340,7 @@ def account_offerings(request):
 		r = request.POST.dict()
 		del r['csrfmiddlewaretoken']
 		s = json.dumps(r)
-		p.offerings.append(s) 
+		p.offerings.append(s)
 		p.save()
 
 	x = [json.loads(r) for r in p.offerings]
@@ -352,7 +355,7 @@ def account_offerings(request):
 @match_role("healthprovider")
 def account_special_checks(request):
 	''' route for account - special_checks  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 	if not p.special_checks:
 		p.special_checks = []
@@ -362,7 +365,7 @@ def account_special_checks(request):
 		r = request.POST.dict()
 		del r['csrfmiddlewaretoken']
 		s = json.dumps(r)
-		p.special_checks.append(s) 
+		p.special_checks.append(s)
 		p.save()
 
 	x = [json.loads(r) for r in p.special_checks]
@@ -380,27 +383,54 @@ def account_special_checks(request):
 @match_role("healthprovider")
 def branch_new(request):
 	''' route for branch - new  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
+	class BranchForm(forms.ModelForm):
+		class Meta:
+			model = Provider
+			fields = ('name', 'type',)
+
+	if request.method == "POST":
+		new_branch = BranchForm(request.POST, request.FILES)
+		if new_branch.is_valid():
+			branch = new_branch.save(commit=False)
+			branch.is_branch = True
+			branch.parent_provider = p
+			branch.address = p.address
+			branch.poc = p.poc
+			branch.save()
+			return redirect("healthprovider:branch_view")
 
 	return render(request, 'healthprovider/dashboard/branch/new.html.j2', context={
 		'title' : "branch - new",
 	})
 
 
+@csrf_exempt
 @match_role("healthprovider")
 def branch_view(request):
 	''' route for branch - view  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
+	if request.method == "POST":
+		b_id = request.POST['b_id']
+		branch = p.provider_set.filter(pk=b_id).first()
+		if branch:
+			branch.delete()
+			return HttpResponse("Branch successfully deleted!")
+		else:
+			return HttpResponse("Invalid Branch!")
+
+	branches = p.provider_set.all()
 
 	return render(request, 'healthprovider/dashboard/branch/view.html.j2', context={
 		'title' : "branch - view",
+		'branches' : branches,
 	})
 
-	
+
 # branch update routes
 
 
@@ -409,7 +439,7 @@ def branch_basic(request):
 	''' route for branch update - branch_basic'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_basic.html.j2', context={
 		'title' : "Update - branch_basic"
@@ -421,7 +451,7 @@ def branch_contact(request):
 	''' route for branch update - branch_contact'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_contact.html.j2', context={
 		'title' : "Update - branch_contact"
@@ -433,7 +463,7 @@ def branch_facilities(request):
 	''' route for branch update - branch_facilities'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_facilities.html.j2', context={
 		'title' : "Update - branch_facilities"
@@ -445,7 +475,7 @@ def branch_healthcheck(request):
 	''' route for branch update - branch_healthcheck'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_healthcheck.html.j2', context={
 		'title' : "Update - branch_healthcheck"
@@ -457,7 +487,7 @@ def branch_offerings(request):
 	''' route for branch update - branch_offerings'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_offerings.html.j2', context={
 		'title' : "Update - branch_offerings"
@@ -469,7 +499,7 @@ def branch_organization(request):
 	''' route for branch update - branch_organization'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_organization.html.j2', context={
 		'title' : "Update - branch_organization"
@@ -481,7 +511,7 @@ def branch_speciality(request):
 	''' route for branch update - branch_speciality'''
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 
 	return render(request, 'healthprovider/dashboard/branch/branch_speciality.html.j2', context={
 		'title' : "Update - branch_speciality"
@@ -491,7 +521,7 @@ def branch_speciality(request):
 
 # Appointment Routes
 
-@method_decorator(match_role("clinician"), name="dispatch")
+@method_decorator(match_role("healthprovider"), name="dispatch")
 class AppointmentTableView(DatatableView):
 	model = Appointment
 
@@ -518,7 +548,7 @@ class AppointmentTableView(DatatableView):
 					<a href="/healthprovider/dashboard/appointments/cancel/{}" class="datatable-btn btn btn-danger" role="button">Cancel</a>
 				</p>
 				'''.format(instance.id, instance.id)
-			
+
 			return 'NA'
 
 		def get_status_raw(self, instance, **kwargs):
@@ -528,14 +558,14 @@ class AppointmentTableView(DatatableView):
 					<a href="#" class="datatable-btn btn btn-success disabled" role="button">Confirmed</a>
 				</p>
 				'''
-			
+
 			elif instance.status == 'cancelled':
 				return '''
 				<p>
 					<a href="#" class="datatable-btn btn btn-danger disabled" role="button">Cancelled</a>
 				</p>
 				'''
-			
+
 			return '''
 			<p>
 				<a href="#" class="datatable-btn btn btn-warning disabled" role="button">Pending</a>
@@ -544,7 +574,7 @@ class AppointmentTableView(DatatableView):
 
 		def get_provider_name(self, instance, **kwargs):
 			return instance.provider.name
-		
+
 		def get_time(self, instance, **kwargs):
 			time = instance.time
 			m = 'PM' if int(time.hour / 12) else 'AM'
@@ -570,7 +600,7 @@ class AppointmentTableView(DatatableView):
 def confirm_appointment(request, id):
 	p = get_provider(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
-	
+
 	# return JsonResponse({'provider': a.provider.id, 'user': p.id})
 
 	if a.provider == p:
@@ -588,7 +618,7 @@ def confirm_appointment(request, id):
 def cancel_appointment(request, id):
 	p = get_provider(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
-	
+
 	if a.provider == p:
 		a.status = 'cancelled'
 		a.save()
@@ -606,7 +636,7 @@ def appointment_weekly(request):
 
 	today = datetime.date.today()
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	
+
 	days = []
 	for d in range(7):
 		day = today + datetime.timedelta(days=d)
@@ -615,7 +645,7 @@ def appointment_weekly(request):
 			'date': day.strftime('%d-%m-%Y'),
 			'n_pending': p.appointment_set.filter(date=day).filter(status='pending').count(),
 			'n_confirmed': p.appointment_set.filter(date=day).filter(status='confirmed').count(),
-			'n_cancelled': p.appointment_set.filter(date=day).filter(status='cancelled').count(),			
+			'n_cancelled': p.appointment_set.filter(date=day).filter(status='cancelled').count(),
 		})
 
 	return render(request, 'healthprovider/dashboard/appointments/weekly.html.j2', context={
@@ -627,7 +657,7 @@ def appointment_weekly(request):
 @match_role("healthprovider")
 def appointment_monthly(request):
 	''' route for appointment - monthly  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
@@ -642,7 +672,7 @@ def appointment_monthly(request):
 @match_role("healthprovider")
 def payment_new(request):
 	''' route for payment - new  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
@@ -654,7 +684,7 @@ def payment_new(request):
 @match_role("healthprovider")
 def payment_add(request):
 	''' route for payment - add  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
 
@@ -666,12 +696,14 @@ def payment_add(request):
 @match_role("healthprovider")
 def payment_view(request):
 	''' route for payment - view  '''
-	
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
+	trans = Transaction.objects.filter(sender=p.poc).all()
 
 	return render(request, 'healthprovider/dashboard/payment/view.html.j2', context={
 		'title' : "payment - view",
+		'transactions' : trans,
 	})
 
 
@@ -699,7 +731,7 @@ def clinician_new(request):
 		'form': user_form,
 	})
 
-	
+
 
 @method_decorator(match_role("healthprovider"), name="dispatch")
 class ClinicianTableView(DatatableView):
@@ -713,7 +745,7 @@ class ClinicianTableView(DatatableView):
 
 		class Meta:
 			columns = ['user_name', 'user_email', 'user_mobile', 'specialities_parsed']
-			
+
 		def get_clinician_name(self, instance, **kwargs):
 			return instance.user.name
 
@@ -722,12 +754,12 @@ class ClinicianTableView(DatatableView):
 
 		def get_clinician_mobile(self, instance, **kwargs):
 			return instance.user.mobile
-		
+
 		def get_specialities(self, instance, **kwargs):
 			# need to work on this
 			# return instance.specialities
 			return 'Speciality'
-			
+
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['title'] = 'Clinicians'

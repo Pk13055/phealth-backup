@@ -225,10 +225,12 @@ class Speciality(models.Model):
 	name = models.CharField(max_length=50, unique=True)
 	description = models.TextField()
 
+	def __str__(self):
+		return "<Speciality: %s | %s... >" % (self.name, self.description[:15])
+
 	class Meta:
 		managed = True
 		db_table = 'specialities'
-
 
 
 # user associated
@@ -269,7 +271,7 @@ class User(models.Model):
 		('admin', 'admin'), # main admin dashboard
 
 		)
-	
+
 	basic_education_choices = (
 
 		('10', '10'),
@@ -326,7 +328,7 @@ class User(models.Model):
 	other_trainings = models.TextField(default="TEST")
 	other_degrees = models.TextField(default="TEST1")
 
-	
+
 
 	def __str__(self):
 		return str(self.email)
@@ -356,7 +358,7 @@ class Transaction(models.Model):
 		current_timestamp, editable=False)
 
 	sender = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='issued')
-	receiver = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='received')
+	receiver = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='received', null=True, blank=True)
 	amount = models.PositiveSmallIntegerField(default=0)
 
 	status = models.CharField(choices=status_options, max_length=1)
@@ -506,14 +508,25 @@ class Clinician(models.Model):
 class Provider(models.Model):
 	''' the hospital that may or may not be a branch
 	'''
+
+	type_choices = (
+		('clinic','clinic'),
+		('hospital','hospital'),
+		('diagnostic_centre','diagnostic center'),
+	)
+
 	id = models.AutoField(primary_key=True)
-	clinicians = models.ManyToManyField(Clinician)
-	address = models.OneToOneField(Address, on_delete=models.DO_NOTHING)
 	name = models.CharField(max_length=100, default="Generic Hospital")
-	poc = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-	parent_provider = models.OneToOneField("self", on_delete=models.DO_NOTHING, null=True, blank=True)
+	type = models.CharField(choices=type_choices, default='hospital', max_length=30)
+	active_from = models.DateField(default=current_timestamp)
+
+	address = models.ForeignKey(Address, on_delete=models.DO_NOTHING)
+	poc = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
 	is_branch = models.BooleanField(default=False)
-	active_from = models.DateField()
+	parent_provider = models.ForeignKey("self", on_delete=models.DO_NOTHING, null=True, blank=True)
+
+	clinicians = models.ManyToManyField(Clinician)
 	specialities = models.ManyToManyField(Speciality)
 	## New Fields added
 	facilities = ArrayField(models.TextField(), null=True, blank=True)
@@ -607,7 +620,7 @@ class Appointment(models.Model):
 		('cancelled', 'cancelled'),
 		('rescheduled', 'rescheduled'),
 		)
-	
+
 	CSS_options = (
         ('event-info', 'Info'),
         ('event-success', 'Success'),
@@ -619,14 +632,14 @@ class Appointment(models.Model):
 	id = models.AutoField(primary_key=True)
 	create_on = models.DateTimeField(default=current_timestamp, editable=False)
 	date_modified = models.DateTimeField(default=current_timestamp, editable=False)
-	
+
 	date = models.DateField()
 	time = models.TimeField()
 	duration = models.PositiveIntegerField(default=30)
 	status = models.CharField(choices=status_options, default='pending', max_length=40)
 	under = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
 	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
-	
+
 	# calendar config fields
 	from_timestamp = models.DateTimeField(default=current_timestamp, editable=False)
 	to_timestamp = models.DateTimeField(default=current_timestamp, editable=False)

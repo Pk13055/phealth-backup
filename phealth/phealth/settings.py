@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'datatableview',
     'bootstrapform',
     'django_summernote',
+    'django_extensions',
 
     'rest_framework',
     'drf_generators',
