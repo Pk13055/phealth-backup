@@ -25,7 +25,7 @@ def SignIn(request):
 		})
 	elif request.method == "POST":
 		if signin("clinician", request):
-			return redirect('clinician:dashboard_home')
+			return redirect('clinician:dashboard_home_new')
 		return redirect('clinician:signin')
 
 def SignUp(request):
