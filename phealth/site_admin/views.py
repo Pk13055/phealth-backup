@@ -28,7 +28,7 @@ def SignIn(request):
     elif request.method == "POST":
         #print(request.POST)
         if signin("admin", request):
-            return redirect('site_admin:dashboard_home_new')
+            return redirect('site_admin:dashboard_home')
         return redirect('site_admin:signin')
 
 
@@ -206,7 +206,7 @@ def new_home(request):
 
     return render(request, 'site_admin/dashboard/new_home.html', {})
 
-    ''' new dashboard home 
+    ''' new dashboard home
 
     c = User.objects.filter(user__email=request.session['email'])
     return render(request, 'site_admin/dashboard/index.html', context={
@@ -214,7 +214,7 @@ def new_home(request):
         'admin': c,
     }) '''
 
-    
+
 @match_role("admin")
 def new_home(request):
     return render(request, 'site_admin/dashboard/new_home.html', {})
