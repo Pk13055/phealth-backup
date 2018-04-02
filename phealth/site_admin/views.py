@@ -13,6 +13,7 @@ from querystring_parser import parser
 
 from api.models import Appointment, Clinician, Speciality, User
 from phealth.utils import get_clinician, match_role, signin
+from .forms import *
 
 
 # Create your views here.
@@ -232,12 +233,40 @@ def cms_view(request):
 
 @match_role("admin")
 def condition_add(request):
-    return render(request, 'site_admin/dashboard/condition_add.html', {})
-
+    if request.method == 'POST':
+        form = SymptomsForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:condition_view')
+    else:
+        form = SymptomsForm()
+    return render(request, 'site_admin/dashboard/condition_add.html', {'form':form})
 
 @match_role("admin")
 def condition_view(request):
     return render(request, 'site_admin/dashboard/condition_view.html', {})
+
+# Conditions
+
+class ConditionTable(Datatable):
+	class Meta:
+		model = Symptoms
+		exclude = ['id',]
+		columns = [ 'name', 'symptomarea',]
+		ordering = ['-id']
+		# cache_type = cache_types.DEFAULT
+		structure_template = 'datatableview/bootstrap_structure.html'
+
+class ConditionTableView(DatatableView):
+	model = Symptoms
+	datatable_class = ConditionTable
+
+	def get_template_names(self):
+		return 'site_admin/dashboard/condition_view.html'
+
+	def get_queryset(self):
+		return Symptoms.objects.all()
 
 
 @match_role("admin")
