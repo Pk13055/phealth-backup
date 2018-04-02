@@ -73,7 +73,7 @@
             <div class="navbar-header">
                 <div class="top-left-part">
                     <!-- Logo -->
-                    <a class="logo" href="{% url 'healthprovider:dashboard_home' %}">
+                    <a class="logo" href="{% url 'healthprovider:dashboard_home_new' %}">
                         <!--This is dark logo icon-->
                         <img src="{% static 'common/dashboard/plugins/images/admin-logo.png' %}" alt="home" class="dark-logo" />
                         <!--This is light logo icon-->
@@ -109,7 +109,7 @@
                                     <div class="u-text">
                                         <h4>Organization</h4>
                                         <p class="text-muted">name</p>
-                                        <a href="{% url 'healthprovider:dashboard_home' %}" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
+                                        <a href="{% url 'healthprovider:dashboard_home_new' %}" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
                                     </div>
                                 </div>
                             </li>
@@ -142,7 +142,7 @@
                 </div>
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="{% url 'healthprovider:dashboard_home' %}" class="waves-effect">
+                        <a href="{% url 'healthprovider:dashboard_home_new' %}" class="waves-effect">
                             <i class="mdi mdi-av-timer fa-fw"></i>
                             <span class="hide-menu"> Dashboard </span>
                         </a>
