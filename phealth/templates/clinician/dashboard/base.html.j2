@@ -27,39 +27,39 @@
 	<link href="{% static 'common/dashboard/css/animate.css' %}" rel="stylesheet">
 	<!-- Custom CSS -->
 	<link href="{% static 'common/dashboard/css/style.css' %}" rel="stylesheet">
-	
+
 	<!-- color CSS -->
 	<link href="{% static 'common/dashboard/css/colors/default.css' %}" id="theme" rel="stylesheet">
 
-	
+
 	<!-- Custom (functionality) JS/CSS -->
 
 	<script src="{% static 'common/dashboard/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="{% static 'common/dashboard/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-	
-	
+
+
 	<!-- FullCalendar Files -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.print.css" media='print'> 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.print.css" media='print'>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
-	
+
 	<!-- DataTables files -->
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/> 
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/>
 	<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.js"></script>
 	<script src="{% static 'js/datatableview.min.js' %}"></script>
 	<script> datatableview.auto_initialize = true;</script>
-	
+
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	
+
 	{% block styles %} {% endblock %}
-	
+
 </head>
 
 <body class="fix-header">
@@ -73,7 +73,7 @@
 			<div class="navbar-header">
 				<div class="top-left-part">
 					<!-- Logo -->
-					<a class="logo" href="{% url 'clinician:dashboard_home_new' %}">
+					<a class="logo" href="{% url 'clinician:dashboard_home' %}">
 						<!-- Logo icon image, you can use font-icon also --><b>
                         <!--This is dark logo icon--><img src="{% static 'common/dashboard/plugins/images/admin-logo.png' %}" alt="home" class="dark-logo" /><!--This is light logo icon--><img src="{% static 'common/dashboard/plugins/images/admin-logo-dark.png' %}" alt="home" class="light-logo" />
                      </b>
@@ -119,7 +119,7 @@
 				<div class="user-profile">
 				</div>
 				<ul class="nav" id="side-menu">
-					<li><a href="{% url 'clinician:dashboard_home_new' %}" class="waves-effect"><i class="mdi mdi-av-timer fa-fw"></i> <span class="hide-menu"> Dashboard </span></a></li>
+					<li><a href="{% url 'clinician:dashboard_home' %}" class="waves-effect"><i class="mdi mdi-av-timer fa-fw"></i> <span class="hide-menu"> Dashboard </span></a></li>
 					<li>
 						<a href="#" class="waves-effect"><i class="mdi mdi-settings fa-fw" data-icon="v"></i> <span class="hide-menu"> My Account <span class="fa arrow"></span> </span></a>
 						<ul class="nav nav-second-level">

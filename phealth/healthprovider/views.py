@@ -82,7 +82,7 @@ def SignIn(request):
 			})
 	elif request.method == "POST":		
 		if signin("healthprovider", request):
-			return redirect('healthprovider:dashboard_home_new')
+			return redirect('healthprovider:dashboard_home')
 		return redirect('healthprovider:signin')
 
 @match_role("healthprovider")
