@@ -7,7 +7,7 @@ from datatableview.helpers import make_xeditable
 from datatableview.views import DatatableView, XEditableDatatableView
 from django import forms
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
 from querystring_parser import parser
 
@@ -26,9 +26,9 @@ def SignIn(request):
             "color": "info"
         })
     elif request.method == "POST":
-        #print(request.POST)
+        # print(request.POST)
         if signin("admin", request):
-            return redirect('site_admin:dashboard_home')
+            return redirect('site_admin:dashboard_home_new')
         return redirect('site_admin:signin')
 
 
@@ -42,34 +42,37 @@ def SignUp(request):
 
 @match_role("admin")
 def dashboard(request):
-	''' route for dashboard home '''
+    ''' route for dashboard home '''
 
-	u = User.objects.filter(user__email=request.session['email']).first()
-	v = u.user
-	class ClinicianForm(forms.ModelForm):
+    u = User.objects.filter(user__email=request.session['email']).first()
+    v = u.user
 
-		class Meta:
-			model = Clinician
-			fields = ('education', 'experience')
-	class UserForm(forms.ModelForm):
+    class ClinicianForm(forms.ModelForm):
 
-		class Meta:
-			model = User
-			fields = ('name', 'email', 'mobile', 'gender',
-			 'question', 'answer', 'profile_pic')
+        class Meta:
+            model = Clinician
+            fields = ('education', 'experience')
 
-	if request.method == "POST":
-		c = ClinicianForm(request.POST, request.FILES, instance=u)
-		b = UserForm(request.POST, request.FILES, instance=v)
-		if c.is_valid() and b.is_valid():
-			c.save() and b.save()
+    class UserForm(forms.ModelForm):
 
-	return render(request, 'clinician/dashboard/home.html.j2', context={
-		"title": "Dashboard Home",
-		"form_title" : "Edit basic information",
-		"clinician_form" : ClinicianForm(instance=u),
-		"user_form" : UserForm(instance=v),
-	})
+        class Meta:
+            model = User
+            fields = ('name', 'email', 'mobile', 'gender',
+                      'question', 'answer', 'profile_pic')
+
+    if request.method == "POST":
+        c = ClinicianForm(request.POST, request.FILES, instance=u)
+        b = UserForm(request.POST, request.FILES, instance=v)
+        if c.is_valid() and b.is_valid():
+            c.save() and b.save()
+
+    return render(request, 'clinician/dashboard/home.html.j2', context={
+        "title": "Dashboard Home",
+        "form_title": "Edit basic information",
+        "clinician_form": ClinicianForm(instance=u),
+        "user_form": UserForm(instance=v),
+    })
+
 
 @match_role("admin")
 def speciality(request):
@@ -203,10 +206,9 @@ def calender(request):
 
 @match_role("admin")
 def new_home(request):
-
     return render(request, 'site_admin/dashboard/new_home.html', {})
 
-    ''' new dashboard home
+    ''' new dashboard home 
 
     c = User.objects.filter(user__email=request.session['email'])
     return render(request, 'site_admin/dashboard/index.html', context={
@@ -220,7 +222,6 @@ def new_home(request):
     return render(request, 'site_admin/dashboard/new_home.html', {})
 
 
-
 @match_role("admin")
 def cms_add(request):
     return render(request, 'site_admin/dashboard/cms_add.html', {})
@@ -230,7 +231,7 @@ def cms_add(request):
 def cms_view(request):
     return render(request, 'site_admin/dashboard/cms_view.html', {})
 
-
+#conditions
 @match_role("admin")
 def condition_add(request):
     if request.method == 'POST':
@@ -241,33 +242,31 @@ def condition_add(request):
             return redirect('site_admin:condition_view')
     else:
         form = SymptomsForm()
-    return render(request, 'site_admin/dashboard/condition_add.html', {'form':form})
+    return render(request, 'site_admin/dashboard/condition_add.html', {'form': form})
 
 @match_role("admin")
 def condition_view(request):
-    return render(request, 'site_admin/dashboard/condition_view.html', {})
+    result = Symptoms.objects.all()
+    return render(request, 'site_admin/dashboard/condition_view.html', {'values': result})
 
-# Conditions
+@match_role("admin")
+def condition_edit(request, pk):
+    post = get_object_or_404(Symptoms, pk=pk)
+    if request.method == "POST":
+        form = SymptomsForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:condition_view')
+    else:
+        form = SymptomsForm(instance=post)
+    return render(request, 'site_admin/dashboard/condition_add.html', {'form': form})
 
-class ConditionTable(Datatable):
-	class Meta:
-		model = Symptoms
-		exclude = ['id',]
-		columns = [ 'name', 'symptomarea',]
-		ordering = ['-id']
-		# cache_type = cache_types.DEFAULT
-		structure_template = 'datatableview/bootstrap_structure.html'
-
-class ConditionTableView(DatatableView):
-	model = Symptoms
-	datatable_class = ConditionTable
-
-	def get_template_names(self):
-		return 'site_admin/dashboard/condition_view.html'
-
-	def get_queryset(self):
-		return Symptoms.objects.all()
-
+@match_role("admin")
+def condition_delete(request, pk):
+    result = Symptoms.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:condition_view')
 
 @match_role("admin")
 def timesession_add(request):
@@ -373,9 +372,11 @@ def idconfiguration_add(request):
 def idconfiguration_view(request):
     return render(request, 'site_admin/dashboard/idconfiguration_view.html', {})
 
+
 @match_role("admin")
 def users(request):
     return render(request, 'site_admin/dashboard/users.html', {})
+
 
 @match_role("admin")
 def salesagents_add(request):
@@ -471,11 +472,10 @@ def resellers_packages_add(request):
 def resellers_packages_view(request):
     return render(request, 'site_admin/dashboard/resellers_packages_view.html', {})
 
+
 @match_role("admin")
 def resellers_packages_reports(request):
     return render(request, 'site_admin/dashboard/resellers_packages_reports.html', {})
-
-
 
 
 # appointment routes
@@ -816,8 +816,8 @@ def education_training(request):
         class Meta:
             model = User
             fields = (
-            'basic_education', 'post_graduate', 'diploma', 'super_speciality', 'other_trainings', 'other_degrees',
-            'profile_pic')
+                'basic_education', 'post_graduate', 'diploma', 'super_speciality', 'other_trainings', 'other_degrees',
+                'profile_pic')
 
     if request.method == "POST":
         e = EducationForm(request.POST, request.FILES, instance=u)
