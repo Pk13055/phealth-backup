@@ -302,17 +302,46 @@ def coupons_view(request):
 def coupons_reports(request):
     return render(request, 'site_admin/dashboard/coupons_reports.html', {})
 
-
+#-------------------------------------------------------------------------------
 @match_role("admin")
 def test_add(request):
-    return render(request, 'site_admin/dashboard/test_add.html', {})
+    if request.method == 'POST':
+        form = TestForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:test_view')
+    else:
+        form = TestForm()
+    return render(request, 'site_admin/dashboard/test_add.html', {'form': form})
 
 
 @match_role("admin")
 def test_view(request):
-    return render(request, 'site_admin/dashboard/test_view.html', {})
+    result = Test.objects.all()
+    return render(request, 'site_admin/dashboard/test_view.html', {'values': result})
+
+@match_role("admin")
+def test_edit(request, pk):
+    post = get_object_or_404(Test, pk=pk)
+    if request.method == "POST":
+        form = TestForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:test_view')
+    else:
+        form = TestForm(instance=post)
+    return render(request, 'site_admin/dashboard/test_add.html', {'form': form})
+
+@match_role("admin")
+def test_delete(request, pk):
+    result = Test.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:test_view')
 
 
+#------------------------------------------------------------------------------>
 @match_role("admin")
 def test_category_add(request):
     return render(request, 'site_admin/dashboard/test_category_add.html', {})
@@ -402,30 +431,88 @@ def health_weekly(request):
 def health_monthly(request):
     return render(request, 'site_admin/dashboard/health_monthly.html', {})
 
-
+#---------------------Dicount Cards------------------------------------------------------------
 @match_role("admin")
 def discountcard_add(request):
-    return render(request, 'site_admin/dashboard/discountcard_add.html', {})
+    if request.method == 'POST':
+        form = DiscountForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:discountcard_view')
+    else:
+        form = DiscountForm()
+    return render(request, 'site_admin/dashboard/discountcard_add.html', {'form': form})
 
 
 @match_role("admin")
 def discountcard_view(request):
-    return render(request, 'site_admin/dashboard/discountcard_view.html', {})
+    result = DiscountCard.objects.all()
+    return render(request, 'site_admin/dashboard/discountcard_view.html', {'values': result})
+
+@match_role("admin")
+def discountcard_edit(request, pk):
+    post = get_object_or_404(DiscountCard, pk=pk)
+    if request.method == "POST":
+        form = DiscountForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:discountcard_view')
+    else:
+        form = DiscountForm(instance=post)
+    return render(request, 'site_admin/dashboard/discountcard_add.html', {'form': form})
+
+@match_role("admin")
+def dicountcard_delete(request, pk):
+    result = DiscountCard.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:discountcard_view')
 
 
 @match_role("admin")
 def discountcard_reports(request):
+    result = DiscountCard.objects.all()
     return render(request, 'site_admin/dashboard/discountcard_reports.html', {})
 
-
+#-------------------------------Healthcheckups---------------------------------------------------------------------
 @match_role("admin")
 def healthcheck_add(request):
-    return render(request, 'site_admin/dashboard/healthcheck_add.html', {})
+    if request.method == 'POST':
+        form = HealthCheckupForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:healthcheck_view')
+    else:
+        form = HealthCheckupForm()
+    return render(request, 'site_admin/dashboard/healthcheck_add.html', {'form': form})
 
 
 @match_role("admin")
 def healthcheck_view(request):
-    return render(request, 'site_admin/dashboard/healthcheck_view.html', {})
+    result = HealthCheckup.objects.all()
+    return render(request, 'site_admin/dashboard/healthcheck_view.html', {'values': result})
+
+@match_role("admin")
+def healthcheck_edit(request, pk):
+    post = get_object_or_404(HealthCheckup, pk=pk)
+    if request.method == "POST":
+        form = HealthCheckupForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:healthcheck_view')
+    else:
+        form = DiscountForm(instance=post)
+    return render(request, 'site_admin/dashboard/healthcheck_add.html', {'form': form})
+
+@match_role("admin")
+def healthcheck_delete(request, pk):
+    result = HealthCheckup.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:healthcheck_view')
+
 
 
 @match_role("admin")
@@ -447,7 +534,7 @@ def healthprovider_plans_view(request):
 def healthprovider_plans_reports(request):
     return render(request, 'site_admin/dashboard/healthprovider_plans_reports.html', {})
 
-
+#------------------------------------------------------------------------------------------------------------------------
 @match_role("admin")
 def salesagents_packages_add(request):
     return render(request, 'site_admin/dashboard/salesagents_packages_add.html', {})
