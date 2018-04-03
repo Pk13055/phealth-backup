@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
 from querystring_parser import parser
 
-from api.models import Appointment, Clinician, Speciality, User
+from api.models import Appointment, Clinician,Symptoms , Speciality, User ,TestCategory ,TestSubcategory
 from phealth.utils import get_clinician, match_role, signin
 from .forms import *
 
@@ -280,13 +280,40 @@ def timesession_view(request):
 
 @match_role("admin")
 def speciality_add(request):
-    return render(request, 'site_admin/dashboard/speciality_add.html', {})
+    if request.method == 'POST':
+        form = SymptomsForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:condition_view')
+    else:
+        form = SymptomsForm()
+    return render(request, 'site_admin/dashboard/speciality_add.html', {'form': form})
 
 
 @match_role("admin")
 def speciality_view(request):
-    return render(request, 'site_admin/dashboard/speciality_view.html', {})
+    result = Speciality.objects.all()
+    return render(request, 'site_admin/dashboard/speciality_view.html', {'values': result})
 
+@match_role("admin")
+def speciality_edit(request, pk):
+    post = get_object_or_404(Speciality, pk=pk)
+    if request.method == "POST":
+        form = SpecialityForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:speciality_view')
+    else:
+        form = SpecialityForm(instance=post)
+    return render(request, 'site_admin/dashboard/speciality_add.html', {'form': form})
+
+@match_role("admin")
+def speciality_delete(request, pk):
+    result = Speciality.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:condition_view')
 
 @match_role("admin")
 def coupons_add(request):
@@ -344,22 +371,79 @@ def test_delete(request, pk):
 #------------------------------------------------------------------------------>
 @match_role("admin")
 def test_category_add(request):
-    return render(request, 'site_admin/dashboard/test_category_add.html', {})
-
+    if request.method == 'POST':
+        form = TestcategoryForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:test_category_view')
+    else:
+        form = TestcategoryForm()
+    return render(request, 'site_admin/dashboard/test_category_add.html', {'form': form})
 
 @match_role("admin")
 def test_category_view(request):
-    return render(request, 'site_admin/dashboard/test_category_view.html', {})
+    result = TestCategory.objects.all()
+    return render(request, 'site_admin/dashboard/test_category_view.html', {'values':result})
+
+@match_role("admin")
+def test_category_edit(request, pk):
+    post = get_object_or_404(TestCategory, pk=pk)
+    if request.method == "POST":
+        form = TestcategoryForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:test_category_view')
+    else:
+        form = TestcategoryForm(instance=post)
+    return render(request, 'site_admin/dashboard/test_category_add.html', {'form': form})
+
+@match_role("admin")
+def test_category_delete(request, pk):
+    result = TestCategory.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:test_category_view')
+
 
 
 @match_role("admin")
 def test_subcategory_add(request):
-    return render(request, 'site_admin/dashboard/test_subcategory_add.html', {})
+    if request.method == 'POST':
+        form = TestsubcategoryForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:test_subcategory_view')
+    else:
+        form = TestsubcategoryForm()
+    return render(request, 'site_admin/dashboard/test_subcategory_add.html', {'form': form})
+
+@ match_role("admin")
+def test_subcategory_view(request):
+    result = TestSubcategory.objects.all()
+    return render(request, 'site_admin/dashboard/test_subcategory_view.html', {'values': result})
+
 
 
 @match_role("admin")
-def test_subcategory_view(request):
-    return render(request, 'site_admin/dashboard/test_subcategory_view.html', {})
+def test_subcategory_edit(request, pk):
+    post = get_object_or_404(TestSubcategory, pk=pk)
+    if request.method == "POST":
+        form = TestcategoryForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:test_subcategory_view')
+    else:
+        form = TestcategoryForm(instance=post)
+    return render(request, 'site_admin/dashboard/test_subcategory_add.html', {'form': form})
+
+@match_role("admin")
+def test_subcategory_delete(request, pk):
+    result = TestSubcategory.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:test_subcategory_view')
 
 
 @match_role("admin")
