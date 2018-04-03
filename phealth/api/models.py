@@ -786,3 +786,28 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Facility(models.Model):
+	facility_type = models.ForeignKey('FacilityType', on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.name
+
+
+class FacilityType(models.Model):
+	service_type = models.ForeignKey('ServiceType', on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.name
+
+class ServiceType(models.Model):
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.name

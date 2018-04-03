@@ -288,20 +288,47 @@ def speciality_view(request):
     return render(request, 'site_admin/dashboard/speciality_view.html', {})
 
 
+#Coupons
 @match_role("admin")
 def coupons_add(request):
-    return render(request, 'site_admin/dashboard/coupons_add.html', {})
-
+    if request.method == 'POST':
+        form = CouponForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:coupons_view')
+    else:
+        form = CouponForm()
+    return render(request, 'site_admin/dashboard/coupons_add.html', {'form': form})
 
 @match_role("admin")
 def coupons_view(request):
-    return render(request, 'site_admin/dashboard/coupons_view.html', {})
+    result = Coupon.objects.all()
+    return render(request, 'site_admin/dashboard/coupons_view.html', {'values': result})
+
+@match_role("admin")
+def coupons_edit(request, pk):
+    post = get_object_or_404(Coupon, pk=pk)
+    if request.method == "POST":
+        form = CouponForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:coupons_view')
+    else:
+        form = CouponForm(instance=post)
+    return render(request, 'site_admin/dashboard/coupons_add.html', {'form': form})
+
+@match_role("admin")
+def coupons_delete(request, pk):
+    result = Coupon.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:coupons_view')
 
 
 @match_role("admin")
 def coupons_reports(request):
     return render(request, 'site_admin/dashboard/coupons_reports.html', {})
-
 
 @match_role("admin")
 def test_add(request):
@@ -333,24 +360,81 @@ def test_subcategory_view(request):
     return render(request, 'site_admin/dashboard/test_subcategory_view.html', {})
 
 
+#facility_type
 @match_role("admin")
 def facility_type_add(request):
-    return render(request, 'site_admin/dashboard/facility_type_add.html', {})
-
+    if request.method == 'POST':
+        form = FacilityTypeForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:facility_type_view')
+    else:
+        form = FacilityTypeForm()
+    return render(request, 'site_admin/dashboard/facility_type_add.html', {'form': form})
 
 @match_role("admin")
 def facility_type_view(request):
-    return render(request, 'site_admin/dashboard/facility_type_view.html', {})
-
+    result = FacilityType.objects.all()
+    return render(request, 'site_admin/dashboard/facility_type_view.html', {'values': result})
 
 @match_role("admin")
-def facility_add(request):
-    return render(request, 'site_admin/dashboard/facility_add.html', {})
+def facility_type_edit(request, pk):
+    post = get_object_or_404(FacilityType, pk=pk)
+    if request.method == "POST":
+        form = FacilityTypeForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:facility_type_view')
+    else:
+        form = FacilityTypeForm(instance=post)
+    return render(request, 'site_admin/dashboard/facility_type_add.html', {'form': form})
 
+@match_role("admin")
+def facility_type_delete(request, pk):
+    result = FacilityType.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:facility_type_view')
+
+
+
+#facility
+@match_role("admin")
+def facility_add(request):
+    if request.method == 'POST':
+        form = FacilityForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:facility_view')
+    else:
+        form = FacilityForm()
+    return render(request, 'site_admin/dashboard/facility_add.html', {'form': form})
 
 @match_role("admin")
 def facility_view(request):
-    return render(request, 'site_admin/dashboard/facility_view.html', {})
+    result = Facility.objects.all()
+    return render(request, 'site_admin/dashboard/facility_view.html', {'values': result})
+
+@match_role("admin")
+def facility_edit(request, pk):
+    post = get_object_or_404(Facility, pk=pk)
+    if request.method == "POST":
+        form = FacilityForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:facility_view')
+    else:
+        form = FacilityForm(instance=post)
+    return render(request, 'site_admin/dashboard/facility_add.html', {'form': form})
+
+@match_role("admin")
+def facility_delete(request, pk):
+    result = Facility.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:facility_view')
 
 
 @match_role("admin")

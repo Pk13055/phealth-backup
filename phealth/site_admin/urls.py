@@ -41,23 +41,37 @@ dashboard_routes = [
     url(r'^condition_view/?$', views.condition_view, name='condition_view'),
     url(r'^condition_edit/(?P<pk>\d+)/condition_edit/$', views.condition_edit, name='condition_edit'),
     url(r'^condition_delete/condition_delete/(?P<pk>\d+)/$', views.condition_delete, name='condition_delete'),
+
+    url(r'^coupons_add/?$', views.coupons_add, name='coupons_add'),
+    url(r'^coupons_view/?$', views.coupons_view, name='coupons_view'),
+    url(r'^coupons_edit/(?P<pk>\d+)/coupons_edit/$', views.coupons_edit, name='coupons_edit'),
+    url(r'^coupons_delete/coupons_delete/(?P<pk>\d+)/$', views.coupons_delete, name='coupons_delete'),
+    url(r'^coupons_reports/?$', views.coupons_reports, name='coupons_reports'),
+
+    url(r'^facility_type_add/?$', views.facility_type_add, name='facility_type_add'),
+    url(r'^facility_type_view/?$', views.facility_type_view, name='facility_type_view'),
+    url(r'^facility_type_edit/(?P<pk>\d+)/facility_type_edit/$', views.facility_type_edit, name='facility_type_edit'),
+    url(r'^facility_type_delete/facility_type_delete/(?P<pk>\d+)/$', views.facility_type_delete, name='facility_type_delete'),
+
+    url(r'^facility_add/?$', views.facility_add, name='facility_add'),
+    url(r'^facility_view/?$', views.facility_view, name='facility_view'),
+    url(r'^facility_edit/(?P<pk>\d+)/facility_edit/$', views.facility_edit, name='facility_edit'),
+    url(r'^facility_delete/facility_delete/(?P<pk>\d+)/$', views.facility_delete, name='facility_delete'),
+
+
+
     url(r'^timesession_add/?$', views.timesession_add, name='timesession_add'),
     url(r'^timesession_view/?$', views.timesession_view, name='timesession_view'),
     url(r'^speciality_add/?$', views.speciality_add, name='speciality_add'),
     url(r'^speciality_view/?$', views.speciality_view, name='speciality_view'),
-    url(r'^coupons_add/?$', views.coupons_add, name='coupons_add'),
-    url(r'^coupons_view/?$', views.coupons_view, name='coupons_view'),
-    url(r'^coupons_reports/?$', views.coupons_reports, name='coupons_reports'),
+
     url(r'^test_add/?$', views.test_add, name='test_add'),
     url(r'^test_view/?$', views.test_view, name='test_view'),
     url(r'^test_category_add/?$', views.test_category_add, name='test_category_add'),
     url(r'^test_category_view/?$', views.test_category_view, name='test_category_view'),
     url(r'^test_subcategory_add/?$', views.test_subcategory_add, name='test_subcategory_add'),
     url(r'^test_subcategory_view/?$', views.test_subcategory_view, name='test_subcategory_view'),
-    url(r'^facility_type_add/?$', views.facility_type_add, name='facility_type_add'),
-    url(r'^facility_type_view/?$', views.facility_type_view, name='facility_type_view'),
-    url(r'^facility_add/?$', views.facility_add, name='facility_add'),
-    url(r'^facility_view/?$', views.facility_view, name='facility_view'),
+
     url(r'^roles_add/?$', views.roles_add, name='roles_add'),
     url(r'^roles_view/?$', views.roles_view, name='roles_view'),
     url(r'^idconfiguration_add/?$', views.idconfiguration_add, name='idconfiguration_add'),

@@ -34,7 +34,7 @@
                                    {% for result in values %}
                                     <tr>
                                         <td>{{ result.name }}</td>
-                                        <td>{{ result.Symptomarea }}</td>
+                                        <td>{{ result.symptomarea }}</td>
                                         <td><center><a class="btn btn-warning"  href="{% url 'site_admin:condition_edit' pk=result.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'site_admin:condition_delete' pk=result.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>
                                     </tr>
                                     {% endfor %}
