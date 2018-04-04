@@ -1,4 +1,7 @@
 {% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+<script>
+	datatableview.auto_initialize = false;
+</script>
          <div class="container-fluid">
             <div class="row bg-title">
                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -22,25 +25,7 @@
 
                       <div class="col-md-12 white-box">
                      <div class="panel-body">
-                             <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                         <th>name</th>
-                                        <th>Symptomarea</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   {% for result in values %}
-                                    <tr>
-                                        <td>{{ result.name }}</td>
-                                        <td>{{ result.symptomarea }}</td>
-                                        <td><center><a class="btn btn-warning"  href="{% url 'site_admin:condition_edit' pk=result.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'site_admin:condition_delete' pk=result.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>
-                                    </tr>
-                                    {% endfor %}
-
-                                </tbody>
-                            </table>
+                             {{ datatable }}
 
                      </div>
                           </div>
@@ -50,4 +35,13 @@
             <!-- /.container-fluid -->
             <footer class="footer text-center"> 2018 &copy; Phealth </footer>
          </div>
-        {% endblock content %}
+
+{% endblock content %}
+{% block script %}
+<script>
+$(document).ready(function() {
+	datatableview.initialize($('table.datatable'));
+});
+</script>
+{% endblock script %}
+

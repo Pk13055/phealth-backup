@@ -38,7 +38,7 @@ dashboard_routes = [
 	url(r'^cms_add/?$', views.cms_add, name='cms_add'),
 	url(r'^cms_view/?$', views.cms_view, name='cms_view'),
     url(r'^condition_add/?$', views.condition_add, name='condition_add'),
-    url(r'^condition_view/?$', views.condition_view, name='condition_view'),
+    url(r'^condition_view/?$',views.ConditionTableView.as_view(), name='condition_view'),
     url(r'^condition_edit/(?P<pk>\d+)/condition_edit/$', views.condition_edit, name='condition_edit'),
     url(r'^condition_delete/condition_delete/(?P<pk>\d+)/$', views.condition_delete, name='condition_delete'),
 

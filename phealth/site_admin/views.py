@@ -244,6 +244,29 @@ def condition_add(request):
         form = SymptomsForm()
     return render(request, 'site_admin/dashboard/condition_add.html', {'form': form})
 
+class ConditionTableView(DatatableView):
+    model = Symptoms
+
+    class datatable_class(Datatable):
+        button = TextColumn('Action', None, processor='get_button_raw')
+        class Meta:
+            columns = ['name', 'symptomarea',  'button']
+
+        def get_button_raw(self, instance, **kwargs):
+            return '''
+				<p>
+					<a href="/site_admin/dashboard/condition_edit/{}/condition_edit/" class="datatable-btn btn btn-success" role="button">Edit</a>
+					<a href="/site_admin/dashboard/condition_delete/condition_delete/{}/" class="datatable-btn btn btn-danger" role="button">Delete</a>
+				</p>
+				'''.format(instance.id, instance.id)
+
+    def get_queryset(self):
+        return Symptoms.objects.all()
+
+    def get_template_names(self):
+        return 'site_admin/dashboard/condition_view.html'
+
+
 @match_role("admin")
 def condition_view(request):
     result = Symptoms.objects.all()
@@ -737,80 +760,28 @@ def resellers_packages_reports(request):
 
 
 # appointment routes
-
-@method_decorator(match_role("admin"), name="dispatch")
 class AppointmentTableView(DatatableView):
-    model = Appointment
+    model = Symptoms
 
     class datatable_class(Datatable):
-        time_parsed = DateTimeColumn('Time', None, processor='get_time')
-        status_new = TextColumn('Status', None, processor='get_status_raw')
-        button = TextColumn('Confirm/Cancel', None, processor='get_button_raw')
-
+        button = TextColumn('Action', None, processor='get_button_raw')
         class Meta:
-            columns = ['date', 'time_parsed', 'provider', 'status_new', 'button']
-            labels = {
-                'date': 'Date',
-                'provider': 'Provider',
-            }
-            processors = {
-                'provider': 'get_provider_name',
-            }
+            columns = ['name',   'button']
 
         def get_button_raw(self, instance, **kwargs):
-            if instance.status == 'pending':
-                return '''
+            return '''
 				<p>
-					<a href="/admin/dashboard/appointments/confirm/{}" class="datatable-btn btn btn-success" role="button">Confirm</a>
-					<a href="/admin/dashboard/appointments/cancel/{}" class="datatable-btn btn btn-danger" role="button">Cancel</a>
+					<a href="/site_admin/dashboard/condition_edit/{}/condition_edit/" class="datatable-btn btn btn-success" role="button">Edit</a>
+					<a href="/site_admin/dashboard/condition_delete/{}/condition_delete/" class="datatable-btn btn btn-danger" role="button">Delete</a>
 				</p>
 				'''.format(instance.id, instance.id)
 
-            return 'NA'
-
-        def get_status_raw(self, instance, **kwargs):
-            if instance.status == 'confirmed':
-                return '''
-				<p>
-					<a href="#" class="datatable-btn btn btn-success disabled" role="button">Confirmed</a>
-				</p>
-				'''
-
-            elif instance.status == 'cancelled':
-                return '''
-				<p>
-					<a href="#" class="datatable-btn btn btn-danger disabled" role="button">Cancelled</a>
-				</p>
-				'''
-
-            return '''
-			<p>
-				<a href="#" class="datatable-btn btn btn-warning disabled" role="button">Pending</a>
-			</p>
-			'''
-
-        def get_provider_name(self, instance, **kwargs):
-            return instance.provider.name
-
-        def get_time(self, instance, **kwargs):
-            time = instance.time
-            m = 'PM' if int(time.hour / 12) else 'AM'
-            return '{}:{} {}'.format(time.hour % 12, time.minute, m)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Appointments'
-        context['admin'] = get_clinician(self.request.session['email'])
-        return context
+    def get_queryset(self):
+        return Symptoms.objects.all()
 
     def get_template_names(self):
-        return 'site_admin/dashboard/appointments/daily.html.j2'
+        return 'site_admin/dashboard/appointments/daily.html'
 
-    def get_queryset(self):
-        today = datetime.date.today()
-        c = get_clinician(self.request.session['email'])
-        # return Appointment.objects.order_by('time', 'date').filter(under=c).filter(date__gte=today)
-        return Appointment.objects.order_by('time', 'date').filter(under=c)
 
 
 @match_role("admin")
