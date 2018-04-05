@@ -364,14 +364,43 @@ def symptomsarea_delete(request, pk):
 
 
 #==========================================================end symptomarea
+
 @match_role("admin")
 def timesession_add(request):
-    return render(request, 'site_admin/dashboard/timesession_add.html', {})
+    if request.method == 'POST':
+        form = TimesessionForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:condition_view')
+    else:
+        form = TimesessionForm()
+    return render(request, 'site_admin/dashboard/timesession_add.html', {'form': form})
 
 
 @match_role("admin")
 def timesession_view(request):
-    return render(request, 'site_admin/dashboard/timesession_view.html', {})
+    result = Timesession.objects.all()
+    return render(request, 'site_admin/dashboard/timesession_view.html', {'values': result})
+
+@match_role("admin")
+def timesession_edit(request, pk):
+    post = get_object_or_404(timesession, pk=pk)
+    if request.method == "POST":
+        form = TimesessionForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:timesession_view')
+    else:
+        form = TimesessionForm(instance=post)
+    return render(request, 'site_admin/dashboard/timesession_add.html', {'form': form})
+
+@match_role("admin")
+def timesession_delete(request, pk):
+    result = Timesession.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:condition_view')
 
 
 @match_role("admin")
