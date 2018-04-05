@@ -38,4 +38,5 @@ urlpatterns = [
     url(r'^sponsor/', include('sponsor.urls', namespace='sponsor')),
     url(r'^reseller/', include('reseller.urls', namespace='reseller')),
     url(r'^salesagent/', include('salesagent.urls', namespace='salesagent')),
+    url(r'^healthseeker/',include('healthseeker.urls',namespace='healthseeker'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

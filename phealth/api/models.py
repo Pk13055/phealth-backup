@@ -374,6 +374,13 @@ class Transaction(models.Model):
 
 '''
 
+class HealthSeekerAddress(models.Model):
+	id = models.AutoField(primary_key=True)
+	location = models.CharField(max_length=100,blank=True,null=True)
+	door_no = models.CharField(max_length=50,blank=True,null=True)
+	landmark = models.CharField(max_length=100,blank=True,null=True)
+	type_of_address = models.CharField(max_length=50,blank=True,null=True)
+
 class Seeker(models.Model):
 	''' the common user who will be using the platform
 	'''
@@ -399,6 +406,11 @@ class Seeker(models.Model):
 		('other', 'other'),
 		)
 
+	gender = (
+		('male','Male'),
+		('female','Female')
+	)
+
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
 	family = models.ManyToManyField("self")
@@ -408,6 +420,11 @@ class Seeker(models.Model):
 	dob = models.DateField()
 
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
+	full_name = models.CharField(max_length=100,blank = True,null=True)
+	gender = models.CharField(max_length=100,choices=gender,default="",blank=True,null=True)
+	profile_pic = models.FileField(blank=True,null=True)
+	email = models.EmailField(max_length=100,blank=True,null=True)
+	mobile_number = models.CharField(max_length=100,blank=True,null=True)
 
 	def __str__(self):
 		return "<Seeker : %s >" % self.user.email
