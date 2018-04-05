@@ -68,6 +68,9 @@ dashboard_routes = [
 
     url(r'^timesession_add/?$', views.timesession_add, name='timesession_add'),
     url(r'^timesession_view/?$', views.timesession_view, name='timesession_view'),
+    url(r'^timesession_edit/(?P<pk>\d+)/timesession_edit/$', views.timesession_edit, name='timesession_edit'),
+    url(r'^timesession_delete/timesession_delete/(?P<pk>\d+)/$', views.timesession_delete, name='timesession_delete'),
+
     url(r'^speciality_add/?$', views.speciality_add, name='speciality_add'),
     url(r'^speciality_view/?$', views.speciality_view, name='speciality_view'),
 
