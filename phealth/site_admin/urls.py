@@ -6,39 +6,39 @@ from . import views
 app_name = "site_admin"
 
 appointment_routes = [
-	url(r'^daily/?$', views.AppointmentTableView.as_view(), name='appointment_daily'),
-	url(r'^weekly/?$', views.appointment_weekly, name='appointment_weekly'),
-	url(r'^monthly/?$', views.appointment_monthly, name='appointment_monthly'),
-	path('confirm/<int:id>/', views.confirm_appointment, name='confirm_appointment'),
-	path('cancel/<int:id>/', views.cancel_appointment, name='cancel_appointment'),
+    url(r'^daily/?$', views.AppointmentTableView.as_view(), name='appointment_daily'),
+    url(r'^weekly/?$', views.appointment_weekly, name='appointment_weekly'),
+    url(r'^monthly/?$', views.appointment_monthly, name='appointment_monthly'),
+    path('confirm/<int:id>/', views.confirm_appointment, name='confirm_appointment'),
+    path('cancel/<int:id>/', views.cancel_appointment, name='cancel_appointment'),
 ]
 
 timing_routes = [
-	url(r'^work/?$', views.timing_work, name='timing_work'),
-	url(r'^break/?$', views.timing_break, name='timing_break'),
-	url(r'^vacation/?$', views.timing_vacation, name='timing_vacation'),
+    url(r'^work/?$', views.timing_work, name='timing_work'),
+    url(r'^break/?$', views.timing_break, name='timing_break'),
+    url(r'^vacation/?$', views.timing_vacation, name='timing_vacation'),
 ]
 
 account_routes = [
-	url(r'^basic_details/?$', views.basic_details, name='basic_details'),
-	url(r'^professional_info/?$', views.professional_info, name='professional_info'),
-	url(r'^education_training/?$', views.education_training, name='education_training'),
-	url(r'^consultation_fee/?$', views.consultation_fee, name='consultation_fee'),
-	url(r'^offerings/?$', views.offerings, name='offerings'),
-	url(r'^conditions_treated/?$', views.conditions_treated, name='conditions_treated'),
-	url(r'^procedures/?$', views.procedures, name='procedures'),
-	url(r'^experience/?$', views.experience, name='experience'),
-	url(r'^awards_recognition/?$', views.awards_recognition, name='awards_recognition'),
-	url(r'^registrations/?$', views.registrations, name='registrations'),
-	url(r'^memberships/?$', views.memberships, name='memberships'),
+    url(r'^basic_details/?$', views.basic_details, name='basic_details'),
+    url(r'^professional_info/?$', views.professional_info, name='professional_info'),
+    url(r'^education_training/?$', views.education_training, name='education_training'),
+    url(r'^consultation_fee/?$', views.consultation_fee, name='consultation_fee'),
+    url(r'^offerings/?$', views.offerings, name='offerings'),
+    url(r'^conditions_treated/?$', views.conditions_treated, name='conditions_treated'),
+    url(r'^procedures/?$', views.procedures, name='procedures'),
+    url(r'^experience/?$', views.experience, name='experience'),
+    url(r'^awards_recognition/?$', views.awards_recognition, name='awards_recognition'),
+    url(r'^registrations/?$', views.registrations, name='registrations'),
+    url(r'^memberships/?$', views.memberships, name='memberships'),
 ]
 
 dashboard_routes = [
 
-	url(r'^cms_add/?$', views.cms_add, name='cms_add'),
-	url(r'^cms_view/?$', views.cms_view, name='cms_view'),
+    url(r'^cms_add/?$', views.cms_add, name='cms_add'),
+    url(r'^cms_view/?$', views.cms_view, name='cms_view'),
     url(r'^condition_add/?$', views.condition_add, name='condition_add'),
-    url(r'^condition_view/?$',views.ConditionTableView.as_view(), name='condition_view'),
+    url(r'^condition_view/?$', views.ConditionTableView.as_view(), name='condition_view'),
     url(r'^condition_edit/(?P<pk>\d+)/condition_edit/$', views.condition_edit, name='condition_edit'),
     url(r'^condition_delete/condition_delete/(?P<pk>\d+)/$', views.condition_delete, name='condition_delete'),
 
@@ -51,14 +51,13 @@ dashboard_routes = [
     url(r'^facility_type_add/?$', views.facility_type_add, name='facility_type_add'),
     url(r'^facility_type_view/?$', views.facility_type_view, name='facility_type_view'),
     url(r'^facility_type_edit/(?P<pk>\d+)/facility_type_edit/$', views.facility_type_edit, name='facility_type_edit'),
-    url(r'^facility_type_delete/facility_type_delete/(?P<pk>\d+)/$', views.facility_type_delete, name='facility_type_delete'),
+    url(r'^facility_type_delete/facility_type_delete/(?P<pk>\d+)/$', views.facility_type_delete,
+        name='facility_type_delete'),
 
     url(r'^facility_add/?$', views.facility_add, name='facility_add'),
     url(r'^facility_view/?$', views.facility_view, name='facility_view'),
     url(r'^facility_edit/(?P<pk>\d+)/facility_edit/$', views.facility_edit, name='facility_edit'),
     url(r'^facility_delete/facility_delete/(?P<pk>\d+)/$', views.facility_delete, name='facility_delete'),
-
-
 
     url(r'^timesession_add/?$', views.timesession_add, name='timesession_add'),
     url(r'^timesession_view/?$', views.timesession_view, name='timesession_view'),
@@ -78,11 +77,13 @@ dashboard_routes = [
     url(r'^test_category_add/?$', views.test_category_add, name='test_category_add'),
     url(r'^test_category_view/?$', views.test_category_view, name='test_category_view'),
     url(r'^test_category_edit/(?P<pk>\d+)/test_category_edit/$', views.test_category_edit, name='test_category_edit'),
-    url(r'^test_category_delete/tetest_category_delete/(?P<pk>\d+)/$', views.test_category_delete, name='test_category_delete'),
+    url(r'^test_category_delete/tetest_category_delete/(?P<pk>\d+)/$', views.test_category_delete,
+        name='test_category_delete'),
     url(r'^test_subcategory_add/?$', views.test_subcategory_add, name='test_subcategory_add'),
     url(r'^test_subcategory_view/?$', views.test_subcategory_view, name='test_subcategory_view'),
 
-    url(r'^test_subcategory_edit/(?P<pk>\d+)/test_subcategory_edit/$', views.test_subcategory_edit, name='test_subcategory_edit'),
+    url(r'^test_subcategory_edit/(?P<pk>\d+)/test_subcategory_edit/$', views.test_subcategory_edit,
+        name='test_subcategory_edit'),
     url(r'^test_subcategory_delete/tetest_subcategory_delete/(?P<pk>\d+)/$', views.test_subcategory_delete,
         name='test_subcategory_delete'),
     url(r'^facility_type_add/?$', views.facility_type_add, name='facility_type_add'),
@@ -104,7 +105,8 @@ dashboard_routes = [
     url(r'^discountcard_view/?$', views.discountcard_view, name='discountcard_view'),
     url(r'^discountcard_reports/?$', views.discountcard_reports, name='discountcard_reports'),
     url(r'^discountcard_edit/(?P<pk>\d+)/discountcard_edit/$', views.discountcard_edit, name='discountcard_edit'),
-    url(r'^discountcard_delete/discountcard_delete/(?P<pk>\d+)/$', views.dicountcard_delete, name='discountcard_delete'),
+    url(r'^discountcard_delete/discountcard_delete/(?P<pk>\d+)/$', views.dicountcard_delete,
+        name='discountcard_delete'),
     url(r'^healthcheck_add/?$', views.healthcheck_add, name='healthcheck_add'),
     url(r'^healthcheck_view/?$', views.healthcheck_view, name='healthcheck_view'),
     url(r'^healthcheck_edit/(?P<pk>\d+)/healthcheck_edit/$', views.healthcheck_edit, name='healthcheck_edit'),
@@ -119,19 +121,18 @@ dashboard_routes = [
     url(r'^resellers_packages_add/?$', views.resellers_packages_add, name='resellers_packages_add'),
     url(r'^resellers_packages_view/?$', views.resellers_packages_view, name='resellers_packages_view'),
     url(r'^resellers_packages_reports/?$', views.resellers_packages_reports, name='resellers_packages_reports'),
-    
 
-	# old_routes
-	# url(r'^$', views.dashboard, name='dashboard_home'),
-	# url(r'calender/?$', views.calender, name='calender'),
-	# url(r'speciality/?$', views.speciality, name='speciality'),
-	# url(r'appointments/?$', views.appointments, name='appointments'),
+    # old_routes
+    # url(r'^$', views.dashboard, name='dashboard_home'),
+    # url(r'calender/?$', views.calender, name='calender'),
+    # url(r'speciality/?$', views.speciality, name='speciality'),
+    # url(r'appointments/?$', views.appointments, name='appointments'),
 
-	# new routes
-	url(r'^$', views.new_home, name='dashboard_home_new'), # remove new later
-	url(r'^appointments/', include(appointment_routes)),
-	url(r'^timings/', include(timing_routes)),
-	url(r'account/', include(account_routes)),
+    # new routes
+    url(r'^$', views.new_home, name='dashboard_home_new'),  # remove new later
+    url(r'^appointments/', include(appointment_routes)),
+    url(r'^timings/', include(timing_routes)),
+    url(r'account/', include(account_routes)),
 
 ]
 

@@ -28,7 +28,7 @@ def SignIn(request):
     elif request.method == "POST":
         # print(request.POST)
         if signin("admin", request):
-            return redirect('site_admin:dashboard_home')
+            return redirect('site_admin:dashboard_home_new')
         return redirect('site_admin:signin')
 
 
@@ -208,7 +208,7 @@ def calender(request):
 def new_home(request):
     return render(request, 'site_admin/dashboard/new_home.html', {})
 
-    ''' new dashboard home
+    ''' new dashboard home 
 
     c = User.objects.filter(user__email=request.session['email'])
     return render(request, 'site_admin/dashboard/index.html', context={
@@ -304,13 +304,13 @@ def timesession_view(request):
 @match_role("admin")
 def speciality_add(request):
     if request.method == 'POST':
-        form = SymptomsForm(request.POST)
+        form = SpecialityForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
             return redirect('site_admin:condition_view')
     else:
-        form = SymptomsForm()
+        form = SpecialityForm()
     return render(request, 'site_admin/dashboard/speciality_add.html', {'form': form})
 
 
