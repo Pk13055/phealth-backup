@@ -853,7 +853,10 @@ class AppointmentTableView(DatatableView):
         return Appointment.objects.all()
 
     def get_template_names(self):
-        return ('site_admin/dashboard/appointments/daily.html', {'form': form})
+        return ('site_admin/dashboard/appointments/daily.html', {'form': forms})
+
+
+
 
 
 @match_role("admin")
@@ -875,7 +878,7 @@ def confirm_appointment(request, id):
 @match_role("admin")
 def cancel_appointment(request, id):
     c = get_clinician(request.session['email'])
-    a = Appointment.objects.filter(roll="healthprovider", )
+    a = Appointment.objects.filter(roll="healthprovider" )
 
     if a.under == c:
         a.status = 'cancelled'
