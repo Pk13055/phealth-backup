@@ -73,58 +73,29 @@
                                                         <th>Mobile</th>
                                                         <th>Gender</th>
                                                         <th>Role</th>
-                                                        <th>Registered On</th>
+                                                        <th>RegisteredDate</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>P00015461</td>
-                                                        <td>Rajesh</td>
-                                                        <td>rajesh@gmail.com</td>
-                                                        <td>9493179601</td>
-                                                        <td>Male</td>
-                                                        <td>Health Seeker</td>
-                                                        <td>20-03-2018</td>
-                                                        <td>Active</td>
-                                                        <td>
-                                                            <button class="btn btn-success  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-check"></i></span>Active</button>
+                                                        {% for user in values %}
+                                                        <td>{{ user.sr.no }}</td>
+                                                        <td>{{ user.id }}</td>
+                                                        <td>{{ user.name }}</td>
+                                                        <td>{{ user.email }}</td>
+                                                        <td>{{ user.mobile }}</td>
+                                                        <td>{{ user.gender}}</td>
+                                                        <td>{{ user.role }}</td>
+                                                        <td>{{ user.reg_date }}</td>
+                                                        <td>{{ user.status }}</td>
+                                                    </tr>
+                                           {% endfor %}
+                                                            <button class="btn btn-success  href="{% url 'site_admin:users' %}" waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-check"></i></span>Active</button>
                                                             <button class="btn btn-danger  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-times"></i></span>Hold</button>
                                                             <button class="btn btn-info  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-history"></i></span>Force to change password</button>
                                                         </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>P00015462</td>
-                                                        <td>Rajesh</td>
-                                                        <td>rajesh@gmail.com</td>
-                                                        <td>9493179601</td>
-                                                        <td>Male</td>
-                                                        <td>Health Seeker</td>
-                                                        <td>20-03-2018</td>
-                                                        <td>Active</td>
-                                                        <td>
-                                                            <button class="btn btn-success  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-check"></i></span>Active</button>
-                                                            <button class="btn btn-danger  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-times"></i></span>Hold</button>
-                                                            <button class="btn btn-info  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-history"></i></span>Force to change password</button>
-                                                        </td>
-                                                    </tr>
-                                                    
-                                                    
-                                                    
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-								</div>
-							</div>
-                            
-						</div>
-					</div>
-				</div>
-               
                 <!-- /.row -->
                 <!-- ============================================================== -->
                 <!-- Right sidebar -->

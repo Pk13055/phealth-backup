@@ -598,13 +598,16 @@ def idconfiguration_view(request):
 
 @match_role("admin")
 def users(request):
-    return render(request, 'site_admin/dashboard/users.html', {})
+    user=User.objects.all()
+    print(user)
+    u=user.filter(role='role')
+    print(u)
+    return render(request, 'site_admin/dashboard/users.html', {'values':user},{})
 
 
 @match_role("admin")
 def salesagents_add(request):
-    return render(request, 'site_admin/dashboard/salesagents_add.html', {})
-
+    return render(request, 'site_admin/dashboard/salesagents_add.html')
 
 @match_role("admin")
 def salesagents_view(request):
