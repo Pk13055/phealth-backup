@@ -42,6 +42,13 @@ dashboard_routes = [
     url(r'^condition_edit/(?P<pk>\d+)/condition_edit/$', views.condition_edit, name='condition_edit'),
     url(r'^condition_delete/condition_delete/(?P<pk>\d+)/$', views.condition_delete, name='condition_delete'),
 
+    url(r'^symptomsarea_add/?$', views.symptomsarea_add, name='symptomsarea_add'),
+    url(r'^symptomsarea_view/?$', views.ConditionTableView.as_view(), name='symptomsarea_view'),
+    url(r'^symptomsarea_edit/(?P<pk>\d+)/symptomsarea_edit/$', views.symptomsarea_edit, name='symptomsarea_edit'),
+    url(r'^symptomsarea_delete/symptomsarea_delete/(?P<pk>\d+)/$', views.symptomsarea_delete, name='symptomsarea_delete'),
+
+
+
     url(r'^coupons_add/?$', views.coupons_add, name='coupons_add'),
     url(r'^coupons_view/?$', views.coupons_view, name='coupons_view'),
     url(r'^coupons_edit/(?P<pk>\d+)/coupons_edit/$', views.coupons_edit, name='coupons_edit'),
@@ -61,6 +68,9 @@ dashboard_routes = [
 
     url(r'^timesession_add/?$', views.timesession_add, name='timesession_add'),
     url(r'^timesession_view/?$', views.timesession_view, name='timesession_view'),
+    url(r'^timesession_edit/(?P<pk>\d+)/timesession_edit/$', views.timesession_edit, name='timesession_edit'),
+    url(r'^timesession_delete/timesession_delete/(?P<pk>\d+)/$', views.timesession_delete, name='timesession_delete'),
+
     url(r'^speciality_add/?$', views.speciality_add, name='speciality_add'),
     url(r'^speciality_view/?$', views.speciality_view, name='speciality_view'),
 

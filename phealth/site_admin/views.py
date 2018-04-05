@@ -290,15 +290,117 @@ def condition_delete(request, pk):
     result = Symptoms.objects.get(pk=pk)
     result.delete()
     return redirect('site_admin:condition_view')
+#=======================symptomareaform
+
+
+@match_role("admin")
+def symptomsarea_add(request):
+    if request.method == 'POST':
+        form = SymptomsareaForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:symptomsarea_view')
+    else:
+        form = SymptomsareaForm()
+    return render(request, 'site_admin/dashboard/symptomsarea_add.html', {'form': form})
+
+class SymptomsareaTableView(DatatableView):
+    model = SymptomsArea
+
+    class datatable_class(Datatable):
+        button = TextColumn('Action', None, processor='get_button_raw')
+        class Meta:
+            columns = ['speciality', 'name',  'created_date']
+
+        def get_button_raw(self, instance, **kwargs):
+            return '''
+				<p>
+					<a href="/site_admin/dashboard/symptomsarea_edit/{}/symptomsarea_edit/" class="datatable-btn btn btn-success" role="button">Edit</a>
+					<a href="/site_admin/dashboard/symptomsarea_delete/symptomsarea_delete/{}/" class="datatable-btn btn btn-danger" role="button">Delete</a>
+				</p>
+				'''.format(instance.id, instance.id)
+
+    def get_queryset(self):
+        return SymptomsArea.objects.all()
+
+    def get_template_names(self):
+        return 'site_admin/dashboard/symptomsarea_view.html'
+
+
+@match_role("admin")
+def symptomarea_view(request):
+    result = SymptomsArea.objects.all()
+    return render(request, 'site_admin/dashboard/symptomsarea_view.html', {'values': result})
+
+@match_role("admin")
+def symptomsarea_edit(request, pk):
+    post = get_object_or_404(SymptomsArea, pk=pk)
+    if request.method == "POST":
+        form = SymptomsareaForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:symptomsarea_view')
+    else:
+        form = SymptomsareaForm(instance=post)
+    return render(request, 'site_admin/dashboard/symptomsarea_add.html', {'form': form})
+
+@match_role("admin")
+def symptomsarea_delete(request, pk):
+    result = SymptomsArea.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:symptomsarea_view')
+
+
+
+
+
+
+
+
+
+
+
+
+#==========================================================end symptomarea
 
 @match_role("admin")
 def timesession_add(request):
-    return render(request, 'site_admin/dashboard/timesession_add.html', {})
+    if request.method == 'POST':
+        form = TimesessionForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:condition_view')
+    else:
+        form = TimesessionForm()
+    return render(request, 'site_admin/dashboard/timesession_add.html', {'form': form})
 
 
 @match_role("admin")
 def timesession_view(request):
-    return render(request, 'site_admin/dashboard/timesession_view.html', {})
+    result = Timesession.objects.all()
+    return render(request, 'site_admin/dashboard/timesession_view.html', {'values': result})
+
+@match_role("admin")
+def timesession_edit(request, pk):
+    post = get_object_or_404(timesession, pk=pk)
+    if request.method == "POST":
+        form = TimesessionForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:timesession_view')
+    else:
+        form = TimesessionForm(instance=post)
+    return render(request, 'site_admin/dashboard/timesession_add.html', {'form': form})
+
+@match_role("admin")
+def timesession_delete(request, pk):
+    result = Timesession.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:condition_view')
 
 
 @match_role("admin")
@@ -761,10 +863,10 @@ def resellers_packages_view(request):
 def resellers_packages_reports(request):
     return render(request, 'site_admin/dashboard/resellers_packages_reports.html', {})
 
-
+#-----------------------------------------------------------appointments daily-----------------------------------------
 # appointment routes
 class AppointmentTableView(DatatableView):
-    model = Symptoms
+    model = Appointment
 
     class datatable_class(Datatable):
         button = TextColumn('Action', None, processor='get_button_raw')
@@ -780,17 +882,16 @@ class AppointmentTableView(DatatableView):
 				'''.format(instance.id, instance.id)
 
     def get_queryset(self):
-        return Symptoms.objects.all()
+        return Appointment.objects.all()
 
     def get_template_names(self):
-        return 'site_admin/dashboard/appointments/daily.html'
-
+        return ('site_admin/dashboard/appointments/daily.html', {'form': form})
 
 
 @match_role("admin")
 def confirm_appointment(request, id):
     c = get_clinician(request.session['email'])
-    a = Appointment.objects.filter(id=id).first()
+    a = Appointment.objects.filter(roll="healthprovider")
 
     if a.under == c:
         a.status = 'confirmed'
@@ -800,13 +901,13 @@ def confirm_appointment(request, id):
         print("*** Authorization failed ***")
         return JsonResponse({'status': 'Auth Error'})
 
-    return redirect('site_admin:appointment_daily')
+    return redirect('site_admin:appointment_daily', {'values': a})
 
 
 @match_role("admin")
 def cancel_appointment(request, id):
     c = get_clinician(request.session['email'])
-    a = Appointment.objects.filter(id=id).first()
+    a = Appointment.objects.filter(roll="healthprovider", )
 
     if a.under == c:
         a.status = 'cancelled'
@@ -816,9 +917,10 @@ def cancel_appointment(request, id):
         print("*** Authorization failed ***")
         return JsonResponse({'status': 'Auth Error'})
 
-    return redirect('site_admin:appointment_daily')
+    return redirect('site_admin:appointment_daily', {'values': a})
 
 
+#-------------------------------------------------------------------------------------appointments daily
 @match_role("admin")
 def appointment_weekly(request):
     ''' appointment stats '''
