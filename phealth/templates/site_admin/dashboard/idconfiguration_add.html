@@ -22,27 +22,21 @@
                       
                       <div class="col-md-12 white-box">
                      <div class="panel-body">
-                        <div class="form-group">
-                            <p>The following Tables only available for ID Configuration</p>
-                           <label for="role"> Select Table</label>
-                            <select class="form-control">
-                                <option>Users</option>
-                                <option>Healthseeker</option>
-                            </select>
-                        </div>
-                         <div class="form-group">
-                           <label for="prefix"> prefix</label>
-                           <input type="text" class="form-control" id="prefix" placeholder="Enter New prefix" name="prefix">
-                        </div>
-                         <div class="form-group">
-                           <label for="suffix"> suffix</label>
-                           <input type="text" class="form-control" id="suffix" placeholder="Enter New suffix" name="suffix">
-                        </div>
-                        
-                        
-                        <div class="form-group">
-                           <a href="#"><button class="btn btn-success pull-right">Add</button></a>
-                        </div>
+                         <form method="POST" class="post-form">{% csrf_token %}
+                            	{% for field in form %}
+										   <div class="form-group">
+											{{ field.label_tag }}<br>
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										{% endfor %}
+
+                            <button type="submit" class="btn btn-success pull-right">Save</button>
+                        </form>
+
+
                      </div>
                           </div>
                   </div>
@@ -51,5 +45,4 @@
             <!-- /.container-fluid -->
             <footer class="footer text-center"> 2018 &copy; Phealth </footer>
          </div>
-        			
-{% endblock content %}
+        {% endblock content %}

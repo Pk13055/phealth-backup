@@ -120,6 +120,7 @@
 				</div>
 				<ul class="nav" id="side-menu">
 					<li><a href="{% url 'site_admin:dashboard_home_new' %}" class="waves-effect"><i class="mdi mdi-av-timer fa-fw"></i> <span class="hide-menu"> Dashboard </span></a></li>
+                   	<!--
                     <li>
 						<a href="#" class="waves-effect"><i class="mdi mdi-format-paint fa-fw" data-icon="v"></i> <span class="hide-menu"> CMS <span class="fa arrow"></span> </span></a>
 						<ul class="nav nav-second-level">
@@ -127,7 +128,7 @@
 							<li> <a href="{% url 'site_admin:cms_view' %}"><i class=" fa-fw"></i><span class="hide-menu">View / Update</span></a> </li>
 						</ul>
 					</li>
-					
+					-->
                     
                     <li> <a href="javascript:void(0)" class="waves-effect"><i class="mdi mdi-settings fa-fw"></i> <span class="hide-menu">Configurations<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
@@ -201,12 +202,12 @@
 						<a href="#" class="waves-effect"><i class="mdi mdi-account-multiple fa-fw" data-icon="v"></i> <span class="hide-menu"> Users <span class="fa arrow"></span> </span></a>
 						<ul class="nav nav-second-level">
 							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">All Users</span></a> </li>
-							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">Health Seekers</span></a> </li>
-							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">Sponsors</span></a> </li>
-							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">Health Providers</span></a> </li>
-							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">Clinicians</span></a> </li>
-							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">Sales Agents</span></a> </li>
-							<li> <a href="{% url 'site_admin:users' %}"><i class=" fa-fw"></i><span class="hide-menu">Resellers</span></a> </li>
+							<li> <a href="/site_admin/dashboard/users/?role=healthprovider"><i class=" fa-fw"></i><span class="hide-menu">Health Providers</span></a> </li>
+							<li> <a href="/site_admin/dashboard/users/?role=clinician"><i class=" fa-fw"></i><span class="hide-menu">Clinicians</span></a> </li>
+							<li> <a href="/site_admin/dashboard/users/?role=healthseeker"><i class=" fa-fw"></i><span class="hide-menu">Health Seekers</span></a> </li>
+							<li> <a href="/site_admin/dashboard/users/?role=sponsor"><i class=" fa-fw"></i><span class="hide-menu">Sponsors</span></a> </li>
+							<li> <a href="/site_admin/dashboard/users/?role=salesagent"><i class=" fa-fw"></i><span class="hide-menu">Sales Agents</span></a> </li>
+							<li> <a href="/site_admin/dashboard/users/?role=reseller"><i class=" fa-fw"></i><span class="hide-menu">Resellers</span></a> </li>
 						</ul>
 					</li>
                     <li>
