@@ -14,6 +14,29 @@ class SymptomsForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+#------------------------------Symptoms area form
+
+class SymptomsareaForm(forms.ModelForm):
+
+    class Meta:
+        model = SymptomsArea
+        fields = ('speciality', 'name', 'created_date')
+
+
+    def __init__(self, *args, **kwargs):
+        super(SymptomsareaForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
+
+
+
+
+
+#----------------------------------------------------------------
+
+
 
 
 class TestForm(forms.ModelForm):
@@ -126,4 +149,20 @@ class FacilityTypeForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+
+
+#appointments daily
+class AppointmentsForm(forms.ModelForm):
+
+    class Meta:
+        model = Appointment
+        fields = ('date','time', 'duration', 'status','under', 'provider')
+
+
+    def __init__(self, *args, **kwargs):
+        super(AppointmentsForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
 
