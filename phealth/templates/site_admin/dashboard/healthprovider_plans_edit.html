@@ -1,0 +1,216 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+
+			<div class="container-fluid">
+				<div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Healthprovider Plans</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">Edit Healthprovider Plans</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+                                    Healthprovider Plans
+                            </div>
+                                    
+							<div class="panel-wrapper collapse in" aria-expanded="true">
+								<div class="panel-body">
+									<form action="healthprovider_plans_view.html" class="form-horizontal">
+										<div class="form-body">
+											<h3 class="box-title">Edit New Healthprovider Plans</h3>
+											<hr class="m-t-0 m-b-40">
+											<div class="row">
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Title</label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" id="title" placeholder="Enter The Title" name="title">
+															</div>
+														</div>
+													</div>
+                                                
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Price</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control" placeholder="Price"> 
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Amount Credit in Account</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control" placeholder="Ex:Amount Credit in Account">
+														</div>
+													</div>
+												</div>
+													
+													<div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Promo Image</label>
+															<div class="col-md-9">
+																<input type="file" class="form-control" id="image" placeholder="image" name="image">
+															</div>
+														</div>
+													</div>
+													
+                                                    <div class="col-md-12">
+														<div class="form-group">
+															<label  class="control-label col-md-1" >Content/ Discription (Write-Up)</label>
+															<div class="col-md-11">
+                                                                <textarea class="form-control summernote" name="content" id="content"> </textarea>
+															</div>
+														</div>
+													</div>
+                                                <div class="col-sm-12">
+                                                 <h3>Offerings:</h3>
+                                                </div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >% Share on First Consultation</label>
+															<div class="col-md-9">
+																<input type="number" min="20"  max="100" class="form-control"  placeholder="Enter % Share on First Consultation" >
+															</div>
+														</div>
+													</div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >% Share on Subsequent Consultation</label>
+															<div class="col-md-9">
+																<input type="number" min="8"  max="100" class="form-control"  placeholder="Enter % Share on Subsequent Consultation" >
+															</div>
+														</div>
+													</div>
+                                                 <div class="col-sm-12">
+                                                 <h3>Conditions Discounts to Health Seeker:</h3>
+                                                </div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >% Discount to Health Seeker on First Consultation</label>
+															<div class="col-md-9">
+																<input type="number" min="20"  max="100" class="form-control"  placeholder="Enter % Discount to Health Seeker on First Consultation" >
+															</div>
+														</div>
+													</div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >% Discount to Health Seeker on Subsequent Consultation</label>
+															<div class="col-md-9">
+																<input type="number" min="10"  max="100" class="form-control"  placeholder="Enter % Discount to Health Seeker on Subsequent Consultation" >
+															</div>
+														</div>
+													</div>
+                                                
+                                                    <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Validity</label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" id="Validity" placeholder="Enter Validity Minimum 6 months" name="Validity">
+															</div>
+														</div>
+													</div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Speciality Group</label>
+															<div class="col-md-9">
+                                                                <select class="form-control" name="status" id="status" >
+                                                                    <option value="1">Group 1</option>
+                                                                    <option value="0">Group 2</option>
+                                                                </select>
+															</div>
+														</div>
+													</div>
+                                                
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >CMS Software License</label>
+															<div class="col-md-9">
+                                                                <select class="form-control" name="status" id="status" >
+                                                                    <option value="1">12 Months</option>
+                                                                    <option value="24">24 Months</option>
+                                                                    <option value="36">36 Months</option>
+                                                                </select>
+															</div>
+														</div>
+													</div>
+                                                
+                                                <div class="col-sm-12"></div>
+                                                <div class="col-md-6">
+                                                
+                                                    <p>Applicability</p>
+                                                    <div class="radio radio-primary">
+                                                        <input type="radio" name="applicabilityradio" id="applicableforgeneral" value="applicableforgeneral">
+                                                        <label for="applicableforgeneral"> General </label>
+                                                    </div>
+                                                    <div class="radio radio-primary">
+                                                        <input type="radio" name="applicabilityradio" id="applicableforsponsor" value="applicableforsponsor">
+                                                        <label for="applicableforsponsor"> Specific Service Provider </label>
+                                                    </div>
+                                                </div>
+                                                   <div class="col-md-6">
+														<div class="form-group">
+                                                <p>If Sponsor show option to select Service Provider</p>
+															<label  class="control-label col-md-3" >Select Service Provider</label>
+															<div class="col-md-9">
+                                                            <select class="form-control">
+                                                                <option>Select Service Provider</option>
+                                                                <option>Service Provider 1</option>
+                                                                <option>Service Provider 2</option>
+                                                                <option>Service Provider 3</option>
+                                                                <option>Service Provider 4</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+                                                <div class="col-md-12">
+                                                    <hr>
+                                                </div>
+                                                <div class="col-md-6">
+														<div class="form-group">
+															<label  class="control-label col-md-3" >Assign A Coupon</label>
+															<div class="col-md-9">
+                                                            <select class="form-control">
+                                                                <option>Select Coupon</option>
+                                                                <option>Coupon 1</option>
+                                                                <option>Coupon 2</option>
+                                                                <option>Coupon 3</option>
+                                                                <option>Coupon 4</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+                                                
+                                                
+                                            </div>
+												
+											</div>
+											<div class="form-actions">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="row">
+															<div class="col-md-offset-10 col-md-2">
+																<button type="submit" class="btn btn-success">Save</button>
+																<button type="button" class="btn btn-default">Cancel</button>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6"> </div>
+												</div>
+											</div>
+									</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+								             {% endblock content %}

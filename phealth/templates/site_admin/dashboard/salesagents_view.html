@@ -1,0 +1,82 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+    
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage SalesAgents</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View / Update SalesAgents</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">View / Update SalesAgents</h3>
+
+                            <p class="text-muted m-b-30"></p>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Name of the Agency</th>
+                                            <th>Name of the Authorised Person</th>
+                                            <th>Type of Business</th>
+                                            <th>Service Offered</th>
+                                            <th>Minimum Number of Resellers</th>
+                                            <th>Service Agreement Period</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>WMB</td>
+                                            <td>rajesh</td>
+                                            <td>Private Limited</td>
+                                            <td>Individual Cards Sales</td>
+                                            <td>50</td>
+                                            <td>1 Year</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <a href="salesagents_edit.html"><button class="btn btn-primary">View/Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>RNB</td>
+                                            <td>rajesh</td>
+                                            <td>Private Limited</td>
+                                            <td>Individual Cards Sales</td>
+                                            <td>50</td>
+                                            <td>1 Year</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <a href="salesagents_edit.html"><button class="btn btn-primary">View/Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+          
+   {% endblock %}

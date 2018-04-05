@@ -1,0 +1,99 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Reseller</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View Reseller Reports</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    
+                    
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">View Reseller Reports</h3>
+                            
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: aliceblue">
+                                <div class="form-group">
+                                    <label>Select Dates</label>
+                                    <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> 
+                                </div>
+                                
+                                    <div class="form-group">
+                                        <button class="btn btn-primary">Filter</button>
+                                    </div>
+                        </div>
+                         <div class="panel-body">
+                             
+                             <p class="text-muted m-b-30"></p>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            
+                                            
+                                            <th>Sr.No</th>
+                                            <th>Title</th>
+                                            <th>Price</th>
+                                            <th>No of Discount Cards</th>
+                                            <th>validity</th>
+                                            <th>Reseller ID</th>
+                                            <th>TransactionNO</th>
+                                            <th>Transaction Date</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Title</td>
+                                            <td>10000</td>
+                                            <td>1000</td>
+                                            <td>03-03-2019</td>
+                                            <td>RE0001200</td>
+                                            <td>TRXN0035</td>
+                                            <td>03-03-2018</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Title</td>
+                                            <td>10000</td>
+                                            <td>1000</td>
+                                            <td>03-03-2019</td>
+                                            <td>RE0001200</td>
+                                            <td>TRXN0035</td>
+                                            <td>03-03-2018</td>
+                                        </tr>
+                                        
+                                      
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                             
+                             
+                        </div>
+                    </div>
+                            
+
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+             {% endblock content %}	

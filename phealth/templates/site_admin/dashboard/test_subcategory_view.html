@@ -1,0 +1,69 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+        
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Tests SubCategory</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View / Update Tests SubCategory</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">View / Update Tests SubCategory</h3>
+
+
+                            <p class="text-muted m-b-30"></p>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Test Title</td>
+                                            <td>Category</td>
+                                            <td>
+                                                <a href="#"><button class="btn btn-success">Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Test Title</td>
+                                            <td>Category</td>
+                                            <td>
+                                                <a href="#"><button class="btn btn-success">Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+           
+{% endblock %}

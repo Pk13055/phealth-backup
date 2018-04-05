@@ -22,6 +22,7 @@ from django.contrib.auth.models import User as admin_user
 from django.contrib.postgres.fields import ArrayField, HStoreField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 
 # functions for default
@@ -777,3 +778,28 @@ class BlogComment(models.Model):
 	class Meta:
 		managed = True
 		db_table = 'blog_comments'
+
+        
+class Symptoms(models.Model):
+    symptomarea = models.ForeignKey('SymptomsArea', on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
+    
+class SymptomsArea(models.Model):
+    speciality = models.ForeignKey('Speciality', on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
+    
+class Group(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(null=True, blank=True)
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name

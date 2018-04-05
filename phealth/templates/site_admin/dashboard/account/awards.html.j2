@@ -1,0 +1,125 @@
+{% extends "clinician/dashboard/base.html.j2" %} {% load static %}
+{% block content %}
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Dashboard 1</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="index.html">Dashboard</a></li>
+				<li><a href="#">Basic Details</a></li>
+			</ol>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					My Account
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
+				</div>
+				<div class="panel-wrapper collapse in" aria-expanded="true">
+					<div class="panel-body">
+						<form class="form-horizontal" method="POST">
+							{% csrf_token %}
+							<div class="form-body">
+								<h3 class="box-title">Awards</h3>
+								<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addcontact">Add Awards</button>
+								<div class="modal fade" id="addcontact" role="dialog">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+												<h4 class="modal-title">Add Awards</h4>
+											</div>
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="award" class="col-md-3">Award/Recognistion </label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" name="award" id="award">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="recognisedby" class="col-md-3">Recognised By </label>
+															<div class="col-md-9">
+																<input type="text" class="form-control" name="recognisedby" id="recognisedby">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="year_2" class="col-md-3">Year </label>
+															<div class="col-md-9">
+																<input type="number" class="form-control" id="year_2" name="year_2">
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<hr>
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="submit" class="btn btn-success">Add</button>
+												<button type="button" class="btn btn-default" data-dismiss="modal">Cancel & Close </button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="white-box">
+											<h3 class="box-title m-b-0">Awards Details</h3>
+											<div class="table-responsive">
+												<table id="myTable" class="table table-striped">
+													<thead>
+														<tr>
+															<th>Award/Recognistion</th>
+															<th>Recognised By</th>
+															<th>Year</th>
+														</tr>
+													</thead>
+													<tbody>
+														{% for award in awards %}
+														<tr>
+															<td>{{award.award}}</td>
+															<td>{{award.recognisedby}}</td>
+															<td>{{award.year_2}}</td>
+														</tr>
+														{% endfor %}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-md-offset-10 col-md-2">
+												<button type="submit" class="btn btn-success">Next</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6"> </div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /.container-fluid -->
+{% endblock content %}

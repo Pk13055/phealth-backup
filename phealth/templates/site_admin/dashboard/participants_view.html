@@ -1,0 +1,59 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Branches</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View / Update Branches</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">Branches</h3>
+                            <p class="text-muted m-b-30">View or update Branches</p>
+                            
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Branch ID</th>
+                                            <th>Full Name of Branch</th>
+                                            <th>View / Update</th>
+                                            <th>Delete from the List</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>CLICK0125</td>
+                                            <td>Rajesh</td>
+                                            <td><a href="branch_basic.html"><button class="btn btn-info">View and Update</button></a></td>
+                                            <td><button class="btn btn-danger">Remove from List</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>CLICK0126</td>
+                                            <td>Raju</td>
+                                            <td><a href="branch_basic.html"><button class="btn btn-info">View and Update</button></a></td>
+                                            <td><button class="btn btn-danger">Remove from List</button></td>
+                                        </tr>
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+            	 {% endblock content %}

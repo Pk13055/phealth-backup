@@ -52,16 +52,16 @@ clinician_routes = [
 
 # dashboard routes
 dashboard_routes = [
-	
+
 	# old routes
-	url(r'^$', views.dashboard, name='dashboard_home'),
-	url(r'^branches/?$', views.branches, name='branches'),
-	url(r'^specialities/?$', views.specialities, name='specialities'),
-	url(r'^clinicians/?$', views.clinicians, name='clinicians'),
-	url(r'^appointments/?$', views.appointments, name='appointments'),
+	# url(r'^$', views.dashboard, name='dashboard_home'),
+	# url(r'^branches/?$', views.branches, name='branches'),
+	# url(r'^specialities/?$', views.specialities, name='specialities'),
+	# url(r'^clinicians/?$', views.clinicians, name='clinicians'),
+	# url(r'^appointments/?$', views.appointments, name='appointments'),
 
 	# new routes
-	url(r'^home/?$', views.dashboard_home, name='dashboard_home_new'),
+	url(r'^$', views.dashboard_home, name='dashboard_home'),
 	url(r'^account/', include(account_routes)),
 	url(r'branches/', include(branch_routes)),
 	url(r'appointments/', include(appointment_routes)),

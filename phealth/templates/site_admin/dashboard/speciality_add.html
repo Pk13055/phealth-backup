@@ -1,0 +1,51 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+      
+         <div class="container-fluid">
+            <div class="row bg-title">
+               <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                  <h4 class="page-title">Manage Speciality</h4>
+               </div>
+               <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                  <ol class="breadcrumb">
+                     <li><a href="index.html">Dashboard</a></li>
+                     <li><a href="#">Add Speciality</a></li>
+                  </ol>
+               </div>
+               <!-- /.col-lg-12 -->
+            </div>
+            <div class="row ">
+               <div class="col-md-12 ">
+                  <div class="panel panel-info ">
+                     <div class="panel-heading">
+                        Add Speciality
+                     </div>
+                     <br>
+                      
+                      <div class="col-md-12 white-box">
+                     <div class="panel-body">
+                        <div class="form-group">
+                           <label for="title"> Title</label>
+                           <input type="text" class="form-control" id="title" placeholder="Title" name="title">
+                        </div>
+                        <div class="form-group">
+                           <label for="service"> Speciality Group</label>
+                            <select name="service" class="form-control">
+                                <option value="">Select from list</option>
+                                <option value="1">Group 1</option>
+                                <option value="2">Group 2</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                           <a href="#"><button class="btn btn-success pull-right">Add</button></a>
+                        </div>
+                     </div>
+                          </div>
+                  </div>
+               </div>
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2018 &copy; Phealth </footer>
+         </div>
+        
+     {% endblock %}

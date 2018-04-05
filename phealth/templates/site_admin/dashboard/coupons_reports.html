@@ -1,0 +1,104 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Coupons</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View Coupons Reports</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    
+                    
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">View Coupons Reports</h3>
+                            
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: aliceblue">
+                                <div class="form-group">
+                                    <label>Select Dates</label>
+                                    <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> 
+                                </div>
+                                <div class="form-group">
+                                    <label>Select Coupon Type</label>
+                                    <select class="form-control">
+                                        <option>Percentage</option>
+                                        <option>Amount</option>
+                                    </select>
+                                </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary">Filter</button>
+                                    </div>
+                        </div>
+                         <div class="panel-body">
+                             
+                             <p class="text-muted m-b-30"></p>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            
+                                            
+                                            <th>Sr.No</th>
+                                            <th>Type of Coupon</th>
+                                            <th>Name of Coupon</th>
+                                            <th>Coupon Code</th>
+                                            <th>Amount</th>
+                                            <th>HealthSeekerID</th>
+                                            <th>TransactionNO</th>
+                                            <th>Transaction Date</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Percentage</td>
+                                            <td>Name of Coupon</td>
+                                            <td>Ugadi</td>
+                                            <td>200</td>
+                                            <td>P0001200</td>
+                                            <td>TRXN0035</td>
+                                            <td>03-03-2018</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Percentage</td>
+                                            <td>Name of Coupon</td>
+                                            <td>Ugadi</td>
+                                            <td>200</td>
+                                            <td>P0001200</td>
+                                            <td>TRXN0035</td>
+                                            <td>03-03-2018</td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                             
+                             
+                        </div>
+                    </div>
+                            
+
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+            <!-- /.container-fluid -->
+           {% endblock content %}

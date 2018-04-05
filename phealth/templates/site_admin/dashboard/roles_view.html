@@ -1,0 +1,64 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+         <div class="container-fluid">
+            <div class="row bg-title">
+               <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                  <h4 class="page-title">Manage Roles</h4>
+               </div>
+               <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                  <ol class="breadcrumb">
+                     <li><a href="index.html">Dashboard</a></li>
+                     <li><a href="#">View / Manage Roles  </a></li>
+                  </ol>
+               </div>
+               <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="panel panel-info">
+                     <div class="panel-heading">
+                        Manage  Roles 
+                     </div>
+                     <br>
+                      <div class="row">
+                       <div class="col-sm-12">
+                          <div class="white-box">
+                             <h3 class="box-title m-b-0">   View / Manage  Roles  </h3>
+                             <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                   <thead>
+                                      <tr>
+                                         <th>S.No.</th>
+                                         <th>Role</th>
+                                         <th>Action</th>
+                                      </tr>
+                                   </thead>
+                                   <tbody>
+                                      <tr>
+                                         <td>1</td>
+                                         <td>HealthSeeker </td>
+                                         <td>
+                                             <button class="btn btn-success">Update</button>
+                                             <button class="btn btn-danger">Delete</button>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                         <td>2</td>
+                                         <td>Ambulance</td>
+                                         <td>
+                                             <button class="btn btn-success">Update</button>
+                                             <button class="btn btn-danger">Delete</button>
+                                          </td>
+                                      </tr>
+                                   </tbody>
+                                </table>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2018 &copy; Phealth </footer>
+         </div>
+          {% endblock content %}	

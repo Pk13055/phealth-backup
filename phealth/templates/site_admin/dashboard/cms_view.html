@@ -1,0 +1,81 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage CMS</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View / Update Payments</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">View / Update CMS</h3>
+                                                                        <p>The code starts with IMG is for Image and rest of the things for content and both</p>
+
+                            <p class="text-muted m-b-30"></p>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Code</th>
+                                            <th>Code Descrption</th>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>External or Internal Link</th>
+                                            <th>Sort by</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>WMB</td>
+                                            <td>Welcome page main banner as background image</td>
+                                            <td style="max-width: 100px;">Image/banner12-a1.png</td>
+                                            <td>title used here for alt in case of IMG</td>
+                                            <td>#</td>
+                                            <td>1</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <a href="cms_edit.html"><button class="btn btn-primary">View/Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>IMGWB</td>
+                                            <td>Welcome  background image</td>
+                                            <td style="max-width: 100px;">Image/banner12-a1.png</td>
+                                            <td>title used here for alt in case of IMG</td>
+                                            <td>blog/2018-02-01/sl1</td>
+                                            <td>2</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <a href="cms_edit.html"><button class="btn btn-primary">View/Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+            {% endblock content %}

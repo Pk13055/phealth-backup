@@ -1,0 +1,47 @@
+{% extends "clinician/base.html.j2" %}
+{% load static %}
+{% load bootstrap %}
+{% block content %}
+<div class="row">
+	<h3>{{ title }}</h3>
+</div>
+<div class="row">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">Clinician Appointment Accept/Reject Panel</h3>
+		</div>
+		<div class="panel-body">
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+		</div>
+		<div class="container">
+			{% for appointment in appointments %}
+			<form method="POST">
+				{% csrf_token %}
+				<div class="well well-lg">
+					<h4>{{ appointment.0.id }}</h4>
+					<p>
+						<span class="far fa-calendar-alt"></span>
+						{{appointment.0.date}}
+						<br/>
+						<span class="far fa-clock"></span>
+						{{appointment.0.time}}
+					</p>
+					<div class="panel-body">
+						{% csrf_token %}
+						{{ appointment.1 | bootstrap }}
+					</div>
+					<button type="submit" value="{{ appointment.0.id }}" name="appointment" class="btn btn-info">Update</button>
+				</div>
+			</form>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

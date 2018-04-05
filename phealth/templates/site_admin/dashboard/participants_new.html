@@ -1,0 +1,64 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+
+			<div class="container-fluid">
+				<div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Branches</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">Basic Details</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+                                   Add Branch
+                            </div>
+                            
+                                <div class="panel-body">
+								
+								<div class="form-group">
+									<label class="radioimage" >Type of Provider </label>
+                                    <br>
+                                    <label class="radioimage">
+                                        <input type="radio" name="fb" value="Corporates"  name="businessregtype"/>
+                                        <img src="register/clinic.png"> 
+                                        <p class="dclass">Clinic</p>
+                                    </label>
+                                    <label class="radioimage">
+                                        <input type="radio" name="fb" value="EducationalInstitutions"  name="businessregtype"/>
+                                        <img src="register/hospital.png">
+                                        <p class="dclass">Hospital</p>
+                                    </label>
+                                    <label class="radioimage">
+                                        <input type="radio" name="fb" value="NGO"  name="businessregtype"/>
+                                        <img src="register/ngo.png">
+                                        <p class="dclass">Diagnostic Center</p>
+                                    </label>
+                                    
+									
+								</div>
+								<div class="form-group">
+									<label for="organizationname"> Full Name</label>
+									<input type="text" class="form-control" id="organizationname" placeholder="Clinic/Hospital/Diagnostics" name="organizationname">
+								</div>
+								<!--<div class="checkbox">
+                                    <input id="checkbox2" type="checkbox">
+                                    <label for="checkbox2">By Signing Up I accept All Terms & Conditions</label>
+                                </div>-->
+                                <div class="form-group">
+									<a href="#"><button class="btn btn-success pull-right">Save & Go</button></a>
+								</div>
+							</div>    
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+				<footer class="footer text-center"> 2018 &copy; Phealth </footer>
+			</div>
+				 {% endblock content %}

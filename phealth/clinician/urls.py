@@ -36,13 +36,13 @@ account_routes = [
 dashboard_routes = [
 
 	# old_routes
-	url(r'^$', views.dashboard, name='dashboard_home'),
-	url(r'calender/?$', views.calender, name='calender'),
-	url(r'speciality/?$', views.speciality, name='speciality'),
-	url(r'appointments/?$', views.appointments, name='appointments'),
+	# url(r'^$', views.dashboard, name='dashboard_home'),
+	# url(r'calender/?$', views.calender, name='calender'),
+	# url(r'speciality/?$', views.speciality, name='speciality'),
+	# url(r'appointments/?$', views.appointments, name='appointments'),
 
 	# new routes
-	url(r'^home/?$', views.new_home, name='dashboard_home_new'), # remove new later
+	url(r'^$', views.new_home, name='dashboard_home'),
 	url(r'^appointments/', include(appointment_routes)),
 	url(r'^timings/', include(timing_routes)),
 	url(r'account/', include(account_routes)),

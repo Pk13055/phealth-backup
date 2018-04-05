@@ -1,52 +1,39 @@
-{% extends 'base.html.j2' %} {% load static %} {% block mainhead %}
-<link type="text/css" rel="stylesheet" href="{% static "site_admin/css/style.css" %}"> {% endblock %} {% block maincontent %}
-<div id="wrapper>
-          <nav class="navbar navbar-default navbar-static-top m-b-0">
-			<div class="navbar-header">
-				<div class="top-left-part">
-					<a class="logo" href="javascript:void(0)">
-						<b>
-							<img src="{%static "images/admin-logo.png" %}" alt="home" class="dark-logo" />
-							<img src="{%static "images/admin-logo-dark.png" %}" alt="home" class="light-logo" />
-						</b>
-
-						<span class="hidden-xs">
-							<img src="{% static "images/admin-text.png" %}" alt="home" class="dark-logo" />
-							<img src="{% static "images/admin-text-dark.png" %}" alt="home" class="light-logo" />
-						</span>
-					</a>
-				</div>
-				<ul class="nav navbar-top-links navbar-left">
-					<li><a href="javascript:void(0)" class="open-close waves-effect waves-light"><i class="ti-menu"></i></a></li>
-				</ul>
-				<ul class="nav navbar-top-links navbar-right pull-right">
-					<li>
-						<form role="search" class="app-search hidden-sm hidden-xs m-r-10">
-							<input type="text" placeholder="Search..." class="form-control"> <a href="#"><i class="fa fa-search"></i></a>
-						</form>
-					</li>
-					<li class="dropdown">
-						<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="javascript:void(0)"> <img src="plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Admin</b><span class="caret"></span> </a>
-						<ul class="dropdown-menu dropdown-user animated flipInY">
-							<li>
-								<div class="dw-user-box">
-									<div class="u-img"><img src="plugins/images/users/varun.jpg" alt="user" /></div>
-									<div class="u-text">
-										<h4>Administration</h4>
-										<p class="text-muted">name</p>
-										<a href="basic.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
-									</div>
-								</div>
-							</li>
-							<li role="separator" class="divider"></li>
-							<li><a href="basic.html"><i class="ti-user"></i> My Profile</a></li>
-							<li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
-						</ul>
-
-					</li>
-
-				</ul>
-			</div>
-		</nav>
+{% extends "site_admin/base.html.j2" %}
+{% load static %}
+{% load bootstrap %}
+{% block content %}
+<div class="row">
+	<h2>Clinician Registration</h2>
+	{# <p class="lead text-muted">Already have an account? Sign in <a href="{% url 'clinician:signin' %}">here</a>.</p> #}
 </div>
+<div class="row">
+	<form method="POST" enctype="multipart/form-data">
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
+				<div class="panel-body">
+					{% csrf_token %}
+					{{ user_form | bootstrap }}
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-6">
+		<div class="row">
+			<div class="panel panel-danger">
+				<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Clinician-specific Information</div>
+				<div class="panel-body">
+					{{ clinician_form | bootstrap }}
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<button class="btn btn-block btn-primary">Update</button>
+			</div>
+		</div>
+	</form>
+</div>
+{# <script src="{% static 'clinician/js/register.js' %}"></script> #}
 {% endblock %}
+

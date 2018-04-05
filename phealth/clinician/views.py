@@ -229,7 +229,7 @@ class AppointmentTableView(DatatableView):
 					<a href="/clinician/dashboard/appointments/cancel/{}" class="datatable-btn btn btn-danger" role="button">Cancel</a>
 				</p>
 				'''.format(instance.id, instance.id)
-			
+
 			return 'NA'
 
 		def get_status_raw(self, instance, **kwargs):
@@ -239,14 +239,14 @@ class AppointmentTableView(DatatableView):
 					<a href="#" class="datatable-btn btn btn-success disabled" role="button">Confirmed</a>
 				</p>
 				'''
-			
+
 			elif instance.status == 'cancelled':
 				return '''
 				<p>
 					<a href="#" class="datatable-btn btn btn-danger disabled" role="button">Cancelled</a>
 				</p>
 				'''
-			
+
 			return '''
 			<p>
 				<a href="#" class="datatable-btn btn btn-warning disabled" role="button">Pending</a>
@@ -255,7 +255,7 @@ class AppointmentTableView(DatatableView):
 
 		def get_provider_name(self, instance, **kwargs):
 			return instance.provider.name
-		
+
 		def get_time(self, instance, **kwargs):
 			time = instance.time
 			m = 'PM' if int(time.hour / 12) else 'AM'
@@ -281,7 +281,7 @@ class AppointmentTableView(DatatableView):
 def confirm_appointment(request, id):
 	c = get_clinician(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
-	
+
 	if a.under == c:
 		a.status = 'confirmed'
 		a.save()
@@ -297,7 +297,7 @@ def confirm_appointment(request, id):
 def cancel_appointment(request, id):
 	c = get_clinician(request.session['email'])
 	a = Appointment.objects.filter(id=id).first()
-	
+
 	if a.under == c:
 		a.status = 'cancelled'
 		a.save()
@@ -315,7 +315,7 @@ def appointment_weekly(request):
 
 	today = datetime.date.today()
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	
+
 	days = []
 	for d in range(7):
 		day = today + datetime.timedelta(days=d)
@@ -324,7 +324,7 @@ def appointment_weekly(request):
 			'date': day.strftime('%d-%m-%Y'),
 			'n_pending': c.appointment_set.filter(date=day).filter(status='pending').count(),
 			'n_confirmed': c.appointment_set.filter(date=day).filter(status='confirmed').count(),
-			'n_cancelled': c.appointment_set.filter(date=day).filter(status='cancelled').count(),			
+			'n_cancelled': c.appointment_set.filter(date=day).filter(status='cancelled').count(),
 		})
 
 
@@ -536,7 +536,7 @@ def education_training(request):
 	if request.method == "POST":
 		e = EducationForm(request.POST, request.FILES, instance=u)
 		if e.is_valid():
-			e.save()		
+			e.save()
 
 	return render(request, 'clinician/dashboard/account/education.html.j2', context={
 		'title' : "Account - ",
@@ -646,7 +646,7 @@ def experience(request):
 		s = json.dumps(r)
 		e.append(s)
 		c.save()
-	
+
 	# del e[0]
 	x = [json.loads(r) for r in e]
 	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
@@ -668,7 +668,7 @@ def awards_recognition(request):
 		r = request.POST.dict()
 		del r['csrfmiddlewaretoken']
 		s = json.dumps(r)
-		c.awards.append(s) 
+		c.awards.append(s)
 		c.save()
 
 	x = [json.loads(r) for r in c.awards]
@@ -692,7 +692,7 @@ def registrations(request):
 		r = request.POST.dict()
 		del r['csrfmiddlewaretoken']
 		s = json.dumps(r)
-		c.registrations.append(s) 
+		c.registrations.append(s)
 		c.save()
 
 	x = [json.loads(r) for r in c.registrations]
@@ -717,7 +717,7 @@ def memberships(request):
 		r = request.POST.dict()
 		del r['csrfmiddlewaretoken']
 		s = json.dumps(r)
-		c.memberships.append(s) 
+		c.memberships.append(s)
 		c.save()
 
 	x = [json.loads(r) for r in c.memberships]

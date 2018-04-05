@@ -1,0 +1,75 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+            <div class="container-fluid">
+                <div class="row bg-title">
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<h4 class="page-title">Manage Reseller Packages</h4>
+					</div>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="#">View / Update Reseller Packages</a></li>
+						</ol>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+                <!-- /row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">View / Update Reseller Packages</h3>
+
+
+                            <p class="text-muted m-b-30"></p>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No</th>
+                                            <th>Title</th>
+                                            <th>Price</th>
+                                            <th>No of Discount Cards</th>
+                                            <th>validity</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Common Package</td>
+                                            <td>10000</td>
+                                            <td>1000</td>
+                                            <td>05-05-2020</td>
+                                            <td>
+                                                <a href="resellers_packages_edit.html"><button class="btn btn-primary">View/Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Common Package</td>
+                                            <td>10000</td>
+                                            <td>1000</td>
+                                            <td>05-05-2020</td>
+                                            <td>
+                                                <a href="resellers_packages_edit.html"><button class="btn btn-primary">View/Update</button></a>
+                                                <button class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                        
+                                     
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+            {% endblock content %}	

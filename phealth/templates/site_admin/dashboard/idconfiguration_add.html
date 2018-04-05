@@ -1,0 +1,55 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %} {% block content %}
+         <div class="container-fluid">
+            <div class="row bg-title">
+               <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                  <h4 class="page-title">Manage IDConfiguration</h4>
+               </div>
+               <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                  <ol class="breadcrumb">
+                     <li><a href="index.html">Dashboard</a></li>
+                     <li><a href="#">Add New IDConfiguration</a></li>
+                  </ol>
+               </div>
+               <!-- /.col-lg-12 -->
+            </div>
+            <div class="row ">
+               <div class="col-md-12 ">
+                  <div class="panel panel-info ">
+                     <div class="panel-heading">
+                        Add IDConfiguration
+                     </div>
+                     <br>
+                      
+                      <div class="col-md-12 white-box">
+                     <div class="panel-body">
+                        <div class="form-group">
+                            <p>The following Tables only available for ID Configuration</p>
+                           <label for="role"> Select Table</label>
+                            <select class="form-control">
+                                <option>Users</option>
+                                <option>Healthseeker</option>
+                            </select>
+                        </div>
+                         <div class="form-group">
+                           <label for="prefix"> prefix</label>
+                           <input type="text" class="form-control" id="prefix" placeholder="Enter New prefix" name="prefix">
+                        </div>
+                         <div class="form-group">
+                           <label for="suffix"> suffix</label>
+                           <input type="text" class="form-control" id="suffix" placeholder="Enter New suffix" name="suffix">
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                           <a href="#"><button class="btn btn-success pull-right">Add</button></a>
+                        </div>
+                     </div>
+                          </div>
+                  </div>
+               </div>
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2018 &copy; Phealth </footer>
+         </div>
+        			
+{% endblock content %}
