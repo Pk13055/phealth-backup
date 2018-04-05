@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
 from querystring_parser import parser
 
-from api.models import Appointment, Clinician,Symptoms , Speciality, User ,TestCategory ,TestSubcategory
+from api.models import Appointment, Clinician,Symptoms , Speciality, User ,TestCategory ,TestSubcategory,Timesession,HealthProviderPlans
 from phealth.utils import get_clinician, match_role, signin
 from .forms import *
 
@@ -372,7 +372,7 @@ def timesession_add(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('site_admin:condition_view')
+            return redirect('site_admin:timesession_view')
     else:
         form = TimesessionForm()
     return render(request, 'site_admin/dashboard/timesession_add.html', {'form': form})
@@ -385,9 +385,9 @@ def timesession_view(request):
 
 @match_role("admin")
 def timesession_edit(request, pk):
-    post = get_object_or_404(timesession, pk=pk)
+    post = get_object_or_404(Timesession, pk=pk)
     if request.method == "POST":
-        form = TimesessionForm(request.POST, instance=post)
+        form =TimesessionForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
@@ -396,11 +396,12 @@ def timesession_edit(request, pk):
         form = TimesessionForm(instance=post)
     return render(request, 'site_admin/dashboard/timesession_add.html', {'form': form})
 
+
 @match_role("admin")
 def timesession_delete(request, pk):
     result = Timesession.objects.get(pk=pk)
     result.delete()
-    return redirect('site_admin:condition_view')
+    return redirect('site_admin:timesession_view')
 
 
 @match_role("admin")
@@ -410,7 +411,7 @@ def speciality_add(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('site_admin:condition_view')
+            return redirect('site_admin:speciality_view')
     else:
         form = SpecialityForm()
     return render(request, 'site_admin/dashboard/speciality_add.html', {'form': form})
@@ -821,12 +822,40 @@ def healthcheck_reports(request):
 
 @match_role("admin")
 def healthprovider_plans_add(request):
-    return render(request, 'site_admin/dashboard/healthprovider_plans_add.html', {})
+    if request.method == 'POST':
+        form = HealthProviderPlansForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:healthprovider_plans_view')
+    else:
+        form =HealthProviderPlansForm
+    return render(request, 'site_admin/dashboard/healthprovider_plans_add.html', {'form': form})
 
 
 @match_role("admin")
 def healthprovider_plans_view(request):
-    return render(request, 'site_admin/dashboard/healthprovider_plans_view.html', {})
+    result =HealthProviderPlans.objects.all()
+    return render(request, 'site_admin/dashboard/healthprovider_plans_view.html', {'values': result})
+
+@match_role("admin")
+def healthprovider_plans_edit(request, pk):
+    post = get_object_or_404(HealthProviderPlans, pk=pk)
+    if request.method == "POST":
+        form = HealthProviderPlansForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:healthprovider_plans_view')
+    else:
+        form = HealthProviderPlansForm(instance=post)
+    return render(request, 'site_admin/dashboard/healthprovider_plans_add.html', {'form': form})
+
+@match_role("admin")
+def healthprovider_plans_delete(request, pk):
+    result = HealthProviderPlans.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:healthprovider_plans_view')
 
 
 @match_role("admin")
@@ -926,28 +955,28 @@ def cancel_appointment(request, id):
 #-------------------------------------------------------------------------------------appointments daily
 @match_role("admin")
 def appointment_weekly(request):
-    ''' appointment stats '''
+	''' appointment stats '''
 
-    today = datetime.date.today()
-    c = User.objects.filter(user__email=request.session['email']).first()
+	today = datetime.date.today()
+	c = User.objects.filter(user__email=request.session['email']).first()
 
-    days = []
-    for d in range(7):
-        day = today + datetime.timedelta(days=d)
-        days.append({
-            'name': day.strftime('%A'),
-            'date': day.strftime('%d-%m-%Y'),
-            'n_pending': c.appointment_set.filter(date=day).filter(status='pending').count(),
-            'n_confirmed': c.appointment_set.filter(date=day).filter(status='confirmed').count(),
-            'n_cancelled': c.appointment_set.filter(date=day).filter(status='cancelled').count(),
-        })
+	days = []
+	for d in range(7):
+		day = today + datetime.timedelta(days=d)
+		days.append({
+			'name': day.strftime('%A'),
+			'date': day.strftime('%d-%m-%Y'),
+			'n_pending': c.appointment_set.filter(date=day).filter(status='pending').count(),
+			'n_confirmed': c.appointment_set.filter(date=day).filter(status='confirmed').count(),
+			'n_cancelled': c.appointment_set.filter(date=day).filter(status='cancelled').count(),
+		})
 
-    return render(request, 'site_admin/dashboard/appointments/weekly.html.j2', context={
-        'title': "appointment - weekly",
-        'admin': c,
-        'days': days
-    })
 
+	return render(request, 'site_admin/dashboard/appointments/weekly.html.j2', context={
+		'title' : "appointment - weekly",
+		'user' : c,
+		'days': days
+	})
 
 @match_role("admin")
 def appointment_monthly(request):

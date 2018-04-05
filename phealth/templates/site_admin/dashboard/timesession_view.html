@@ -29,7 +29,8 @@
                                 <thead>
                                     <tr>
                                         <th>name</th>
-                                        <th>Facility Type</th>
+                                        <th>Fromtime</th>
+                                        <th>Totime</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -37,7 +38,8 @@
                                    {% for result in values %}
                                     <tr>
                                         <td>{{ result.name }}</td>
-                                        <td>{{ result.facility_type }} </td>
+                                        <td>{{ result.fromtime }} </td>
+                                        <td>{{ result.totime }}</td>
                                        <td><center><a class="btn btn-warning"  href="{% url 'site_admin:timesession_edit' pk=result.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'site_admin:timesession_delete' pk=result.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>
 
                                     </tr>
