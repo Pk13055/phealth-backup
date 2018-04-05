@@ -700,11 +700,17 @@ def idconfiguration_view(request):
 
 @match_role("admin")
 def users(request):
-    user=User.objects.all()
-    print(user)
-    u=user.filter(role='role')
+    filter = 0;
+    if 'role' in request.GET:
+        filter = request.GET['role']
+    if(filter == 0):
+        u=User.objects.all()
+        print(filter)
+    else:
+        print(filter)
+        u=User.objects.filter(role = filter)
     print(u)
-    return render(request, 'site_admin/dashboard/users.html', {'values':user},{})
+    return render(request, 'site_admin/dashboard/users.html', {'values':u})
 
 
 @match_role("admin")
