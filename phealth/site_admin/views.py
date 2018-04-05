@@ -677,27 +677,92 @@ def facility_delete(request, pk):
     result.delete()
     return redirect('site_admin:facility_view')
 
-
+#-------------------------------Roles -------------------------------------
 @match_role("admin")
 def roles_add(request):
-    return render(request, 'site_admin/dashboard/roles_add.html', {})
+    if request.method == 'POST':
+        form = RoleForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:roles_view')
+    else:
+        form = RoleForm()
+    return render(request, 'site_admin/dashboard/roles_add.html', {'form': form})
+
 
 
 @match_role("admin")
 def roles_view(request):
-    return render(request, 'site_admin/dashboard/roles_view.html', {})
+    result = Role.objects.all()
+    return render(request, 'site_admin/dashboard/roles_view.html', {'values': result})
 
 
 @match_role("admin")
+def roles_edit(request, pk):
+    post = get_object_or_404(Role, pk=pk)
+    if request.method == "POST":
+        form = RoleForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:roles_view')
+    else:
+        form = RoleForm(instance=post)
+    return render(request, 'site_admin/dashboard/roles_add.html', {'form': form})
+
+@match_role("admin")
+def roles_delete(request, pk):
+    result = Role.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:roles_view')
+
+
+
+#-----------------------------ID configurations------------------------------------------
+
+@match_role("admin")
 def idconfiguration_add(request):
-    return render(request, 'site_admin/dashboard/idconfiguration_add.html', {})
+    if request.method == 'POST':
+        form = IdConfigurationForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:idconfiguration_view')
+    else:
+        form = IdConfigurationForm()
+    return render(request, 'site_admin/dashboard/idconfiguration_add.html', {'form': form})
 
 
 @match_role("admin")
 def idconfiguration_view(request):
-    return render(request, 'site_admin/dashboard/idconfiguration_view.html', {})
+    result = IdConfiguration.objects.all()
+    return render(request, 'site_admin/dashboard/idconfiguration_view.html', {'values': result})
+
+@match_role("admin")
+def idconfiguration_edit(request, pk):
+    post = get_object_or_404(IdConfiguration, pk=pk)
+    if request.method == "POST":
+        form = IdConfigurationForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:idconfiguration_view')
+    else:
+        form = IdConfigurationForm(instance=post)
+    return render(request, 'site_admin/dashboard/idconfiguration_add.html', {'form': form})
+
+@match_role("admin")
+def idconfiguration_delete(request, pk):
+    result = IdConfiguration.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:idconfiguration_view')
 
 
+
+
+
+#-----------------------------------------------------------------------------
 @match_role("admin")
 def users(request):
     user=User.objects.all()

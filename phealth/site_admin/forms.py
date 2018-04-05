@@ -184,7 +184,7 @@ class TimesessionForm(forms.ModelForm):
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
 
-
+#--------------------RoleForm------------------------------------------------
 class RoleForm(forms.ModelForm):
 
     class Meta:
@@ -198,6 +198,7 @@ class RoleForm(forms.ModelForm):
             self.fields[myField].widget.attrs['placeholder'] = myField
 
 
+#--------------------RoleForm------------------------------------------------
 
 
 class HealthProviderPlansForm(forms.ModelForm):
@@ -211,6 +212,8 @@ class HealthProviderPlansForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+
+#-------------------------------------ID Configurations-----------------------------------
 
 
 class IdConfigurationForm(forms.ModelForm):

@@ -103,8 +103,15 @@ dashboard_routes = [
 
     url(r'^roles_add/?$', views.roles_add, name='roles_add'),
     url(r'^roles_view/?$', views.roles_view, name='roles_view'),
+    url(r'^roles_edit/(?P<pk>\d+)/roles_edit/$', views.roles_edit, name='roles_edit'),
+    url(r'^roles_delete/roles_delete/(?P<pk>\d+)/$', views.roles_delete, name='roles_delete'),
+
+
     url(r'^idconfiguration_add/?$', views.idconfiguration_add, name='idconfiguration_add'),
     url(r'^idconfiguration_view/?$', views.idconfiguration_view, name='idconfiguration_view'),
+    url(r'^idconfiguration_edit/(?P<pk>\d+)/idconfiguration_edit/$', views.idconfiguration_edit, name='idconfiguration_edit'),
+    url(r'^idconfiguration_delete/idconfiguration_delete/(?P<pk>\d+)/$', views.idconfiguration_delete, name='idconfiguration_delete'),
+
     url(r'^users/?$', views.users, name='users'),
     url(r'^salesagents_add/?$', views.salesagents_add, name='salesagents_add'),
     url(r'^salesagents_view/?$', views.salesagents_view, name='salesagents_view'),
