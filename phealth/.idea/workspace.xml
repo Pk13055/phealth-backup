@@ -17,8 +17,8 @@
       <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/site_admin/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="707">
-              <caret line="166" column="0" lean-forward="true" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
+            <state relative-caret-position="622">
+              <caret line="161" column="19" lean-forward="false" selection-start-line="161" selection-start-column="19" selection-end-line="161" selection-end-column="19" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -36,14 +36,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/site_admin/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="855" column="79" lean-forward="true" selection-start-line="855" selection-start-column="79" selection-end-line="855" selection-end-column="79" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="0">
+              <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,7 +58,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="health_daily.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/site_admin/dashboard/health_daily.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="958">
+              <caret line="86" column="45" lean-forward="false" selection-start-line="86" selection-start-column="45" selection-end-line="86" selection-end-column="45" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/clinician/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/healthseeker/forms.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="272">
@@ -72,36 +90,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/clinician/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="health_daily.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/site_admin/dashboard/health_daily.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="86" column="45" lean-forward="false" selection-start-line="86" selection-start-column="45" selection-end-line="86" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/clinician/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3188">
-              <caret line="298" column="34" lean-forward="false" selection-start-line="298" selection-start-column="28" selection-end-line="298" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
@@ -109,8 +97,6 @@
       <find>custi</find>
       <find>condit</find>
       <find>condition_edit</find>
-      <find>time</find>
-      <find>session</find>
       <find>roles</find>
       <find>white</find>
       <find>speciali</find>
@@ -136,6 +122,8 @@
       <find>appointment_</find>
       <find>filter</find>
       <find>s hea</find>
+      <find>session</find>
+      <find>time</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -153,15 +141,15 @@
         <option value="$PROJECT_DIR$/phealth/urls.py" />
         <option value="$PROJECT_DIR$/templates/home.html.j2" />
         <option value="$PROJECT_DIR$/templates/site_admin/dashboard/salesagents_add.html" />
-        <option value="$PROJECT_DIR$/clinician/views.py" />
         <option value="$PROJECT_DIR$/templates/site_admin/dashboard/base.html" />
         <option value="$PROJECT_DIR$/site_admin/urls.py" />
         <option value="$PROJECT_DIR$/site_admin/forms.py" />
         <option value="$PROJECT_DIR$/templates/clinician/dashboard/appointments/daily.html.j2" />
         <option value="$PROJECT_DIR$/templates/site_admin/dashboard/health_daily.html" />
-        <option value="$PROJECT_DIR$/site_admin/views.py" />
         <option value="$PROJECT_DIR$/api/models.py" />
         <option value="$PROJECT_DIR$/healthseeker/forms.py" />
+        <option value="$PROJECT_DIR$/site_admin/views.py" />
+        <option value="$PROJECT_DIR$/clinician/views.py" />
       </list>
     </option>
   </component>
@@ -203,7 +191,7 @@
             <path>
               <item name="phealth" type="b2602c69:ProjectViewProjectNode" />
               <item name="phealth" type="462c0819:PsiDirectoryNode" />
-              <item name="healthseeker" type="462c0819:PsiDirectoryNode" />
+              <item name="site_admin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="phealth" type="b2602c69:ProjectViewProjectNode" />
@@ -665,16 +653,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site_admin/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
-          <caret line="166" column="0" lean-forward="true" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/site_admin/dashboard/condition_add.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="578">
@@ -691,14 +669,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clinician/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3188">
-          <caret line="298" column="34" lean-forward="false" selection-start-line="298" selection-start-column="28" selection-end-line="298" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/site_admin/dashboard/condition_view.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -709,19 +679,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/site_admin/dashboard/health_daily.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
+        <state relative-caret-position="958">
           <caret line="86" column="45" lean-forward="false" selection-start-line="86" selection-start-column="45" selection-end-line="86" selection-end-column="45" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/site_admin/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="855" column="79" lean-forward="true" selection-start-line="855" selection-start-column="79" selection-end-line="855" selection-end-column="79" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -743,6 +703,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/clinician/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/healthseeker/forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -750,6 +718,24 @@
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site_admin/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="622">
+          <caret line="161" column="19" lean-forward="false" selection-start-line="161" selection-start-column="19" selection-end-line="161" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site_admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="15" />
+          <folding />
         </state>
       </provider>
     </entry>
