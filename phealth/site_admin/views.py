@@ -109,6 +109,13 @@ def appointments(request):
     apps = Appointment.objects.filter(under=c).all().order_by('id')
     appointments_arr = []
 
+    def filter_by_date(date):
+        return Appointment.filter(post_date__year=date.year,
+                              post_date__month=date.month,
+                              post_date__day=date.day)
+
+
+
     class AppointmentForm(forms.ModelForm):
 
         class Meta:
@@ -775,6 +782,7 @@ def users(request):
     else:
         print(filter)
         u=User.objects.filter(role = filter)
+    u=User.objects.filter(role = filter)
     print(u)
     return render(request, 'site_admin/dashboard/users.html', {'values':u})
 
@@ -982,6 +990,9 @@ class AppointmentTableView(DatatableView):
 				'''.format(instance.id, instance.id)
 
     def get_queryset(self):
+        user = User.objects.get(Status = "confirmed")
+        user = User.objects.get(Status = "cancelled")
+        user = User.objects.get(Status = "confirmed")
         return Appointment.objects.all()
 
     def get_template_names(self):
@@ -1021,6 +1032,28 @@ def cancel_appointment(request, id):
         return JsonResponse({'status': 'Auth Error'})
 
     return redirect('site_admin:appointment_daily', {'values': a})
+
+@match_role("admin")
+def health_daily(request):
+    providers = Provider.objects.all()
+    result = Appointment.objects.all()
+    return render(request, 'site_admin/dashboard/health_daily.html', {'values': result,'providers':providers, })
+
+@match_role("admin")
+def confirm_appointment(request, id):
+
+    a = Appointment.objects.filter(role="healthprovider")
+
+    if a.under == c:
+        a.status = 'confirmed'
+        a.save()
+    else:
+        # add appropriate error handling
+        print("*** Authorization failed ***")
+        return JsonResponse({'status': 'Auth Error'})
+
+    return redirect('site_admin:health_daily', {'values': a})
+
 
 
 #-------------------------------------------------------------------------------------appointments daily
