@@ -35,9 +35,9 @@
                                     <div class="form-group">
                                         <div class="col-md-9">
                                             <select name="provider" class="form-control">
-                                                <option value="" disabled="" selected="">All Provider</option>
+                                                <option value="All" >All Provider</option>
                                                 {%  for provider in providers %}
-                                                    <option value="{{ provider.id }}">{{ provider.name }}</option>
+                                                    <option value="{{ provider.id }}"   >{{ provider.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -47,9 +47,11 @@
                                     <div class="form-group">
                                         <div class="col-md-9">
                                             <select name="status" class="form-control">
-                                                <option value="" disabled="" selected="">All Status</option>
-                                                <option value="confirmed">confirmed</option>
-                                                <option value="cancelled">cancelled</option>
+                                                <option value="All" >All Status</option>
+                                                <option value="confirmed" {% if request.GET.status == 'confirmed' %}  selected {% endif %} >confirmed</option>
+                                                <option value="cancelled" {% if request.GET.status == 'cancelled' %}  selected {% endif %} >cancelled</option>
+                                                <option value="pending" {% if request.GET.status == 'pending' %}  selected {% endif %} >pending</option>
+                                                <option value="rescheduled" {% if request.GET.status == 'rescheduled' %}  selected {% endif %} >rescheduled</option>
                                             </select>
                                         </div>
                                     </div>

@@ -1,114 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Qlick Health</title>
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
-    <link href="../css/forms.css" rel="stylesheet">
-    <link href="../css/font.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
-      
-      <style>
-        body {
-            background-color: #F6F8FA;
-        }
-      </style>
+{%  extends "healthseeker/dashboard/base_dashboard.html" %}
+{% load static %}
 
-  </head>
-  <body>
-      
-      <nav class="navbar navbar-default navbar-fixed-top inner_nav_menu reg_menu_main">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="../index.html"><img src="../img/logo1.png"></a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<!--<ul class="nav navbar-nav navbar-right custom_nav nav_inner">
-						
-						<li><a href="#">My Profile</a></li>
-						<li><a href="#">Avail services </a></li>
-						<li><a href="#">Refer And Earn</a></li>
-						<li><a href="#">Send A Feedback</a></li>
-                        
-                      
-						
-					</ul>-->
-                    
-                    <ul class="nav navbar-nav navbar-right custom_nav nav_inner">
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile</a>
-                          <ul class="dropdown-menu">
-                            <li><a href="../dashboard/personal_information.html">Personal Information</a></li>
-                            <li><a href="../dashboard/family_details.html">Family Details</a></li>
-                            <li><a href="../dashboard/contact_details.html">Contact Details</a></li>
-                            <li><a href="../dashboard/other_info.html">Other Information</a></li>
-                          </ul>
-                        </li>
-                        
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Avail services </a>
-                          <ul class="dropdown-menu">
-                            <li><a href="#">Book Appointment</a></li>
-                            <li><a href="#">Book Healthchecks</a></li>
-                            <li><a href="#">Buy Discount Cards</a></li>
-                            <li><a href="#">Gift health</a></li>
-                          </ul>
-                        </li>
-                        
-                        <li>
-                            <a href="../dashboard/refer_earn.html">Refer and Earn</a>
-                            
-                        </li>
-                        <li>
-                            <a href="#">Send a feedback</a>
-                            
-                        </li>
-                        
-						<!--<li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
-                          <ul class="dropdown-menu">
-                            <li><a href="../dashboard/change_pswd.html">Change Password</a></li>
-                            <li><a href="../dashboard/manage_intrests.html">Manage Intrests</a></li>
-                          </ul>
-                        </li>-->
-						<!--<li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">facilitation</a>
-                          <ul class="dropdown-menu">
-                            <li><a href="../dashboard/account_manager.html">Account Manager</a></li>
-                            <li><a href="#">Customer Care</a></li>
-                            <li><a href="../dashboard/comlaints.html">Comlaints/Grivieance</a></li>
-                          </ul>
-                        </li>-->
-						<li><a href="#"><i class="fa fa-bell"></i></a></li>
-                        
-                        
-                        <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="head_prof_AV"><img src="../img/avatar3.png"></span>Ramu Peetha<b class="caret"></b></a>
-                          <ul class="dropdown-menu">
-                            <li><a href="../dashboard/booked.html">My Appointments</a></li>
-                            <li><a href="../dashboard/health_records.html">Health Records</a></li>
-                            <li><a href="../dashboard/health_alerts.html">Health Alerts</a></li>
-                            <li><a href="../dashboard/favorite_decors.html">Favorite Decors</a></li>
-                            <li><a href="../dashboard/comlaints.html">Facilitation</a></li>
-                            <li><a href="../dashboard/change_pswd.html">Settings</a></li>
-                            <li><a href="#">Logout</a></li>
-                          </ul>
-                        </li>
-                  </ul>
+{% block content %}
 
-				</div>
-			</div>
-		</nav>
-      
+    {% block facilitations %}
+        {% endblock %}
+
         <section class="form_reg_one_hero dash_board">
             <div class="container">
                 <div class="row">
@@ -120,13 +17,7 @@
                             <div class="form_reg_one_in form_reg_one_in_my_p">
                                 
                                 <h3>Facilitation</h3>
-                        
-                                <ul class="my_profile_div">
-                                    <li class="active"><a href="../dashboard/account_manager.html"><img src="../img/dashboard/my_profile.png">Account Manager</a></li>
-                                    <li><a href="#"><img src="../img/dashboard/my_profile.png">Customer Care</a></li>
-                                    <li><a href="../dashboard/comlaints.html"><img src="../img/dashboard/my_profile.png">Comlaints/Grivieance</a></li>
-                                    
-                                </ul>
+
                                 
                                 <div class="my_pro_form_he">
                                 
@@ -166,80 +57,5 @@
             </div>
         </section>
       
-        <footer>
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="full-widrth">
-							<h4>About us</h4>
-							<p>Lorem Ipsum is simply dummy text of the printing<br> and typesetting industry. Lorem Ipsum has<br> been the industry's standard dummy text</p>
-							<img src="../img/logo.png">
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="full-widrth">
-							<h4>Quick Links</h4>
-							<ul>
-								<li><a href="#">How it works</a></li>
-								<li><a href="#">Our Team</a></li>
-								<li><a href="#">Vision</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="full-widrth">
-							<h4>Contact Us</h4>
-							<p>#658, 3rd Floor, Ayyappa Socitey, Madhapur, Hyderabad, 500081, Telangana </p>
-							<p>+91 8686768612,</p>
-							<p>contact@mbrinformatics.com</p>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="full-widrth">
-							<h4>Subscribe Us</h4>
-							<div class="row">
-								<div class="col-md-12">
-									<form action="#">
-										<div class="input-group">
-											<input class="btn btn-lg" name="email" id="email" type="email" placeholder="Your Email Address" required>
-											<button class="btn btn-lg" type="submit"><i class="fa fa-envelope" aria-hidden="true"></i></button>
-										</div>
-									</form>
-									<!--<small class="promise"><em>We won't send spam.</em></small>-->
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-		<div class="footer_bottom">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<ul>
-							<li><a href="#">Teram of Conditions</a></li>
-							<li><a href="#">How it Works</a></li>
-							<li><a href="#">Cancellation & Refund</a></li>
-							<li><a href="#">Disclaime</a></li>
-						</ul>
-					</div>
-					<div class="col-md-6">
-						<p>Copyright © 2017  MBR Informatics, All Rights Reserved.</p>
-					</div>
-				</div>
-			</div>
-		</div>
 
-    <script src="../js/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-      
-      <script>
-        $('ul.nav li.dropdown').hover(function() {
-          $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeIn(300);
-        }, function() {
-          $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeOut(300);
-        });  
-    </script>
-  </body>
-</html>
+   {% endblock  %}
