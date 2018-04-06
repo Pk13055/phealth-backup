@@ -82,7 +82,7 @@
                                                 <tbody>
                                                     <tr>
                                                         {% for user in values %}
-                                                        <td>{{ user.sr.no }}</td>
+                                                        <td>{{ forloop.counter }}</td>
                                                         <td>{{ user.id }}</td>
                                                         <td>{{ user.name }}</td>
                                                         <td>{{ user.email }}</td>
