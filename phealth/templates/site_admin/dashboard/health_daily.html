@@ -20,19 +20,25 @@
                     <div class="col-md-12">
                         <div class="white-box">
                             <div class="row row-in">
-                                <div class="col-lg-3 col-sm-6 row-in-br">
+                            <form >
+                                <div class="col-lg-2 col-sm-6 row-in-br">
                                     <div class="input-group">
-                                        <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy"> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="fromdate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-sm-6 row-in-br">
+                                    <div class="input-group">
+                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="todate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-sm-6">
                                     <div class="form-group">
                                         <div class="col-md-9">
-                                            <select name="Obstetrician" class="form-control">
-                                                <option value="" disabled="" selected="">Select Status</option>
-                                                <option value="Rajesh">Dr. Rajesh</option>
-                                                <option value="Srinivasulu">Dr. Srinivasulu</option>
-                                                <option value="Priya">Dr. Priya</option>
+                                            <select name="provider" class="form-control">
+                                                <option value="" disabled="" selected="">All Provider</option>
+                                                {%  for provider in providers %}
+                                                    <option value="{{ provider.id }}">{{ provider.name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -40,32 +46,18 @@
                                 <div class="col-lg-2 col-sm-6">
                                     <div class="form-group">
                                         <div class="col-md-9">
-                                            <select name="Obstetrician" class="form-control">
-                                                <option value="" disabled="" selected="">Select Status</option>
-                                                <option value="urologist">urologist</option>
-                                                <option value="Cardiologist">Cardiologist</option>
-                                                <option value="Dermatologist">Dermatologist</option>
-                                                <option value="Surgery">Surgery</option>
-                                                <option value="neurologist">neurologist</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-sm-6">
-                                    <div class="form-group">
-                                        <div class="col-md-9">
-                                            <select name="Obstetrician" class="form-control">
-                                                <option value="" disabled="" selected="">Select Status</option>
-                                                <option value="scheduled">Scheduled</option>
-                                                <option value="waitinglist">Waiting List</option>
-                                                <option value="rejected">Rejected</option>
+                                            <select name="status" class="form-control">
+                                                <option value="" disabled="" selected="">All Status</option>
+                                                <option value="confirmed">confirmed</option>
+                                                <option value="cancelled">cancelled</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12">
-                                    <button class="btn btn-block btn-info btn-rounded">Filter</button>
+                                    <button class="btn btn-block btn-info btn-rounded"type="submit">Filter</button>
                                 </div>
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -88,14 +80,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   {% for a in values %}
+                                   {% for result in values %}
                                     <tr>
-                                        <td>{{ a.date }}</td>
-                                        <td>{{ a.time }}</td>
-                                        <td>{{ a.duration }}</td>
-                                        <td>{{ a.status }}</td>
-                                        <!--<td><center><a class="btn btn-warning"  href="{% url 'site_admin:condition_edit' pk=result.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'site_admin:condition_delete' pk=result.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>
-                                   --> </tr>
+                                        <td>{{ result.date }}</td>
+                                        <td>{{ result.time }}</td>
+                                        <td>{{ result.duration }}</td>
+                                        <td>{{ result.status }}</td>
+                                         </tr>
                                     {% endfor %}
 
                                 </tbody>
