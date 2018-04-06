@@ -6,6 +6,7 @@ from datatableview import (Datatable, DateTimeColumn, TextColumn,
 from datatableview.helpers import make_xeditable
 from datatableview.views import DatatableView, XEditableDatatableView
 from django import forms
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -773,18 +774,31 @@ def idconfiguration_delete(request, pk):
 #-----------------------------------------------------------------------------
 @match_role("admin")
 def users(request):
-    filter = 0;
-    if 'role' in request.GET:
-        filter = request.GET['role']
-    if(filter == 0):
-        u=User.objects.all()
-        print(filter)
-    else:
-        print(filter)
-        u=User.objects.filter(role = filter)
-    u=User.objects.filter(role = filter)
-    print(u)
+
+    u=User.objects.all()
+    if request.GET.get("role") is not None:
+        if request.GET.get('role') != "All":
+            u=u.filter(Q(role = request.GET.get('role')))
+
+    if request.GET.get("status") is not None:
+        if request.GET.get('status') != "All":
+            u=u.filter(Q(status = request.GET.get('status')))
+
+
+
     return render(request, 'site_admin/dashboard/users.html', {'values':u})
+
+
+@match_role("admin")
+def users_active(request, pk):
+    User.objects.filter(pk=pk).update(status=True)
+    return redirect('site_admin:users')
+
+
+@match_role("admin")
+def users_inactive(request, pk):
+    User.objects.filter(pk=pk).update(status=False)
+    return redirect('site_admin:users')
 
 
 @match_role("admin")
