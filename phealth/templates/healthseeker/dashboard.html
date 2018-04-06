@@ -1,5 +1,18 @@
  
-        <section class="form_reg_one_hero dash_board">
+
+
+{%  extends "healthseeker/dashboard/base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+
+
+<section class="form_reg_one_hero dash_board">
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
@@ -15,22 +28,7 @@
                         <div class="full_width dash_header">
                             <h3>My Health Feed</h3>
                             
-                            <ul>
-                                <li><a href="#"><img src="../img/dashi1.png"><span>Weight Loss</span></a></li>
-                                <li><a href="#"><img src="../img/dashi2.png"><span>Healthy Skin</span></a></li>
-                                <li><a href="#"><img src="../img/dashi3.png"><span>Healthy Hair</span></a></li>
-                                <li class="more">
-                                    
-                                   <div class="dropdown">
-                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">More <b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Weight Loss</a></li>
-                                            <li><a href="#">Healthy Skin</a></li>
-                                        </ul>
-                                    </div>
-                
-                                </li>
-                            </ul>
+
                             
                             
                         </div>
@@ -268,4 +266,7 @@
                 </div>
             </div>
         </section>
-      
+
+
+
+   {% endblock %}
