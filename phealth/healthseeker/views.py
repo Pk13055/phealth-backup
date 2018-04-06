@@ -58,3 +58,32 @@ def registrationform3(request):
 
 def addfamilymembers(request):
     print(request.GET)
+
+
+def accountmanager(requset):
+
+    return render(requset,'healthseeker/account_manager.html',{
+
+    })
+
+def contactdetails(requset):
+
+    return render(requset,'healthseeker/contact_details.html',{
+
+    })
+
+def intrest(requset):
+    return render(requset,'healthseeker/manage_intrests.html',{})
+
+
+def booking(requset):
+    return render(requset,'healthseeker/booked.html',{})
+
+def favaroitedoctors(requset):
+    return render(requset,'healthseeker/favorite_decors.html',{})
+
+def complaints(requset):
+    return render(requset,'healthseeker/comlaints.html',{})
+
+def healthalerts(requset):
+    return render(requset,'healthseeker/health_alerts.html',{})
