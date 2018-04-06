@@ -12,7 +12,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
 from querystring_parser import parser
 
-from api.models import Appointment, Clinician,Symptoms , Speciality, User ,TestCategory ,TestSubcategory,Timesession,HealthProviderPlans
+from api.models import *
 from phealth.utils import get_clinician, match_role, signin
 from .forms import *
 
@@ -771,6 +771,7 @@ def idconfiguration_delete(request, pk):
 
 
 
+
 #-----------------------------------------------------------------------------
 @match_role("admin")
 def users(request):
@@ -809,10 +810,6 @@ def salesagents_add(request):
 def salesagents_view(request):
     return render(request, 'site_admin/dashboard/salesagents_view.html', {})
 
-
-@match_role("admin")
-def health_daily(request):
-    return render(request, 'site_admin/dashboard/health_daily.html', {})
 
 
 @match_role("admin")
@@ -1051,6 +1048,18 @@ def cancel_appointment(request, id):
 def health_daily(request):
     providers = Provider.objects.all()
     result = Appointment.objects.all()
+    if request.GET.get("provider") is not None:
+        if request.GET.get('provider') != "All":
+            result=result.filter(Q(provider = request.GET.get('provider')))
+
+    if request.GET.get("status") is not None:
+        if request.GET.get('status') != "All":
+            result=result.filter(Q(status = request.GET.get('status')))
+
+
+
+
+
     return render(request, 'site_admin/dashboard/health_daily.html', {'values': result,'providers':providers, })
 
 @match_role("admin")
