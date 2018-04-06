@@ -40,8 +40,8 @@
                                         <div class="col-md-9">
                                             <select name="status" class="form-control">
                                                 <option value="All">All</option>
-                                                <option value="Active" {% if request.GET.status == "Active" %}  selected {% endif %} >Active</option>
-                                                <option value="Inactive" {% if request.GET.status == "Inactive" %}  selected {% endif %} >Inactive</option>
+                                                <option value="True" {% if request.GET.status == "True" %}  selected {% endif %} >Active</option>
+                                                <option value="False" {% if request.GET.status == "False" %}  selected {% endif %} >Inactive</option>
                                                 
                                             </select>
                                         </div>
@@ -93,9 +93,9 @@
                                                         <td>{{ user.status }}</td>
                                                         <td>
                                                             {% if user.status == True %}
-                                                            <button class="btn btn-danger  waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-times"></i></span>Hold</button>
+                                                            <a class="btn btn-danger  waves-effect waves-light marextra" href="{% url 'site_admin:users_inactive' pk=user.pk %}" onclick="return confirm('Are you sure you want to Hold this item?');"><span class="btn-label"><i class="fa fa-times"></i></span>Hold</a>
                                                             {% else %}
-                                                            <button class="btn btn-success  href="{% url 'site_admin:users' %}" waves-effect waves-light marextra"><span class="btn-label"><i class="fa fa-check"></i></span>Activate</button>
+                                                            <a class="btn btn-success  waves-effect waves-light marextra" href="{% url 'site_admin:users_active' pk=user.pk %}" onclick="return confirm('Are you sure you want to Activate this User?');"><span class="btn-label"><i class="fa fa-check"></i></span>Activate</button>
                                                             {% endif %}
                                                         </td>
                                                          </tr>

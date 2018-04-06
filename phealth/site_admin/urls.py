@@ -113,6 +113,9 @@ dashboard_routes = [
     url(r'^idconfiguration_delete/idconfiguration_delete/(?P<pk>\d+)/$', views.idconfiguration_delete, name='idconfiguration_delete'),
 
     url(r'^users/?$', views.users, name='users'),
+    url(r'^users_active/users_active/(?P<pk>\d+)/$', views.users_active, name='users_active'),
+    url(r'^users_inactive/users_inactive/(?P<pk>\d+)/$', views.users_inactive, name='users_inactive'),
+
     url(r'^salesagents_add/?$', views.salesagents_add, name='salesagents_add'),
     url(r'^salesagents_view/?$', views.salesagents_view, name='salesagents_view'),
     url(r'^health_daily/?$', views.health_daily, name='health_daily'),
