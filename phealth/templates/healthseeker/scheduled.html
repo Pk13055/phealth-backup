@@ -1,0 +1,187 @@
+{%  extends "healthseeker/dashboard/base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+
+      
+    {% block appointments %}
+        {% endblock %}
+        <section class="form_reg_one_hero dash_board">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="form_reg_one form_reg_one_m_p">
+                            
+                            
+                            <div class="form_reg_one_in form_reg_one_in_my_p">
+                                
+                                <h3>Appoinments</h3>
+                        
+                                <ul class="my_profile_div my_profile_div_w">
+                                    <li>
+                                        <a href="../dashboard/booked.html"><img src="../img/dashboard/my_profile.png">Booked</a>
+                                    </li>
+                                    
+                                    <li class="active">
+                                        <a href="../dashboard/scheduled.html"><img src="../img/dashboard/my_profile.png">Scheduled</a>
+                                    </li>
+                                    
+                                    <li><a href="#"><img src="../img/dashboard/my_profile.png">Visited</a></li>
+                                    
+                                    <li class="search_for_dc"><input class="form-control" type="text" placeholder="Enter Doctor name or Hospital"></li>
+                                    
+                                </ul>
+                                
+                                <div class="my_pro_form_he my_pro_form_wait">
+                                
+                                    <h2>Customer Care</h2>
+                                    
+                                    <div class="custo_care_acc">
+                                        <ul class="health_recordsz">
+                                        <li>
+                                            <div class="item">
+                                                <span>Wed</span>
+                                                  <h2>24</h2>
+                                                  <span>Jan</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="health_recc_name">
+                                                <p>Santhosh Kumar</p>
+                                                <span>Shree Krishna Dental <br>Clinic Tuesday, 3PM</span>
+                                            </div>
+                                        </li>
+                                            
+                                        <li class="view_desript view_desript_a">
+                                            <a class="Presciptiona" href="#">View Presciption</a>
+                                            <a class="View_Reports" href="#">View Reports</a>
+                                        </li>
+                                        <li class="view_desript view_desript_b">
+                                            <a data-toggle="modal" data-target=".bs-example-modal-lg" class="Presciptiona" href="#">Feedback / Complaints</a>
+                                            
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" >
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                  
+                                        <div class="modal-body revewi_feedbac">
+                                            <div class="full_width">
+                                                <div class="appointment_main_hero appointment_main_hero_fina">
+                                                    <div class="app_list_in">
+                                                        <div class="appointment_list_in">
+                                                            <div class="appointment_list_clo">
+                                                                <div class="alt-center">
+                                                                    <div class="alt-center-l">
+                                                                        <div class="alt-center-lp">
+                                                                        <div class="alt-logo">
+                                                                            <a href="#"><img alt="" src="../img/doctor_new.jpg"></a>
+                                                                        </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="content_confirm">
+                                                                        <div class="content_confirm_in">
+                                                                            <div class="full_width doctr_details">
+                                                                                <h4>Dr Santhosh Kumar</h4>
+                                                                                <p>Gynocologist / Obstertriciam</p>
+                                                                                <span class="review_date">29th Feb 2018 at 3PM</span>
+                                                                                <span class="appo_id_rev">Appontment ID 45846449</span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+					                           </div>
+                                            </div>
+                                            
+                                            <div class="full_width start_ratging">
+                                                <h4>Rate your Experience</h4>
+                                                
+                                                <table>
+                                                  
+                                                  <tbody>
+                                                    <tr class="hotel_a">
+                                                      <td>Doctor</td>
+                                                      <td>
+                                                        <div class="stars-outer">
+                                                          <div class="stars-inner"></div>
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                    <tr class="hotel_b">
+                                                      <td>Clinic & Aminities</td>
+                                                      <td>
+                                                        <div class="stars-outer">
+                                                          <div class="stars-inner"></div>
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                    <tr class="hotel_c">
+                                                      <td>Staff & Hospitality</td>
+                                                      <td>
+                                                        <div class="stars-outer">
+                                                          <div class="stars-inner"></div>
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                    <tr class="hotel_d">
+                                                      <td>Timelines</td>
+                                                      <td>
+                                                        <div class="stars-outer">
+                                                          <div class="stars-inner"></div>
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                    
+                                                  </tbody>
+                                                </table>
+                                                
+                                                
+                                                <form class="feddback_comment">
+                                                    <div class="form-group">
+                                                      <textarea class="form-control" rows="3" placeholder="Write down your feedback"></textarea>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                            
+                                            
+                                        </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+                                            
+                                            
+                                            <a class="View_Reports" href="#">Book Again</a>
+                                        </li>
+                                        
+                                        </ul>
+                                    </div>
+                                
+                                </div>
+                                
+                                
+                                <ul class="save_next">
+                                    <li><a class="next_inf" href="#">Next</a></li>
+                                    
+                                </ul>
+                                
+                        </div>
+                            
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+             {% endblock %}

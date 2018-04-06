@@ -1,0 +1,85 @@
+{%  extends "healthseeker/dashboard/base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+
+{% block appointments %}
+        {% endblock %}
+
+      
+        <section class="form_reg_one_hero dash_board">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="form_reg_one form_reg_one_m_p">
+                            
+                            
+                            <div class="form_reg_one_in form_reg_one_in_my_p">
+                                
+                                <h3>Appoinments</h3>
+                        
+                                <ul class="my_profile_div my_profile_div_w">
+                                    <li class="active">
+                                        <a href="../dashboard/booked.html"><img src="../img/dashboard/my_profile.png">Booked</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="../dashboard/scheduled.html"><img src="../img/dashboard/my_profile.png">Scheduled</a>
+                                    </li>
+                                    
+                                    <li><a href="../dashboard/comlaints.html"><img src="../img/dashboard/my_profile.png">Visited</a></li>
+                                    
+                                    <li class="search_for_dc"><input class="form-control" type="text" placeholder="Enter Doctor name or Hospital"></li>
+                                    
+                                </ul>
+                                
+                                <div class="my_pro_form_he my_pro_form_wait">
+                                
+                                    <h2>Customer Care</h2>
+                                    
+                                    <div class="custo_care_acc">
+                                        <ul class="health_recordsz">
+                                        <li>
+                                            <div class="item">
+                                                <span>Wed</span>
+                                                  <h2>24</h2>
+                                                  <span>Jan</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="health_recc_name">
+                                                <p>Santhosh Kumar</p>
+                                                <span>Shree Krishna Dental <br>Clinic Tuesday, 3PM</span>
+                                            </div>
+                                        </li>
+                                        <li class="dpctor_li">
+                                            <div class="doctor_presc">
+                                                <p><img src="../img/dashboard/icon1.png">Booked Waiting for Doctor Confirmation</p>
+                                            </div>
+                                        </li>
+                                        
+                                    </ul>
+                                    </div>
+                                
+                                </div>
+                                
+                                
+                                <ul class="save_next">
+                                    <li><a class="next_inf" href="../dashboard/scheduled.html">Next</a></li>
+                                    
+                                </ul>
+                                
+                        </div>
+                            
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock  %}
+      
+     
