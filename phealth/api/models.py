@@ -433,7 +433,7 @@ class Seeker(models.Model):
     appointments = models.ManyToManyField('Appointment', editable=False)
     profession = models.CharField(max_length=100, choices=profession_choices, default="other")
     language = models.CharField(max_length=100, choices=language_choices, default="other")
-    dob = models.DateField()
+
 
     healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
 

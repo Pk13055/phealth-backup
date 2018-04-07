@@ -13,8 +13,9 @@ urlpatterns = [
     url(r'^registration/$',registration,name="healthseekerregistration"),
     url(r'^otp/$',otp,name="otp"),
     url(r'^form2/$',registrationform2,name="form2"),
-    url(r'^form3/$',form_add,name="form3"),
-
+    url(r'^step3/$',step3,name="step3"),
+    url(r'^family_edit/(?P<pk>\d+)/family_edit/$', views.family_edit, name='family_edit'),
+    url(r'^family_delete/family_delete/(?P<pk>\d+)/$', views.family_delete, name='family_delete'),
     url(r'^dashboard/$',healthseekerdashboard,name="healthseekerdashboard_home"),
     url(r'^addfamilymembers/$',addfamilymembers,name="addfamilymembers"),
 

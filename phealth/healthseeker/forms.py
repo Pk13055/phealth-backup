@@ -19,10 +19,22 @@ class UserForm(forms.ModelForm):
             self.fields[myField].widget.attrs['placeholder'] = myField
 
 
+class FamilyForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('name', 'email', 'mobile',  'gender','dob')
+
+    def __init__(self, *args, **kwargs):
+        super(FamilyForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
+
 class SeekerForm(forms.ModelForm):
     class Meta:
         model = Seeker
-        fields = ('family', 'profession', 'language', 'dob',)
+        fields = ('family', 'profession', 'language', )
 
     def __init__(self, *args, **kwargs):
         super(SeekerForm, self).__init__(*args, **kwargs)

@@ -102,16 +102,42 @@ def registrationform2(request):
 
 
 @match_role("healthseeker")
-def form_add(request):
+def step3(request):
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = FamilyForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.role = "healthseeker"
+            post.save()
+            me = User.objects.get(pk=post.pk)
+            Seeker.objects.create(user=me)
+            return redirect('healthseeker:step3')
+    else:
+        form = FamilyForm()
+    u = User.objects.all()
+    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u })
+
+
+@match_role("healthseeker")
+def family_edit(request, pk):
+    post = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        form =FamilyForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('healthseeker:form3_view')
+            return redirect('site_admin:step3')
     else:
-        form = UserForm()
+        form = FamilyForm(instance=post)
     return render(request, 'healthseeker/registration/form3.html', {'form': form})
+
+
+@match_role("healthseeker")
+def family_delete(request, pk):
+    result = User.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:step3')
+
 
 
 @match_role("healthseeker")
