@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^form5/?$', registrationform3, name="form5"),
     url(r'^/dashboard/?$',healthseekerdashboard,name="healthseekerdashboard_home"),
     url(r'^/addfamilymembers/?$',addfamilymembers,name="addfamilymembers"),
+    url(r'^signin/?$', SignIn, name='signin'),
+
     url(r'^accountmanager/?$', accountmanager, name='accountmanager'),
     url(r'^contactdetails/?$', contactdetails, name='contactdetails'),
     url(r'^intrest/?$', intrest, name='intrest'),
