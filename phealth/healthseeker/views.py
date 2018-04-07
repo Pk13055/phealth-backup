@@ -73,9 +73,21 @@ def registrationform3(request):
     return render(request,'healthseeker/registration/form3.html',{
 
     })
+def registrationform4(request):
+
+    return render(request, 'healthseeker/registration/form4.html', {
+
+    })
+
+def registrationform5(request):
+
+    return render(request,'healthseeker/registration/form5.html',{
+
+    })
 
 def addfamilymembers(request):
     print(request.GET)
+    return render(request,'healthseeker/family_details.html',{})
 
 
 def accountmanager(requset):
@@ -105,3 +117,37 @@ def complaints(requset):
 
 def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
+
+def schedule(request):
+
+    return render(request,'healthseeker/scheduled.html',{
+
+    })
+
+def reference(request):
+
+    return render(request,'healthseeker/refer_earn.html',{
+
+    })
+
+def personalinformation(request):
+
+    return render(request,'healthseeker/personal_information.html',{
+
+    })
+
+def otherinformation(request):
+
+    return render(request,'healthseeker/other_info.html',{
+
+    })
+def records(request):
+
+    return render(request,'healthseeker/health_records.html',{
+
+    })
+def changepassword(request):
+
+    return render(request,'healthseeker/change_pswd.html',{
+
+    })
