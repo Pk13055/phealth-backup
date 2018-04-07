@@ -82,27 +82,54 @@ def registrationform2(request):
     })
 
 #-----------------------------------------------------------------------------------------------
-def registrationform3(request):
-    if request.method == 'POST':
-        uform = UserForm(request.POST)
-        nform = DobForm(request.POST)
-        if uform.is_valid() and nform.is_valid():
-            upost = uform.save(commit=False)
-            upost.save()
-            npost = nform.save(commit=False)
-            npost.save()
-            return redirect('healthseeker:form2')
-    else:
-        uform = UserForm()
-        nform = DobForm()
-        result = User.objects.all()
-    return render(request, 'healthseeker/registration/form3.html', context={
-        "uform": uform,
-        "nform": nform,
-        "values": result,
-    })
 
-def registrationform3(request, pk):
+
+@match_role("healthseeker")
+def form_add(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:form3_view')
+    else:
+        form = UserForm()
+    return render(request, 'healthseeker/registration/form3.html', {'form': form})
+
+
+@match_role("healthseeker")
+def form_view(request):
+    result = User.objects.all()
+    return render(request, 'healthseeker/registration/form3.html', {'values': result})
+
+@match_role("healthseeker")
+def form_edit(request, pk):
+    post = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:form3_view')
+    else:
+        form = User(instance=post)
+    return render(request, 'healthseeker/registration/from3.html', {'form': form})
+
+
+@match_role("healthseeker")
+def form3_delete(request, pk):
+    result = User.objects.get(pk=pk)
+    result.delete()
+    return redirect('healthseeker:form3_view')
+
+
+
+
+
+
+
+'''
+def form3_edit(request, pk):
     post = get_object_or_404(User, pk=pk)
     if request.method == "POST":
         form = UserForm(request.POST, instance=post)
@@ -116,12 +143,16 @@ def registrationform3(request, pk):
 
 
 
-def registrationform3(request, pk):
+@match_role("admin")
+def User_delete(request, pk):
     result = User.objects.get(pk=pk)
     result.delete()
-    return redirect('healthseeker:form3')
+    return redirect('healthseeker:form_view')'''
 
 
+
+
+#------------------------------------------------------------------------------
 def registrationform4(request):
 
     return render(request, 'healthseeker/registration/form4.html', {
