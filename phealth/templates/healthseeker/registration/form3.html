@@ -108,7 +108,7 @@
                                     <tr>
                                         <td>{{ result.name }}</td>
                                         <td>{{ result.gender }} </td>
-                                        <td>{{ result.mobile }} </td>
+                                        <td>{{ result.family }} </td>
                                         <td>{{ result.email }} </td>
 
                                         <td><center><a class="btn btn-warning"  href="{% url 'healthseeker:family_edit' pk=result.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'healthseeker:family_delete' pk=result.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>

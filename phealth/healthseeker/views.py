@@ -1,5 +1,6 @@
 from random import randint
 import requests
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import *
 # Create your views here.
@@ -103,7 +104,13 @@ def registrationform2(request):
 
 @match_role("healthseeker")
 def step3(request):
-    #me = User.objects.get(pk=)
+    me = User.objects.get(pk=request.session['pk'])
+
+
+    #s = Seeker.objects.filter(Q(family=me))
+    #entry = User.objects.select_related('Seeker').filter(Q(family=me))
+
+
     if request.method == 'POST':
         form = FamilyForm(request.POST)
         if form.is_valid():
@@ -111,12 +118,16 @@ def step3(request):
             post.role = "healthseeker"
             post.save()
             member = User.objects.get(pk=post.pk)
-            me = User.objects.get(pk=request.session['pk'])
             Seeker.objects.create(user=member,family=me)
             return redirect('healthseeker:step3')
     else:
         form = FamilyForm()
-    u = User.objects.all()
+
+
+    u = Seeker.objects.filter(family = me)
+    u = u.user_set.all()
+
+    print(u)
     return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u })
 
 
