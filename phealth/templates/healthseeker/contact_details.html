@@ -3,27 +3,22 @@
 
 {% block content %}
 
-    {% block profile %}
-        {% endblock %}
-     
+
+
         <section class="form_reg_one_hero dash_board">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        
+
                         <div class="form_reg_one form_reg_one_m_p">
-                            
-                            
+
+
                             <div class="form_reg_one_in form_reg_one_in_my_p">
-                                
+
                                 <h3>My Profile</h3>
-                        
-                                <ul class="my_profile_div">
-                                    <li><a href="../dashboard/personal_information.html"><img src="../img/dashboard/my_profile.png">Personal information</a></li>
-                                    <li><a href="../dashboard/family_details.html"><img src="../img/dashboard/my_profile.png">Family Details</a></li>
-                                    <li class="active"><a href="../dashboard/contact_details.html"><img src="../img/dashboard/my_profile.png">Contact Details</a></li>
-                                    <li><a href="../dashboard/other_info.html"><img src="../img/dashboard/my_profile.png">Other Information</a></li>
-                                </ul>
+
+                                    {% block profile %}
+                                    {% endblock %}
                                 
                                 <div class="my_pro_form_he">
                                 

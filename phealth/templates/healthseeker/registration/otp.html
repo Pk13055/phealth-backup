@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends 'healthseeker/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+        <section class="form_reg_one_hero">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="full_width form_reg_one">
+
+                            <div class="header_form">
+
+
+                            </div>
+
+                            <div class="form_reg_one_in">
+                                <h2>Please enter the otp sent to your Mobile !</h2>
+                                  {% if error %}
+                                      <div class="alert alert-danger">
+                                        <strong>{{error}}</strong>
+                                      </div>
+                                      {% endif %}
+                                  <form method="POST" class="registration_form">{% csrf_token %}
+                                   <div class="row">
+                                       <div class="form-group custom_md_3 col-md-12">
+                                        <div class="icon-addon addon-md">
+											<input type="number" name="otp" id="id_otp" placeholder="Enter OTP" required class="form-control" maxlength="150" />
+										  </div>
+									  </div>
+                                   </div>
+                                    <div class="col-md-3">
+                                         <ul class="save_next">
+                                        <li><input type="submit" class="btn save_inf" value="Verify"></li>
+                                      </ul>
+                                    </div>
+                                   </div>
+                        </form>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
