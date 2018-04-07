@@ -356,6 +356,7 @@ class User(models.Model):
     super_speciality = models.CharField(choices=super_speciality_choices, max_length=30, default='none')
     other_trainings = models.TextField(default="TEST")
     other_degrees = models.TextField(default="TEST1")
+    dob = models.DateField()
 
     def __str__(self):
         return str(self.email)
