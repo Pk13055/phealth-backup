@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-
+from .forms import *
 # Create your views here.
 from api.models import User
 from api.models import Seeker
-from healthseeker.forms import RegistrationForm, UserForm
 from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
 
@@ -19,7 +18,26 @@ def healthseekerdashboard(request):
     pass
 
 
+def registration(request):
+    if request.method == 'POST':
+        uform = UserForm(request.POST)
+        nform = DobForm(request.POST)
+        if uform.is_valid() and nform.is_valid():
+            upost = uform.save(commit=False)
+            upost.save()
+            npost = nform.save(commit=False)
+            npost.save()
+            return redirect('healthseeker:form2')
+    else:
+        uform = UserForm()
+        nform = DobForm()
+    return render(request, 'healthseeker/registration/form1.html', context={
+        "uform": uform,
+        "nform": nform,
+    })
 
+
+'''
 def registration(request):
 
     if request.method == "POST":
@@ -43,7 +61,7 @@ def registration(request):
     else:
         form = RegistrationForm()
         return render(request,'healthseeker/registration/form1.html',{'form':form})
-
+'''
 def registrationform2(request):
     return render(request,'healthseeker/registration/form2.html',{
 

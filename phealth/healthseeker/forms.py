@@ -1,27 +1,42 @@
 from django import forms
 
-from api.models import User
-from api.models import Seeker
-
-
-class RegistrationForm(forms.ModelForm):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-
-        self.fields['dob'].widget.attrs.update({'class':'form-control'})
-
-        # self.fields['profile_pic'].widget.attrs.update({'class':'form-control'})
-
-    class Meta:
-        model = Seeker
-        fields = ['dob']
+from api.models import *
 
 
 class UserForm(forms.ModelForm):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.fields['password'].widget.attrs.update({'class':'form-control'})
-
     class Meta:
         model = User
-        fields = ['password']
+        fields = ('name', 'email', 'mobile', 'password', 'gender',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
+
+class SeekerForm(forms.ModelForm):
+    class Meta:
+        model = Seeker
+        fields = ('family', 'profession', 'language', 'dob',)
+
+    def __init__(self, *args, **kwargs):
+        super(SeekerForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
+class DobForm(forms.ModelForm):
+    class Meta:
+        model = Seeker
+        fields = ( 'dob',)
+
+    def __init__(self, *args, **kwargs):
+        super(DobForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
+
+
+
