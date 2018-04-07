@@ -7,6 +7,20 @@ from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
 
 
+def SignIn(request):
+    if request.method == "GET":
+        return render(request, 'common/signin.html.j2', context={
+            "title": "Login",
+            "route": "/healthseeker",
+            "color": "green"
+        })
+    elif request.method == "POST":
+        # print(request.POST)
+        if signin("healthseeker", request):
+            return redirect('healthseeker:contactdetails')
+        return redirect('healthseeker:signin')
+
+
 def healthseekersignin(request):
     if request.method == "POST":
         data = request.POST
@@ -92,6 +106,8 @@ def contactdetails(requset):
 
 def intrest(requset):
     return render(requset,'healthseeker/manage_intrests.html',{})
+
+
 
 
 def booking(requset):

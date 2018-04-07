@@ -8,6 +8,7 @@ from .views import *
 app_name = "healthseeker"
 urlpatterns = [
     url(r'^$',healthseekersignin,name="healthseekersignin"),
+    url(r'^signin/?$', SignIn, name='signin'),
     url(r'^registration/$',registration,name="healthseekerregistration"),
     url(r'^form2/$',registrationform2,name="form2"),
     url(r'^form3/$',registrationform3,name="form3"),
