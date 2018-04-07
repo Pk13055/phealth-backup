@@ -72,6 +72,7 @@ def signin(role, request):
 		u.last_update=datetime.datetime.now()
 		request.session['email'] = email
 		request.session['role'] = u.role
+		request.session['pk'] = u.pk
 		status = True
 
 	u.save()

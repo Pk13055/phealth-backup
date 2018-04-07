@@ -46,7 +46,7 @@ def otp(request):
             upost.password = make_password(request.POST['password'])
             upost.save()
             if signin("healthseeker", request):
-                return redirect('healthseeker:contactdetails')
+                return redirect('healthseeker:step3')
         else:
             return render(request,'healthseeker/registration/otp.html',{ 'error': "Invalid Otp"})
 
@@ -103,14 +103,16 @@ def registrationform2(request):
 
 @match_role("healthseeker")
 def step3(request):
+    #me = User.objects.get(pk=)
     if request.method == 'POST':
         form = FamilyForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.role = "healthseeker"
             post.save()
-            me = User.objects.get(pk=post.pk)
-            Seeker.objects.create(user=me)
+            member = User.objects.get(pk=post.pk)
+            me = User.objects.get(pk=request.session['pk'])
+            Seeker.objects.create(user=member,family=me)
             return redirect('healthseeker:step3')
     else:
         form = FamilyForm()
