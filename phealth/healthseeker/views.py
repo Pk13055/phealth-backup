@@ -1,3 +1,5 @@
+from random import randint
+import requests
 from django.shortcuts import render, redirect
 from .forms import *
 # Create your views here.
@@ -34,16 +36,55 @@ def healthseekersignin(request):
 def healthseekerdashboard(request):
     pass
 
+def otp(request):
+    if request.method == "POST":
+        if (int(request.POST['otp']) == int(request.session['otp'])):
+            request.POST = request.session['userdata']
+            uform = UserForm(request.POST)
+            upost = uform.save(commit=False)
+            upost.role = "healthseeker"
+            upost.password = make_password(request.POST['password'])
+            upost.save()
+            if signin("healthseeker", request):
+                return redirect('healthseeker:contactdetails')
+        else:
+            return render(request,'healthseeker/registration/otp.html',{ 'error': "Invalid Otp"})
+
+    else:
+        return render(request,'healthseeker/registration/otp.html',{})
+
+
+
+
 
 def registration(request):
     if request.method == 'POST':
         uform = UserForm(request.POST)
         if uform.is_valid():
-            upost = uform.save(commit=False)
-            upost.role = "healthseeker"
-            upost.password = make_password(request.POST['password'])
-            upost.save()
-            return redirect('healthseeker:form2')
+
+            #otp here
+            mobile = request.POST['mobile']
+            mutable = request.POST._mutable
+            request.POST._mutable = True
+            request.POST['username'] = request.POST['email']
+            request.POST._mutable = mutable
+
+            request.session['userdata'] = request.POST
+            otp = randint(1, 99999)
+            request.session['otp'] = otp
+            base_url = "http://api.msg91.com/api/sendhttp.php"
+            params = {
+                'sender': "CLICKH",
+                'route': 4,
+                'country': 91,
+                'mobiles': [mobile],
+                'authkey': '182461AjomJGPHB5a0041cb',
+                'message': "Verification OTP : %d" % otp
+            }
+            r = requests.get(base_url, params=params)
+
+
+            return redirect('healthseeker:otp')
     else:
         uform = UserForm()
     return render(request, 'healthseeker/registration/form1.html', context={
@@ -51,31 +92,7 @@ def registration(request):
     })
 
 
-'''
-def registration(request):
 
-    if request.method == "POST":
-        print(request.POST)
-        form = RegistrationForm(request.POST)
-        user = UserForm(request.POST)
-        print(form.is_valid())
-        if form.is_valid():
-            f = form.save(commit=False)
-            email = request.POST['email']
-            name = request.POST['full_name']
-            mobile = request.POST['mobile_number']
-            gender = request.POST['gender']
-            password = make_password(request.POST['password'])
-            u = User.objects.create(status=True,role="healthseeker",
-                                     email=email,password=password,name=name,mobile=mobile,question_id=1)
-            f.user = u
-            f.save()
-            # f.cleaned_data['']
-            return redirect('healthseeker:form2')
-    else:
-        form = RegistrationForm()
-        return render(request,'healthseeker/registration/form1.html',{'form':form})
-'''
 def registrationform2(request):
     return render(request,'healthseeker/registration/form2.html',{
 

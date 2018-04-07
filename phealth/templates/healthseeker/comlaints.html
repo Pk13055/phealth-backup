@@ -3,8 +3,7 @@
 
 {% block content %}
 
-    {% block facilitations %}
-        {% endblock %}
+
       
         <section class="form_reg_one_hero dash_board">
             <div class="container">
@@ -18,13 +17,9 @@
                                 
                                 <h3>Facilitation</h3>
                         
-                                <ul class="my_profile_div">
-                                    <li><a href="../dashboard/account_manager.html"><img src="../img/dashboard/my_profile.png">Account Manager</a></li>
-                                    <li><a href="#"><img src="../img/dashboard/my_profile.png">Customer Care</a></li>
-                                    <li class="active"><a href="../dashboard/comlaints.html"><img src="../img/dashboard/my_profile.png">Comlaints/Grivieance</a></li>
-                                    
-                                </ul>
-                                
+                               {% block facilitations %}
+                                {% endblock %}
+
                                 <div class="my_pro_form_he">
                                     
                                     <h2 class="reset_psdd">Complaints</h2>

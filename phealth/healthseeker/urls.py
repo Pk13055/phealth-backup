@@ -11,6 +11,7 @@ app_name = "healthseeker"
 urlpatterns = [
     url(r'^$',healthseekersignin,name="healthseekersignin"),
     url(r'^registration/$',registration,name="healthseekerregistration"),
+    url(r'^otp/$',otp,name="otp"),
     url(r'^form2/$',registrationform2,name="form2"),
     url(r'^form3/$',form_add,name="form3"),
 
