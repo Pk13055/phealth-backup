@@ -3,8 +3,8 @@ from .forms import *
 # Create your views here.
 from api.models import User
 from api.models import Seeker
-from phealth.utils import signin
-from django.contrib.auth.hashers import make_password
+from phealth.utils import  match_role, redirect, signin
+from django.contrib.auth.hashers import make_password,check_password
 
 
 def SignIn(request):
@@ -15,7 +15,7 @@ def SignIn(request):
             "color": "green"
         })
     elif request.method == "POST":
-        # print(request.POST)
+        print(request.POST)
         if signin("healthseeker", request):
             return redirect('healthseeker:contactdetails')
         return redirect('healthseeker:signin')
@@ -35,19 +35,16 @@ def healthseekerdashboard(request):
 def registration(request):
     if request.method == 'POST':
         uform = UserForm(request.POST)
-        nform = DobForm(request.POST)
-        if uform.is_valid() and nform.is_valid():
+        if uform.is_valid():
             upost = uform.save(commit=False)
+            upost.role = "healthseeker"
+            upost.password = make_password(request.POST['password'])
             upost.save()
-            npost = nform.save(commit=False)
-            npost.save()
             return redirect('healthseeker:form2')
     else:
         uform = UserForm()
-        nform = DobForm()
     return render(request, 'healthseeker/registration/form1.html', context={
         "uform": uform,
-        "nform": nform,
     })
 
 
@@ -98,6 +95,7 @@ def accountmanager(requset):
 
     })
 
+@match_role("healthseeker")
 def contactdetails(requset):
 
     return render(requset,'healthseeker/contact_details.html',{
