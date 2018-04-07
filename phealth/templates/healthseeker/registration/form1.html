@@ -53,91 +53,39 @@
                                 <h2>Please fill the Registration form!</h2>
                                 <p>Base on your profile & intrest we will provide free Health tips</p>
 
-
-                                <form class="registration_form" method="POST">{% csrf_token %}
-
-                                <div class="row">
-
-
-
-                                    <div class="form-group custom_md_3 col-md-6">
+                                  <form method="POST" class="registration_form">{% csrf_token %}
+                                   <div class="row">
+                            	        {% for field in uform %}
+                                                   <div class="form-group custom_md_3 col-md-6">
                                         <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Full Name (Self)" class="form-control"
-                                                   name="full_name" id="full_name_id">
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group custom_md_3 col-md-6">
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										  </div>
+										{% endfor %}
+                                       {% for field in nform %}
+                                                   <div class="form-group custom_md_3 col-md-6">
                                         <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="DOB" class="form-control"
-                                                   name="dob" id="dob_id">
-                                        </div>
-                                    </div>
 
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										  </div>
+										{% endfor %}
 
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <select name="gender" class="form-control" name="gender">
-                                                <option value="">Gender</option>
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                                <option value="other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Mobile Number" class="form-control"
-                                                   name="mobile_number" id="mobile_number">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Email Id" class="form-control" id="email_id" name="email">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="password" placeholder="password" class="form-control" name="password">
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-
-
-
-
-                                <!--<div class="full_width upload_new_img">-->
-
-                                      <!--<div class="profile_text no_padding_left">-->
-                                        <!--<p>profile picture</p>-->
-                                      <!--</div>-->
-
-                                      <!--<div class="profile_img_main">-->
-                                        <!--<div class="proifile_in">-->
-                                            <!--<img class="profile-pic" src="{%static 'healthseeker/images/avatar.png'}">-->
-
-                                        <!--</div>-->
-                                      <!--</div>-->
-
-                                     <!--<div class="col-md-3 p-image">-->
-                                        <!--<i class="fa fa-camera upload-button"><span>Change Profile Photo</span></i>-->
-                                        <!--<input class="file-upload" type="file" name="profile_pic">-->
-                                     <!--</div>-->
-
-                                    <!--</div>-->
                                     <div class="col-md-3" style="float:right">
                                          <ul class="save_next">
                                         <li><input type="submit" class="btn save_inf" value="Next"></li>
                                       </ul>
                                     </div>
+                                   </div>
+                        </form>
 
-                                </form>
 
                             </div>
                         </div>
