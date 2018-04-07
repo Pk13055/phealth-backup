@@ -5,6 +5,7 @@ from api.models import User
 from api.models import Seeker
 from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import redirect, render, get_object_or_404
 
 
 def healthseekersignin(request):
@@ -67,12 +68,48 @@ def registrationform2(request):
 
     })
 
-
+#-----------------------------------------------------------------------------------------------
 def registrationform3(request):
-
-    return render(request,'healthseeker/registration/form3.html',{
-
+    if request.method == 'POST':
+        uform = UserForm(request.POST)
+        nform = DobForm(request.POST)
+        if uform.is_valid() and nform.is_valid():
+            upost = uform.save(commit=False)
+            upost.save()
+            npost = nform.save(commit=False)
+            npost.save()
+            return redirect('healthseeker:form2')
+    else:
+        uform = UserForm()
+        nform = DobForm()
+        result = User.objects.all()
+    return render(request, 'healthseeker/registration/form3.html', context={
+        "uform": uform,
+        "nform": nform,
+        "values": result,
     })
+
+def registrationform3(request, pk):
+    post = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:form3')
+    else:
+        form = UserForm(instance=post)
+    return render(request, 'healthseeker/registration/form3.html', {'form': form})
+
+
+
+def registrationform3(request, pk):
+    result = User.objects.get(pk=pk)
+    result.delete()
+    return redirect('healthseeker:form3')
+
+#-----------------------------------------------------------------------------------------------
+
 
 def addfamilymembers(request):
     print(request.GET)
