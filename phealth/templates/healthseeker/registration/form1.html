@@ -4,35 +4,6 @@
 
 {% block content %}
 
-      <nav class="navbar navbar-default navbar-fixed-top inner_nav_menu reg_menu_main">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="index.html"><img src="../img/logo1.png"></a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<!-- <ul class="nav navbar-nav">
-						<li><a href="#"><span class="call_span"><i class="fa fa-phone" aria-hidden="true"></i></span>Call Us : 040-12345678</a></li>
-						</ul>-->
-					<!--<ul class="nav navbar-nav navbar-right custom_nav nav_inner">
-
-						<li><a href="#"><i class="fa fa-bell"></i> <span></span></a></li>
-						<li><a href="#"></a></li>
-
-
-
-
-					</ul>
-                    -->
-
-				</div>
-			</div>
-		</nav>
 
         <section class="form_reg_one_hero">
             <div class="container">
@@ -47,8 +18,7 @@
 
                             </div>
 
-                            <a href="{% url 'healthseeker:form2' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
-                            <a href="#" class="skipt0page skipt0pageone">Edit</a>
+                            <a href="{% url 'healthseeker:signin' %}" class="skipt0page"><i class="fa fa-share"></i> Click To Login</a>
                             <div class="form_reg_one_in">
                                 <h2>Please fill the Registration form!</h2>
                                 <p>Base on your profile & intrest we will provide free Health tips</p>

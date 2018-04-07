@@ -6,6 +6,22 @@ from api.models import Seeker
 from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect, render, get_object_or_404
+from phealth.utils import  match_role, redirect, signin
+from django.contrib.auth.hashers import make_password,check_password
+
+
+def SignIn(request):
+    if request.method == "GET":
+        return render(request, 'common/signin.html.j2', context={
+            "title": "Login",
+            "route": "/healthseeker",
+            "color": "green"
+        })
+    elif request.method == "POST":
+        print(request.POST)
+        if signin("healthseeker", request):
+            return redirect('healthseeker:contactdetails')
+        return redirect('healthseeker:signin')
 
 
 def healthseekersignin(request):
@@ -22,19 +38,16 @@ def healthseekerdashboard(request):
 def registration(request):
     if request.method == 'POST':
         uform = UserForm(request.POST)
-        nform = DobForm(request.POST)
-        if uform.is_valid() and nform.is_valid():
+        if uform.is_valid():
             upost = uform.save(commit=False)
+            upost.role = "healthseeker"
+            upost.password = make_password(request.POST['password'])
             upost.save()
-            npost = nform.save(commit=False)
-            npost.save()
             return redirect('healthseeker:form2')
     else:
         uform = UserForm()
-        nform = DobForm()
     return render(request, 'healthseeker/registration/form1.html', context={
         "uform": uform,
-        "nform": nform,
     })
 
 
@@ -108,11 +121,22 @@ def registrationform3(request, pk):
     result.delete()
     return redirect('healthseeker:form3')
 
-#-----------------------------------------------------------------------------------------------
 
+def registrationform4(request):
+
+    return render(request, 'healthseeker/registration/form4.html', {
+
+    })
+
+def registrationform5(request):
+
+    return render(request,'healthseeker/registration/form5.html',{
+
+    })
 
 def addfamilymembers(request):
     print(request.GET)
+    return render(request,'healthseeker/family_details.html',{})
 
 
 def accountmanager(requset):
@@ -121,6 +145,7 @@ def accountmanager(requset):
 
     })
 
+@match_role("healthseeker")
 def contactdetails(requset):
 
     return render(requset,'healthseeker/contact_details.html',{
@@ -129,6 +154,8 @@ def contactdetails(requset):
 
 def intrest(requset):
     return render(requset,'healthseeker/manage_intrests.html',{})
+
+
 
 
 def booking(requset):
@@ -142,3 +169,37 @@ def complaints(requset):
 
 def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
+
+def schedule(request):
+
+    return render(request,'healthseeker/scheduled.html',{
+
+    })
+
+def reference(request):
+
+    return render(request,'healthseeker/refer_earn.html',{
+
+    })
+
+def personalinformation(request):
+
+    return render(request,'healthseeker/personal_information.html',{
+
+    })
+
+def otherinformation(request):
+
+    return render(request,'healthseeker/other_info.html',{
+
+    })
+def records(request):
+
+    return render(request,'healthseeker/health_records.html',{
+
+    })
+def changepassword(request):
+
+    return render(request,'healthseeker/change_pswd.html',{
+
+    })

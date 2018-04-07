@@ -17,6 +17,9 @@ urlpatterns = [
     url(r'^form3_delete/form3_delete/(?P<pk>\d+)/$', views.registrationform3, name='form3_delete'),
     url(r'^/dashboard/$',healthseekerdashboard,name="healthseekerdashboard_home"),
     url(r'^/addfamilymembers/$',addfamilymembers,name="addfamilymembers"),
+
+    url(r'^signin/?$', SignIn, name='signin'),
+
     url(r'^accountmanager/?$', accountmanager, name='accountmanager'),
     url(r'^contactdetails/?$', contactdetails, name='contactdetails'),
     url(r'^intrest/?$', intrest, name='intrest'),
@@ -24,5 +27,11 @@ urlpatterns = [
     url(r'^favaroitedoctors/?$', favaroitedoctors, name='favaroitedoctors'),
     url(r'^complaints/?$', complaints, name='complaints'),
     url(r'^healthalerts/?$', healthalerts, name='healthalerts'),
-
+    url(r'^schedule/?$', schedule, name='schedule'),
+    url(r'^reference/?$', reference, name='reference'),
+    url(r'^information/?$', personalinformation, name='information'),
+    url(r'^otherinformation/?$', otherinformation, name='otherinformation'),
+    url(r'^records/?$', records, name='records'),
+    url(r'^familyinformation/?$', addfamilymembers, name='familyinformation'),
+    url(r'^changepassword/?$', changepassword, name='changepassword'),
 ]
