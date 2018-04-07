@@ -3,6 +3,9 @@ from .forms import *
 # Create your views here.
 from api.models import User
 from api.models import Seeker
+from phealth.utils import signin
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import redirect, render, get_object_or_404
 from phealth.utils import  match_role, redirect, signin
 from django.contrib.auth.hashers import make_password,check_password
 
@@ -78,15 +81,62 @@ def registrationform2(request):
 
     })
 
-
+#-----------------------------------------------------------------------------------------------
 def registrationform3(request):
+    if request.method == 'POST':
+        uform = UserForm(request.POST)
+        nform = DobForm(request.POST)
+        if uform.is_valid() and nform.is_valid():
+            upost = uform.save(commit=False)
+            upost.save()
+            npost = nform.save(commit=False)
+            npost.save()
+            return redirect('healthseeker:form2')
+    else:
+        uform = UserForm()
+        nform = DobForm()
+        result = User.objects.all()
+    return render(request, 'healthseeker/registration/form3.html', context={
+        "uform": uform,
+        "nform": nform,
+        "values": result,
+    })
 
-    return render(request,'healthseeker/registration/form3.html',{
+def registrationform3(request, pk):
+    post = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:form3')
+    else:
+        form = UserForm(instance=post)
+    return render(request, 'healthseeker/registration/form3.html', {'form': form})
+
+
+
+def registrationform3(request, pk):
+    result = User.objects.get(pk=pk)
+    result.delete()
+    return redirect('healthseeker:form3')
+
+
+def registrationform4(request):
+
+    return render(request, 'healthseeker/registration/form4.html', {
+
+    })
+
+def registrationform5(request):
+
+    return render(request,'healthseeker/registration/form5.html',{
 
     })
 
 def addfamilymembers(request):
     print(request.GET)
+    return render(request,'healthseeker/family_details.html',{})
 
 
 def accountmanager(requset):
@@ -119,3 +169,37 @@ def complaints(requset):
 
 def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
+
+def schedule(request):
+
+    return render(request,'healthseeker/scheduled.html',{
+
+    })
+
+def reference(request):
+
+    return render(request,'healthseeker/refer_earn.html',{
+
+    })
+
+def personalinformation(request):
+
+    return render(request,'healthseeker/personal_information.html',{
+
+    })
+
+def otherinformation(request):
+
+    return render(request,'healthseeker/other_info.html',{
+
+    })
+def records(request):
+
+    return render(request,'healthseeker/health_records.html',{
+
+    })
+def changepassword(request):
+
+    return render(request,'healthseeker/change_pswd.html',{
+
+    })
