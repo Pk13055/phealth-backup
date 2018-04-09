@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^$',healthseekersignin,name="healthseekersignin"),
     url(r'^registration/$',registration,name="healthseekerregistration"),
     url(r'^otp/$',otp,name="otp"),
-    url(r'^form2/$',registrationform2,name="form2"),
+    url(r'^step2/$',step2,name="step2"),
     url(r'^step3/$',step3,name="step3"),
     url(r'^step6/$',step6,name="step6"),
 

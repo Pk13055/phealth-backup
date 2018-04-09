@@ -4,8 +4,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import *
 # Create your views here.
-from api.models import User
-from api.models import Seeker
+from api.models import *
 from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect, render, get_object_or_404
@@ -94,10 +93,12 @@ def registration(request):
 
 
 
-def registrationform2(request):
-    return render(request,'healthseeker/registration/form2.html',{
-
-    })
+def step2(request):
+    if request.method == 'POST':
+        request.session['discountcard_id'] = request.POST.get('discountcard_id')
+        return redirect('healthseeker:step3')
+    cards = DiscountCard.objects.all()
+    return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 #-----------------------------------------------------------------------------------------------
 
@@ -124,11 +125,11 @@ def step3(request):
         form = FamilyForm()
 
 
+    #u = User.objects.filter()
     u = Seeker.objects.filter(family = me)
-    u = u.user_set.all()
+    discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
 
-    print(u)
-    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u })
+    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u,'discountcard':discountcard })
 
 
 @match_role("healthseeker")
@@ -139,10 +140,10 @@ def family_edit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('site_admin:step3')
+            return redirect('healthseeker:step3')
     else:
         form = FamilyForm(instance=post)
-    return render(request, 'healthseeker/registration/form3.html', {'form': form})
+    return render(request, 'healthseeker/registration/familymember_edit.html', {'form': form})
 
 
 @match_role("healthseeker")

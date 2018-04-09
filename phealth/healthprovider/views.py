@@ -663,6 +663,7 @@ def appointment_monthly(request):
 
 	return render(request, 'healthprovider/dashboard/appointments/monthly.html.j2', context={
 		'title' : "appointment - monthly",
+		'doctors' : p.clinicians.all(),
 	})
 
 

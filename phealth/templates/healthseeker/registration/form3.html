@@ -21,6 +21,7 @@
 
 
                                 <h2>Discount Cards</h2>
+                                    {{ discountcard }}
                                 <div class="row">
                                     <div class="col-md-5 padding_right_0">
                                         <div class="full_width discountcard_he">
@@ -31,7 +32,7 @@
                                             <div class="full_width main_screen_3">
                                             <div class="col-md-6">
                                                <div class="ful_width health_seeker_detials health_detials_regi">
-                                                    <h4>Healthy Family</h4>
+                                                    <h4>{{ discountcard.name }}</h4>
                                                     <ul>
                                                         <li>Name</li>
                                                         <li>Rajesh P</li>
@@ -44,11 +45,17 @@
 
                                                     <ul>
                                                         <li>Covers</li>
-                                                        <li>4 Numbers</li>
+                                                        <li>{{ discountcard.coverage }} Members</li>
                                                     </ul>
                                                     <ul>
-                                                        <li>Sex</li>
-                                                        <li>male</li>
+                                                        <li>Family Members</li>
+                                                        <li>
+                                                            {% for area in applicable_family_members.Familymember.all %}{{ area }}<br/>{% endfor %}
+                                                        {% for family in applicable_family_members %}
+                                                        {{ family.name }}
+                                                        {% endfor %}
+                                                                                                                </li>
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -56,7 +63,7 @@
                                                 <div class="content_confirm_in content_confirm_in_r content_regi_5">
                                                 <div class="final_amount_d">
                                                     <span>Final Amount</span>
-                                                    <span class="fnal_amoun_act">Rs 499</span>
+                                                    <span class="fnal_amoun_act">Rs {{ discountcard.price }}</span>
                                                 </div>
 
                                                 <div class="final_amount_d">
@@ -117,70 +124,7 @@
 
                                 </tbody>
 
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Relation</th>
-                                            <th>Gender</th>
-                                            <th>DOB</th>
-                                            <th>Mobile No</th>
-                                            <th>Photo</th>
-                                        </tr>
-                                    </thead>
 
-                                    <tbody>
-                                        <tr>
-                                            <td>Laxman P</td>
-                                            <td>Wife</td>
-                                            <td>Male</td>
-                                            <td>05/08/1993</td>
-                                            <td>9701086993</td>
-                                            <td>
-                                                <div class="image_avatar_ad">
-                                                    <img src="{% static 'healthseeker/img/avatar2.png' %}">
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Laxman P</td>
-                                            <td>Son</td>
-                                            <td>Male</td>
-                                            <td>05/08/1993</td>
-                                            <td>9701086993</td>
-                                            <td>
-                                                <div class="image_avatar_ad">
-                                                    <img src="{% static 'healthseeker/img/test1.jpg' %}">
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Laxman P</td>
-                                            <td>Daughter</td>
-                                            <td>Male</td>
-                                            <td>05/08/1993</td>
-                                            <td>9701086993</td>
-                                            <td>
-                                                <div class="image_avatar_ad">
-                                                    <img src="{% static 'healthseeker/img/avatar_ma.png' %}">
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Laxman P</td>
-                                            <td>Father</td>
-                                            <td>Male</td>
-                                            <td>05/08/1993</td>
-                                            <td>9701086993</td>
-                                            <td>
-                                                <div class="image_avatar_ad">
-                                                    <img src="{% static 'healthseeker/img/test2.jpg' %}">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
                                 </table>
 
                                     <ul class="applY_coupon">
