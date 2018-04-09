@@ -220,6 +220,11 @@ def registrationform5(request):
     return render(request,'healthseeker/registration/form5.html',{
 
     })
+def step6(request):
+
+    return render(request,'healthseeker/registration/form6.html',{
+
+    })
 
 def addfamilymembers(request):
     print(request.GET)
