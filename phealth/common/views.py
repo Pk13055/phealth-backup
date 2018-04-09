@@ -171,11 +171,11 @@ def verify_coupon(request):
 @match_role(["clinician", "healthprovider", "poc"])
 def appointment_list(request):
 	''' route to retrieve appointment data | start and end as get params '''
-	
+
 	status = 1
-	get_time = lambda x: dateutil.parser.parse(x)
+	get_time = lambda x: datetime.datetime.utcfromtimestamp(int(x))
 	init_set = Appointment.objects
-	
+
 	# filter initial appointment set according to user type
 	u = User.objects.filter(email=request.session['email']).first()
 	if u.role == "clinician":
@@ -186,7 +186,7 @@ def appointment_list(request):
 		init_set = p.appointment_set
 	elif u.role == "poc":
 		pass
-		
+
 
 	if request.method == "GET":
 		from_date = request.GET.get('start', False)
@@ -199,6 +199,9 @@ def appointment_list(request):
 		status = 0
 		return JsonResponse([], safe=False)
 
+	from_date = get_time(from_date)
+	to_date = get_time(to_date)
+
 	class AppointmentSerializer(ModelSerializer):
 		title = serializers.CharField(source='status')
 		start = serializers.DateTimeField(source='from_timestamp')
@@ -210,6 +213,10 @@ def appointment_list(request):
 			fields = ('id', 'start', 'end', 'title', 'className')
 
 	q = init_set.filter(from_timestamp__gte=from_date, to_timestamp__lte=to_date)
+	id = request.GET.get('id', False) or request.POST.get('id', False)
+	if u.role == "healthprovider" and id and id != '':
+		q = q.filter(under_id=id)
+
 	data = AppointmentSerializer(q, many=True)
-	
+
 	return JsonResponse(data.data, safe=False)
