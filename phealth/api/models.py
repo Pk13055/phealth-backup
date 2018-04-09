@@ -102,6 +102,7 @@ class Address(models.Model):
         ('other', "Other"),
     )
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True)
     location_type = models.CharField(choices=location_type_options, max_length=200, default='current')
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)

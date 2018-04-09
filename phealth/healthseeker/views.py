@@ -211,10 +211,21 @@ def User_delete(request, pk):
 
 #------------------------------------------------------------------------------
 def step4(request):
+    me = User.objects.get(pk=request.session['pk'])
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = me
+            post.save()
+            return redirect('healthseeker:step5')
+    else:
+        form = AddressForm
+    states = State.objects.all()
+    cities = City.objects.all()
+    return render(request, 'healthseeker/registration/form4.html', {'form': form,'states':states,'cities':cities})
 
-    return render(request, 'healthseeker/registration/form4.html', {
 
-    })
 
 def registrationform5(request):
 

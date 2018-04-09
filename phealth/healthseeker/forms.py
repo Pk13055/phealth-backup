@@ -44,6 +44,16 @@ class SeekerForm(forms.ModelForm):
 
 
 
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ('location_type', 'longitude','latitude','state','city','area','door_no','landmark','resident_type','pincode' )
+
+    def __init__(self, *args, **kwargs):
+        super(AddressForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
 
 
 

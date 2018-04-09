@@ -2,8 +2,15 @@
 {% load static %}
 
 {% block content %}
-
-        <section class="form_reg_one_hero">
+<style>
+    .h40{
+        height: 32px !important;
+    }
+    .manual {
+        display: none;
+    }
+</style>
+       <section class="form_reg_one_hero">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -18,129 +25,140 @@
 
                             <a href="#" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
                             <div class="form_reg_one_in">
-                                <!--<h2>Please fill the Registration form!</h2>
-                                <p>Base on your profile & intrest we will provide free Health tips</p>
-
-                                -->
-
-
                                 <div class="full_width curent_location">
-                                    <div style="margin-bottom: 30px;" class="col-md-7 padding_all_0">
-                                        <label><p><input type="radio" name="location"> &nbsp;Current Location</p></label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Madhapur Ayyappa Society...">
-                                            <span class="input-group-addon">Change</span>
+                                    <form method="POST" class="post-form cureent_loca_form">
+                                        {% csrf_token %}
+                                        <div class="form-group ">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="location_type" class="ltype" value="current" checked>Current Location
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="location_type" class="ltype" value="manual">Update Manually
+                                            </label>
                                         </div>
-                                    </div>
+                                        <br>
+                                        <div class="current">
+                                        <div class="col-md-12">
+                                                    <ul class="loca_po_li" style="border-top: 1px solid ">
+                                                        <li style="    width: 49.333333%;">
+                                                            <label for="find_btn">Use My current Location</label><br>
+                                                            <button id="find_btn" class="btn btn-primary" style="color: #fff;background-color: #5cb85c;border-color: #4cae4c;">Get My Current Location</button>
+                                                        </li>
+                                                        <li style="width: 49.333333%;">
+                                                            <label>Enter Address Manually</label><br>
+                                                            <div class="form-group">
+                                                                <input class="placepicker form-control h40" placeholder="Enter a location" id="searchTextField" data-latitude-input="#id_latitude" data-longitude-input="#id_longitude" />
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <input type="hidden" name="longitude" step="any" class="form-control" placeholder="longitude" id="id_longitude" />
+                                                <input type="hidden" name="latitude" step="any" class="form-control" placeholder="latitude" id="id_latitude" />
+                                            </div>
+                                        <div class="manual">
 
+                                           <div class="form-group">
+                                            <label for="id_state">State:</label><br>
+                                            <select name="state" class="form-control h40" placeholder="state" id="id_state">
+                                                <option value="" selected>---------</option>
+                                                    {% for result in states %}
+                                                <option value="{{ result.pk }}">{{ result.name }}</option>
+                                                    {% endfor %}
+                                            </select>
+                                          </div>
+
+                                        <div class="form-group">
+                                            <label for="id_city">City:</label><br>
+                                            <select name="city" class="form-control h40" placeholder="city" id="id_city">
+                                            <option value="" selected>---------</option>
+
+                                            {% for result in cities %}
+                                            <option value="{{ result.pk }}">{{ result.name }}</option>
+                                            {% endfor %}
+
+                                            </select>
+                                        </div>
+										   <div class="form-group">
+											<label for="id_area">Area:</label><br>
+											<input type="text" name="area" maxlength="200" class="form-control h40" placeholder="area" id="id_area" />
+
+										  </div>
+                                        </div>
+                                    <br>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <!--
+                                        <div class="col-md-12">
                                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.131522315598!2d78.39221431443993!3d17.453417988039117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb91638b1458e1%3A0x872cd53869cbcd42!2sMBR+Informatics+Pvt+Ltd!5e0!3m2!1sen!2sin!4v1517829412276" width="100%" height="200" frameborder="0" style="border:0" allowfullscreen=""></iframe>
                                         </div>
-
-                                        <div class="col-md-6">
-                                            <form class="cureent_loca_form">
+-->
+                                        <div class="col-md-12">
+        <br>
 
                                             <div class="row">
-
-                                                <div class="form-group col-md-12">
-                                                    <div class="icon-addon addon-md">
-                                                        <input type="text" placeholder="Door / Flat no" class="form-control border_borrom">
+                                                        <div class="form-group col-md-12">
+                                                            <div class="icon-addon addon-md">
+											<input type="text" name="door_no" maxlength="200" class="form-control border_borrom" placeholder="Door no:" id="id_door_no" />
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group col-md-12">
                                                     <div class="icon-addon addon-md">
-                                                        <input type="text" placeholder="Landmark" class="form-control">
+                                                        <input type="text" name="landmark" maxlength="200" class="form-control" placeholder="Enter Landmark" id="id_landmark" />
+
                                                     </div>
                                                 </div>
+                                                <div class="form-group col-md-12">
+                                                     <div class="icon-addon addon-md">
+                                                    <input type="text" name="pincode" maxlength="9" class="form-control" placeholder="Pincode" id="id_pincode" />
 
+                                                  </div>
+                                                </div>
                                                 <div class="col-md-12">
                                                     <ul class="loca_po_li">
-                                                        <li><a href="#"><i class="fa fa-home"></i>home</a></li>
-                                                        <li><a href="#"><i class="fa fa-briefcase"></i>Work</a></li>
-                                                        <li><a href="#"><i class="fa fa-map-marker"></i>Other</a></li>
+                                                        <li>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="resident_type" value="home" checked><i class="fa fa-home"></i>Home
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="resident_type" value="office"><i class="fa fa-briefcase"></i>Office
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="resident_type" value="other"><i class="fa fa-map-marker"></i>Other
+                                                            </label>
+                                                        </li>
                                                     </ul>
-
                                                 </div>
-
-
-
                                             </div>
 
 
-
-                                            </form>
                                         </div>
+
+
                                     </div>
-
-                                </div>
-
-
-                                 <div class="col-md-12 padding_all_0 current_loc_form">
-                                     <label><p><input type="radio" name="location"> &nbsp;Update Manually</p> </label>
-                                </div>
-
-                               <form class="registration_form current_loc_form">
-
-
-
-
-                                <div class="row">
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="State" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="City" class="form-control">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Area/Location" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="land Mark" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Building Name" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="H.No / Flat No" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Pin Code" class="form-control">
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-
+                                        <br>
+                                          <button type="submit" class="btn btn-success pull-right savebtn" style="color: #fff;background-color: #5cb85c;
+    border-color: #4cae4c;">Save</button>
                         </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
                             </div>
                         </div>
 
+
+
+
+
                         <ul class="save_next">
-                            <li><a class="save_inf" href="../registrations/form5.html">Next</a></li>
+                            <li><a class="save_inf" href="">Next</a></li>
                             <li><a class="next_inf" href="../registrations/form3.html">Back</a></li>
                         </ul>
 
@@ -148,5 +166,38 @@
                 </div>
             </div>
         </section>
+<script>
 
+$(document).ready(function(){
+    $(".ltype").click(function(){
+             var radioValue = $("input[name='location_type']:checked").val();
+            if(radioValue == 'current'){
+                $(".manual").hide();
+                $(".current").show();
+            }else{
+                $(".current").hide();
+                $(".manual").show();
+            }
+    });
+
+
+        $("form").on('submit', function(e) {
+              if($("input[name='location_type']:checked").val() == 'current'){
+                  if($("#id_latitude").val() == ''){
+                        e.preventDefault();
+                        alert("Please Choose a address")
+                    }
+
+              }else{
+                  if($("#id_area").val() == ''){
+                      e.preventDefault();
+                      alert("Please Enter an Area")
+                  }
+            }
+
+
+        });
+
+});
+</script>
     {% endblock %}
