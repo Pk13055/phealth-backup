@@ -28,49 +28,59 @@
                                         <h2>Other Information</h2>
                                         <p>Languages Known</p>
                                     </div>
+                                    <h4><b>Select Your Language</b></h4>
 
-                                        <label class="checkbox-inline"><input type="checkbox" value="bengali">Bengali</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="gujarati">Gujarati</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="hindi">Hindi</label><br><br>
-                                        <label class="checkbox-inline"><input type="checkbox" value="kannada">Kannada</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="marathi">Marathi</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="odia">Odia</label><br><br>
-                                        <label class="checkbox-inline"><input type="checkbox" value="tamil">Tamil</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="telugu">Telugu</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="english">English</label><br><br>
-                                        <label class="checkbox-inline"><input type="checkbox" value="urdu">Urdu</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <label class="checkbox-inline"><input type="checkbox" value="nepali">Nepali</label>
+                                        <form method="POST" class="post-form">
+                                            {% csrf_token %}
+									  	 <div class="col-md-10">
+										   <div class="form-group">
+
+										            {% for languages in lang %}
+                                                       <label class="checkbox-inline">
+                                                          <input type="checkbox" name="language" value="{{ languages.pk  }}">{{ languages.name }}
+                                                        </label>
+                                                {% endfor %}
+
+										  </div>
+										  </div>
+
+										   <div class="col-md-10">
+										   <div class="form-group">
+											<label for="id_profession">Profession:</label><br>
+											<select name="profession" class="form-control" placeholder="profession" id="id_profession">
+                                                  <option value="doctor">doctor</option>
+
+                                                  <option value="teacher">teacher</option>
+
+                                                  <option value="engineer">engineer</option>
+
+                                                  <option value="professor">professor</option>
+
+                                                  <option value="business">business</option>
+
+                                                  <option value="other" selected>other</option>
+
+                                                </select>
+
+										  </div>
+										  </div>
 
 
 
+                                              <button type="submit" class="btn btn-success pull-right">Save</button>
+                        </form>
 
                                     <br><br>
 
-                                    
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                        <select style="padding-left: 0 !important;border-bottom: 1px solid #d8d8d8 !important;border: 0; width: 100%;    background-color: transparent;" name="cars" class="form-control">
-                                            <option value="volvo">Profession</option>
-                                            <option value="saab">Option one</option>
-                                            <option value="fiat">Option Two</option>
-                                            <option value="audi">Option Three</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                                       
 
-                                    
-                                    
                                     
                                 </div>
                                 
           
                             </div>
                         </div>
-                        
-                        
-                         <ul class="save_next">
-                            <li><a class="save_inf" href="#">Save</a></li>
+
+
                             <li><a class="next_inf" href="../registrations/form3.html">Back</a></li>
                         </ul>
                         

@@ -4,7 +4,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import *
 # Create your views here.
-from api.models import *
+from api.models import User
+from api.models import Seeker
 from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect, render, get_object_or_404
@@ -94,11 +95,9 @@ def registration(request):
 
 
 def step2(request):
-    if request.method == 'POST':
-        request.session['discountcard_id'] = request.POST.get('discountcard_id')
-        return redirect('healthseeker:step3')
-    cards = DiscountCard.objects.all()
-    return render(request,'healthseeker/registration/form2.html',{'cards':cards})
+    return render(request,'healthseeker/registration/form2.html',{
+
+    })
 
 #-----------------------------------------------------------------------------------------------
 
@@ -125,11 +124,11 @@ def step3(request):
         form = FamilyForm()
 
 
-    #u = User.objects.filter()
     u = Seeker.objects.filter(family = me)
-    discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
+    u = u.user_set.all()
 
-    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u,'discountcard':discountcard })
+    print(u)
+    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u })
 
 
 @match_role("healthseeker")
@@ -140,10 +139,10 @@ def family_edit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('healthseeker:step3')
+            return redirect('site_admin:step3')
     else:
         form = FamilyForm(instance=post)
-    return render(request, 'healthseeker/registration/familymember_edit.html', {'form': form})
+    return render(request, 'healthseeker/registration/form3.html', {'form': form})
 
 
 @match_role("healthseeker")
@@ -221,11 +220,29 @@ def registrationform5(request):
     return render(request,'healthseeker/registration/form5.html',{
 
     })
+
+#----------------------------------------------step6
+
+
+@match_role("healthseeker")
 def step6(request):
+    me = User.objects.get(pk=request.session['pk'])
+    if request.method == 'POST':
+        print(request.POST)
+        form = LanguageForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = me
+            post.save()
+            return redirect('healthseeker:dashboard')
+    else:
+        form = LanguageForm()
+    lang = Languages.objects.all()
+    print(lang)
+    return render(request, 'healthseeker/registration/form6.html', {'form': form, 'lang': lang})
 
-    return render(request,'healthseeker/registration/form6.html',{
 
-    })
+#--------------------------------------------------------
 
 def addfamilymembers(request):
     print(request.GET)

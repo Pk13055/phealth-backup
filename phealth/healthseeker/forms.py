@@ -42,6 +42,19 @@ class SeekerForm(forms.ModelForm):
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
 
+#-----------------------------Language
+
+class LanguageForm(forms.ModelForm):
+    class Meta:
+        model = Seeker
+        fields = ('language','profession')
+
+    def __init__(self, *args, **kwargs):
+        super(LanguageForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
 
 
 
