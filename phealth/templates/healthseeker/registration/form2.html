@@ -2,8 +2,26 @@
 {% load static %}
 
 {% block content %}
+<style>
+.buy_now_DC{
+    text-align: center;width: 48%;padding: 6px 10px;font-size: 11px;background: #ff9f00;
+    color: #fff;
+    text-transform: uppercase;
+    float: left;
+    border-radius: 4px;
+    }
+    .buy_now_btn{
+    background: #47ba4a;
+    margin-left: 7px;
+    color: #fff;
+        text-align: center;
+    width: 48%;
+    padding: 6px 10px;
+    font-size: 11px;
+    }
+</style>
 
-  <section class="form_reg_one_hero">
+        <section class="form_reg_one_hero">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -16,7 +34,7 @@
 
                             </div>
 
-                            <a href="{% url 'healthseeker:form3' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
+                            <a href="{% url 'healthseeker:step3' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in form_reg_one_DC">
                                 <h2>Discount Cards</h2>
                                 <p>Choose best Discount Cards based on your family</p>
@@ -28,70 +46,29 @@
 										<div class="div_slde_main">
 											<div class="large-12 columns">
 												<div class="owl-carousel owl-theme">
+
+                                                    {% for card in cards %}
+                                                    <form method="post">
+                                                        {% csrf_token %}
 													<div class="item">
-														<img src="../img/dc_card.png">
+														<img src="{% static 'healthseeker/img/dc_card.png' %}">
 												        <div class="captoNcard">
-                                                            <p>Covers 4 Family Members</p>
-                                                            <small>Father, Mother, Son & Daughter</small>
-                                                            <a class="view_details_dc" href="#">View Details</a>
-                                                            <a class="buy_now_DC" href="#">Wish List</a>
-                                                            <a class="buy_now_DC" href="#">Buy Now</a>
+                                                            <p>{{ card.name }}</p>
+                                                            <small>Covers {{ card.coverage }} family Members</small>
+                                                            <small>{{ card.applicable_family_members }} </small>
+                                                            <a class="view_details_dc" target="_blank" href="{% url 'healthseeker:step2' %}">View Details</a>
+                                                            <input type="hidden" name="discountcard_id" value="{{ card.pk }}">
+                                                            <button type="submit"  class="buy_now_DC" >Wish List</button>
+                                                            <button type="submit"  class="buy_now_btn" >Buy Now</button>
                                                         </div>
 													</div>
-													<div class="item">
-														<img src="../img/dc_card2.png">
-														<div class="captoNcard">
-                                                            <p>Covers 4 Family Members</p>
-                                                            <small>Father, Mother, Son & Daughter</small>
-                                                            <a class="view_details_dc" href="#">View Details</a>
-                                                            <a class="buy_now_DC" href="#">Wish List</a>
-                                                            <a class="buy_now_DC" href="#">Buy Now</a>
-                                                        </div>
-													</div>
-													<div class="item">
-														<img src="../img/dc_card3.png">
-														<div class="captoNcard">
-                                                            <p>Covers 4 Family Members</p>
-                                                            <small>Father, Mother, Son & Daughter</small>
-                                                            <a class="view_details_dc" href="#">View Details</a>
-                                                            <a class="buy_now_DC" href="#">Wish List</a>
-                                                            <a class="buy_now_DC" href="#">Buy Now</a>
-                                                        </div>
-													</div>
-													<div class="item">
-														<img src="../img/dc_card.png">
-												        <div class="captoNcard">
-                                                            <p>Covers 4 Family Members</p>
-                                                            <small>Father, Mother, Son & Daughter</small>
-                                                            <a class="view_details_dc" href="#">View Details</a>
-                                                            <a class="buy_now_DC" href="#">Wish List</a>
-                                                            <a class="buy_now_DC" href="#">Buy Now</a>
-                                                        </div>
-													</div>
-													<div class="item">
-														<img src="../img/dc_card2.png">
-														<div class="captoNcard">
-                                                            <p>Covers 4 Family Members</p>
-                                                            <small>Father, Mother, Son & Daughter</small>
-                                                            <a class="view_details_dc" href="#">View Details</a>
-                                                            <a class="buy_now_DC" href="#">Wish List</a>
-                                                            <a class="buy_now_DC" href="#">Buy Now</a>
-                                                        </div>
-													</div>
-													<div class="item">
-														<img src="../img/dc_card3.png">
-														<div class="captoNcard">
-                                                            <p>Covers 4 Family Members</p>
-                                                            <small>Father, Mother, Son & Daughter</small>
-                                                            <a class="view_details_dc" href="#">View Details</a>
-                                                            <a class="buy_now_DC" href="#">Wish List</a>
-                                                            <a class="buy_now_DC" href="#">Buy Now</a>
-                                                        </div>
-													</div>
+                                                           </form>
+                                                    {% endfor %}
 												</div>
 											</div>
 										</div>
 									</section>
+
 
 
 
@@ -101,8 +78,7 @@
 
 
                          <ul class="save_next">
-                              <li><a class="save_inf" href="{% url 'healthseeker:form3' %}">Next</a></li>
-                            <li><a class="next_inf" href="{% url 'healthseeker:form2' %}">Back</a></li>
+                              <li><a class="save_inf" href="{% url 'healthseeker:step3' %}">Next</a></li>
 
 
                         </ul>
@@ -111,4 +87,11 @@
                 </div>
             </div>
         </section>
+
+
+
+
+
+
+
 {% endblock %}

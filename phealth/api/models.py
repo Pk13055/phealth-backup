@@ -415,24 +415,13 @@ class Seeker(models.Model):
         ('other', 'other'),
     )
 
-    language_choices = (
-        ('english', 'english'),
-        ('hindi', 'hindi'),
-        ('telugu', 'telugu'),
-        ('marathi', 'marathi'),
-        ('malayalam', 'malayalam'),
-        ('gujarati', 'gujarati'),
-        ('bhojpuri', 'bhojpuri'),
-        ('tamil', 'tamil'),
-        ('other', 'other'),
-    )
 
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     family = models.ForeignKey(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
     appointments = models.ManyToManyField('Appointment', editable=False)
     profession = models.CharField(max_length=100, choices=profession_choices, default="other")
-    language = models.CharField(max_length=100, choices=language_choices, default="other")
+    language = models.ManyToManyField('Languages',  null=True, blank=True)
 
 
     healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
@@ -864,6 +853,13 @@ class Role(models.Model):
         return self.name
 
 class Familymember(models.Model):
+    name = models.CharField(max_length=200)
+    created_date = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return self.name
+
+
+class Languages(models.Model):
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
     def __str__(self):

@@ -12,7 +12,7 @@
     <link href="{% static 'healthseeker/css/forms.css' %}" rel="stylesheet">
     <link href="{% static 'healthseeker/css/font.css' %}" rel="stylesheet">
     <link href="{% static 'healthseeker/css/font-awesome.min.css' %}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{% static 'healthseeker/css/owl.carousel.min.css' %}">
       <style>
         body {
             background-color: #F6F8FA;
@@ -140,6 +140,7 @@
     <script src="{% static 'healthseeker/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'healthseeker/js/index.js' %}"></script>
 
+      <script src="{% static 'healthseeker/js/owl.carousel.min.js' %}"></script>
       <script>
         $('ul.nav li.dropdown').hover(function() {
           $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeIn(300);
@@ -147,7 +148,32 @@
           $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeOut(300);
         });
     </script>
+<script>
+			$(document).ready(function() {
+			  var owl = $('.owl-carousel');
+			  owl.owlCarousel({
+			    margin: 10,
+			    nav: true,
+			    loop: true,
+			    dot: false,
 
+			    navText: ["<span class='fa fa-chevron-left'></span>","<span class='fa fa-chevron-right'></span>"],
+			    responsive: {
+			      0: {
+			        items: 1
+			      },
+			      600: {
+			        items: 3
+			      },
+			      1000: {
+			        items: 3
+			      }
+			    }
+			  })
+			})
+
+
+		</script>
 
 
 
