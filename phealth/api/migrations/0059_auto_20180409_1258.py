@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             model_name='seeker',
             name='language',
         ),
-   
+
         migrations.AddField(
             model_name='seeker',
             name='language',

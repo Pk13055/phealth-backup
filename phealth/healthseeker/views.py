@@ -210,7 +210,7 @@ def User_delete(request, pk):
 
 
 #------------------------------------------------------------------------------
-def registrationform4(request):
+def step4(request):
 
     return render(request, 'healthseeker/registration/form4.html', {
 

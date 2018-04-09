@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^otp/$',otp,name="otp"),
     url(r'^step2/$',step2,name="step2"),
     url(r'^step3/$',step3,name="step3"),
+    url(r'^step4/$',step4,name="step4"),
     url(r'^family_edit/(?P<pk>\d+)/family_edit/$', views.family_edit, name='family_edit'),
     url(r'^family_delete/family_delete/(?P<pk>\d+)/$', views.family_delete, name='family_delete'),
     url(r'^dashboard/$',healthseekerdashboard,name="healthseekerdashboard_home"),
