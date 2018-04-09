@@ -1,0 +1,3 @@
+/*
+	Sponsor registration JS
+*/
