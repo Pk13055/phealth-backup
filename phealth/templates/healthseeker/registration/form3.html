@@ -14,14 +14,13 @@
 
                             </div>
 
-                            <a href="#" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
+                            <a href="{% url 'healthseeker:step4' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in">
 
                                 <div class="full_width space">
 
 
                                 <h2>Discount Cards</h2>
-                                    {{ discountcard }}
                                 <div class="row">
                                     <div class="col-md-5 padding_right_0">
                                         <div class="full_width discountcard_he">
@@ -33,6 +32,7 @@
                                             <div class="col-md-6">
                                                <div class="ful_width health_seeker_detials health_detials_regi">
                                                     <h4>{{ discountcard.name }}</h4>
+<!--
                                                     <ul>
                                                         <li>Name</li>
                                                         <li>Rajesh P</li>
@@ -42,7 +42,7 @@
                                                         <li>Age</li>
                                                         <li>45 Years</li>
                                                     </ul>
-
+-->
                                                     <ul>
                                                         <li>Covers</li>
                                                         <li>{{ discountcard.coverage }} Members</li>
@@ -62,10 +62,10 @@
                                             <div class="col-md-6">
                                                 <div class="content_confirm_in content_confirm_in_r content_regi_5">
                                                 <div class="final_amount_d">
-                                                    <span>Final Amount</span>
+                                                    <span>Final Price</span>
                                                     <span class="fnal_amoun_act">Rs {{ discountcard.price }}</span>
                                                 </div>
-
+<!--
                                                 <div class="final_amount_d">
                                                     <span>Actual Amount</span>
                                                     <span class="actutal_amount"><del>Rs 599</del></span>
@@ -75,7 +75,7 @@
                                                     <span>Save Price</span>
                                                     <span class="actutal_amount">999</span>
                                                 </div>
-
+-->
 
                                             </div>
 
@@ -146,8 +146,8 @@
                         </div>
 
                         <ul class="save_next">
-                              <li><a class="save_inf" href="../registrations/form4.html">Next</a></li>
-                            <li><a class="next_inf" href="../registrations/form2.html">Back</a></li>
+                              <li><a class="save_inf" href="{% url 'healthseeker:step4' %}">Next</a></li>
+                            <li><a class="next_inf" href="{% url 'healthseeker:step2' %}">Back</a></li>
 
 
                         </ul>

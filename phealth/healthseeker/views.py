@@ -226,7 +226,7 @@ def step4(request):
 
 
 
-def registrationform5(request):
+def step5(request):
 
     return render(request,'healthseeker/registration/form5.html',{
 
