@@ -23,7 +23,7 @@
 
                             </div>
 
-                            <a href="#" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
+                            <a href="{% url 'healthseeker:step5' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in">
                                 <div class="full_width curent_location">
                                     <form method="POST" class="post-form cureent_loca_form">
@@ -158,8 +158,8 @@
 
 
                         <ul class="save_next">
-                            <li><a class="save_inf" href="">Next</a></li>
-                            <li><a class="next_inf" href="../registrations/form3.html">Back</a></li>
+                            <li><a class="save_inf" href="{% url 'healthseeker:step3' %}">Next</a></li>
+                            <li><a class="next_inf" href="{% url 'healthseeker:step5' %}">Back</a></li>
                         </ul>
 
                     </div>

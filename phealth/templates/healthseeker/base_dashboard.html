@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Qlick Health</title>
+    <title>Click Health</title>
     <link href="{% static 'healthseeker/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'healthseeker/css/style.css' %}" rel="stylesheet">
     <link href="{% static 'healthseeker/css/forms.css' %}" rel="stylesheet">
@@ -48,10 +48,10 @@
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile</a>
                           <ul class="dropdown-menu">
-                            <li><a href="../dashboard/personal_information.html">Personal Information</a></li>
-                            <li><a href="../dashboard/family_details.html">Family Details</a></li>
-                            <li><a href="../dashboard/contact_details.html">Contact Details</a></li>
-                            <li><a href="../dashboard/other_info.html">Other Information</a></li>
+                            <li><a href="{% url 'healthseeker:information' %}">Personal Information</a></li>
+                            <li><a href="{% url 'healthseeker:family' %}">Family Details</a></li>
+                            <li><a href="{% url 'healthseeker:contact' %}">Contact Details</a></li>
+                            <li><a href="{% url 'healthseeker:other' %}">Other Information</a></li>
                           </ul>
                         </li>
 
@@ -66,7 +66,7 @@
                         </li>
 
                         <li>
-                            <a href="../dashboard/refer_earn.html">Refer and Earn</a>
+                            <a href="{% url 'healthseeker:reference' %}">Refer and Earn</a>
 
                         </li>
                         <li>
@@ -95,13 +95,13 @@
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="head_prof_AV"><img src="{% static 'healthseeker/img/avatar3.png' %}"></span>Ramu Peetha<b class="caret"></b></a>
                           <ul class="dropdown-menu">
-                            <li><a href="../dashboard/booked.html">My Appointments</a></li>
-                            <li><a href="../dashboard/health_records.html">Health Records</a></li>
-                            <li><a href="../dashboard/health_alerts.html">Health Alerts</a></li>
-                            <li><a href="../dashboard/favorite_decors.html">Favorite Decors</a></li>
-                            <li><a href="../dashboard/comlaints.html">Facilitation</a></li>
-                            <li><a href="../dashboard/change_pswd.html">Settings</a></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a href="{% url 'healthseeker:booking' %}">My Appointments</a></li>
+                            <li><a href="{% url 'healthseeker:records' %}">Health Records</a></li>
+                            <li><a href="{% url 'healthseeker:healthalerts' %}">Health Alerts</a></li>
+                            <li><a href="{% url 'healthseeker:favaroitedoctors' %}">Favorite Decors</a></li>
+                            <li><a href="{% url 'healthseeker:complaints' %}">Facilitation</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="{% url 'common:signout' %}">Logout</a></li>
                           </ul>
                         </li>
                   </ul>
@@ -196,7 +196,7 @@ $(document).ready(function(){
     $(".registration_form").submit(function(e){
             e.preventDefault();
             var str = $( ".registration_form" ).serialize();
-           $.get("{% url 'healthseeker:addfamilymembers' %}?"+str, function(data, status){
+           $.get("{% url 'healthseeker:family' %}?"+str, function(data, status){
                alert(data);
         });
 

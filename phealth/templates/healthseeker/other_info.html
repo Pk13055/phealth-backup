@@ -1,12 +1,7 @@
 {%  extends "healthseeker/base_dashboard.html" %}
 {% load static %}
-
 {% block content %}
 
-{% block profile %}
-        {% endblock %}
-      
-      
         <section class="form_reg_one_hero dash_board">
             <div class="container">
                 <div class="row">
@@ -19,13 +14,8 @@
                                 
                                 <h3>My Profile</h3>
                         
-                                <ul class="my_profile_div">
-                                    <li><a href="../dashboard/personal_information.html"><img src="../img/dashboard/my_profile.png">Personal information</a></li>
-                                    <li><a href="../dashboard/family_details.html"><img src="../img/dashboard/my_profile.png">Family Details</a></li>
-                                    <li><a href="../dashboard/contact_details.html"><img src="../img/dashboard/my_profile.png">Contact Details</a></li>
-                                    <li class="active"><a href="../dashboard/other_info.html"><img src="../img/dashboard/my_profile.png">Other Information</a></li>
-                                </ul>
-                                
+                                {% include 'healthseeker/base_profile.html' %}
+
                                 <div class="my_pro_form_he lagunages">
                                 
                                 <div class="form_reg_one_DC">

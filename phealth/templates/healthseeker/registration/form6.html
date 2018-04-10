@@ -15,7 +15,7 @@
                                
                             </div>
                             
-                            <a href="#" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
+                            <a href="{% url 'healthseeker:dashboard' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in">
                                 <!--<h2>Please fill the Registration form!</h2>
                                 <p>Base on your profile & intrest we will provide free Health tips</p>
@@ -81,7 +81,10 @@
                         </div>
 
 
-                            <li><a class="next_inf" href="../registrations/form3.html">Back</a></li>
+
+                        <ul class="save_next">
+                            <li><a class="save_inf" href="{% url 'healthseeker:dashboard' %}">Next</a></li>
+                            <li><a class="next_inf" href="{% url 'healthseeker:step6' %}">Back</a></li>
                         </ul>
                         
                     </div>

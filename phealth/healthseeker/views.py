@@ -23,19 +23,13 @@ def SignIn(request):
     elif request.method == "POST":
         print(request.POST)
         if signin("healthseeker", request):
-            return redirect('healthseeker:contactdetails')
+            return redirect('healthseeker:step2')
         return redirect('healthseeker:signin')
 
 
-def healthseekersignin(request):
-    if request.method == "POST":
-        data = request.POST
-        if signin("admin", data):
-            return redirect('healthseeker:healthseekerdashboard_home')
-    return render(request,'healthseeker/sigin.html',{})
 
-def healthseekerdashboard(request):
-    pass
+def dashboard(request):
+    return render(request, 'healthseeker/dashboard.html', {})
 
 def otp(request):
     if request.method == "POST":
@@ -47,7 +41,7 @@ def otp(request):
             upost.password = make_password(request.POST['password'])
             upost.save()
             if signin("healthseeker", request):
-                return redirect('healthseeker:step3')
+                return redirect('healthseeker:step2')
         else:
             return render(request,'healthseeker/registration/otp.html',{ 'error': "Invalid Otp"})
 
@@ -95,9 +89,11 @@ def registration(request):
 
 
 def step2(request):
-    return render(request,'healthseeker/registration/form2.html',{
-
-    })
+    if request.method == 'POST':
+        request.session['discountcard_id'] = request.POST['discountcard_id']
+        return redirect('healthseeker:step3')
+    cards = DiscountCard.objects.all()
+    return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 #-----------------------------------------------------------------------------------------------
 
@@ -125,10 +121,8 @@ def step3(request):
 
 
     u = Seeker.objects.filter(family = me)
-    u = u.user_set.all()
-
-    print(u)
-    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u })
+    discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
+    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u ,'discountcard':discountcard})
 
 
 @match_role("healthseeker")
@@ -255,7 +249,7 @@ def step6(request):
 
 #--------------------------------------------------------
 
-def addfamilymembers(request):
+def family(request):
     print(request.GET)
     return render(request,'healthseeker/family_details.html',{})
 
@@ -267,7 +261,7 @@ def accountmanager(requset):
     })
 
 @match_role("healthseeker")
-def contactdetails(requset):
+def contact(requset):
 
     return render(requset,'healthseeker/contact_details.html',{
 
@@ -303,13 +297,13 @@ def reference(request):
 
     })
 
-def personalinformation(request):
+def information(request):
 
     return render(request,'healthseeker/personal_information.html',{
 
     })
 
-def otherinformation(request):
+def other(request):
 
     return render(request,'healthseeker/other_info.html',{
 

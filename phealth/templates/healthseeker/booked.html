@@ -3,8 +3,7 @@
 
 {% block content %}
 
-{% block appointments %}
-        {% endblock %}
+
 
       
         <section class="form_reg_one_hero dash_board">
@@ -19,20 +18,7 @@
                                 
                                 <h3>Appoinments</h3>
                         
-                                <ul class="my_profile_div my_profile_div_w">
-                                    <li class="active">
-                                        <a href="../dashboard/booked.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Booked</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="../dashboard/scheduled.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Scheduled</a>
-                                    </li>
-
-                                    <li><a href="../dashboard/comlaints.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Visited</a></li>
-
-                                    <li class="search_for_dc"><input class="form-control" type="text" placeholder="Enter Doctor name or Hospital"></li>
-
-                                </ul>
+                                {% include 'healthseeker/base_appointments.html' %}
 
                                 <div class="my_pro_form_he my_pro_form_wait">
 
