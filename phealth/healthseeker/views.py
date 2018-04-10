@@ -118,8 +118,12 @@ def step3(request):
             return redirect('healthseeker:step3')
     else:
         form = FamilyForm()
+    records = User.objects.all()
+    print ("User", records)
+    print(Seeker.objects.filter(family=me))
 
-
+    data = User.objects.all()
+    # print('data', data)
     u = Seeker.objects.filter(family = me)
     discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
     return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u ,'discountcard':discountcard})
@@ -318,3 +322,5 @@ def changepassword(request):
     return render(request,'healthseeker/change_pswd.html',{
 
     })
+
+

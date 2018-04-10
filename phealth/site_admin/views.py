@@ -819,7 +819,9 @@ def health_weekly(request):
 
 @match_role("admin")
 def health_monthly(request):
-    return render(request, 'site_admin/dashboard/health_monthly.html', {})
+    result = Appointment.objects.all()
+    print("resultresult", result)
+    return render(request, 'site_admin/dashboard/health_monthly.html', {"result": result})
 
 #---------------------Dicount Cards------------------------------------------------------------
 @match_role("admin")
@@ -1048,6 +1050,8 @@ def cancel_appointment(request, id):
 def health_daily(request):
     providers = Provider.objects.all()
     result = Appointment.objects.all()
+    fromDate = ''
+    toDate = ''
     if request.GET.get("provider") is not None:
         if request.GET.get('provider') != "All":
             result=result.filter(Q(provider = request.GET.get('provider')))
@@ -1055,12 +1059,11 @@ def health_daily(request):
     if request.GET.get("status") is not None:
         if request.GET.get('status') != "All":
             result=result.filter(Q(status = request.GET.get('status')))
-
-
-
-
-
-    return render(request, 'site_admin/dashboard/health_daily.html', {'values': result,'providers':providers, })
+    if request.GET.get("fromdate") is not None and request.GET.get("todate") is not None:
+        fromDate = request.GET.get("fromdate")
+        toDate = request.GET.get("todate")
+        result = Appointment.objects.filter(date__range=[fromDate, toDate])
+    return render(request, 'site_admin/dashboard/health_daily.html', {'values': result,'providers':providers, 'fromdate': fromDate, 'todate': toDate, })
 
 @match_role("admin")
 def confirm_appointment(request, id):
@@ -1110,7 +1113,6 @@ def appointment_monthly(request):
     ''' appointment stats '''
 
     c = User.objects.filter(user__email=request.session['email']).first()
-
     return render(request, 'site_admin/dashboard/appointments/monthly.html.j2', context={
         'title': "appointment - monthly",
         'admin': c,
