@@ -226,7 +226,7 @@ h2 {
     color: #2658a4;
     text-transform: uppercase;
         font-size: 24px;
-
+    
 }
 
 p {
@@ -349,7 +349,7 @@ padding-right: 10px;
     margin-top: 100px;
 }
 .tab_main .tab-content {
-
+ 
     border-radius: 3px;
 }
 .tab_main .tab-content .tab-pane  {
@@ -383,8 +383,8 @@ padding-right: 10px;
     background-color: #47ba4a !important;
     color: #fff;
     border: 1px solid transparent !important;
-
-
+    
+   
 }
 .custom_tab>li>a span img{
     width: 20px;
@@ -402,7 +402,7 @@ padding-right: 10px;
 }
 .custom_tab li{
     display: inline-block;
-    float: none;
+    float: none;  
     margin-left: -4px;
 }
 .custom_tab li a{
@@ -443,7 +443,7 @@ padding-right: 10px;
 }
 
 .icon-addon.addon-md .glyphicon,
-.icon-addon .glyphicon,
+.icon-addon .glyphicon, 
 .icon-addon.addon-md .fa,
 .icon-addon .fa {
     position: absolute;
@@ -522,7 +522,7 @@ padding-right: 10px;
     float: left;
     margin-left: 13px;
     margin-bottom: 0;
-
+    
 }
 .custom_md_2 .form-control{
     border: 0;
@@ -562,7 +562,7 @@ padding-right: 10px;
 }
 
 /*.custom_md_2 .search_vtm{
-  width: 100%;
+  width: 100%; 
     padding: 10px 30px;
 }*/
 .search_vtm {
@@ -577,7 +577,7 @@ padding-right: 10px;
     margin: 0 auto;
     text-align: center;
         font-family: 'Open Sans', sans-serif;
-
+  
 }
 
 
@@ -591,7 +591,7 @@ a.search_vtm:hover {
 
 /*.search_vtm:hover .fa {
     margin-left: 10px;
-     -webkit-transition: width 2s;  Safari
+     -webkit-transition: width 2s;  Safari 
     transition: width 2s;
 }*/
 
@@ -710,7 +710,7 @@ a.search_vtm:hover {
     display: inline-block;
     line-height: 22px;
     position: relative;
-    top: -2px;
+    top: -2px;  
     margin-right: 6px;
 }
 .how_it_works_in p span i {
@@ -736,11 +736,11 @@ a.search_vtm:hover {
 }
 
 .panel-default>.panel-heading {
-   background-color: #fff;
+   background-color: #fff; 
 }
 .panel-default>.panel-heading .panel-title{
-   color: #2658a4;
-
+   color: #2658a4; 
+    
 }
 
 .panel-default>.panel-heading+.panel-collapse>.panel-body {
@@ -788,7 +788,7 @@ font-size: 14px;
 }
 
 .panel-heading.active:active {
-
+    
 }
 .panel-default>.panel-heading.active  {
     background-color: #47ba4a;
@@ -837,7 +837,7 @@ font-size: 14px;
     font-style: italic;
 line-height: 28px;
 }
-.carousel .overview {
+.carousel .overview {	
 	font-style: italic;
     color: #fff;
 }
@@ -887,13 +887,13 @@ line-height: 28px;
 	margin: 1px 3px;
 	border-radius: 50%;
 }
-.carousel-indicators li {
+.carousel-indicators li {	
 	background: #999;
 	border-color: transparent;
 	box-shadow: inset 0 2px 1px rgba(0,0,0,0.2);
 }
-.carousel-indicators li.active {
-	background: #555;
+.carousel-indicators li.active {	
+	background: #555;		
 	box-shadow: inset 0 2px 1px rgba(0,0,0,0.2);
 }
 
@@ -1071,7 +1071,7 @@ select.frecuency {
 }
 select.frecuency:focus {
     outline: none;
-
+ 
 }
 .free {
     text-transform: uppercase;
@@ -1170,7 +1170,7 @@ footer button.btn {
     position: relative;
     float: left;
     width: 100%;
-}
+}   
 
 img.auto-size {
     width: 100%;
@@ -1223,7 +1223,7 @@ img.auto-size {
     color: #48ba49;
     margin-bottom: 10px;
     display: block;
-
+    
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -1366,7 +1366,7 @@ img.auto-size {
     border-radius: 50px;
 /*    width: 35px;
     height: 35px;*/
-    padding: 0;
+    padding: 0;  
     line-height: 40px;
     margin-top:9px;
 }
@@ -1473,7 +1473,7 @@ li.call_li_menu a{
 
 /*
 .sidebar_man {
-    box-shadow: 5px 0px rgba(0, 0, 0, 0.02);
+    box-shadow: 5px 0px rgba(0, 0, 0, 0.02); 
 }*/
 
 .searching_form input{
@@ -1811,7 +1811,7 @@ li.modify_searc a {
 }
 
 .veiw_collaps_23 {
-
+    
 }
 
 .veiw_collaps_23 h4 {
@@ -1916,7 +1916,7 @@ li.modify_searc a {
 }
 
 .registration_form {
-
+    
 }
 
 .registration_form .custom_md_3 {
@@ -2150,7 +2150,7 @@ ul.succ_time_date_ye li {
     right: 10px;
     top: 38px;
     background-size: 14px;
-
+    
 }
 
 
@@ -2188,7 +2188,7 @@ ul.succ_time_date_ye li {
 }
 
 .timins_hero_first_main ul li {
-    color: #666666;
+    color: #666666; 
     border: 1px solid #dbdbdb;
     padding: 0 4px;
     float: left;
@@ -2240,7 +2240,7 @@ ul.succ_time_date_ye li {
   -webkit-animation: animationFrames ease 1s;
   -webkit-animation-iteration-count: 1;
   -webkit-transform-origin: 50% 50%;
-  -webkit-animation-fill-mode:forwards; /*Chrome 16+, Safari 4+*/
+  -webkit-animation-fill-mode:forwards; /*Chrome 16+, Safari 4+*/ 
   -moz-animation: animationFrames ease 1s;
   -moz-animation-iteration-count: 1;
   -moz-transform-origin: 50% 50%;
@@ -2317,11 +2317,11 @@ ul.succ_time_date_ye li {
 
 /*.fade-in {
     opacity:0;
-    -webkit-animation:fadeIn ease-in 1;
+    -webkit-animation:fadeIn ease-in 1;  
     -moz-animation:fadeIn ease-in 1;
     animation:fadeIn ease-in 1;
 
-    -webkit-animation-fill-mode:forwards;
+    -webkit-animation-fill-mode:forwards;  
     -moz-animation-fill-mode:forwards;
     animation-fill-mode:forwards;
 
@@ -2502,7 +2502,7 @@ animation-delay: 0.5s;
     color: #fff;
     margin: 0;
     line-height: 37px;
-
+    
 }
 
 .date_based_select_text4 {
@@ -2526,7 +2526,7 @@ animation-delay: 0.5s;
     overflow: hidden;
     float: left;
     font-family: 'Open Sans', sans-serif;
-
+    
 }
 
 .date_based_select_date a {
@@ -2552,7 +2552,7 @@ animation-delay: 0.5s;
     color: #333333;
     text-align: left;
     padding-top: 170px;
-
+    
 }
 .otp_scr p{
     font-size: 19px;
@@ -2572,12 +2572,12 @@ animation-delay: 0.5s;
     font-family: 'Open Sans', sans-serif;
     height: 57px;
     padding: 5px;
-
+    
 }
 .otp_scr2 .input-group{
     margin-bottom: 20px;
     text-align: left;
-
+    
 }
 
 .otp_scr2 i {
@@ -2596,7 +2596,7 @@ animation-delay: 0.5s;
     width: 100%;
     float: left;
     box-shadow: none;
-    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.30);
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.30); 
 }
 
 .otp_scr2 .input-group .form-control:focus{
@@ -2663,7 +2663,7 @@ animation-delay: 0.5s;
 .otp_scr23 .input-group {
     width: 39%;
     margin-bottom: 13px;
-
+    
 }
 .otp_scr23 .input-group label{
     position: absolute;
@@ -2703,7 +2703,7 @@ animation-delay: 0.5s;
     margin: 17px 30px 10px;
     line-height: 26px;
     font-weight: 300;
-
+    
 }
 .booking_confirm .booking_con_header h2 img{
     position: relative;
@@ -2750,7 +2750,7 @@ animation-delay: 0.5s;
 }
 
 .content_confirm_in_r p{
-    color: #666666;
+    color: #666666;   
 }
 
 .final_amount_d {
@@ -2782,7 +2782,7 @@ animation-delay: 0.5s;
     font-size: 18px;
     text-transform: uppercase;
     text-align: center;
-
+    
 }
 
 .sidear_discount {
@@ -2818,17 +2818,17 @@ animation-delay: 0.5s;
 }
 
 .testmonials_pay {
-    padding: 30px 0;
+    padding: 30px 0;   
     margin-bottom: 0;
         min-height: 360px;
 }
 
 .testmonials_pay p {
     font-size: 13px !important;
-    line-height: 19px !important;
+    line-height: 19px !important; 
     text-align: center;
     width: 100%;
-    padding: 14px 0 10px !important;
+    padding: 14px 0 10px !important; 
 }
 .testmonials_pay .carousel .item .img-box {
     width: 80px;
@@ -3275,14 +3275,14 @@ button.ui-button::-moz-focus-inner {
 	padding: .7em .3em;
 	text-align: center;
 	font-weight: bold;
-	border: 0;
+	border: 0;   
     text-transform: uppercase;
     color: #77858e;
 }
 .ui-datepicker td th{
 	border: 0;
 	padding: 5px;
-
+   
 }
 .ui-datepicker td span,
 .ui-datepicker td a {
@@ -4371,7 +4371,7 @@ p.more_for_git_card a{
     font-size: 13px;
     text-transform: uppercase;
     left: 7px;
-    line-height: 15px;
+    line-height: 15px;  
 }
 
 .car_top_city p {
@@ -4402,7 +4402,7 @@ p.more_for_git_card a{
     font-weight: 600;
     color: #48ba49;
     font-family: 'Open Sans', sans-serif;
-    background-position: 117% center;
+    background-position: 117% center;   
 }
 
 .hosptial_detilas .doctr_details3 p {
@@ -4436,7 +4436,7 @@ p.more_for_git_card a{
 }
 
 .call_detials {
-
+    
 }
 
 .call_detials h4 {
@@ -4474,7 +4474,7 @@ p.more_for_git_card a{
     margin-bottom: 2px;
     border: 0;
     margin-top: 2px;
-    padding-top: 0;
+    padding-top: 0; 
     padding-bottom: 0;
 }
 
@@ -4884,7 +4884,7 @@ ul.hos_specilites li:first-child {
 .hea_about_des {
     padding: 30px;
     background: #fafafa;
-
+    
 }
 
 .hea_about_des h2 {
@@ -4914,7 +4914,7 @@ ul.hos_specilites li:first-child {
     height: 500px;
     width: 100%;
     margin-top: 70px;
-    box-shadow: 1px 1px 35px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 35px 0px rgba(0, 0, 0, 0.3); 
 }
 
 .hea_about_des2 {
@@ -5042,7 +5042,7 @@ ul.services_list_checks li img {
     text-align: center;
     margin: 0 auto;
     margin-bottom: 10px;
-
+    
 }
 
 
@@ -5209,7 +5209,7 @@ ul.services_list_checks h4 {
     float: left;
     min-height: 285px;
     background: #fafafa;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.14);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.14); 
     border-radius: 4px;
     padding: 15px 15px;
 }
@@ -5232,7 +5232,7 @@ ul.services_list_checks h4 {
     font-size: 13px;
     color: #333;
     font-family: 'Open Sans', sans-serif;
-
+    
 }
 
 .specialities ul li .fa {
@@ -5293,13 +5293,13 @@ ul.services_list_checks h4 {
 
 .healths_details{
     padding-left: 0 !important;
-
+    
 }
 .healths_details p{
     color: #333;
     font-size: 13px;
     font-weight: 300;
-
+    
 }
 .healths_details .flight-line-b b.view_more_cur{
     margin-top: 18px;
@@ -5348,7 +5348,7 @@ a.gift_now_btn_main{
     font-family: 'Open Sans', sans-serif;
     border-radius: 4px;
     float: right;
-
+    
 }
 
 .gift_now_btn {
@@ -5357,7 +5357,7 @@ a.gift_now_btn_main{
 }
 .book_now_btn {
     background: #47ba4a;
-
+    
      margin-left: 7px !important;
 }
 
@@ -5375,13 +5375,13 @@ a.gift_now_btn_main{
 }
 
 .health_check_mainTo {
-
+    
 }
 
 .health_check_mainTo_in {
     padding: 20px;
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.14);
-
+    
 }
 
 .health_check_mainTo_in ul{
@@ -5408,7 +5408,7 @@ a.gift_now_btn_main{
     box-shadow: none;
     min-height: inherit;
     display: inline-table;
-    padding-top: 0;
+    padding-top: 0; 
     padding-bottom: 0;
     padding-right: 0;
 }
@@ -5456,7 +5456,7 @@ a.gift_now_btn_main{
     float: left;
     color: #333;
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.30);
-    width: 100%;
+    width: 100%;   
     height: 55px;
     line-height: 60px;
     font-family: 'Open Sans', sans-serif;
@@ -5558,8 +5558,8 @@ a.gift_now_btn_main{
 
 .get_appo_sce {
     text-align: center;
-
-
+    
+    
 }
 
 .get_appo_sce a {
@@ -5676,7 +5676,7 @@ a.gift_now_btn_main{
     border: 0;
     float: left;
     width: 100%;
-
+    
 }
 
 .thum_dc {
@@ -5686,7 +5686,7 @@ a.gift_now_btn_main{
 
 .Health_Checks_typez .caption img {
     width: auto;
-
+   
 }
 
 .free_tag_dc {
@@ -5784,12 +5784,12 @@ a.gift_now_btn_main{
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300 !important;
-
+    
 }
 a.wedding_a{
     background: #8a0a93;
     border: 2px solid #8a0a93;
-
+    
 }
 
 a.wedding_a:hover {
@@ -5820,7 +5820,7 @@ a.seni_citi_a {
 
 .dc_banner_content p {
     margin-bottom: 30px;
-
+    
 }
 
 .dc_banner_content a:last-child {
@@ -5834,14 +5834,14 @@ a.seni_citi_a {
 .dc_banner_content .btn-4c:before {
     top: 0px;
 }
-
+    
 .dc_banner img {
     margin:60px auto;
     display: block;
     width: 450px;
-    box-shadow: 0px 1px 38px 0px rgba(0, 0, 0, 0.89);
+    box-shadow: 0px 1px 38px 0px rgba(0, 0, 0, 0.89); 
     border-radius: 30px;
-
+    
 }
 
 .dc_hero .custom_tab li a{
@@ -5948,7 +5948,7 @@ a.seni_citi_a {
 }
 .custom_tab_3 li{
     display: inline-block;
-    float: none;
+    float: none;  
     margin-left: -4px;
 }
 .custom_tab_3 li a{
@@ -5995,17 +5995,17 @@ a.seni_citi_a {
 }
 .how_it_one {
     color: #2658a4;
-
+    
 }
 
 .how_it_two {
     color: #ffb005;
-
+    
 }
 
 .how_it_three {
     color: #47ba4a;
-
+    
 }
 
 .discount_cards_howitw img {
@@ -6025,7 +6025,7 @@ a.seni_citi_a {
     padding: 17px 60px;
     display: inline-block;
     margin: 17px auto 20px;
-
+    
 }
 
 .explore_bg a:hover {
@@ -6047,7 +6047,7 @@ a.seni_citi_a {
 }
 
 .right_sidebar_hc {
-
+       
 }
 
 .right_sidebar_hc img {
@@ -6057,12 +6057,12 @@ a.seni_citi_a {
     width: 90px;
 }
 .right_sidebar_hc .content_confirm_in_r span.fnal_amoun_act {
-    text-align: right;
+    text-align: right;  
     position: relative;
     right: 15px;
 }
 .right_sidebar_hc .actutal_amount {
-    text-align: right;
+    text-align: right;   
     position: relative;
     right: 15px;
 }
@@ -6125,7 +6125,7 @@ ol.insrurer li{
     left: 19px;
     top: 4px;
     font-weight: 600;
-}
+}   
 
 .heart_fav {
     z-index: 9999999;
@@ -6141,7 +6141,7 @@ ol.insrurer li{
 }
 
 .heart_fav {
-
+    
 }
 
 .heart_fav span{
@@ -6207,7 +6207,7 @@ ol.insrurer li{
 }
 
 .gift_by_form {
-
+    
 }
 
 .family_card_de {
@@ -6229,7 +6229,7 @@ ol.insrurer li{
 .dicount_cards_check .image_on_text img {
     width: auto;
     margin: 13px;
-
+    
 }
 
 .for_corporates {
@@ -6273,7 +6273,7 @@ ol.insrurer li{
 }
 
 .for_health_pro_hero {
-
+    
 }
 
 .for_health_pro_hero_in {
@@ -6288,7 +6288,7 @@ img.logo_for_healh{
     margin: 0 auto;
     display: block;
     margin-bottom: 30px;
-
+    
 }
 
 .for_health_pro_hero h2 {
@@ -6336,7 +6336,7 @@ img.logo_for_healh{
 
 
 .for_assined_for {
-
+    
 }
 
 .for_assined_for h2 {
@@ -6395,7 +6395,7 @@ img.logo_for_healh{
     text-align: center;
     color: #fff;
     font-size: 19px;
-}
+} 
 
 .for_cor_mian .tab_main_insds{
     background: none;
@@ -6452,7 +6452,7 @@ img.logo_for_healh{
 }
 
 .for_cor_mian .custom_tab li {
-
+    
 }
 .for_cor_mian .custom_tab li a{
     border: 1px solid #47ba4a;
@@ -6474,7 +6474,7 @@ img.logo_for_healh{
 
 .for_corporates_2 {
     margin-bottom: 10px;
-    padding: 4% 0;
+    padding: 4% 0;  
 }
 
 .for_corp_4_ke h4 {
@@ -6581,7 +6581,7 @@ ul.for_corpo_ul_hero li span {
     background-color: #fff;
     padding: 10px 10px 40px;
     border-radius: 4px;
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.12); 
     overflow: hidden;
 }
 .lb-header{
@@ -6589,7 +6589,7 @@ ul.for_corpo_ul_hero li span {
     color: #00415d;
     margin: 5px 5px 10px 5px;
     height:auto;
-
+    
     padding: 10px 21px 0;
 }
 .lb-header a{
@@ -6707,7 +6707,7 @@ ul.for_corpo_ul_hero li span {
 }
 .u-form-group button.btn_right {
     float: right;
-
+    
     border: 1px solid #47ba4a;
     background-color: transparent;
     color: #47ba4a;
@@ -6718,7 +6718,7 @@ ul.for_corpo_ul_hero li span {
   text-decoration: underline;
   color: #888;
   font-size: 12px;
-
+    
 }
 
 .socail_login {
@@ -6867,7 +6867,7 @@ ul.blog_nav_in li.green a{
     float: left;
     border-radius: 4px;
     overflow: hidden;
-
+    
 }
 
 .blog_one h5{
@@ -6919,7 +6919,7 @@ ul.blog_nav_in li.green a{
     list-style: none;
     float: left;
     height: auto;
-
+    
     margin-left: 13px;
     border-radius: 4px;
 }
@@ -7279,11 +7279,11 @@ article[class*="type-"] .entry-header, blockquote {
 @media (min-width: 1600px) {
    .container {
        width: 1450px;
-    }
+    } 
     .navbar-brand {
         padding: 30px 15px;
     }
-
+    
     .navbar li a {
         line-height: 75px;
         font-size: 18px;
@@ -7376,8 +7376,8 @@ article[class*="type-"] .entry-header, blockquote {
     .owl-prev, .owl-next {
         width: 50px;
         height: 50px;
-
-    }
+    
+    } 
     .owl-prev {
         left: -68px;
     }
@@ -7403,7 +7403,7 @@ article[class*="type-"] .entry-header, blockquote {
     .about_congent h2 {
         margin-bottom: 19px;
     }
-
+    
     .search_vtm {
         padding: 12px 50px 11px;
         font-size: 18px;
@@ -7417,7 +7417,7 @@ article[class*="type-"] .entry-header, blockquote {
     .about_congent p {
         margin-bottom: 30px;
     }
-
+    
     .m3_im .caption h2 {
         font-size: 23px;
     }
@@ -7476,7 +7476,7 @@ article[class*="type-"] .entry-header, blockquote {
     .hosptal_inner p {
         font-size: 17px;
         line-height: 27px;
-
+       
     }
     .carousel .item .img-box {
         width: 130px;
@@ -7541,7 +7541,7 @@ article[class*="type-"] .entry-header, blockquote {
         line-height: 79px;
         font-size: 15px;
     }
-
+    
     .jumbotron .custom_md_2:last-child{
         float: right;
     }
@@ -7549,7 +7549,7 @@ article[class*="type-"] .entry-header, blockquote {
         display: block;
         margin: 0 auto;
     }
-
+    
     .disc_div_a {
         text-align: center;
         margin-top: 40px;
@@ -7563,7 +7563,7 @@ article[class*="type-"] .entry-header, blockquote {
     }
     .health_che_div_com p {
         padding: 0 26px;
-        height: 54px;
+        height: 54px;  
         line-height: 55px;
         font-size: 16px;
     }
@@ -7586,7 +7586,7 @@ article[class*="type-"] .entry-header, blockquote {
         width: 138px;
         font-size: 16px;
     }
-
+    
     .inner_nav_menu {
         min-height: 65px !important;
     }
@@ -7605,7 +7605,7 @@ article[class*="type-"] .entry-header, blockquote {
     }
     .nav_second {
         margin-top: 65px;
-
+        
     }
     .srch-results-lbl {
         font-size: 18px !important;
@@ -7651,7 +7651,7 @@ article[class*="type-"] .entry-header, blockquote {
     .side-padding {
         padding: 17px 45px 20px 26px !important;
     }
-
+    
     #style-3::-webkit-scrollbar-track
     {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -7688,8 +7688,8 @@ article[class*="type-"] .entry-header, blockquote {
     .catalog-head .search-select {
         margin-right: 21px !important;
     }
-
-
+        
+    
     .catalog-head label {
         font-size: 13px;
     }
@@ -7726,7 +7726,7 @@ article[class*="type-"] .entry-header, blockquote {
         font-size: 16px;
         line-height: 22px;
         margin-bottom: 23px;
-
+        
     }
     .doctr_details p {
         margin-bottom: 7px;
@@ -7737,7 +7737,7 @@ article[class*="type-"] .entry-header, blockquote {
     .flight-line-b b {
         font-size: 14px !important;
     }
-
+    
     .pricing_list .flt-i-price {
         font-size: 34px;
     }
@@ -7892,7 +7892,7 @@ article[class*="type-"] .entry-header, blockquote {
         font-size: 16px;
     }
     .appointment_main_hero_fina .alt-center-l{
-        width: 30%;
+        width: 30%;   
     }
     .final_amount_d {
         margin-bottom: 16px;
@@ -7932,7 +7932,7 @@ article[class*="type-"] .entry-header, blockquote {
         font-size: 17px;
         width: 48px;
     }
-
+    
     ul.pro_upl li {
         font-size: 18px;
     }
@@ -7948,7 +7948,7 @@ article[class*="type-"] .entry-header, blockquote {
 }
 
 /*.combobox-container {
-
+    
 }*/
 
 .down_select {
@@ -7986,7 +7986,7 @@ article[class*="type-"] .entry-header, blockquote {
 .profile-pic {
     overflow: hidden;
     display: block;
-
+    
 }
 
 .file-upload {
@@ -8024,7 +8024,7 @@ img {
 }
 
 .upload_new_img {
-
+    
 }
 
 .upload_new_img p {

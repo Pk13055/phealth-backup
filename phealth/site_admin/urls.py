@@ -153,7 +153,7 @@ dashboard_routes = [
     # url(r'appointments/?$', views.appointments, name='appointments'),
 
     # new routes
-    url(r'^$', views.new_home, name='dashboard_home_new'),  # remove new later
+    url(r'^$', views.new_home, name='dashboard_home'),  # remove new later
     url(r'^appointments/', include(appointment_routes)),
     url(r'^timings/', include(timing_routes)),
     url(r'account/', include(account_routes)),
