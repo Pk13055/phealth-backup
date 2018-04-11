@@ -358,7 +358,7 @@ class User(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),), default="F")
 
-    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
+    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, default=1)
     answer = models.CharField(max_length=100)
     profile_pic = models.ImageField(upload_to='profile_pics',
                                     default='default_profile.jpg')
@@ -370,7 +370,7 @@ class User(models.Model):
     super_speciality = models.CharField(choices=super_speciality_choices, max_length=30, default='none')
     other_trainings = models.TextField(default="TEST")
     other_degrees = models.TextField(default="TEST1")
-    dob = models.DateField()
+    dob = models.DateField(default=current_timestamp)
 
     def __str__(self):
         return str(self.email)

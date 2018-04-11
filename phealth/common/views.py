@@ -173,7 +173,7 @@ def appointment_list(request):
 	''' route to retrieve appointment data | start and end as get params '''
 
 	status = 1
-	get_time = lambda x: datetime.datetime.utcfromtimestamp(int(x))
+	get_time = lambda x: dateutil.parser.parse(x)
 	init_set = Appointment.objects
 
 	# filter initial appointment set according to user type
@@ -185,6 +185,7 @@ def appointment_list(request):
 		p = Provider.objects.filter(poc=u).first()
 		init_set = p.appointment_set
 	elif u.role == "poc":
+		# handle POC differently
 		pass
 
 
