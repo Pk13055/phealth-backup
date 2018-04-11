@@ -185,6 +185,7 @@ def appointment_list(request):
 		p = Provider.objects.filter(poc=u).first()
 		init_set = p.appointment_set
 	elif u.role == "poc":
+		# handle POC differently
 		pass
 
 

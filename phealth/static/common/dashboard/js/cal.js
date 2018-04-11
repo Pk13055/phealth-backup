@@ -1,21 +1,21 @@
+var x;
 
 'use strict';
 const spinnerClass = 'fa fa-spinner faa-spin animated';
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     // initialize the filters
-    $("div.filter-btn").on('click', function() {
+    $("div.filter-btn").on('click', function () {
         let target = $(this).attr("data-target");
 
         $("td a.fc-event").hide();
         $("div[role='alert']").hide();
 
-        if(target == "all") {
+        if (target == "all") {
             $("td a.fc-event").fadeIn();
             $("div[role='alert']").fadeIn();
-        }
-        else {
+        } else {
             $("a.event-" + target).fadeIn();
             $("div[role='alert'].event-" + target).fadeIn();
         }
@@ -24,19 +24,35 @@ $(document).ready(function(){
 
     //initialise the calendar
     $("#userCal").fullCalendar({
+        customButtons: {},
         header: {
-            left: 'title',
-            center: '',
+            left: 'agendaCustomRange',
+            center: 'title',
             right: 'today agendaDay,listDay agendaWeek,listWeek month,listMonth prev,next'
         },
-
-        views:{
-            listMonth:{
-                buttonText:"Month's events"
+        views: {
+            agendaCustomRange: {
+                type: 'list',
+                visibleRange: function (currentDate) {
+                    let start = $("#customStart").val(), end = $("#customEnd").val();
+                    if(start < end) {
+                        start = moment(start);
+                        end = moment(end);
+                    }
+                    else start = end = "";
+                    return {
+                        start: start || currentDate.clone().subtract('days', 1),
+                        end: end || currentDate.clone().add('days', 3),
+                    };
+                },
+                buttonText: 'Custom Range',
+            },
+            listMonth: {
+                buttonText: "Month's events"
             },
 
-            listWeek:{
-                buttonText:"Week's events"
+            listWeek: {
+                buttonText: "Week's events"
             },
 
             listDay: {
@@ -45,26 +61,33 @@ $(document).ready(function(){
         },
 
         fixedWeekCount: false,
-        eventLimit: true,//whether to limit the number of events displayed on a day
-        timezone: 'local',
-        nowIndicator: true,//whether to display a marker on the current time
-        displayEventEnd: true,//whether to display the time an event will end
+        eventLimit: true, //whether to limit the number of events displayed on a day
+        timezone: 'Asia/Kolkata',
+        nowIndicator: true, //whether to display a marker on the current time
+        displayEventEnd: true, //whether to display the time an event will end
         navLinks: true,
-        selectable: false,//to enable or disable selection
-        selectOverlap: false,//to allow or disallow selecting a time with an event
+        selectable: false, //to enable or disable selection
+        selectOverlap: false, //to allow or disallow selecting a time with an event
         allDayDefault: false,
-        nextDayThreshold: "00:00:00",// (12am)time to regard as the next day
+        nextDayThreshold: "00:00:00", // (12am)time to regard as the next day
 
-        events: {
-            url: '/common/appointment_list/',
-            data: {action:'get'},
-            method: 'POST',
-            success: function(response) {
-                console.log(response);
-            },
-            fail: function(){
-                alert("An error occured while fetching events");
-            }
+        events: function (start, end, timezone, callback) {
+            $.ajax({
+                url: '/common/appointment_list/',
+                method: 'POST',
+                data: {
+                    start: start._d.toISOString(),
+                    end: end._d.toISOString(),
+                    id: '' || $("#d_id").val(),
+                },
+                success: function (response) {
+                    events = response;
+                    callback && callback(events);
+                },
+                fail: function () {
+                    alert("An error occured while fetching events");
+                }
+            });
         }
 
 
@@ -91,19 +114,19 @@ $(document).ready(function(){
     // });
 
     //when an event is clicked
-    usercal.on('eventClick', function(e, jsEvent, view){
+    usercal.on('eventClick', function (e, jsEvent, view) {
         //allow the clicking of events with status = 1
     });
 
 
     //after a selection is made
-    usercal.on('select', function(start, end, jsEvent, view){
+    usercal.on('select', function (start, end, jsEvent, view) {
 
     });
 
 
     //when user mouse over an event
-    usercal.on('eventMouseover', function(e, jsEvent, view){
+    usercal.on('eventMouseover', function (e, jsEvent, view) {
         $(this).attr('data-toggle', 'tooltip');
         $(this).attr('data-placement', 'bottom');
         $(this).attr('data-title', e.description);
@@ -112,106 +135,104 @@ $(document).ready(function(){
     });
 
     //TO show loading icon when an event is being loaded
-    usercal.on('loading', function(isLoading, view){
-        if(isLoading){
+    usercal.on('loading', function (isLoading, view) {
+        if (isLoading) {
             //displayFlashMsg("Fetching events", spinnerClass, 'black', '', true);
-            $("#calMsg").html("<i class='"+spinnerClass+"'></i> Fetching events...");
-        }
-
-        else{
+            $("#calMsg").html("<i class='" + spinnerClass + "'></i> Fetching events...");
+        } else {
             $("#calMsg").html("");
         }
     });
 
 
 
-//     //WHEN USERS TRY TO SET AN EVENT ON THE CALENDAR
-//     $("#appPersonalCreate").click(function(e){
-//         e.preventDefault();
+    //     //WHEN USERS TRY TO SET AN EVENT ON THE CALENDAR
+    //     $("#appPersonalCreate").click(function(e){
+    //         e.preventDefault();
 
-//         var title = $("#appPersonalTitle").val();
-//         var fromDate = $("#appPersonalFromDate").val();
-//         var fromTime = $("#appPersonalFromTime").val();
-//         var toDate = $("#appPersonalToDate").val();
-//         var toTime = $("#appPersonalToTime").val();
-//         var description = $("#appPersonalDescription").val();
+    //         var title = $("#appPersonalTitle").val();
+    //         var fromDate = $("#appPersonalFromDate").val();
+    //         var fromTime = $("#appPersonalFromTime").val();
+    //         var toDate = $("#appPersonalToDate").val();
+    //         var toTime = $("#appPersonalToTime").val();
+    //         var description = $("#appPersonalDescription").val();
 
-//         if(!title || !fromDate || !fromTime || !toDate || !toTime){
-//             !title ? $("#appPersonalTitleErr").html("Set event title") : $("#appPersonalTitleErr").html("");
-//             !fromDate ? $("#appPersonalFromDateErr").html("Set event start date") : $("#appPersonalFromDateErr").html("");
-//             !fromTime ? $("#appPersonalFromTimeErr").html("Set event start time") : $("#appPersonalFromTimeErr").html("");
-//             !toDate ? $("#appPersonalToDateErr").html("Set event end date") : $("#appPersonalToDateErr").html("");
-//             !toTime ? $("#appPersonalToTimeErr").html("Set event end time") : $("#appPersonalToTimeErr").html("");
+    //         if(!title || !fromDate || !fromTime || !toDate || !toTime){
+    //             !title ? $("#appPersonalTitleErr").html("Set event title") : $("#appPersonalTitleErr").html("");
+    //             !fromDate ? $("#appPersonalFromDateErr").html("Set event start date") : $("#appPersonalFromDateErr").html("");
+    //             !fromTime ? $("#appPersonalFromTimeErr").html("Set event start time") : $("#appPersonalFromTimeErr").html("");
+    //             !toDate ? $("#appPersonalToDateErr").html("Set event end date") : $("#appPersonalToDateErr").html("");
+    //             !toTime ? $("#appPersonalToTimeErr").html("Set event end time") : $("#appPersonalToTimeErr").html("");
 
-//             return;
-//         }
+    //             return;
+    //         }
 
-//         //clear all error messages
-//         $("#appPersonalTitleErr").html("");
-//         $("#appPersonalFromDateErr").html("");
-//         $("#appPersonalFromTimeErr").html("");
-//         $("#appPersonalToDateErr").html("");
-//         $("#appPersonalToTimeErr").html("");
+    //         //clear all error messages
+    //         $("#appPersonalTitleErr").html("");
+    //         $("#appPersonalFromDateErr").html("");
+    //         $("#appPersonalFromTimeErr").html("");
+    //         $("#appPersonalToDateErr").html("");
+    //         $("#appPersonalToTimeErr").html("");
 
-//         //concatenate the date and time of both the 'from' and 'to' fields
-//         var startFrom = fromDate + " " + fromTime;//e.g "2016-10-19 09:41am"
-//         var endAt = toDate + " " + toTime;//e.g "2016-10-19 09:41am"
+    //         //concatenate the date and time of both the 'from' and 'to' fields
+    //         var startFrom = fromDate + " " + fromTime;//e.g "2016-10-19 09:41am"
+    //         var endAt = toDate + " " + toTime;//e.g "2016-10-19 09:41am"
 
-//         //create an ISO string from the concatenated date and time of both the 'from' and 'to' fields
-//         var startDate = new moment(startFrom).format();
-//         var endDate = new moment(endAt).format();
+    //         //create an ISO string from the concatenated date and time of both the 'from' and 'to' fields
+    //         var startDate = new moment(startFrom).format();
+    //         var endDate = new moment(endAt).format();
 
-//         //show loading icon
-//         $("#pFormErr").css({color:'black'}).html("<i class='"+spinnerClass+"'></i> Creating event...");
+    //         //show loading icon
+    //         $("#pFormErr").css({color:'black'}).html("<i class='"+spinnerClass+"'></i> Creating event...");
 
-//         $.ajax({
-//             url: "php/events.php",
-//             data: {s:startDate, e:endDate, t:title, description:description, action:'post'},
-//             method: 'POST'
-//         }).done(function(rd){
-//             if(rd.status === 1){
-//                 //display success msg
-//                 $("#pFormErr").css({color:'green'}).html("Event successfully created");
+    //         $.ajax({
+    //             url: "php/events.php",
+    //             data: {s:startDate, e:endDate, t:title, description:description, action:'post'},
+    //             method: 'POST'
+    //         }).done(function(rd){
+    //             if(rd.status === 1){
+    //                 //display success msg
+    //                 $("#pFormErr").css({color:'green'}).html("Event successfully created");
 
-//                 //remove msg after 5secs
-//                 setTimeout(function(){
-//                     $("#pFormErr").html("");
+    //                 //remove msg after 5secs
+    //                 setTimeout(function(){
+    //                     $("#pFormErr").html("");
 
-//                     $("#setEventModal").modal('hide');
-//                 }, 2000);
+    //                     $("#setEventModal").modal('hide');
+    //                 }, 2000);
 
-//                 //render event on calendar
-//                 $("#userCal").fullCalendar('renderEvent', {
-//                     id: rd.id,
-//                     title: title,
-//                     start: startDate,
-//                     end: endDate,
-//                     allday: false,
-//                     description: description
-//                 }, false);
+    //                 //render event on calendar
+    //                 $("#userCal").fullCalendar('renderEvent', {
+    //                     id: rd.id,
+    //                     title: title,
+    //                     start: startDate,
+    //                     end: endDate,
+    //                     allday: false,
+    //                     description: description
+    //                 }, false);
 
-//                 //reset form
-//                 document.getElementById('personalForm').reset();
-//             }
+    //                 //reset form
+    //                 document.getElementById('personalForm').reset();
+    //             }
 
-//             else if(rd.status === -1){
-//                 $("#pFormErr").css({color:'red'}).html("Log in required to perform this action");
-//             }
+    //             else if(rd.status === -1){
+    //                 $("#pFormErr").css({color:'red'}).html("Log in required to perform this action");
+    //             }
 
-//             else if(rd.status === 2){
-//                 $("#pFormErr").css({color:'red'}).html("Unable to process your request at this time. Please try again later");
-//             }
+    //             else if(rd.status === 2){
+    //                 $("#pFormErr").css({color:'red'}).html("Unable to process your request at this time. Please try again later");
+    //             }
 
-//             else if(rd.status === 3){
-//                 $("#pFormErr").css({color:'red'}).html("Event cannot be in the past");
-//             }
+    //             else if(rd.status === 3){
+    //                 $("#pFormErr").css({color:'red'}).html("Event cannot be in the past");
+    //             }
 
-//             else{
-//                 $("#pFormErr").css({color:'red'}).html("One or more requird fields are empty or not properly filled");
-//             }
-//         }).fail(function(){
-//             $("#pFormErr").css({color:'red'}).html("Request Failed");
-//         });
-//     });
+    //             else{
+    //                 $("#pFormErr").css({color:'red'}).html("One or more requird fields are empty or not properly filled");
+    //             }
+    //         }).fail(function(){
+    //             $("#pFormErr").css({color:'red'}).html("Request Failed");
+    //         });
+    //     });
 
 });

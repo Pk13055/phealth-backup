@@ -45,16 +45,32 @@
         </div>
     </div>
     <div class="row">
-        <div class="row" style="margin: 2rem auto;">
-            <div class="col-sm-12">
-                <div class="col-xs-12 lead">Filter : </div>
-                <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-warning filter-btn" data-target="all">All</div>
-                <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-success filter-btn" data-target="success">Confirmed</div>
-                <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-info filter-btn" data-target="info">Pending</div>
-                <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-danger filter-btn" data-target="warning">Cancelled</div>
+        <div class="row">
+            <div class="col-xs-12 lead">Filter : </div>
+            <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-warning filter-btn" data-target="all">All</div>
+            <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-success filter-btn" data-target="success">Confirmed</div>
+            <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-info filter-btn" data-target="info">Pending</div>
+            <div class="col-xs-12 col-md-2 col-md-offset-1 btn btn-danger filter-btn" data-target="warning">Cancelled</div>
+        </div>
+        <div class="row">
+            <div class="lead">Doctor : </div>
+            <div class="col-xs-6">
+                <select id="d_id" onchange="$('#userCal').fullCalendar('refetchEvents');">
+                    <option value="">All</option>
+                    {% for doc in doctors %}
+                    <option value="{{ doc.pk }}">{{ doc.user.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
-        <div class="col-sm-12" id="userCal" style='margin: 2rem auto'></div>
+        <div class="row">
+            <div class="lead">Range : </div>
+            <div class="col-xs-6">From : <input type="date" id="customStart"></div>
+            <div class="col-xs-6">To : <input type="date" id="customEnd"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" id="userCal" style='margin: 2rem auto'></div>
+        </div>
     </div>
 </div>
 {% endblock content %} {% block script %}
