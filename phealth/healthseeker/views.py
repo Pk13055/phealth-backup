@@ -137,7 +137,7 @@ def family_edit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('site_admin:step3')
+            return redirect('healthseeker:step3')
     else:
         form = FamilyForm(instance=post)
     return render(request, 'healthseeker/registration/form3.html', {'form': form})
@@ -166,7 +166,7 @@ def form_edit(request, pk):
             post.save()
             return redirect('healthseeker:form3_view')
     else:
-        form = User(instance=post)
+        form = UserForm()
     return render(request, 'healthseeker/registration/from3.html', {'form': form})
 
 
@@ -214,7 +214,6 @@ def step4(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.user = me
-            post.save()
             return redirect('healthseeker:step5')
     else:
         form = AddressForm
@@ -266,10 +265,19 @@ def accountmanager(requset):
 
 @match_role("healthseeker")
 def contact(requset):
+    me = User.objects.get(pk=requset.session['pk'])
+    if requset.method == 'POST':
+        form = AddressForm(requset.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = me
+            return redirect('healthseeker:other')
+    else:
+        form = AddressForm
+    states = State.objects.all()
+    cities = City.objects.all()
+    return render(requset, 'healthseeker/contact_details.html', {'form': form, 'states': states, 'cities': cities})
 
-    return render(requset,'healthseeker/contact_details.html',{
-
-    })
 
 def intrest(requset):
     return render(requset,'healthseeker/manage_intrests.html',{})
@@ -290,10 +298,8 @@ def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
 
 def schedule(request):
+    return render(request, 'healthseeker/scheduled.html', {})
 
-    return render(request,'healthseeker/scheduled.html',{
-
-    })
 
 def reference(request):
 
@@ -302,10 +308,17 @@ def reference(request):
     })
 
 def information(request):
+    me = User.objects.get(pk=request.session['pk'])
+    if request.method == "POST":
+        form = FamilyForm(request.POST, instance=me)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:family')
+    else:
+        form = FamilyForm(instance=me)
+    return render(request, 'healthseeker/personal_information.html', {'form': form})
 
-    return render(request,'healthseeker/personal_information.html',{
-
-    })
 
 def other(request):
 

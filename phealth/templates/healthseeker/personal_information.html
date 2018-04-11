@@ -8,121 +8,70 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        
+
                         <div class="form_reg_one form_reg_one_m_p">
-                            
-                            
+
+
                             <div class="form_reg_one_in form_reg_one_in_my_p">
-                                
+
                                 <h3>My Profile</h3>
-                        
+
                                 {% include 'healthseeker/base_profile.html' %}
 
                                 <div class="my_pro_form_he">
-                                
-                                <h2>Please fill the Registration form!</h2>
-                                
-                                <form class="registration_form">
-                                
-                                <div class="row">
-                                    
-                                    
-                                  
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Full Name (Self)" class="form-control" id="phone">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="DOB" class="form-control" id="email">
-                                        </div>
-                                    </div>  
-                                    
-                                  
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <select name="cars" class="form-control">
-                                                <option value="volvo">Gender</option>
-                                                <option value="saab">Male</option>
-                                                <option value="fiat">Female</option>
-                                                <option value="audi">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Mobile Number" class="form-control" id="email">
-                                        </div>
-                                    </div>  
-                                    
-                                    <div class="form-group custom_md_3 col-md-6">
-                                        <div class="icon-addon addon-md">
-                                            <input type="text" placeholder="Email Id" class="form-control" id="phone">
-                                        </div>
-                                    </div>
-                                    
-                                
-                                   <!-- <ul class="pro_upl">
-                                        <li>Profile Picture</li>
-                                        <li>
-                                            <div class="prof_avatar4">
-                                                <img src="../img/avatar2.png">
-                                            </div>
-                                        </li>
-                                        <li><i class="fa fa-camera"></i> &nbsp;Profile Picture</li>
-                                    </ul>-->
-                                  
-                                </div>
-                                    
-                                  <div class="full_width upload_new_img">
-                                        
-                                      <div class="profile_text no_padding_left">
-                                        <p>profile picture</p>
-                                      </div>
-                                    
-                                      <div class="profile_img_main">
-                                        <div class="proifile_in">
-                                            <img class="profile-pic" src="../img/avatar2.png">
 
-                                        </div>
-                                      </div>
-                                      
-                                     <div class="col-md-3 p-image">
-                                        <i class="fa fa-camera upload-button"><span>Change Profile Photo</span></i>
-                                        <input class="file-upload" type="file" accept="image/*"/>
-                                     </div>
-                                        
-                                    </div> 
-                        </form>
-                                    
-                                  
-                                    
-                               
-                               
-                                    
-                                 
-                            </div>
-                                
-                                
+                                <h2>Please fill the Personal Information form!</h2>
+
+                                  <form method="POST" class="registration_form1">{% csrf_token %}
+                                   <div class="row">
+                            	        {% for field in form %}
+                                                   <div class="form-group custom_md_3 col-md-6">
+                                        <div class="icon-addon addon-md">
+
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										  </div>
+										{% endfor %}
+
+                                    </div>
+                                   </div>
+
                                 <ul class="save_next">
-                                    <li><a class="next_inf" href="../dashboard/family_details.html">Next</a></li>
-                                    <li><a class="save_inf" href="#">Save</a></li>
-                                    
+                                    <li><button class="next_inf" type="submit">Save</button></li>
+                                    <li><button class="next_inf" type="submit">Next</button></li>
+
                                 </ul>
-                                
+                                  </form>
+
+
+
+
+                                    </div>
+                        </form>
+
+
+
+
+
+
+
+                            </div>
+
+
+
                         </div>
-                            
+
                         </div>
-                        
-                        
+
+
                     </div>
                 </div>
-                
-                
+
+
             </div>
         </section>
-      
+
               {% endblock %}
