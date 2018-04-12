@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from querystring_parser import parser
 
-from api.models import Appointment, Clinician, Speciality, User
+from api.models import Appointment, Clinician, Speciality, User, Provider
 from phealth.utils import get_clinician, match_role, signin
 
 # Create your views here.
@@ -33,161 +33,6 @@ def SignUp(request):
 	'''
 	return redirect('clinician:signin')
 
-# Dashboard view functions
-
-@match_role("clinician")
-def dashboard(request):
-	''' route for dashboard home '''
-
-	u = Clinician.objects.filter(user__email=request.session['email']).first()
-	v = u.user
-	class ClinicianForm(forms.ModelForm):
-
-		class Meta:
-			model = Clinician
-			fields = ('education', 'experience')
-	class UserForm(forms.ModelForm):
-
-		class Meta:
-			model = User
-			fields = ('name', 'email', 'mobile', 'gender',
-			 'question', 'answer', 'profile_pic')
-
-	if request.method == "POST":
-		c = ClinicianForm(request.POST, request.FILES, instance=u)
-		b = UserForm(request.POST, request.FILES, instance=v)
-		if c.is_valid() and b.is_valid():
-			c.save() and b.save()
-
-	return render(request, 'clinician/dashboard/home.html.j2', context={
-		"title": "Dashboard Home",
-		"form_title" : "Edit basic information",
-		"clinician_form" : ClinicianForm(instance=u),
-		"user_form" : UserForm(instance=v),
-	})
-
-@match_role("clinician")
-def speciality(request):
-	u = Clinician.objects.filter(user__email=request.session['email']).first()
-	n = u.specialities.all()
-	# print("I was here")
-	class SpecialityForm(forms.ModelForm):
-		class Meta:
-			model = Speciality
-			fields = ('name', 'description',)
-	v = SpecialityForm()
-	if request.method == "POST":
-		b = SpecialityForm(request.POST, request.FILES)
-		if b.is_valid():
-			u.save()
-			speciality = b.save()
-			# speciality.save()
-			u.specialities.add(speciality)
-		else:
-			v = b
-
-	return render(request, 'clinician/dashboard/speciality.html.j2', context={
-	 	"title": "Speciality Addition",
-	 	"speciality_form" : v,
-	 	"speciality_list" : n,
-	})
-
-
-@match_role("clinician")
-def appointments(request):
-	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	apps = Appointment.objects.filter(under=c).all().order_by('id')
-	appointments_arr = []
-	class AppointmentForm(forms.ModelForm):
-
-		class Meta:
-			model = Appointment
-			fields = ('status',)
-
-
-	for appointment in apps:
-	 	appointments_arr.append((appointment, AppointmentForm(instance=appointment)))
-
-
-	if request.method == 'POST':
-		print(request.POST)
-		b = AppointmentForm(request.POST, request.FILES, instance=Appointment.objects.filter(id=int(request.POST['appointment'])).first())
-		if b.is_valid():
-			b.save()
-			print(b)
-
-	return render(request, 'clinician/dashboard/appointments.html.j2', context={
-		"title": "Doctors Appointment List",
-		"appointments": appointments_arr,
-		})
-
-
-@match_role("clinician")
-def calender(request):
-	''' dashboard function '''
-	''' handles the calender page for clincian timings
-	and bookings
-	'''
-	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-	if request.method == "POST":
-		p_dict = parser.parse(request.POST.urlencode())
-		if p_dict['section'] in ['work', 'break']:
-			timings = []
-			if p_dict['section'] == 'work': base_compare = c.work_timings
-			else: base_compare = c.break_timings
-			for day, actual in zip(days, base_compare):
-				try:
-					timings.append(list(map(lambda x: datetime.datetime.strptime(x,
-					 '%H:%M:%S').time(), p_dict['timings'][day])))
-				except ValueError:
-					try:
-						timings.append(list(map(lambda x: datetime.datetime.strptime(x,
-					 	'%H:%M').time(), p_dict['timings'][day])))
-					except KeyError:
-						timings.append(actual)
-				except KeyError:
-					timings.append(actual)
-			if p_dict['section'] == 'work':
-				c.work_timings = timings
-			else:
-				c.break_timings = timings
-		else:
-			try:
-				vacs = p_dict['timings'][""]
-				vacs = [ list(map(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d').date(),
-				 [i, j])) for i, j in zip(vacs[::2], vacs[1::2])]
-				c.vacations = vacs
-			except:
-				pass
-		c.save()
-
-	work_timings, break_timings, vacation_timings = [], [], []
-
-	for day, w_t, b_t in zip(days, c.work_timings, c.break_timings):
-		cur_obj = { 'day' : day }
-		cur_obj['start'] = w_t[0].isoformat().split('.')[0][:5]
-		cur_obj['end'] = w_t[-1].isoformat().split('.')[0][:5]
-		work_timings.append(cur_obj)
-		cur_obj['start'] = b_t[0].isoformat().split('.')[0][:5]
-		cur_obj['end'] = b_t[-1].isoformat().split('.')[0][:5]
-		break_timings.append(cur_obj)
-
-	for vacation in c.vacations:
-		vacation_timings.append({
-			'start' : vacation[0].isoformat(),
-			'end' : vacation[-1].isoformat(),
-		})
-
-	return render(request, 'clinician/dashboard/calender.html.j2', context={
-			'title' : "Set your timings",
-			'work' : work_timings,
-			'break' : break_timings,
-			'vacations' : vacation_timings,
-		})
-
-# NEW ROUTES
 
 @match_role("clinician")
 def new_home(request):
@@ -479,46 +324,61 @@ def basic_details(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	u = c.user
+
 	class UserForm(forms.ModelForm):
+		language_choices = (
+			('english', 'english'),
+			('hindi', 'hindi'),
+			('telugu', 'telugu'),
+			('marathi', 'marathi'),
+			('malayalam', 'malayalam'),
+			('gujarati', 'gujarati'),
+			('bhojpuri', 'bhojpuri'),
+			('tamil', 'tamil'),
+			('other', 'other'),
+    	)
+		language = forms.ChoiceField(choices=language_choices)
+
 		class Meta:
 			model = User
-			fields = ('name', 'gender')
+			fields = ('name', 'gender', 'language',)
 
 	if request.method == "POST":
-		b = UserForm(request.POST, instance=u)
+		b = UserForm(request.POST, instance=c.user)
 		if b.is_valid():
+			c.language = b.cleaned_data.get('language')
+			del b.__dict__['fields']['language']
 			b.save()
+			c.save()
 
 	return render(request, 'clinician/dashboard/account/basic.html.j2', context={
 		'title' : "Account - ",
 		'clinician' : c,
-		'form' : UserForm(instance=u),
+		'form' : UserForm(instance=c.user, initial={'language' : c.language }),
 		})
 
 
 @match_role("clinician")
 def professional_info(request):
-	u = Clinician.objects.filter(user__email=request.session['email']).first()
-	n = u.specialities.all()
-	class SpecialityForm(forms.ModelForm):
-		class Meta:
-			model = Speciality
-			fields = ('name', 'description',)
-	v = SpecialityForm()
+	c = Clinician.objects.filter(user__email=request.session['email']).first()
+
 	if request.method == "POST":
-		b = SpecialityForm(request.POST, request.FILES)
-		if b.is_valid():
-			u.save()
-			speciality = b.save()
-			u.specialities.add(speciality)
-		else:
-			v = b
+		ids = parser.parse(request.POST.urlencode())
+		cur_specs = c.specialities.all()
+		ids = ids['ids']['']
+		new_specs = Speciality.objects.filter(id__in=ids)
+		[c.specialities.remove(_) for _ in cur_specs if _ not in new_specs]
+		[c.specialities.add(_) for _ in new_specs if _ not in cur_specs]
+
+	cur_specs = c.specialities.all()
+	all_specs = Speciality.objects.filter(id__in=Provider.objects.filter(
+		clinicians__in=[c]).values_list(
+			'specialities', flat=True))
 
 	return render(request, 'clinician/dashboard/account/professionaldetails.html.j2', context={
-	 	"title": "Account - ",
-	 	"speciality_form" : v,
-	 	"speciality_list" : n,
+	 	"title": "Account - Specialities",
+		'specialities' : cur_specs,
+		'all_specs' : all_specs,
 	})
 
 

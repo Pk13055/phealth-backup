@@ -34,23 +34,13 @@ account_routes = [
 ]
 
 dashboard_routes = [
-
-	# old_routes
-	# url(r'^$', views.dashboard, name='dashboard_home'),
-	# url(r'calender/?$', views.calender, name='calender'),
-	# url(r'speciality/?$', views.speciality, name='speciality'),
-	# url(r'appointments/?$', views.appointments, name='appointments'),
-
-	# new routes
 	url(r'^$', views.new_home, name='dashboard_home'),
 	url(r'^appointments/', include(appointment_routes)),
 	url(r'^timings/', include(timing_routes)),
 	url(r'account/', include(account_routes)),
-
 ]
 
 urlpatterns = [
-    # url(r'^signup/?$', views.SignUp, name='signup'),
     url(r'^signin/?$', views.SignIn, name='signin'),
     url(r'^dashboard/', include(dashboard_routes)),
     url(r'^signup/?$', views.SignUp, name='signup'),
