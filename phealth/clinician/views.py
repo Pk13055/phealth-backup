@@ -384,24 +384,58 @@ def professional_info(request):
 
 
 @match_role("clinician")
-def education_training(request):
+def education(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	u = c.user
-	class EducationForm(forms.ModelForm):
-		class Meta:
-			model = User
-			fields = ('basic_education','post_graduate', 'diploma', 'super_speciality', 'other_trainings', 'other_degrees', 'profile_pic')
-	if request.method == "POST":
-		e = EducationForm(request.POST, request.FILES, instance=u)
-		if e.is_valid():
-			e.save()
 
+	class EducationForm(forms.Form):
+		type_choices = (
+			('post-graduate','post-graduate'),
+			('high-school','high-school'),
+			('undergraduate','undergraduate'),
+			('masters','masters'),
+			('other','other'),
+		)
+		year = forms.CharField(min_length=4, max_length=4)
+		title = forms.CharField(max_length=30)
+		description = forms.CharField(max_length=100, widget=forms.widgets.Textarea())
+		type = forms.ChoiceField(choices=type_choices)
+
+	edu_form = EducationForm()
+
+	if request.method == "POST":
+		if request.POST['btn-type'] == "1":
+			edu_form = EducationForm(request.POST, request.FILES)
+			if edu_form.is_valid():
+				e = edu_form.cleaned_data
+				c.education.append(e)
+		elif request.POST['btn-type'] == "0":
+			post_params = parser.parse(request.POST.urlencode())
+			fields = ['year', 'title', 'type', 'description']
+			for _ in fields:
+				if not isinstance(post_params[_], list):
+					post_params[_] = [post_params[_]]
+			cur_all = zip(post_params[fields[0]])
+			for field in fields[1:]:
+				cur_all = zip(*cur_all)
+				cur_all = zip(*cur_all, post_params[field])
+			cur_all = list(cur_all)
+			records = []
+			for r in cur_all:
+				x = {}
+				[x.update({j : i}) for i, j in zip(r, fields)]
+				records.append(x)
+			c.education = records
+
+		c.save()
+
+	edu_records = c.education
 	return render(request, 'clinician/dashboard/account/education.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Education & Training",
 		'clinician' : c,
-		'form' : EducationForm(instance=u),
+		'education' : edu_form,
+		'edu_records' : edu_records,
 		})
 
 
@@ -410,20 +444,33 @@ def consultation_fee(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	u = c.user
-	class FeeForm(forms.ModelForm):
-		class Meta:
-			model = Clinician
-			fields = ('fee', 'amount', 'discount', 'discount_sub')
-	if request.method == "POST":
-		f = FeeForm(request.POST, request.FILES, instance=c)
-		if f.is_valid():
-			f.save()
 
+	if request.method == "POST":
+		c.first_fee = request.POST['first_time']
+		c.fee = request.POST['fee']
+		post_params = parser.parse(request.POST.urlencode())
+		fields = ['amount', 'name', 'type', 'description']
+		for _ in fields:
+			if not isinstance(post_params[_], list):
+				post_params[_] = [post_params[_]]
+		cur_all = zip(post_params[fields[0]])
+		for field in fields[1:]:
+			cur_all = zip(*cur_all)
+			cur_all = zip(*cur_all, post_params[field])
+		cur_all = list(cur_all)
+		records = []
+		for r in cur_all:
+			x = {}
+			[x.update({j : i}) for i, j in zip(r, fields)]
+			records.append(x)
+		c.discount_offerings = records
+		c.save()
+
+	fees = c.discount_offerings
 	return render(request, 'clinician/dashboard/account/consultation.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Fees",
 		'clinician' : c,
-		'form' : FeeForm(instance=c),
+		'fees' : fees,
 		})
 
 
@@ -493,7 +540,7 @@ def procedures(request):
 
 
 @match_role("clinician")
-def experience(request):
+def experience_training(request):
 	''' account route for '''
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
 	if not c.experience:
