@@ -19,7 +19,9 @@ import uuid
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User as admin_user
-from django.contrib.postgres.fields import ArrayField, HStoreField
+from django.contrib.postgres.fields import ArrayField, HStoreField, JSONField
+from django.contrib.postgres.fields.jsonb import JSONField as JSONBField
+from django.contrib.postgres.validators import KeysValidator, ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -315,30 +317,7 @@ class User(models.Model):
 
     )
 
-    basic_education_choices = (
 
-        ('10', '10'),
-        ('10+2', '10+2'),
-
-    )
-
-    post_graduate_choices = (
-        ('none', 'none'),
-        ('pg', 'pg'),
-        ('pglist', 'pglist'),
-    )
-
-    diploma_choices = (
-        ('none', 'none'),
-        ('diploma', 'diploma'),
-        ('diplomalist', 'diplomalist'),
-    )
-
-    super_speciality_choices = (
-        ('none', 'none'),
-        ('super_speciality1', 'super_speciality1'),
-        ('super_speciality2', 'super_speciality2'),
-    )
     # whether the user is active or not
     status = models.NullBooleanField(default=True, editable=False)
     role = models.CharField(choices=role_choices, editable=False, max_length=30)
@@ -348,6 +327,7 @@ class User(models.Model):
 
     email = models.EmailField()
     name = models.CharField(max_length=150)
+    dob = models.DateField(default=current_timestamp)
     mobile = models.CharField(validators=[
         RegexValidator(
             regex=r'^(\+\d{1,3}[- ]?)?\d{10}$',
@@ -363,14 +343,6 @@ class User(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics',
                                     default='default_profile.jpg')
 
-    # NEW FIELDS ADDED FOR EDUCATION OF USER
-    basic_education = models.CharField(choices=basic_education_choices, max_length=30, default='10')
-    post_graduate = models.CharField(choices=post_graduate_choices, max_length=30, default='none')
-    diploma = models.CharField(choices=diploma_choices, max_length=30, default='none')
-    super_speciality = models.CharField(choices=super_speciality_choices, max_length=30, default='none')
-    other_trainings = models.TextField(default="TEST")
-    other_degrees = models.TextField(default="TEST1")
-    dob = models.DateField(default=current_timestamp)
 
     def __str__(self):
         return str(self.email)
@@ -475,6 +447,97 @@ class Clinician(models.Model):
             models.DateField(),
             size=2), null=True, blank=True, default=[])
 
+    def get_def_discount():
+        '''
+            @description default discounts available
+            @return list
+        '''
+        discounts = []
+        services = ['Out Patient Services', 'Emergency Room',
+         'Day Care Procedures', 'Lab Services', 'Speciality']
+        for service in services:
+            discounts.append({
+                'name' : service,
+                'type' : 'offering',
+                'amount' : 0,
+                'description' : "",
+            })
+        fees = ['First time', 'Subsequent fees']
+        for fee in fees:
+            discounts.append({
+                'name' : fee,
+                'type' : "fee",
+                'amount' : 0,
+                'description' : ""
+            })
+        return discounts
+
+    # JSON-based and other account related fields
+
+    # fees -> correlate with discount_offerings
+    first_fee = models.PositiveSmallIntegerField(default=0)
+    fee = models.PositiveSmallIntegerField(default=0)
+
+    # education locations and other details can be stored here
+    education = JSONBField(JSONField(validators=[
+        KeysValidator(['year', 'title', 'description', 'type'])
+    ]), null=True, blank=True, default=list)
+
+    # experience/training obtained in an institute
+    experience_training = JSONBField(JSONField(validators=[
+        KeysValidator(['year', 'position', 'description', 'type'])
+    ]), null=True, blank=True, default=list)
+
+    # various types of discounts and offerings offered
+    discount_offerings = JSONBField(JSONField(validators=[
+        KeysValidator(['name', 'amount', 'type', 'description'])
+    ]), default=get_def_discount)
+
+    # procedure or conditions storage
+    procedure_conditions = JSONBField(JSONField(validators=[
+        KeysValidator(['name', 'description', 'type', 'date'])
+    ]), null=True, blank=True, default=list)
+
+    # awards and recognition
+    awards = JSONBField(JSONField(validators=[
+        KeysValidator(['name', 'description', 'year', 'recognised_by'])
+    ]), null=True, blank=True, default=list)
+
+    # registrations
+    registrations = JSONBField(JSONField(validators=[
+        KeysValidator(['name', 'reg_no', 'year',])
+    ]), null=True, blank=True, default=list)
+
+    # memberships
+    memberships = JSONBField(JSONField(validators=[
+        KeysValidator(['name', 'country', 'city',])
+    ]), null=True, blank=True, default=list)
+
+    def clean(self):
+        '''
+            override the clean function for JSON validation
+        '''
+        validators = [
+            ('education', KeysValidator(['year', 'title', 'description', 'type',])),
+            ('experience_training', KeysValidator(['year', 'position', 'description', 'type',])),
+            ('discount_offerings', KeysValidator(['name', 'amount', 'type', 'description',])),
+            ('procedure_conditions', KeysValidator(['name', 'description', 'type', 'date',])),
+            ('awards', KeysValidator(['name', 'description', 'year', 'recognised_by',])),
+            ('registrations', KeysValidator(['name', 'reg_no', 'year',])),
+            ('memberships', KeysValidator(['name', 'country', 'city',])),
+        ]
+        errors = []
+        for field, validator in validators:
+            for record in self.__dict__[field]:
+                print(record)
+                try:
+                    _ = validator(record)
+                except ValidationError as e:
+                    errors.append(e)
+        if len(errors):
+            raise ValidationError(errors)
+        return super().clean()
+
     def check_availability(self, from_date, to_date):
         ''' given from and to, check whether the clinician
 			is available for the given period.
@@ -516,21 +579,6 @@ class Clinician(models.Model):
             if time_slot[0] <= session_timings[session] <= time_slot[1]:
                 return True
         return False
-
-    education = models.TextField()
-    experience = ArrayField(models.TextField(), null=True, blank=True)
-
-    ##NEW ROUTES ADDED
-    offerings = ArrayField(models.TextField(), null=True, blank=True)
-    conditions_treated = ArrayField(models.TextField(), null=True, blank=True)
-    procedures = ArrayField(models.TextField(), null=True, blank=True)
-    awards = ArrayField(models.TextField(), null=True, blank=True)
-    fee = models.PositiveSmallIntegerField(default=0)
-    amount = models.PositiveSmallIntegerField(default=0)
-    discount = models.PositiveSmallIntegerField(default=0)
-    discount_sub = models.PositiveSmallIntegerField(default=0)
-    registrations = ArrayField(models.TextField(), null=True, blank=True)
-    memberships = ArrayField(models.TextField(), null=True, blank=True)
 
     class Meta:
         managed = True
