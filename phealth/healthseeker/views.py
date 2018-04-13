@@ -118,14 +118,18 @@ def step3(request):
     else:
         form = FamilyForm()
     records = User.objects.all()
-    print ("User", records)
-    print(Seeker.objects.filter(family=me))
+
 
     data = User.objects.all()
     # print('data', data)
-    u = Seeker.objects.filter(family = me)
+    family = Seeker.objects.filter(family = me)
+    print(family.first())
+    #psobjs = Affiliation.objects.filter(ipId=x)
+    #queryset = Sessions.objects.filter(sessionId__in=family.first)
+
+
     discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
-    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u ,'discountcard':discountcard})
+    return render(request, 'healthseeker/registration/form3.html', {'form': form,'family':family ,'discountcard':discountcard})
 
 
 @match_role("healthseeker")
@@ -208,17 +212,28 @@ def User_delete(request, pk):
 #------------------------------------------------------------------------------
 def step4(request):
     me = User.objects.get(pk=request.session['pk'])
+
+    sc = Address.objects.filter(user=me).first()
+    print(sc)
     if request.method == 'POST':
-        form = AddressForm(request.POST)
+        if sc:
+            form = AddressForm(request.POST, instance=sc)
+        else:
+            form = AddressForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = me
+            post.save()
+            print(post.pk)
             return redirect('healthseeker:step5')
+
+    if sc:
+        form = AddressForm(instance=sc)
     else:
         form = AddressForm
     states = State.objects.all()
     cities = City.objects.all()
-    return render(request, 'healthseeker/registration/form4.html', {'form': form,'states':states,'cities':cities})
+    return render(request, 'healthseeker/registration/form4.html', {'form': form,'states':states,'cities':cities,'sc':sc})
 
 
 
@@ -234,18 +249,23 @@ def step5(request):
 @match_role("healthseeker")
 def step6(request):
     me = User.objects.get(pk=request.session['pk'])
+    sc = Seeker.objects.filter(user=me).first()
     if request.method == 'POST':
-        print(request.POST)
-        form = LanguageForm(request.POST)
+        if sc:
+            form = LanguageForm(request.POST, instance=sc)
+        else:
+            form = LanguageForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = me
             post.save()
             return redirect('healthseeker:dashboard')
+
+    if sc:
+        form = LanguageForm(instance=sc)
     else:
         form = LanguageForm()
     lang = Languages.objects.all()
-    print(lang)
     return render(request, 'healthseeker/registration/form6.html', {'form': form, 'lang': lang})
 
 

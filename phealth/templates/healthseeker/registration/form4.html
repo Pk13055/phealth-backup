@@ -26,6 +26,7 @@
                             <a href="{% url 'healthseeker:step5' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in">
                                 <div class="full_width curent_location">
+
                                     <form method="POST" class="post-form cureent_loca_form">
                                         {% csrf_token %}
                                         <div class="form-group ">
@@ -38,22 +39,77 @@
                                         </div>
                                         <br>
                                         <div class="current">
-                                        <div class="col-md-12">
-                                                    <ul class="loca_po_li" style="border-top: 1px solid ">
-                                                        <li style="    width: 49.333333%;">
-                                                            <label for="find_btn">Use My current Location</label><br>
-                                                            <button id="find_btn" class="btn btn-primary" style="color: #fff;background-color: #5cb85c;border-color: #4cae4c;">Get My Current Location</button>
-                                                        </li>
-                                                        <li style="width: 49.333333%;">
-                                                            <label>Enter Address Manually</label><br>
-                                                            <div class="form-group">
-                                                                <input class="placepicker form-control h40" placeholder="Enter a location" id="searchTextField" data-latitude-input="#id_latitude" data-longitude-input="#id_longitude" />
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+
+                                      <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#geo">Current Location</a></li>
+                                        <li><a data-toggle="tab" href="#map">Choose From Map</a></li>
+                                      </ul>
+                                      <div class="tab-content">
+                                        <div id="geo" class="tab-pane fade in active">
+                                            <div class="getlocation" style="cursor: pointer;">
+                                                <img src="https://git.reviewboard.kde.org/media/uploaded/files/2015/07/30/019abdbb-80cf-4935-8d6d-0c3e6927d2b3__gps_fixed_600.png" style="height:50px">
+                                               Click to Get Current Location
+                                            </div>
+                                        </div>
+                                        <div id="map" class="tab-pane fade">
+                                          <div class="form-horizontal" style="width: 550px">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Location:</label>
+
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" id="clickhealth_address" />
+                                                    </div>
                                                 </div>
-                                                <input type="hidden" name="longitude" step="any" class="form-control" placeholder="longitude" id="id_longitude" />
-                                                <input type="hidden" name="latitude" step="any" class="form-control" placeholder="latitude" id="id_latitude" />
+                                                <div class="form-group" style="display:none">
+                                                    <label class="col-sm-2 control-label">Radius:</label>
+
+                                                    <div class="col-sm-5">
+                                                        <input type="text" class="form-control" id="clickhealth_radius" />
+                                                    </div>
+                                                </div>
+                                                    <div class="col-md-12">
+                                                <div id="clickhealth_map" style="width: 550px; height: 400px;"></div>
+                                                    </div>
+                                                <div class="clearfix">&nbsp;</div>
+                                                <div class="m-t-small" style="display:none">
+                                                    <label class="p-r-small col-sm-1 control-label">Lat.:</label>
+
+                                                    <div class="col-sm-3">
+                                                        <input type="text" class="form-control" style="width: 110px" name="longitude" id="clickhealth_lat" />
+                                                    </div>
+                                                    <label class="p-r-small col-sm-2 control-label">Long.:</label>
+
+                                                    <div class="col-sm-3">
+                                                        <input type="text" class="form-control" style="width: 110px" name="latitude" id="clickhealth_lon" />
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <script>
+                                                    $('#clickhealth_map').locationpicker({
+                                                        location: {
+                                                            latitude: 17.453418,
+                                                            longitude: 78.39440300000001
+                                                        },
+                                                        radius: 100,
+                                                        inputBinding: {
+                                                            latitudeInput: $('#clickhealth_lat'),
+                                                            longitudeInput: $('#clickhealth_lon'),
+                                                            radiusInput: $('#clickhealth_radius'),
+                                                            locationNameInput: $('#clickhealth_address')
+                                                        },
+                                                        enableAutocomplete: true,
+                                                        onchanged: function (currentLocation, radius, isMarkerDropped) {
+                                                            // Uncomment line below to show alert on each Location Changed event
+                                                            //alert("Location changed. New location (" + currentLocation.latitude + ", " + currentLocation.longitude + ")");
+                                                        }
+                                                    });
+                                                </script>
+                                            </div>
+
+                                        </div>
+                                      </div>
+
+
                                             </div>
                                         <div class="manual">
 
@@ -91,13 +147,15 @@
                                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.131522315598!2d78.39221431443993!3d17.453417988039117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb91638b1458e1%3A0x872cd53869cbcd42!2sMBR+Informatics+Pvt+Ltd!5e0!3m2!1sen!2sin!4v1517829412276" width="100%" height="200" frameborder="0" style="border:0" allowfullscreen=""></iframe>
                                         </div>
 -->
+
+
                                         <div class="col-md-12">
         <br>
 
                                             <div class="row">
                                                         <div class="form-group col-md-12">
                                                             <div class="icon-addon addon-md">
-											<input type="text" name="door_no" maxlength="200" class="form-control border_borrom" placeholder="Door no:" id="id_door_no" />
+											<input type="text" name="door_no" maxlength="200" class="form-control border_borrom" placeholder="Door no:" id="id_door_no" required/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -139,9 +197,11 @@
 
                                     </div>
                                         <br>
+
                                           <button type="submit" class="btn btn-success pull-right savebtn" style="color: #fff;background-color: #5cb85c;
-    border-color: #4cae4c;">Save</button>
+    border-color: #4cae4c;">Save & Next</button>
                         </form>
+<div id="result"></div>
                                         </div>
                                     </div>
 
@@ -158,16 +218,15 @@
 
 
                         <ul class="save_next">
-                            <li><a class="save_inf" href="{% url 'healthseeker:step3' %}">Next</a></li>
-                            <li><a class="next_inf" href="{% url 'healthseeker:step5' %}">Back</a></li>
+
+                            <li><a class="next_inf" href="{% url 'healthseeker:step3' %}">Back</a></li>
                         </ul>
 
                     </div>
                 </div>
             </div>
         </section>
- <script>
-
+<script>
 $(document).ready(function(){
     $(".ltype").click(function(){
              var radioValue = $("input[name='location_type']:checked").val();
@@ -179,26 +238,24 @@ $(document).ready(function(){
                 $(".manual").show();
             }
     });
-
-
-        $("form").on('submit', function(e) {
-              if($("input[name='location_type']:checked").val() == 'current'){
-                  if($("#id_latitude").val() == ''){
-                        e.preventDefault();
-                        alert("Please Choose a address")
-                    }
-
-              }else{
-                  if($("#id_area").val() == ''){
-                      e.preventDefault();
-                      alert("Please Enter an Area")
-                  }
-            }
-
-
-        });
-
 });
 </script>
 
+
+
+<script>
+$(document).ready(function(){
+    $(".getlocation").click(function () {
+     alert("clicked");
+        if ("geolocation" in navigator){
+            navigator.geolocation.getCurrentPosition(function(position){
+                    $("#clickhealth_lat").val(position.coords.latitude);
+                    $("#clickhealth_lon").val(position.coords.longitude);
+                });
+        }else{
+            console.log("Browser doesn't support geolocation!");
+        }
+    });
+});
+</script>
     {% endblock %}

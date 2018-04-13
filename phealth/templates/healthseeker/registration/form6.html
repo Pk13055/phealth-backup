@@ -43,8 +43,8 @@
 										  </div>
 										{% endfor %}
 
-
-                                              <button type="submit" class="btn btn-success pull-right">Save</button>
+ <button type="submit" class="btn btn-success pull-right savebtn" style="color: #fff;background-color: #5cb85c;
+    border-color: #4cae4c;">Save & Next</button>
                         </form>
 
                                     <br><br>
@@ -60,8 +60,7 @@
 
 
                         <ul class="save_next">
-                            <li><a class="save_inf" href="{% url 'healthseeker:dashboard' %}">Next</a></li>
-                            <li><a class="next_inf" href="{% url 'healthseeker:step6' %}">Back</a></li>
+                            <li><a class="next_inf" href="{% url 'healthseeker:step5' %}">Back</a></li>
                         </ul>
                         
                     </div>
