@@ -538,8 +538,9 @@ class Clinician(models.Model):
             ('memberships', KeysValidator(['name', 'country', 'city',])),
         ]
         errors = []
+        cleaned_fields = super().clean()
         for field, validator in validators:
-            for record in self.__dict__[field]:
+            for record in cleaned_fields[field]:
                 print(record)
                 try:
                     _ = validator(record)
@@ -547,7 +548,7 @@ class Clinician(models.Model):
                     errors.append(e)
         if len(errors):
             raise ValidationError(errors)
-        return super().clean()
+        return cleaned_fields
 
     def check_availability(self, from_date, to_date):
         ''' given from and to, check whether the clinician
