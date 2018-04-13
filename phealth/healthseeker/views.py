@@ -23,7 +23,7 @@ def SignIn(request):
     elif request.method == "POST":
         print(request.POST)
         if signin("healthseeker", request):
-            return redirect('healthseeker:step2')
+            return redirect('healthseeker:dashboard')
         return redirect('healthseeker:signin')
 
 
@@ -102,9 +102,8 @@ def step2(request):
 def step3(request):
     me = User.objects.get(pk=request.session['pk'])
 
-
-    #s = Seeker.objects.filter(Q(family=me))
-    #entry = User.objects.select_related('Seeker').filter(Q(family=me))
+    if not request.session.get('discountcard_id'):
+        return  redirect('healthseeker:step4')
 
 
     if request.method == 'POST':
