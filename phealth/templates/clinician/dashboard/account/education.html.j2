@@ -89,7 +89,7 @@
 			$(this).closest('table').find("tbody input[type='checkbox']").click();
 		}).click();
 		$("table tbody tr td input[type='checkbox']").on('click', function () {
-			$(this).closest('tr').find("input[type='text']").prop({
+			$(this).closest('tr').find("input[type='text'], textarea").prop({
 				'disabled': !$(this).prop('checked')
 			})
 		});
