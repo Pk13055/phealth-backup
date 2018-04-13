@@ -32,39 +32,16 @@
 
                                         <form method="POST" class="post-form">
                                             {% csrf_token %}
-									  	 <div class="col-md-10">
+
+                                    {% for field in form %}
 										   <div class="form-group">
-
-										            {% for languages in lang %}
-                                                       <label class="checkbox-inline">
-                                                          <input type="checkbox" name="language" value="{{ languages.pk  }}">{{ languages.name }}
-                                                        </label>
-                                                {% endfor %}
-
+											{{ field.label_tag }}<br>
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
 										  </div>
-										  </div>
-
-										   <div class="col-md-10">
-										   <div class="form-group">
-											<label for="id_profession">Profession:</label><br>
-											<select name="profession" class="form-control" placeholder="profession" id="id_profession">
-                                                  <option value="doctor">doctor</option>
-
-                                                  <option value="teacher">teacher</option>
-
-                                                  <option value="engineer">engineer</option>
-
-                                                  <option value="professor">professor</option>
-
-                                                  <option value="business">business</option>
-
-                                                  <option value="other" selected>other</option>
-
-                                                </select>
-
-										  </div>
-										  </div>
-
+										{% endfor %}
 
 
                                               <button type="submit" class="btn btn-success pull-right">Save</button>

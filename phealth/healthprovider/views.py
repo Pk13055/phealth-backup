@@ -262,7 +262,7 @@ def account_basic(request):
 		'user_form' : UserForm(instance=p.poc),
 	})
 
-
+#------------------------------------------------------------------------------------
 @match_role("healthprovider")
 def account_contact(request):
 	''' route for account - contact  '''
@@ -274,33 +274,33 @@ def account_contact(request):
 		'title' : "account - contact",
 	})
 
-
+#------------------------------------------------------------
 @match_role("healthprovider")
 def account_speciality(request):
 	''' route for account - speciality  '''
 
 	u = Provider.objects.filter(poc__email=request.session['email']).first()
+
 	s = u.specialities.all()
 	class SpecialityForm(forms.ModelForm):
 		class Meta:
-			model = Speciality
-			fields = ('name', 'description',)
-	v = SpecialityForm()
+			model = Provider
+			fields = ('specialities',)
+
+
 	if request.method == "POST":
-		b = SpecialityForm(request.POST, request.FILES)
-		if b.is_valid():
-			u.save()
-			speciality = b.save()
-			u.specialities.add(speciality)
-		else:
-			v = b
+		c = SpecialityForm(request.POST, instance=u)
+		if c.is_valid:
+			c.save()
 
 	return render(request, 'healthprovider/dashboard/account/speciality.html.j2', context={
+		'form': SpecialityForm(instance=u),
 		'title' : "account - speciality",
-	 	"speciality_form" : v,
-	 	"speciality_list" : s,
+
 	})
 
+
+#------------------------------------------------------------
 
 @match_role("healthprovider")
 def account_facilities(request):
