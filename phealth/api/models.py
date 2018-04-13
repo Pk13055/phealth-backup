@@ -423,9 +423,23 @@ class Seeker(models.Model):
 class Clinician(models.Model):
     ''' the doctor who belongs to a given Provider
 	'''
+
+    language_choices = (
+        ('english', 'english'),
+        ('hindi', 'hindi'),
+        ('telugu', 'telugu'),
+        ('marathi', 'marathi'),
+        ('malayalam', 'malayalam'),
+        ('gujarati', 'gujarati'),
+        ('bhojpuri', 'bhojpuri'),
+        ('tamil', 'tamil'),
+        ('other', 'other'),
+    )
+
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     specialities = models.ManyToManyField(Speciality)
+    language = models.CharField(max_length=100, choices=language_choices, default="other")
 
     # [ [start_time, end_time], ... <7 days> ]
     work_timings = ArrayField(

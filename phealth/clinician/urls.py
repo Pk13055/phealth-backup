@@ -22,35 +22,25 @@ timing_routes = [
 account_routes = [
 	url(r'^basic_details/?$', views.basic_details, name='basic_details'),
 	url(r'^professional_info/?$', views.professional_info, name='professional_info'),
-	url(r'^education_training/?$', views.education_training, name='education_training'),
+	url(r'^education/?$', views.education, name='education'),
 	url(r'^consultation_fee/?$', views.consultation_fee, name='consultation_fee'),
 	url(r'^offerings/?$', views.offerings, name='offerings'),
 	url(r'^conditions_treated/?$', views.conditions_treated, name='conditions_treated'),
 	url(r'^procedures/?$', views.procedures, name='procedures'),
-	url(r'^experience/?$', views.experience, name='experience'),
+	url(r'^experience_training/?$', views.experience_training, name='experience_training'),
 	url(r'^awards_recognition/?$', views.awards_recognition, name='awards_recognition'),
 	url(r'^registrations/?$', views.registrations, name='registrations'),
 	url(r'^memberships/?$', views.memberships, name='memberships'),
 ]
 
 dashboard_routes = [
-
-	# old_routes
-	# url(r'^$', views.dashboard, name='dashboard_home'),
-	# url(r'calender/?$', views.calender, name='calender'),
-	# url(r'speciality/?$', views.speciality, name='speciality'),
-	# url(r'appointments/?$', views.appointments, name='appointments'),
-
-	# new routes
 	url(r'^$', views.new_home, name='dashboard_home'),
 	url(r'^appointments/', include(appointment_routes)),
 	url(r'^timings/', include(timing_routes)),
 	url(r'account/', include(account_routes)),
-
 ]
 
 urlpatterns = [
-    # url(r'^signup/?$', views.SignUp, name='signup'),
     url(r'^signin/?$', views.SignIn, name='signin'),
     url(r'^dashboard/', include(dashboard_routes)),
     url(r'^signup/?$', views.SignUp, name='signup'),
