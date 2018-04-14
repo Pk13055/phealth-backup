@@ -29,7 +29,33 @@ def SignIn(request):
 
 
 def dashboard(request):
-    return render(request, 'healthseeker/dashboard.html', {})
+    me = User.objects.get(pk=request.session.get("pk"))
+    email = User.objects.get(pk=request.session.get("pk"))
+    part = Seeker.objects.get(user=me)
+    #part = Seeker.objects.values('appointments').count()
+    appointment = part.appointments.all().count()
+
+    healthchecks = HealthCheckup.objects.count()
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps +=20
+    if Address.objects.filter(user=me).count() > 0:
+        ps +=20
+
+    if Seeker.objects.get(user=me).profession:
+        ps +=20
+
+
+
+    return render(request, 'healthseeker/dashboard.html', {
+                                    'user': me,
+                                    'email':email,
+                                    'appointment':appointment,
+                                    'healthchecks':healthchecks,
+                                    'ps':ps
+
+    })
+
 
 def otp(request):
     if request.method == "POST":
