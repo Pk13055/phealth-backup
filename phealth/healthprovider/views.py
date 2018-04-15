@@ -12,6 +12,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import gettext_lazy as _
 
 from api.models import (Appointment, Clinician, Provider, Speciality,
                         Transaction, User)
@@ -227,52 +228,81 @@ def dashboard_home(request):
 
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
 
-
 	return render(request, 'healthprovider/dashboard/index.html.j2', context={
 		'title' : "Dashboard - Home",
 	})
 
 # account routes
 
-
 @match_role("healthprovider")
 def account_basic(request):
 	''' route for account - basic  '''
+
 	p = Provider.objects.filter(poc__email=request.session['email']).first()
-	user = p.poc
+
 	class ProviderForm(forms.ModelForm):
 		class Meta:
 			model = Provider
 			fields = ('name',)
+			labels = {
+				'name': _('Hospital')
+			}
+
 	class UserForm(forms.ModelForm):
 		class Meta:
 			model = User
 			fields = ('name', 'email', 'mobile')
-	if request.method == "POST":
-		c = ProviderForm(request.POST, instance=p)
-		b = UserForm(request.POST, instance=p.poc)
-		if c.is_valid() and b.is_valid():
-			print("came here")
-			c.save() and b.save()
 
+	if request.method == "POST":
+		poc = UserForm(request.POST, instance=p.poc)
+		# provider = ProviderForm(request.POST, instance=p)
+
+		if poc.is_valid():
+			p.poc = poc.save()
+			p.name = request.POST['hospital']
+			p.save()
 
 	return render(request, 'healthprovider/dashboard/account/basic.html.j2', context={
 		'title' : "account - Basic",
-		'provider_form' : ProviderForm(instance=p),
+		'hospital' : p.name,
 		'user_form' : UserForm(instance=p.poc),
 	})
 
 
-@match_role("healthprovider")
-def account_contact(request):
-	''' route for account - contact  '''
+@method_decorator(match_role("healthprovider"), name="dispatch")
+class ContactTableView(DatatableView):
+	model = User
 
-	p = Provider.objects.filter(poc__email=request.session['email']).first()
+	class datatable_class(Datatable):
+		button = TextColumn('Confirm/Cancel', None, processor='get_button_raw')
 
+		class Meta:
+			columns = ['name', 'email', 'mobile', 'button']
 
-	return render(request, 'healthprovider/dashboard/account/contact.html.j2', context={
-		'title' : "account - contact",
-	})
+		def get_button_raw(self, instance, **kwargs):
+			if instance.status == 'pending':
+				return '''
+				<p>
+					<a href="/healthprovider/dashboard/contact/update/{}" class="datatable-btn btn btn-success" role="button">Update</a>
+					<a href="/healthprovider/dashboard/contact/delete/{}" class="datatable-btn btn btn-danger" role="button">Delete</a>
+				</p>
+				'''.format(instance.id, instance.id)
+
+			return 'NA'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'Contact Details'
+		context['healthprovider'] = get_provider(self.request.session['email'])
+		return context
+
+	def get_template_names(self):
+		return 'healthprovider/dashboard/basic/contact.html.j2'
+
+	def get_queryset(self):
+		# p = get_provider(self.request.session['email'])
+		# return Appointment.objects.order_by('time', 'date').filter(provider=p)
+		return
 
 
 @match_role("healthprovider")
