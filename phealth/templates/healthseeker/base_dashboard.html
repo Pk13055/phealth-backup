@@ -191,24 +191,7 @@
     </script>
 
 
-<script>
-$(document).ready(function(){
-    $(".registration_form").submit(function(e){
-            e.preventDefault();
-            var str = $( ".registration_form" ).serialize();
-           $.get("{% url 'healthseeker:family' %}?"+str, function(data, status){
-               alert(data);
-        });
 
-
-
-
-    });
-
-});
-
-
-</script>
 
   </body>
 </html>

@@ -122,89 +122,86 @@ def step2(request):
     return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 #-----------------------------------------------------------------------------------------------
-
-
 @match_role("healthseeker")
 def step3(request):
-    me = User.objects.get(pk=request.session['pk'])
+   me = User.objects.get(pk=request.session['pk'])
 
-    if not request.session.get('discountcard_id'):
-        return  redirect('healthseeker:step4')
-
-
-    if request.method == 'POST':
-        form = FamilyForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.role = "healthseeker"
-            post.save()
-            member = User.objects.get(pk=post.pk)
-            Seeker.objects.create(user=member,family=me)
-            return redirect('healthseeker:step3')
-    else:
-        form = FamilyForm()
-    records = User.objects.all()
+   if not request.session.get('discountcard_id'):
+       return  redirect('healthseeker:step4')
 
 
-    data = User.objects.all()
-    # print('data', data)
-    family = Seeker.objects.filter(family = me)
-    print(family.first())
-    #psobjs = Affiliation.objects.filter(ipId=x)
-    #queryset = Sessions.objects.filter(sessionId__in=family.first)
+   if request.method == 'POST':
+       form = FamilyForm(request.POST)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.role = "healthseeker"
+           post.save()
+           member = User.objects.get(pk=post.pk)
+           Seeker.objects.create(user=member,family=me)
+           return redirect('healthseeker:step3')
+   else:
+       form = FamilyForm()
+   records = User.objects.all()
 
 
-    discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
-    return render(request, 'healthseeker/registration/form3.html', {'form': form,'family':family ,'discountcard':discountcard})
+   data = User.objects.all()
+   # print('data', data)
+   family = Seeker.objects.filter(family = me)
+   print(family.first())
+   #psobjs = Affiliation.objects.filter(ipId=x)
+   #queryset = Sessions.objects.filter(sessionId__in=family.first)
+
+
+   discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
+   return render(request, 'healthseeker/registration/form3.html', {'form': form,'family':family ,'discountcard':discountcard})
 
 
 @match_role("healthseeker")
 def family_edit(request, pk):
-    post = get_object_or_404(User, pk=pk)
-    if request.method == "POST":
-        form =FamilyForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('healthseeker:step3')
-    else:
-        form = FamilyForm(instance=post)
-    return render(request, 'healthseeker/registration/form3.html', {'form': form})
+   post = get_object_or_404(User, pk=pk)
+   if request.method == "POST":
+       form =FamilyForm(request.POST, instance=post)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.save()
+           return redirect('healthseeker:step3')
+   else:
+       form = FamilyForm(instance=post)
+   return render(request, 'healthseeker/registration/familymember_edit.html', {'form': form})
 
 
 @match_role("healthseeker")
 def family_delete(request, pk):
-    result = User.objects.get(pk=pk)
-    result.delete()
-    return redirect('site_admin:step3')
+   result = User.objects.get(pk=pk)
+   result.delete()
+   return redirect('site_admin:step3')
 
 
 
 @match_role("healthseeker")
 def form_view(request):
-    result = User.objects.all()
-    return render(request, 'healthseeker/registration/form3.html', {'values': result})
+   result = User.objects.all()
+   return render(request, 'healthseeker/registration/form3.html', {'values': result})
 
 @match_role("healthseeker")
 def form_edit(request, pk):
-    post = get_object_or_404(User, pk=pk)
-    if request.method == "POST":
-        form = UserForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('healthseeker:form3_view')
-    else:
-        form = UserForm()
-    return render(request, 'healthseeker/registration/from3.html', {'form': form})
+   post = get_object_or_404(User, pk=pk)
+   if request.method == "POST":
+       form = UserForm(request.POST, instance=post)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.save()
+           return redirect('healthseeker:form3_view')
+   else:
+       form = UserForm()
+   return render(request, 'healthseeker/registration/from3.html', {'form': form})
 
 
 @match_role("healthseeker")
 def form3_delete(request, pk):
-    result = User.objects.get(pk=pk)
-    result.delete()
-    return redirect('healthseeker:form3_view')
-
+   result = Seeker.objects.get(pk=pk)
+   result.delete()
+   return redirect('healthseeker:form3_view')
 
 
 
@@ -297,10 +294,41 @@ def step6(request):
 
 #--------------------------------------------------------
 
+@match_role("healthseeker")
 def family(request):
-    print(request.GET)
-    return render(request,'healthseeker/family_details.html',{})
+   me = User.objects.get(pk=request.session['pk'])
 
+   if not request.session.get('discountcard_id'):
+       return  redirect('healthseeker:family')
+
+
+   if request.method == 'POST':
+       form = FamilyForm(request.POST)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.role = "healthseeker"
+           post.save()
+           member = User.objects.get(pk=post.pk)
+           Seeker.objects.create(user=member,family=me)
+           return redirect('healthseeker:family')
+   else:
+       form = FamilyForm()
+   records = User.objects.all()
+
+
+   data = User.objects.all()
+   # print('data', data)
+   family = Seeker.objects.filter(family = me)
+   print(family.first())
+   #psobjs = Affiliation.objects.filter(ipId=x)
+   #queryset = Sessions.objects.filter(sessionId__in=family.first)
+
+
+   discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
+   return render(request, 'healthseeker/family_details.html', {'form': form,'family':family ,'discountcard':discountcard})
+
+
+#---------------------------------------------------------------------------------
 
 def accountmanager(requset):
 
