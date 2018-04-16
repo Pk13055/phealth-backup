@@ -199,11 +199,9 @@ def form_edit(request, pk):
 
 @match_role("healthseeker")
 def form3_delete(request, pk):
-   result = Seeker.objects.get(pk=pk)
+   result = User.objects.get(pk=pk)
    result.delete()
    return redirect('healthseeker:form3_view')
-
-
 
 
 
