@@ -343,13 +343,13 @@ def basic_details(request):
 			model = User
 			fields = ('name', 'gender', 'language',)
 
-	if request.method == "POST":
-		b = UserForm(request.POST, instance=c.user)
-		if b.is_valid():
-			c.language = b.cleaned_data.get('language')
-			del b.__dict__['fields']['language']
-			b.save()
-			c.save()
+		if request.method == "POST":
+			b = UserForm(request.POST, instance=c.user)
+			if b.is_valid():
+				c.language = b.cleaned_data.get('language')
+				del b.__dict__['fields']['language']
+				b.save()
+				c.save()
 
 	return render(request, 'clinician/dashboard/account/basic.html.j2', context={
 		'title' : "Account - ",
@@ -413,14 +413,16 @@ def education(request):
 		elif request.POST['btn-type'] == "0":
 			post_params = parser.parse(request.POST.urlencode())
 			fields = ['year', 'title', 'type', 'description']
-			for _ in fields:
-				if not isinstance(post_params[_], list):
-					post_params[_] = [post_params[_]]
-			cur_all = zip(post_params[fields[0]])
-			for field in fields[1:]:
-				cur_all = zip(*cur_all)
-				cur_all = zip(*cur_all, post_params[field])
-			cur_all = list(cur_all)
+			cur_all = []
+			if any([_ in post_params for _ in fields]):
+				for _ in fields:
+					if not isinstance(post_params[_], list):
+						post_params[_] = [post_params[_]]
+				cur_all = zip(post_params[fields[0]])
+				for field in fields[1:]:
+					cur_all = zip(*cur_all)
+					cur_all = zip(*cur_all, post_params[field])
+				cur_all = list(cur_all)
 			records = []
 			for r in cur_all:
 				x = {}
@@ -440,7 +442,7 @@ def education(request):
 
 
 @match_role("clinician")
-def consultation_fee(request):
+def fee_offerings(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
@@ -450,14 +452,16 @@ def consultation_fee(request):
 		c.fee = request.POST['fee']
 		post_params = parser.parse(request.POST.urlencode())
 		fields = ['amount', 'name', 'type', 'description']
-		for _ in fields:
-			if not isinstance(post_params[_], list):
-				post_params[_] = [post_params[_]]
-		cur_all = zip(post_params[fields[0]])
-		for field in fields[1:]:
-			cur_all = zip(*cur_all)
-			cur_all = zip(*cur_all, post_params[field])
-		cur_all = list(cur_all)
+		cur_all = []
+		if any([_ in post_params for _ in fields]):
+			for _ in fields:
+				if not isinstance(post_params[_], list):
+					post_params[_] = [post_params[_]]
+			cur_all = zip(post_params[fields[0]])
+			for field in fields[1:]:
+				cur_all = zip(*cur_all)
+				cur_all = zip(*cur_all, post_params[field])
+			cur_all = list(cur_all)
 		records = []
 		for r in cur_all:
 			x = {}
@@ -475,162 +479,280 @@ def consultation_fee(request):
 
 
 @match_role("clinician")
-def offerings(request):
+def condition_procedures(request):
 	''' account route for '''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	if not c.offerings:
-		c.offerings = []
-	o = c.offerings
+
+	class ProcedureForm(forms.Form):
+		type_choices = (
+			('procedure','procedure'),
+			('condition','condition'),
+			('other','other'),
+		)
+
+		def clean(self):
+			cleaned_data = super().clean()
+			cleaned_data['date'] = cleaned_data['date'].isoformat()
+			return cleaned_data
+
+		date = forms.DateField(required=False)
+		name = forms.CharField(max_length=30)
+		description = forms.CharField(max_length=100, widget=forms.widgets.Textarea())
+		type = forms.ChoiceField(choices=type_choices)
+
+	procedure_form = ProcedureForm()
+
 	if request.method == "POST":
-		print(request.POST)
-		print(c.offerings)
-		c.offerings.append(request.POST['offering'])
-		c.save()
-	return render(request, 'clinician/dashboard/account/offerings.html.j2', context={
-		'title' : "Account - ",
-		'clinician' : c,
-		'offerings' : o,
-		})
+		if request.POST['btn-type'] == "1":
+			procedure_form = ProcedureForm(request.POST, request.FILES)
+			if procedure_form.is_valid():
+				e = procedure_form.cleaned_data
+				c.procedure_conditions.append(e)
+				procedure_form = ProcedureForm()
 
+		elif request.POST['btn-type'] == "0":
+			post_params = parser.parse(request.POST.urlencode())
+			fields = ['name', 'description', 'type', 'date']
+			cur_all = []
+			if any([_ in post_params for _ in fields]):
+				for _ in fields:
+					if not isinstance(post_params[_], list):
+						post_params[_] = [post_params[_]]
+				cur_all = zip(post_params[fields[0]])
+				for field in fields[1:]:
+					cur_all = zip(*cur_all)
+					cur_all = zip(*cur_all, post_params[field])
+				cur_all = list(cur_all)
+			records = []
+			for r in cur_all:
+				x = {}
+				[x.update({j : i}) for i, j in zip(r, fields)]
+				records.append(x)
 
-@match_role("clinician")
-def conditions_treated(request):
-	''' account route for '''
+			print(records)
+			c.procedure_conditions = records
 
-	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	ct = c.conditions_treated
-	if request.method == "POST":
-		print(request.POST)
-		print(c.conditions_treated)
-		if c.conditions_treated == None:
-			c.conditions_treated = [request.POST['condition']]
-		else:
-			c.conditions_treated.append(request.POST['condition'])
 		c.save()
 
 	return render(request, 'clinician/dashboard/account/conditions.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Procedures/Conditions",
 		'clinician' : c,
-		'conditions_treated' : ct,
-		})
-
-
-@match_role("clinician")
-def procedures(request):
-	''' account route for '''
-
-	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	p = c.procedures
-
-	if request.method == "POST":
-		print(request.POST)
-		print(c.procedures)
-		if c.procedures == None:
-			c.procedures = [request.POST['procedure']]
-		else:
-			c.procedures.append(request.POST['procedure'])
-		c.save()
-
-	return render(request, 'clinician/dashboard/account/procedures.html.j2', context={
-		'title' : "Account - ",
-		'clinician' : c,
-		'procedures' : p,
+		'all_procs' : c.procedure_conditions,
+		'procedure_form' : procedure_form,
 		})
 
 
 @match_role("clinician")
 def experience_training(request):
-	''' account route for '''
+	''' account route for experience and training'''
+
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	if not c.experience:
-		c.experience = []
-	e = c.experience
+
+	class ExperienceForm(forms.Form):
+		type_choices = (
+			('experience','experience'),
+			('training','training'),
+			('other','other'),
+		)
+
+		year = forms.CharField(required=False)
+		position = forms.CharField(max_length=30)
+		description = forms.CharField(max_length=100, widget=forms.widgets.Textarea())
+		type = forms.ChoiceField(choices=type_choices)
+
+	experience_form = ExperienceForm()
 
 	if request.method == "POST":
-		r = request.POST.dict()
-		del r['csrfmiddlewaretoken']
-		s = json.dumps(r)
-		e.append(s)
+		if request.POST['btn-type'] == "1":
+			experience_form = ExperienceForm(request.POST, request.FILES)
+			if experience_form.is_valid():
+				e = experience_form.cleaned_data
+				c.experience_training.append(e)
+				experience_form = ExperienceForm()
+
+		elif request.POST['btn-type'] == "0":
+			post_params = parser.parse(request.POST.urlencode())
+			fields = ['year', 'position', 'description', 'type']
+			cur_all = []
+			if any([_ in post_params for _ in fields]):
+				for _ in fields:
+					if not isinstance(post_params[_], list):
+						post_params[_] = [post_params[_]]
+				cur_all = zip(post_params[fields[0]])
+				for field in fields[1:]:
+					cur_all = zip(*cur_all)
+					cur_all = zip(*cur_all, post_params[field])
+				cur_all = list(cur_all)
+			records = []
+			for r in cur_all:
+				x = {}
+				[x.update({j : i}) for i, j in zip(r, fields)]
+				records.append(x)
+
+			print(records)
+			c.experience_training = records
+
 		c.save()
 
-	# del e[0]
-	x = [json.loads(r) for r in e]
+
 	return render(request, 'clinician/dashboard/account/experience.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Experience & Training",
 		'clinician' : c,
-		'experiences': x,
+		'all_exp': c.experience_training,
+		'experience_form' : experience_form,
 		})
 
 
 @match_role("clinician")
 def awards_recognition(request):
-	''' account route for '''
+	''' account route for awards and recognitions'''
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	if not c.awards:
-		c.awards = []
 
+	class AwardForm(forms.Form):
+		name = forms.CharField()
+		description = forms.CharField(max_length=100, widget=forms.widgets.Textarea())
+		year = forms.CharField()
+		recognised_by = forms.CharField()
+
+	award_form = AwardForm()
 	if request.method == "POST":
-		print(request.POST)
-		r = request.POST.dict()
-		del r['csrfmiddlewaretoken']
-		s = json.dumps(r)
-		c.awards.append(s)
-		c.save()
+		if request.POST['btn-type'] == "1":
+			award_form = AwardForm(request.POST, request.FILES)
+			if award_form.is_valid():
+				e = award_form.cleaned_data
+				c.awards.append(e)
+				award_form = AwardForm()
 
-	x = [json.loads(r) for r in c.awards]
+		elif request.POST['btn-type'] == "0":
+			post_params = parser.parse(request.POST.urlencode())
+			fields = ['name', 'description', 'year', 'recognised_by']
+			cur_all = []
+			if any([_ in post_params for _ in fields]):
+				for _ in fields:
+					if not isinstance(post_params[_], list):
+						post_params[_] = [post_params[_]]
+				cur_all = zip(post_params[fields[0]])
+				for field in fields[1:]:
+					cur_all = zip(*cur_all)
+					cur_all = zip(*cur_all, post_params[field])
+				cur_all = list(cur_all)
+			records = []
+			for r in cur_all:
+				x = {}
+				[x.update({j : i}) for i, j in zip(r, fields)]
+				records.append(x)
+
+			print(records)
+			c.awards = records
+		c.save()
 	return render(request, 'clinician/dashboard/account/awards.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Awards & Recognition",
 		'clinician' : c,
-		'awards' : x
+		'award_form' : award_form,
+		'awards' : c.awards,
 		})
 
 
 @match_role("clinician")
 def registrations(request):
-	''' account route for '''
+	''' account route for registrations'''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	if not c.registrations:
-		c.registrations = []
 
+	class RegistrationForm(forms.Form):
+		name = forms.CharField()
+		year = forms.CharField()
+		reg_no = forms.CharField()
+
+	registration_form = RegistrationForm()
 	if request.method == "POST":
-		print(request.POST)
-		r = request.POST.dict()
-		del r['csrfmiddlewaretoken']
-		s = json.dumps(r)
-		c.registrations.append(s)
+		if request.POST['btn-type'] == "1":
+			registration_form = RegistrationForm(request.POST, request.FILES)
+			if registration_form.is_valid():
+				e = registration_form.cleaned_data
+				c.registrations.append(e)
+				registration_form = RegistrationForm()
+
+		elif request.POST['btn-type'] == "0":
+			post_params = parser.parse(request.POST.urlencode())
+			fields = ['name', 'year', 'reg_no']
+			cur_all = []
+			if any([_ in post_params for _ in fields]):
+				for _ in fields:
+					if not isinstance(post_params[_], list):
+						post_params[_] = [post_params[_]]
+				cur_all = zip(post_params[fields[0]])
+				for field in fields[1:]:
+					cur_all = zip(*cur_all)
+					cur_all = zip(*cur_all, post_params[field])
+				cur_all = list(cur_all)
+			records = []
+			for r in cur_all:
+				x = {}
+				[x.update({j : i}) for i, j in zip(r, fields)]
+				records.append(x)
+
+			print(records)
+			c.registrations = records
 		c.save()
 
-	x = [json.loads(r) for r in c.registrations]
-
 	return render(request, 'clinician/dashboard/account/registration.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Registrations",
 		'clinician' : c,
-		'registrations': x,
+		'registration_form' : registration_form,
+		'registrations': c.registrations,
 		})
 
 
 @match_role("clinician")
 def memberships(request):
-	''' account route for '''
+	''' account route for memberships'''
 
 	c = Clinician.objects.filter(user__email=request.session['email']).first()
-	if not c.memberships:
-		c.memberships = []
 
+	class MembershipForm(forms.Form):
+		name = forms.CharField()
+		country = forms.CharField()
+		city = forms.CharField()
+
+	membership_form = MembershipForm()
 	if request.method == "POST":
-		print(request.POST)
-		r = request.POST.dict()
-		del r['csrfmiddlewaretoken']
-		s = json.dumps(r)
-		c.memberships.append(s)
+		if request.POST['btn-type'] == "1":
+			membership_form = MembershipForm(request.POST, request.FILES)
+			if membership_form.is_valid():
+				e = membership_form.cleaned_data
+				c.memberships.append(e)
+				membership_form = MembershipForm()
+
+		elif request.POST['btn-type'] == "0":
+			post_params = parser.parse(request.POST.urlencode())
+			fields = ['name','country', 'city']
+			cur_all = []
+			if any([_ in post_params for _ in fields]):
+
+
+				for _ in fields:
+					if not isinstance(post_params[_], list):
+						post_params[_] = [post_params[_]]
+				cur_all = zip(post_params[fields[0]])
+				for field in fields[1:]:
+					cur_all = zip(*cur_all)
+				cur_all = zip(*cur_all, post_params[field])
+			cur_all = list(cur_all)
+			records = []
+			for r in cur_all:
+				x = {}
+				[x.update({j : i}) for i, j in zip(r, fields)]
+				records.append(x)
+
+			print(records)
+			c.memberships = records
 		c.save()
 
-	x = [json.loads(r) for r in c.memberships]
-
 	return render(request, 'clinician/dashboard/account/memberships.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Memberships",
 		'clinician' : c,
-		'memberships': x,
+		'membership_form' : membership_form,
+		'memberships' : c.memberships,
 		})

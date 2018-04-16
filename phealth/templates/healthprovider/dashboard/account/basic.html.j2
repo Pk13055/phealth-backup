@@ -35,9 +35,12 @@
 						<div class="row">
 							<div class="panel-body">
 								{% csrf_token %}
-								{{ provider_form | bootstrap }}
-							</div>
-							<div class="panel-body">
+								<div class="form-group">
+									<label for="id_hospital" class="control-label">
+										Hospital Name
+									</label>
+									<input type="text" name="hospital" class="form-control" value="{{ hospital }}">
+								</div>
 								{{ user_form | bootstrap }}
 							</div>
 						</div>
@@ -47,8 +50,7 @@
 							<div class="col-md-12">
 								<div class="row">
 									<div class="col-md-offset-10 col-md-2">
-										<button type="submit" class="btn btn-success">Save & Go</button>
-										<button type="button" class="btn btn-default">Cancel</button>
+										<input type="submit" class="btn btn-success" value="Save & Go">
 									</div>
 								</div>
 							</div>

@@ -79,7 +79,7 @@ def doctors_list(request):
     raw_locs = AddressSerializer([_.address for _ in hospitals], many=True)
     locations = raw_locs.data
 
-    response['hospitals'] = [_.name for _ in hospitals]
+    response['hospitals'] = [{'name' : _.name, 'id' : _.pk } for _ in hospitals]
     response['locations'] = locations
 
     clinicians = {}
@@ -134,6 +134,45 @@ def make_appointment(request):
         'status' : status,
         'data' : data
         })
+
+
+@require_POST
+@csrf_exempt
+def attach_user(request):
+    '''
+        @description This route is responsible for attaching an
+        appointment object to a given user
+        @param POST seeker_id int
+        @param POST appointment_id int
+        @return status, appointment object
+    '''
+    seeker_id = request.POST['seeker_id']
+    appointment_id = request.POST['appointment_id']
+    apt = Appointment.objects.filter(id=appointment_id).first()
+
+    class AppointmentSerializer(ModelSerializer):
+        class Meta:
+            model = Appointment
+            depth = 1
+            fields = '__all__'
+
+    if apt:
+        status = True
+        user = Seeker.objects.filter(id=seeker_id).first()
+        if user:
+            user.appointments.add(apt)
+            data = AppointmentSerializer(apt).data
+        else:
+            status = False
+            data = ["Invalid user (404)"]
+    else:
+        status = False
+        data = ["Invalid Appointment (404)"]
+
+    return JsonResponse({
+        'status' : status,
+        'data' : data,
+    })
 
 
 # default API viewset
