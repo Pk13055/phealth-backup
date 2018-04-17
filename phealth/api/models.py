@@ -15,13 +15,16 @@
 
 import datetime
 import hashlib
+import math
 import uuid
-from django.db import models
-from django.core.validators import RegexValidator
+from decimal import Decimal
+
 from django.contrib.auth.models import User as admin_user
 from django.contrib.postgres.fields import ArrayField, HStoreField, JSONField
 from django.contrib.postgres.fields.jsonb import JSONField as JSONBField
 from django.contrib.postgres.validators import KeysValidator, ValidationError
+from django.core.validators import RegexValidator
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -81,15 +84,138 @@ class City(models.Model):
         db_table = 'cities'
 
 
-# class District(models.Model):
-# 	id = models.AutoField(primary_key=True)
-# 	name = models.CharField(max_length=60)
-# 	code = models.CharField(max_length=5)
-# 	city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
+class Location(models.Model):
 
-# 	class Meta:
-# 		managed = True
-# 		db_table = 'districts'
+    id = models.AutoField(primary_key=True)
+    place_id = models.CharField(max_length=128, unique=True, editable=False) # used to reference the place using maps API
+    name = models.CharField(max_length=100) # can be used for object referral
+    full_name = models.CharField(max_length=200) # can be used to display
+
+    lat = models.DecimalField(max_digits=8, decimal_places=5)
+    long = models.DecimalField(max_digits=8, decimal_places=5)
+
+    rad_lat = models.DecimalField(max_digits=8, decimal_places=5, editable=False) # internal field for calculation
+    rad_long = models.DecimalField(max_digits=8, decimal_places=5, editable=False) # internal field for calculation
+
+    landmark = models.CharField(max_length=100) # used for lazy grouping
+
+    # direct storage of address components
+    # this field adapts directly from the JSON returned by the MAPS API
+    # type -> Array | len -> 7 | assert(eles == JSON) |
+    # keys -> long_name <String>, short_name <String>, types <Array>
+    address_component = JSONBField(JSONField(validators=[
+    ]), default=(7 * [{'long_name' : "", 'short_name' : "", 'types' : [] }]), editable=False)
+
+    class Meta:
+        managed = True
+        db_table = 'locations'
+
+
+    def __init__(self, *args, **kwargs):
+        '''
+            @description override init to directly init the values from the google place API
+            accepts a JSON as follows:
+            place = {
+                'place_id' : <String>,
+                'name' : <String>,
+                'formatted_address' : <String>,
+                'vicinity' : <String>, // corresponds to landmark
+
+                'location' : {
+                    'lat' : <Decimal 8,5>,
+                    'lng' : <Decimal 8,5>,
+                },
+
+                'address_component' : [
+                    {
+                        'short_name' : <String>,
+                        'long_name' : <String>,
+                        'types' : <Array>,
+                    }, ... <7 records>
+                ],
+            }
+            @param [place] -> JSON
+            @params (opt.) keys
+        '''
+        place = kwargs.pop('place', None)
+        super(Location, self).__init__(*args, **kwargs)
+        if place is not None:
+            self.place_id = place['place_id']
+            self.name = place['name']
+            self.full_name = place['formatted_address']
+
+            self.lat = Decimal(str(round(place['location']['lat'], 5)))
+            self.long = Decimal(str(round(place['location']['lng'], 5)))
+
+            self.landmark = place['vicinity']
+            self.address_component = place['address_components']
+
+
+    def __str__(self):
+        ''' pretty repr for an instance '''
+        return "%s | %f, %f" % (self.full_name, self.lat, self.long)
+
+
+    def clean(self, *args, **kwargs):
+        ''' override to check validity of address_components '''
+
+        # address_component checking
+        error_msg = "Invalid address_component | %s"
+        # length check
+        if len(self.address_component) != 7:
+            raise ValidationError({ 'address_component' : error_msg % "Length is not 7" })
+        # JSON sanity check
+        if not all([isinstance(_, dict) for _ in self.address_component]):
+            raise ValidationError({ 'address_component' : error_msg % "Components are not all JSON" })
+        # key validation
+        if not all([all([_ in ['short_name', 'long_name', 'types'] for _ in x])
+            for x in self.address_component]):
+            raise ValidationError({ 'address_component' : error_msg % "Invalid keys" })
+        # key type validation
+        if not all(all([isinstance(_['short_name'], str), isinstance(_['long_name'], str),
+             isinstance(_['types'], list), ]) for _ in self.address_component):
+            raise ValidationError({ 'address_component' : error_msg % "Invalid key type(s)" })
+
+        return super().clean(*args, **kwargs)
+
+
+    def save(self):
+        ''' override save to save internal fields at model level '''
+        self.full_clean()
+        self.rad_lat = math.radians(self.lat)
+        self.rad_long = math.radians(self.long)
+        super().save()
+
+
+    def getCoords(self):
+        ''' returns the lat, long of the current location '''
+        return { 'lat' : self.lat, 'long' : self.long }
+
+
+    def getDistance(self, lat, lng):
+        '''
+            @description returns the distance between a given place and this current location
+
+            if
+                φ1 = lat1.toRadians()
+                φ2 = lat2.toRadians()
+                Δλ = (lon2-lon1).toRadians()
+                R = 6371e3;
+            then
+                return acos( Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ) ) * R
+
+            @param lat -> decimal field
+            @param lng -> decimal field
+            @return dist -> float, metres
+        '''
+        distance = 0
+        rad_lat_2 = math.radians(lat)
+        del_lng = math.radians(lng - self.long)
+        R = 6371e3
+        distance = math.acos( math.sin(self.rad_lat) * math.sin(rad_lat_2) + \
+            math.cos(self.rad_lat) * math.cos(rad_lat_2) * math.cos(del_lng) ) * R
+        return distance
+
 
 class Address(models.Model):
     ''' address, can be of the user or any other model

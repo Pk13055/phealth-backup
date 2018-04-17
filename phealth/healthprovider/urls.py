@@ -7,7 +7,7 @@ app_name = "healthprovider"
 
 account_routes = [
 	url(r'^basic/?$', views.account_basic, name="account_basic"),
-	url(r'^contact/?$', views.account_contact, name="account_contact"),
+	# url(r'^contact/?$', views.account_contact, name="account_contact"),
 	url(r'^speciality/?$', views.account_speciality, name="account_speciality"),
 	url(r'^facilities/?$', views.account_facilities, name="account_facilities"),
 	url(r'^offerings/?$', views.account_offerings, name="account_offerings"),
