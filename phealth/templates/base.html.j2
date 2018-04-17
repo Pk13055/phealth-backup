@@ -1,21 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content-width="device-width" initial-scale="1.0">
-	<title>PHealth - {{ title }}</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'common/dashboard/plugins/images/favicon.png' %}">
 	<link href="{% static 'common/css/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
 	<link href="{% static 'common/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
 	<link href="{% static 'common/css/all.css' %}" rel="stylesheet" type="text/css">
 	<script src="{% static 'common/js/jquery.min.js' %}"></script>
 	<script src="{% static 'common/js/bootstrap.min.js' %}"></script>
 	<script href="{% static 'common/js/all.js' %}"></script>
-	{% block mainhead %}
-	{% endblock %}
+	{% block mainhead %} {% endblock %}
 </head>
-<body>
-	{% block maincontent %}
-	{% endblock %}
+
+<body class="fix-header">
+	{% block maincontent %} {% endblock %}
 </body>
+
 </html>

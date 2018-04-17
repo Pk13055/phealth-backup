@@ -81,7 +81,7 @@ def SignIn(request):
 			"route" : "/healthprovider",
 			"color" : "primary"
 			})
-	elif request.method == "POST":		
+	elif request.method == "POST":
 		if signin("healthprovider", request):
 			return redirect('healthprovider:dashboard_home')
 		return redirect('healthprovider:signin')
@@ -309,6 +309,12 @@ class ContactTableView(DatatableView):
 		return
 
 #------------------------------------------------------------
+@match_role("healthprovider")
+def account_contact(request):
+	''' route for consistency error DELETE ONCE ADDED '''
+	return JsonResponse({ 'status' : True })
+
+
 @match_role("healthprovider")
 def account_speciality(request):
 	''' route for account - speciality  '''
