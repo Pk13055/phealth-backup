@@ -14,7 +14,7 @@ function getCSRF() {
  * the required JSON for storage
  * @param {JSON} place
  */
-let placeToJSON = (place) => {
+function placeToJSON(place) {
     let fields = ['address_components', 'vicinity', 'name', 'formatted_address', 'place_id'];
     let return_place = {};
     // commonplace field addition
