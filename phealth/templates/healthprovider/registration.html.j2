@@ -1,55 +1,87 @@
-{% extends 'base.html.j2' %}
+<!DOCTYPE html>
+{% extends 'healthseeker/base.html' %}
 {% load static %}
-{% load bootstrap %}
-{% block maincontent %}
-<div class="container">
-<div class="row">
-	<h2>Healthprovider Registration</h2>
-	<p class="lead text-muted">Already have an account? Sign in <a href="{{ route }}/signin">here</a>.</p>
-</div>
-<div class="row">
-	<form method="POST" enctype="multipart/form-data">
-		<div class="col-xs-12 col-md-6">
-			<div class="panel panel-success">
-				<div class="panel-heading"><i class="fa fa-user-circle-o fa-lg"></i> Basic Information</div>
-				<div class="panel-body">
-					{% csrf_token %}
-					{{ user_form | bootstrap }}
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-md-6">
-		<div class="row">
-			<div class="panel panel-danger">
-				<div class="panel-heading"><i class="fa fa-money fa-lg"></i> Healthprovider-specific Information</div>
-				<div class="panel-body">
-					{{ sponsor_form | bootstrap }}
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading"><i class="fa fa-bolt fa-lg"></i> OTP Verification</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label class="control-label" for="otp">OTP</label>
-						<input class=" form-control" type="number" name="otp" id="otp" max="999999999" required>
-						{# <button type="button" class="btn btn-default" id="otp_send">Generate OTP</button> #}
-					</div>
-				</div>
-			</div>
-		</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<p class="text-muted">
-					<input type="checkbox" required id="tick" class="form-inline"><label for="tick"> I have read all the details</label>
-				</p>
-				<button class="btn btn-block btn-primary" id="otp_send">Register!</button>
-			</div>
-		</div>
-	</form>
-</div>
-</div>
-<script src="{% static 'sponsor/js/register.js' %}"></script>
+
+{% block content %}
+<style>
+    ::-webkit-input-placeholder {
+  text-transform:capitalize;
+}
+</style>
+
+        <section class="form_reg_one_hero">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="full_width form_reg_one">
+
+                            <div class="header_form">
+                                <div class="form_reg_one_in">
+                                    <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:20%"></div></div>
+                                </div>
+
+                            </div>
+
+                            <a href="{% url 'healthprovider:signin' %}" class="skipt0page"><i class="fa fa-share"></i> Click To Login</a>
+                            <div class="form_reg_one_in">
+                                <h2>Please fill the Registration form!</h2>
+
+                                  <form method="POST" class="registration_form">{% csrf_token %}
+                                   <div class="row">
+                                   {% for field in prform %}
+                                                   <div class="form-group custom_md_3 col-md-6">
+                                        <div class="icon-addon addon-md">
+
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										  </div>
+										{% endfor %}
+
+                            	        {% for field in uform %}
+                                                   <div class="form-group custom_md_3 col-md-6">
+                                        <div class="icon-addon addon-md">
+
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										  </div>
+										{% endfor %}
+
+
+                                    <div class="col-md-3" style="float:right">
+                                         <ul class="save_next">
+                                        <li><input type="submit" class="btn save_inf" value="Next"></li>
+                                      </ul>
+                                    </div>
+                                   </div>
+
+
+                        </form>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+<script>
+$(document).ready(function(){
+        $('#id_password').attr('type', 'password');
+        $('#id_dob').attr('type', 'date');
+        $('#id_dob').val('');
+});
+</script>
+
+
 {% endblock %}

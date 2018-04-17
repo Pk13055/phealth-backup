@@ -72,6 +72,7 @@ dashboard_routes = [
 # actual routes
 urlpatterns = [
     url(r'^signup/?$', views.SignUp, name='signup'),
+    url(r'^otp/?$', views.otp, name='otp'),
     url(r'^signin/?$', views.SignIn, name='signin'),
     url(r'^dashboard/', include(dashboard_routes)),
 ]

@@ -710,14 +710,14 @@ class Provider(models.Model):
     type = models.CharField(choices=type_choices, default='hospital', max_length=30)
     active_from = models.DateField(default=current_timestamp)
 
-    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
     poc = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     is_branch = models.BooleanField(default=False)
     parent_provider = models.ForeignKey("self", on_delete=models.DO_NOTHING, null=True, blank=True)
 
-    clinicians = models.ManyToManyField(Clinician)
-    specialities = models.ManyToManyField(Speciality)
+    clinicians = models.ManyToManyField(Clinician,null=True, blank=True)
+    specialities = models.ManyToManyField(Speciality,null=True, blank=True)
     ## New Fields added
     facilities = ArrayField(models.TextField(), null=True, blank=True)
     offerings = ArrayField(models.TextField(), null=True, blank=True)
