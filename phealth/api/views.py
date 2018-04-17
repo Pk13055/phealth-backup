@@ -35,51 +35,51 @@ def doctors_list(request):
     response = {}
 
     hospitals = Provider.objects.filter(
-        Q(address__city__name__icontains=params['location']) |
-        Q(address__city__state__name__icontains=params['location'])).all()
+        Q(location__landmark__icontains=params['location']) |
+        Q(location__full_name__icontains=params['location'])).all()
 
-    class AddressSerializer(ModelSerializer):
-            class Meta:
-                model = Address
-                depth = 5
-                fields = '__all__'
+    class LocationSerializer(ModelSerializer):
+        class Meta:
+            model = Location
+            depth = 1
+            fields = '__all__'
 
     class ClinicianSerializer(ModelSerializer):
 
-            timings = SerializerMethodField()
+        # timings = SerializerMethodField()
 
-            class Meta:
-                model = Clinician
-                depth = 5
-                fields = '__all__'
+        class Meta:
+            model = Clinician
+            depth = 5
+            fields = '__all__'
 
-            def get_timings(self, c):
-                ''' get the required timings array format as specified '''
-                days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-                timings = []
-                get_time = lambda x: datetime.datetime.strptime(x, '%H:%M').time()
-                sessions = [('morning', get_time('11:00')), ('afternoon', get_time('16:00')),
-                    ('evening', get_time('21:00')), ('night', get_time('23:59')),]
-                for idx, day in enumerate(days):
-                    cur_day = {}
-                    cur_day['day'] = day
-                    start_w, end_w = c.work_timings[idx]
-                    start_b, end_b = c.break_timings[idx]
-                    work_t = perdelta(start_w, end_w, datetime.timedelta(minutes=30))
-                    work_t = list(zip(*[iter(work_t), iter(work_t[1:])]))
-                    break_t = perdelta(start_b, end_b, datetime.timedelta(minutes=30))
-                    break_t = list(zip(*[iter(break_t), iter(break_t[1:])]))
-                    work_t = [_ for _ in work_t if not any([_[0] >= i[0] or _[1] <= i[1] for i in break_t])]
-                    for session, time in sessions:
-                        cur_day[session] = [_ for _ in work_t if _[1] <= time]
-                        work_t = [_ for _ in work_t if _ not in cur_day[session]]
-                    timings.append(cur_day)
-                return timings
+        # def get_timings(self, c):
+        #     ''' get the required timings array format as specified '''
+        #     days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+        #     timings = []
+        #     get_time = lambda x: datetime.datetime.strptime(x, '%H:%M').time()
+        #     sessions = [('morning', get_time('11:00')), ('afternoon', get_time('16:00')),
+        #         ('evening', get_time('21:00')), ('night', get_time('23:59')),]
+        #     for idx, day in enumerate(days):
+        #         cur_day = {}
+        #         cur_day['day'] = day
+        #         start_w, end_w = c.work_timings[idx]
+        #         start_b, end_b = c.break_timings[idx]
+        #         work_t = perdelta(start_w, end_w, datetime.timedelta(minutes=30))
+        #         work_t = list(zip(*[iter(work_t), iter(work_t[1:])]))
+        #         break_t = perdelta(start_b, end_b, datetime.timedelta(minutes=30))
+        #         break_t = list(zip(*[iter(break_t), iter(break_t[1:])]))
+        #         work_t = [_ for _ in work_t if not any([_[0] >= i[0] or _[1] <= i[1] for i in break_t])]
+        #         for session, time in sessions:
+        #             cur_day[session] = [_ for _ in work_t if _[1] <= time]
+        #             work_t = [_ for _ in work_t if _ not in cur_day[session]]
+        #         timings.append(cur_day)
+        #     return timings
 
-    raw_locs = AddressSerializer([_.address for _ in hospitals], many=True)
+    raw_locs = LocationSerializer([_.location for _ in hospitals], many=True)
     locations = raw_locs.data
 
-    response['hospitals'] = [{'name' : _.name, 'id' : _.pk } for _ in hospitals]
+    response['hospitals'] = [{'name' : _.name, 'id' : _.pk, 'location_id' : _.location.pk } for _ in hospitals]
     response['locations'] = locations
 
     clinicians = {}
@@ -176,16 +176,6 @@ def attach_user(request):
 
 
 # default API viewset
-
-class CountryViewSet(ModelViewSet):
-    queryset = Country.objects.all()
-    serializer_class = CountrySerializer
-
-
-class StateViewSet(ModelViewSet):
-    queryset = State.objects.all()
-    serializer_class = StateSerializer
-
 
 class CityViewSet(ModelViewSet):
     queryset = City.objects.all()

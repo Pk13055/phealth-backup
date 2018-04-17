@@ -43,38 +43,10 @@ def current_timestamp():
 
 # Address and Location related models
 
-class Country(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, unique=True)
-    code = models.CharField(unique=True, max_length=5)
-
-    def __str__(self):
-        return "<Country %s: %s >" % (self.code, self.name)
-
-    class Meta:
-        managed = True
-        db_table = 'countries'
-
-
-class State(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=60)
-    code = models.CharField(max_length=5)
-    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING)
-
-    def __str__(self):
-        return "<State %s | %s: %s>" % (self.code, self.country.code, self.name)
-
-    class Meta:
-        managed = True
-        db_table = 'states'
-
-
 class City(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=60)
     code = models.CharField(max_length=5)
-    state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return "<City %s | %s | %s >" % (self.code, self.state.name, self.name)
@@ -738,7 +710,7 @@ class Provider(models.Model):
     type = models.CharField(choices=type_choices, default='hospital', max_length=30)
     active_from = models.DateField(default=current_timestamp)
 
-    address = models.ForeignKey(Address, on_delete=models.DO_NOTHING)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     poc = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     is_branch = models.BooleanField(default=False)
@@ -781,7 +753,7 @@ class Organization(models.Model):
     name = models.CharField(max_length=50)
     size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
     type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
-    location = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, blank=True)
+    location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Sponsor(models.Model):
@@ -1009,8 +981,7 @@ class Group(models.Model):
         return self.name
 
 
-class Facility(models.Model):
-    facility_type = models.ForeignKey('FacilityType', on_delete=models.CASCADE)
+class ServiceType(models.Model):
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -1019,15 +990,15 @@ class Facility(models.Model):
 
 
 class FacilityType(models.Model):
-    service_type = models.ForeignKey('ServiceType', on_delete=models.CASCADE)
+    service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
 
-
-class ServiceType(models.Model):
+class Facility(models.Model):
+    facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
