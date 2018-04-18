@@ -43,38 +43,10 @@ def current_timestamp():
 
 # Address and Location related models
 
-class Country(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, unique=True)
-    code = models.CharField(unique=True, max_length=5)
-
-    def __str__(self):
-        return "<Country %s: %s >" % (self.code, self.name)
-
-    class Meta:
-        managed = True
-        db_table = 'countries'
-
-
-class State(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=60)
-    code = models.CharField(max_length=5)
-    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING)
-
-    def __str__(self):
-        return "<State %s | %s: %s>" % (self.code, self.country.code, self.name)
-
-    class Meta:
-        managed = True
-        db_table = 'states'
-
-
 class City(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=60)
     code = models.CharField(max_length=5)
-    state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return "<City %s | %s | %s >" % (self.code, self.state.name, self.name)
@@ -144,8 +116,8 @@ class Location(models.Model):
             self.name = place['name']
             self.full_name = place['formatted_address']
 
-            self.lat = Decimal(str(round(place['location']['lat'], 5)))
-            self.long = Decimal(str(round(place['location']['lng'], 5)))
+            self.lat = Decimal(str(round(float(place['location']['lat']), 5)))
+            self.long = Decimal(str(round(float(place['location']['lng']), 5)))
 
             self.landmark = place['vicinity']
             self.address_component = place['address_components']
@@ -162,8 +134,8 @@ class Location(models.Model):
         # address_component checking
         error_msg = "Invalid address_component | %s"
         # length check
-        if len(self.address_component) != 7:
-            raise ValidationError({ 'address_component' : error_msg % "Length is not 7" })
+        if len(self.address_component) < 1:
+            raise ValidationError({ 'address_component' : error_msg % "Length is invalid" })
         # JSON sanity check
         if not all([isinstance(_, dict) for _ in self.address_component]):
             raise ValidationError({ 'address_component' : error_msg % "Components are not all JSON" })
@@ -235,7 +207,6 @@ class Address(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, blank=True, null=True)
-    state = models.ForeignKey(State, on_delete=models.DO_NOTHING, blank=True, null=True)
     door_no= models.CharField(max_length=200, blank=True, null=True)
     area= models.CharField(max_length=200, blank=True, null=True)
     landmark= models.CharField(max_length=200, blank=True, null=True)
@@ -741,14 +712,14 @@ class Provider(models.Model):
     type = models.CharField(choices=type_choices, default='hospital', max_length=30)
     active_from = models.DateField(default=current_timestamp)
 
-    address = models.ForeignKey(Address, on_delete=models.DO_NOTHING)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
     poc = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     is_branch = models.BooleanField(default=False)
     parent_provider = models.ForeignKey("self", on_delete=models.DO_NOTHING, null=True, blank=True)
 
-    clinicians = models.ManyToManyField(Clinician)
-    specialities = models.ManyToManyField(Speciality)
+    clinicians = models.ManyToManyField(Clinician,null=True, blank=True)
+    specialities = models.ManyToManyField(Speciality,null=True, blank=True)
     ## New Fields added
     facilities = ArrayField(models.TextField(), null=True, blank=True)
     offerings = ArrayField(models.TextField(), null=True, blank=True)
@@ -784,7 +755,7 @@ class Organization(models.Model):
     name = models.CharField(max_length=50)
     size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
     type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
-    location = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, blank=True)
+    location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Sponsor(models.Model):
@@ -1012,8 +983,7 @@ class Group(models.Model):
         return self.name
 
 
-class Facility(models.Model):
-    facility_type = models.ForeignKey('FacilityType', on_delete=models.CASCADE)
+class ServiceType(models.Model):
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -1022,15 +992,15 @@ class Facility(models.Model):
 
 
 class FacilityType(models.Model):
-    service_type = models.ForeignKey('ServiceType', on_delete=models.CASCADE)
+    service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
 
-
-class ServiceType(models.Model):
+class Facility(models.Model):
+    facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
 
