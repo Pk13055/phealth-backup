@@ -354,10 +354,14 @@ def intrest(requset):
     return render(requset,'healthseeker/manage_intrests.html',{})
 
 
-
-
-def booking(requset):
-    return render(requset,'healthseeker/booked.html',{})
+#-----------------------------------------------------------------------------------------------------------
+@match_role("healthseeker")
+def booking(request):
+    me = User.objects.get(pk=request.session['pk'])
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.appointments.all()
+    return render(request, 'healthseeker/booked.html', {'values': result})
+#-----------------------------------------------------------------------------------------------------------
 
 def favaroitedoctors(requset):
     return render(requset,'healthseeker/favorite_decors.html',{})
