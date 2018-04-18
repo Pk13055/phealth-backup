@@ -116,8 +116,8 @@ class Location(models.Model):
             self.name = place['name']
             self.full_name = place['formatted_address']
 
-            self.lat = Decimal(str(round(place['location']['lat'], 5)))
-            self.long = Decimal(str(round(place['location']['lng'], 5)))
+            self.lat = Decimal(str(round(float(place['location']['lat']), 5)))
+            self.long = Decimal(str(round(float(place['location']['lng']), 5)))
 
             self.landmark = place['vicinity']
             self.address_component = place['address_components']
@@ -134,8 +134,8 @@ class Location(models.Model):
         # address_component checking
         error_msg = "Invalid address_component | %s"
         # length check
-        if len(self.address_component) != 7:
-            raise ValidationError({ 'address_component' : error_msg % "Length is not 7" })
+        if len(self.address_component) < 1:
+            raise ValidationError({ 'address_component' : error_msg % "Length is invalid" })
         # JSON sanity check
         if not all([isinstance(_, dict) for _ in self.address_component]):
             raise ValidationError({ 'address_component' : error_msg % "Components are not all JSON" })

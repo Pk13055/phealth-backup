@@ -1,23 +1,26 @@
-from random import randint
-import requests
 import datetime
 import json
 import random
+from random import randint
 
+import requests
 from datatableview import (Datatable, DateTimeColumn, TextColumn,
                            ValuesDatatable)
 from datatableview.helpers import make_xeditable
 from datatableview.views import DatatableView, XEditableDatatableView
 from django import forms
 from django.contrib.auth.hashers import make_password
+from django.core.validators import ValidationError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from querystring_parser import parser
+from rest_framework.serializers import ModelSerializer
 
-from api.models import (Appointment, Clinician, Provider, Speciality,Location,
-                        Transaction, User,Organization)
+from api.models import (Appointment, Clinician, Location, Organization,
+                        Provider, Speciality, Transaction, User)
 from phealth.utils import get_provider, match_role, redirect, signin
 
 # Create your views here.
@@ -350,14 +353,61 @@ class ContactTableView(DatatableView):
         return
 
 
+@csrf_exempt
 @match_role("healthprovider")
 def account_contact(request):
     me = User.objects.get(pk=request.session['pk'])
+    p = me.provider_set.filter(poc__id=request.session['pk']).first()
+
     if request.method == "POST":
-        print(request.POST)
-        l = Location(place=request.POST['place'])
-        l.save()
-    return render(request, 'healthprovider/dashboard/account/contact.html.j2', {})
+        data = parser.parse(request.POST.urlencode())
+        place = data['place']
+        place['address_components'] = list(place['address_components'].values())
+        for comp in place['address_components']:
+            comp['types'] = comp['types']['']
+            if isinstance(comp['types'], str):
+                comp['types'] = [comp['types']]
+        print(json.dumps(place, indent=4))
+        try:
+            l = Location(place=place)
+            l.save()
+            status = True
+            data = place
+        except Exception as e:
+            print(e)
+            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
+            l = temp_loc or p.location
+            if l == p.location:
+                status = True
+                data = ["Same Location as before!"]
+            elif temp_loc is None:
+                status = False
+                data = [str(e)]
+            else:
+                status = True
+                data = l
+
+        p.location = l
+        p.save()
+
+        if isinstance(data, Location):
+            class LocationSerializer(ModelSerializer):
+                class Meta:
+                    depth = 1
+                    fields = ('lat', 'long', 'full_name', 'name',)
+                    model = Location
+            data = LocationSerializer(data).data
+
+        return JsonResponse({
+            'status' : status,
+            'data' : data,
+        })
+
+    return render(request, 'healthprovider/dashboard/account/contact.html.j2', {
+        'title' : "Account - Location Settings",
+        'hospital' : p,
+
+    })
 
 
 

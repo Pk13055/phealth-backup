@@ -1,239 +1,218 @@
-{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %}
-
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMCBCYMwsj0JQowT1a4GMNtYJqVEPqxVc&libraries=places"></script>
+{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block head %}
 <style>
-    .h40{
+    .h40 {
         height: 32px !important;
     }
+
     .manual {
         display: none;
     }
 </style>
+{% endblock head %} {% block content %}
+<script src="{% static 'common/js/all.js' %}"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMCBCYMwsj0JQowT1a4GMNtYJqVEPqxVc&libraries=places"></script>
+<script>
+        let makeRequest = (obj) => {
+            var place = obj.place || "", latLong = obj.latLong;
+            let setPlace = (place) => {
+                place = placeToJSON(place);
+                $.ajax({
+                    url: window.location.pathname,
+                    method: "POST",
+                    data: {
+                        place: place,
+                    },
+                    success: function(response) {
+                        alert("Location" + ((response.status)? " " : " not ") + "updated successfully!");
+                        $("pre#id_place").text(JSON.stringify(response, null, 4));
+                        $("pre#id_place").fadeIn();
+                        if(response['status']) $("pre#id_place").css({ 'color' : 'black', });
+                        else $("pre#id_place").css({ 'color' : 'red', });
+                        setTimeout(() => { $("pre#id_place").fadeOut(); }, 5000);
+                    }
+                });
+            };
+            if(latLong) {
+                let geocoder = new google.maps.Geocoder;
+                geocoder.geocode({'location': latLong }, function(results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) setPlace(results[0]);
+                    else alert('Geocoder failed due to: ' + status + '! Please add manually!');
+                });
+            }
+            else setPlace(place);
+        };
+</script>
 <div class="row bg-title">
-	<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-		<h4 class="page-title">Dashboard 1</h4>
-	</div>
-	<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-		<ol class="breadcrumb">
-			<li>
-				<a href="index.html">Dashboard</a>
-			</li>
-			<li>
-				<a href="#">Contact Details</a>
-			</li>
-		</ol>
-	</div>
-	<!-- /.col-lg-12 -->
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Dashboard 1</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'healthprovider:dashboard_home' %}">Dashboard</a>
+            </li>
+            <li>
+                <a href="{% url 'healthprovider:account_contact' %}">Contact Details</a>
+            </li>
+        </ol>
+    </div>
 </div>
 <div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				My Account
-			</div>
-			<div class="progress">
-				<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-				    aria-valuemax="100" style="width: 30%;">
-					<span class="sr-only">60% Complete</span>
-				</div>
-			</div>
-			<div class="panel-wrapper collapse in" aria-expanded="true">
-				<div class="panel-body">
-						<div class="form-body">
-							<h3 class="box-title">Contact Details</h3>
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">My Account</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form-body">
+                        <h3 class="box-title">Contact Details</h3>
 
-							<div class="row">
-								<div class="col-sm-12">
-									<div class="white-box">
-										 <form method="POST" class="post-form cureent_loca_form">
-                                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="white-box">
                                         <div class="form-group ">
                                             <label class="radio-inline">
-                                                <input type="radio" name="location_type" class="ltype" value="current" checked>Current Location
+                                                <input type="radio" name="location_type" class="ltype" value=".current" checked>Current Location
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="location_type" class="ltype" value="manual">Update Manually
+                                                <input type="radio" name="location_type" class="ltype" value=".manual">Update Manually
                                             </label>
                                         </div>
                                         <br>
-                                        <div class="current">
+                                        <div class="current location_sections">
 
-                                      <ul class="nav nav-tabs">
-                                        <li ><a data-toggle="tab" href="#geo">Current Location</a></li>
-                                        <li class="active"><a data-toggle="tab" href="#map">Enter Your Location</a></li>
-                                      </ul>
-                                      <div class="tab-content">
-                                        <div id="geo" class="tab-pane fade">
-                                            <div class="getlocation" style="cursor: pointer;">
-                                                <img src="https://git.reviewboard.kde.org/media/uploaded/files/2015/07/30/019abdbb-80cf-4935-8d6d-0c3e6927d2b3__gps_fixed_600.png" style="height:50px">
-                                               Click to Get Current Location
-                                            </div>
-                                        </div>
-                                        <div id="map" class="tab-pane fade  in active">
-                                          <div class="form-horizontal" style="width: 550px">
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Location:</label>
-
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="clickhealth_address" />
+                                            <ul class="nav nav-tabs">
+                                                <li>
+                                                    <a data-toggle="tab" href="#geo">Current Location</a>
+                                                </li>
+                                                <li class="active">
+                                                    <a data-toggle="tab" href="#map">Enter Your Location</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div id="geo" class="tab-pane fade">
+                                                    <div class="getlocation" style="cursor: pointer;">
+                                                        <img src="https://git.reviewboard.kde.org/media/uploaded/files/2015/07/30/019abdbb-80cf-4935-8d6d-0c3e6927d2b3__gps_fixed_600.png"
+                                                        style="height:50px"> Click to Get Current Location
                                                     </div>
                                                 </div>
+                                                <div id="map" class="tab-pane fade  in active">
+                                                    <div class="form-horizontal" style="width: 550px">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label">Location:</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" id="clickhealth_address" />
+                                                            </div>
+                                                        </div>
 
 
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="m-t-small" style="display:none">
-                                                    <label class="p-r-small col-sm-1 control-label">Lat.:</label>
+                                                        <div class="clearfix">&nbsp;</div>
+                                                        <div class="m-t-small" style="display:none">
+                                                            <label class="p-r-small col-sm-1 control-label">Lat.:</label>
 
-                                                    <div class="col-sm-3">
-                                                        <input type="text" class="form-control" style="width: 110px" name="longitude" id="clickhealth_lat" />
-                                                    </div>
-                                                    <label class="p-r-small col-sm-2 control-label">Long.:</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" style="width: 110px" name="longitude" id="clickhealth_lat" />
+                                                            </div>
+                                                            <label class="p-r-small col-sm-2 control-label">Long.:</label>
 
-                                                    <div class="col-sm-3">
-                                                        <input type="text" class="form-control" style="width: 110px" name="latitude" id="clickhealth_lon" />
+                                                            <div class="col-sm-3">
+                                                                <input type="text" class="form-control" style="width: 110px" name="latitude" id="clickhealth_lon" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        <script>
+                                                            var place = "";
+                                                            var input = document.getElementById('clickhealth_address');
+                                                            autocomplete = new google.maps.places.Autocomplete(input, {
+                                                                    types: ['geocode']
+                                                                });
+                                                            autocomplete.addListener('place_changed', function () {
+                                                                place = autocomplete.getPlace();
+                                                                makeRequest({ 'place' : place });
+                                                            });
+                                                        </script>
                                                     </div>
                                                 </div>
-                                                <div class="clearfix"></div>
-                                                <script>
-                                                    var place = "";
-                                                    var defaultBounds = new google.maps.LatLngBounds(
-                                                        new google.maps.LatLng(-33.8902, 151.1759),
-                                                        new google.maps.LatLng(-33.8474, 151.2631));
-
-                                                    var input = document.getElementById('clickhealth_address');
-                                                    var options = {
-                                                        types: ['geocode']
-                                                    };
-
-
-                                                    autocomplete = new google.maps.places.Autocomplete(input, options);
-                                                    autocomplete.addListener('place_changed', function() {
-                                                        place = autocomplete.getPlace();
-                                                        document.getElementById('id_place').innerHTML = placeToJSON(place)
-                                                    });
-                                                </script>
-
                                             </div>
-
                                         </div>
-                                      </div>
-
-
-                                            </div>
-                                        <div class="manual">
-
-                                           <div class="form-group">
-                                            <label for="id_state">State:</label><br>
-                                            <select name="state" class="form-control h40" placeholder="state" id="id_state">
-                                                <option value="" selected>---------</option>
+                                        <div class="manual location_sections">
+                                            <div class="form-group">
+                                                <label for="id_state">State:</label>
+                                                <br>
+                                                <select name="state" class="form-control h40" placeholder="state" id="id_state">
+                                                    <option value="" selected>---------</option>
                                                     {% for result in states %}
-                                                <option value="{{ result.pk }}">{{ result.name }}</option>
+                                                    <option value="{{ result.pk }}">{{ result.name }}</option>
                                                     {% endfor %}
-                                            </select>
-                                          </div>
-
-                                        <div class="form-group">
-                                            <label for="id_city">City:</label><br>
-                                            <select name="city" class="form-control h40" placeholder="city" id="id_city">
-                                            <option value="" selected>---------</option>
-
-                                            {% for result in cities %}
-                                            <option value="{{ result.pk }}">{{ result.name }}</option>
-                                            {% endfor %}
-
-                                            </select>
-                                        </div>
-										   <div class="form-group">
-											<label for="id_area">Area:</label><br>
-											<input type="text" name="area" maxlength="200" class="form-control h40" placeholder="area" id="id_area" />
-
-										  </div>
-                                        </div>
-                                    <br>
-                                    <div class="row">
-
-
-                                        <div class="col-md-12">
-        <br>
-
-                                            <div class="row">
-                                                        <div class="form-group col-md-12">
-                                                            <div class="icon-addon addon-md">
-											<textarea  name="place"  class="form-control border_borrom" placeholder="Place:" id="id_place" required/></textarea>
-                                                    </div>
-                                                   <!--
-                                                    <div class="form-group col-md-12">
-                                                            <div class="icon-addon addon-md">
-											<input type="text" name="door_no" maxlength="200" class="form-control border_borrom" placeholder="Door no:" id="id_door_no" required/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <div class="icon-addon addon-md">
-                                                        <input type="text" name="landmark" maxlength="200" class="form-control" placeholder="Enter Landmark" id="id_landmark" />
-
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                     <div class="icon-addon addon-md">
-                                                    <input type="text" name="pincode" maxlength="9" class="form-control" placeholder="Pincode" id="id_pincode" />
-
-                                                  </div>
-                                                </div>
-                                                -->
-
+                                                </select>
                                             </div>
 
+                                            <div class="form-group">
+                                                <label for="id_city">City:</label>
+                                                <br>
+                                                <select name="city" class="form-control h40" placeholder="city" id="id_city">
+                                                    <option value="" selected>---------</option>
 
+                                                    {% for result in cities %}
+                                                    <option value="{{ result.pk }}">{{ result.name }}</option>
+                                                    {% endfor %}
+
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_area">Area:</label>
+                                                <br>
+                                                <input type="text" name="area" maxlength="200" class="form-control h40" placeholder="area" id="id_area" />
+
+                                            </div>
                                         </div>
-
-
-                                    </div>
                                         <br>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <br>
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <div class="icon-addon addon-md">
+                                                            <pre id="id_place"></pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("div.location_sections").hide();
+            $("div.current").fadeIn();
 
-                                          <button type="submit" class="btn btn-success pull-right savebtn" style="color: #fff;background-color: #5cb85c;
-    border-color: #4cae4c;">Save & Next</button>
-                        </form>
-									</div>
-								</div>
-							</div>
-						</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<script src="{% static 'common/js/all.js' %}"></script>
+            $(".ltype").click(function () {
+                let radioValue = $("input[name='location_type']:checked").val();
+                $("div.location_sections").hide();
+                $(radioValue).fadeIn();
+            });
 
-
-<script>
-$(document).ready(function(){
-    $(".ltype").click(function(){
-             var radioValue = $("input[name='location_type']:checked").val();
-            if(radioValue == 'current'){
-                $(".manual").hide();
-                $(".current").show();
-            }else{
-                $(".current").hide();
-                $(".manual").show();
-            }
-    });
-});
-</script>
-
-
-
-<script>
-$(document).ready(function(){
-    $(".getlocation").click(function () {
-        if ("geolocation" in navigator){
-            navigator.geolocation.getCurrentPosition(function(position){
-                    $("#clickhealth_lat").val(position.coords.latitude);
-                    $("#clickhealth_lon").val(position.coords.longitude);
-                });
-        }else{
-            console.log("Browser doesn't support geolocation!");
-        }
-    });
-});
-</script>
-{% endblock content %}
+            $(".getlocation").click(function () {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        $("#clickhealth_lat").val(position.coords.latitude);
+                        $("#clickhealth_lon").val(position.coords.longitude);
+                        let latLong = {
+                            'lat' : position.coords.latitude,
+                            'lng' : position.coords.longitude,
+                        };
+                        makeRequest({ 'latLong' : latLong });
+                    });
+                } else
+                    alert("Browser doesn't support geolocation!");
+            });
+        });
+    </script>
+    {% endblock content %}
