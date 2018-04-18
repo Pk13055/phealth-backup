@@ -39,7 +39,6 @@
 			</div>
 			<div class="panel-wrapper collapse in" aria-expanded="true">
 				<div class="panel-body">
-					<form action="#" class="form-horizontal">
 						<div class="form-body">
 							<h3 class="box-title">Contact Details</h3>
 
@@ -60,17 +59,17 @@
                                         <div class="current">
 
                                       <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#geo">Current Location</a></li>
-                                        <li><a data-toggle="tab" href="#map">Enter Your Location</a></li>
+                                        <li ><a data-toggle="tab" href="#geo">Current Location</a></li>
+                                        <li class="active"><a data-toggle="tab" href="#map">Enter Your Location</a></li>
                                       </ul>
                                       <div class="tab-content">
-                                        <div id="geo" class="tab-pane fade in active">
+                                        <div id="geo" class="tab-pane fade">
                                             <div class="getlocation" style="cursor: pointer;">
                                                 <img src="https://git.reviewboard.kde.org/media/uploaded/files/2015/07/30/019abdbb-80cf-4935-8d6d-0c3e6927d2b3__gps_fixed_600.png" style="height:50px">
                                                Click to Get Current Location
                                             </div>
                                         </div>
-                                        <div id="map" class="tab-pane fade">
+                                        <div id="map" class="tab-pane fade  in active">
                                           <div class="form-horizontal" style="width: 550px">
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Location:</label>
@@ -96,23 +95,23 @@
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <script>
-                                                     var place = "";
-        var defaultBounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng(-33.8902, 151.1759),
-            new google.maps.LatLng(-33.8474, 151.2631));
+                                                    var place = "";
+                                                    var defaultBounds = new google.maps.LatLngBounds(
+                                                        new google.maps.LatLng(-33.8902, 151.1759),
+                                                        new google.maps.LatLng(-33.8474, 151.2631));
 
-        var input = document.getElementById('clickhealth_address');
-        var options = {
-            types: ['geocode']
-        };
+                                                    var input = document.getElementById('clickhealth_address');
+                                                    var options = {
+                                                        types: ['geocode']
+                                                    };
 
 
-        autocomplete = new google.maps.places.Autocomplete(input, options);
-        autocomplete.addListener('place_changed', function() {
-            place = autocomplete.getPlace();
-            console.log(place);
-        });
-    </script>
+                                                    autocomplete = new google.maps.places.Autocomplete(input, options);
+                                                    autocomplete.addListener('place_changed', function() {
+                                                        place = autocomplete.getPlace();
+                                                        document.getElementById('id_place').innerHTML = placeToJSON(place)
+                                                    });
+                                                </script>
 
                                             </div>
 
@@ -160,6 +159,11 @@
                                             <div class="row">
                                                         <div class="form-group col-md-12">
                                                             <div class="icon-addon addon-md">
+											<textarea  name="place"  class="form-control border_borrom" placeholder="Place:" id="id_place" required/></textarea>
+                                                    </div>
+                                                   <!--
+                                                    <div class="form-group col-md-12">
+                                                            <div class="icon-addon addon-md">
 											<input type="text" name="door_no" maxlength="200" class="form-control border_borrom" placeholder="Door no:" id="id_door_no" required/>
                                                     </div>
                                                 </div>
@@ -175,6 +179,7 @@
 
                                                   </div>
                                                 </div>
+                                                -->
 
                                             </div>
 
@@ -192,12 +197,14 @@
 								</div>
 							</div>
 						</div>
-					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+<script src="{% static 'common/js/all.js' %}"></script>
+
+
 <script>
 $(document).ready(function(){
     $(".ltype").click(function(){

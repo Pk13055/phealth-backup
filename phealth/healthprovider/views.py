@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext_lazy as _
 
-from api.models import (Appointment, Clinician, Provider, Speciality,
+from api.models import (Appointment, Clinician, Provider, Speciality,Location,
                         Transaction, User,Organization)
 from phealth.utils import get_provider, match_role, redirect, signin
 
@@ -352,8 +352,12 @@ class ContactTableView(DatatableView):
 
 @match_role("healthprovider")
 def account_contact(request):
-   me = User.objects.get(pk=request.session['pk'])
-   return render(request, 'healthprovider/dashboard/account/contact.html.j2', {})
+    me = User.objects.get(pk=request.session['pk'])
+    if request.method == "POST":
+        print(request.POST)
+        l = Location(place=request.POST['place'])
+        l.save()
+    return render(request, 'healthprovider/dashboard/account/contact.html.j2', {})
 
 
 
