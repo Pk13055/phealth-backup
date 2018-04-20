@@ -393,7 +393,10 @@ def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
 
 def schedule(request):
-    return render(request, 'healthseeker/scheduled.html', {})
+    me = User.objects.get(pk=request.session['pk'])
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.appointments.all()
+    return render(request, 'healthseeker/scheduled.html', {'values': result})
 
 
 def reference(request):
