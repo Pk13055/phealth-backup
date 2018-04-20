@@ -259,10 +259,22 @@ def step4(request):
 
 
 def step5(request):
+    me = User.objects.get(pk=request.session.get("pk"))
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -=20
+    if Address.objects.filter(user=me).count() > 0:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -=20
+    if Seeker.objects.get(user=me).profession:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -=20
 
-    return render(request,'healthseeker/registration/form5.html',{
-
-    })
+    return render(request,'healthseeker/registration/form5.html',{'ps':ps})
 
 #----------------------------------------------step6
 
@@ -271,6 +283,13 @@ def step5(request):
 def step6(request):
     me = User.objects.get(pk=request.session['pk'])
     sc = Seeker.objects.filter(user=me).first()
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps += 20
+    if Address.objects.filter(user=me).count() > 0:
+        ps += 20
+    if Seeker.objects.get(user=me).profession:
+        ps += 20
     if request.method == 'POST':
         if sc:
             form = LanguageForm(request.POST, instance=sc)
@@ -287,7 +306,8 @@ def step6(request):
     else:
         form = LanguageForm()
     lang = Languages.objects.all()
-    return render(request, 'healthseeker/registration/form6.html', {'form': form, 'lang': lang})
+    print(me)
+    return render(request, 'healthseeker/registration/form6.html', {'form': form, 'lang': lang, 'ps':ps})
 
 
 #--------------------------------------------------------
@@ -393,13 +413,30 @@ def information(request):
     else:
         form = FamilyForm(instance=me)
     return render(request, 'healthseeker/personal_information.html', {'form': form})
+#---------------------------------------------------------------------------------------
 
-
+match_role("healthseeker")
 def other(request):
+    me = User.objects.get(pk=request.session['pk'])
+    sc = Seeker.objects.filter(user=me).first()
+    if request.method == 'POST':
+        if sc:
+            form = LanguageForm(request.POST, instance=sc)
+        else:
+            form = LanguageForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = me
+            post.save()
+            return redirect('healthseeker:dashboard')
 
-    return render(request,'healthseeker/other_info.html',{
+    if sc:
+        form = LanguageForm(instance=sc)
+    else:
+        form = LanguageForm()
+    lang = Languages.objects.all()
+    return render(request, 'healthseeker/other_info.html', {'form': form, 'lang': lang})
 
-    })
 def records(request):
 
     return render(request,'healthseeker/health_records.html',{

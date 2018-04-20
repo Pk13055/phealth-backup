@@ -17,57 +17,38 @@
                                 {% include 'healthseeker/base_profile.html' %}
 
                                 <div class="my_pro_form_he lagunages">
-                                
+                                <div class="full_width curent_location lagunages">
+                                    <div class="form_reg_one_DC">
                                 <div class="form_reg_one_DC">
                                         <h2>Other Information</h2>
                                         <p>Languages Known</p>
                                     </div>
-                                    
-                                    <ul>
-                                        <li class="no_margin_left"><a href="#"><i class="fa fa-star"></i> Bengali</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Gujarati</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Hindi</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Kannada</a></li>
-                                        
-                                        <li class="no_margin_left"><a href="#"><i class="fa fa-star"></i> Marathi</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Odia</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Tamil</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Telugu</a></li>
-                                        
-                                        <li class="no_margin_left"><a href="#"><i class="fa fa-star"></i> English</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Urdu</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Nepali</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Bengali</a></li>
-                                        
-                                        
-                                        
-                                        
-                                    </ul>
+                                     <form method="POST" class="post-form">
+                                            {% csrf_token %}
+
+                                    {% for field in form %}
+										   <div class="form-group">
+											{{ field.label_tag }}<br>
+											{{ field }}<br>
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										{% endfor %}
+
+ <button type="submit" class="btn btn-success pull-right savebtn" style="color: #fff;background-color: #5cb85c;
+    border-color: #4cae4c;">Save & Next</button>
+
+                        </form>
+
                                     
                                     
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                        <select style="padding-left: 0 !important;
-    border-bottom: 1px solid #d8d8d8 !important;
-    border: 0;
-    width: 100%;    background-color: transparent;    box-shadow: none;" name="cars" class="form-control">
-                                            <option value="volvo">Profession</option>
-                                            <option value="saab">Option one</option>
-                                            <option value="fiat">Option Two</option>
-                                            <option value="audi">Option Three</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                                    
-                                    
-                                    
-                                 
+
                             </div>
                                 
                                 
                                 <ul class="save_next">
-                                    <li><a class="next_inf" href="#">Next</a></li>
-                                    <li><a class="save_inf" href="#">Save</a></li>
+
                                     
                                 </ul>
                                 

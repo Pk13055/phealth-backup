@@ -229,13 +229,14 @@
                                   <div class="u-text">
 										<h4>{{ healthseeker.org_name }}</h4>
 										<p class="text-muted">{{ user.name }}</p>
-										<p class="text-muted">{{ user.email }}</p><a href="{% url 'healthseeker:information' %}" class="btn btn-primary">View Profile</a></div>
+										{{ user.role }}
+										<p class="text-muted">{{ user.email }}</p><a href="{% url 'healthseeker:information' %}" class="btn  btn-danger">View Profile</a></div>
 
                                 </div>
                                     <p class="mt-4 card-text">
 											Profile Status <span>{{ ps }}%</span>
 									</p>
-                                    <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{ ps }}%"></div></div>
+                                    <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{ ps }}%"> {{ ps }}% Complete </div></div>
 
 									<!--<button class="btn btn-info btn-sm mt-3 mb-4">Follow</button>-->
 									<div class="border-top pt-3">
