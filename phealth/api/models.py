@@ -522,14 +522,19 @@ class Clinician(models.Model):
 	'''
 
     language_choices = (
-        ('english', 'english'),
-        ('hindi', 'hindi'),
-        ('telugu', 'telugu'),
-        ('marathi', 'marathi'),
-        ('malayalam', 'malayalam'),
-        ('gujarati', 'gujarati'),
-        ('bhojpuri', 'bhojpuri'),
-        ('tamil', 'tamil'),
+        ('hindi', 'Hindi'),
+        ('english', 'English'),
+        ('bengali', 'Bengali'),
+        ('telugu', 'Telugu'),
+        ('marathi', 'Marathi'),
+        ('tamil', 'Tamil'),
+        ('urdu', 'Urdu'),
+        ('kannada', 'Kannada'),
+        ('gujarati', 'Gujarati'),
+        ('bhojpuri', 'Bhojpuri'),
+        ('odia', 'Odia'),
+        ('malayalam', 'Malayalam'),
+        ('sanskri', 'Sanskri'),
         ('other', 'other'),
     )
 
@@ -852,6 +857,11 @@ class Appointment(models.Model):
         self.css_class = css[ops.index(self.status)]
 
         super(Appointment, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'appointments'
+        managed = True
+        unique_together = (('date', 'time', 'under', 'provider'),)
 
 
 class Testimonial(models.Model):

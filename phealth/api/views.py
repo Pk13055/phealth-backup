@@ -44,14 +44,34 @@ def doctors_list(request):
             depth = 1
             fields = '__all__'
 
+    class AppointmentSerializer(ModelSerializer):
+        class Meta:
+            model = Appointment
+            depth = 1
+            fields = ('date', 'time', 'duration',
+                'from_timestamp', 'to_timestamp',)
+
     class ClinicianSerializer(ModelSerializer):
 
         # timings = SerializerMethodField()
+        pending_appointments = SerializerMethodField()
+        confirmed_appointments = SerializerMethodField()
 
         class Meta:
             model = Clinician
             depth = 5
             fields = '__all__'
+
+
+        def get_pending_appointments(self, c):
+            ''' gets the pending appointments for the given clinician '''
+            apts = Appointment.objects.filter(under=c).filter(status='pending').all()
+            return AppointmentSerializer(apts, many=True).data
+
+        def get_confirmed_appointments(self, c):
+            ''' gets the confirmed appointments for the given clinician '''
+            apts = Appointment.objects.filter(under=c).filter(status='confirmed').all()
+            return AppointmentSerializer(apts, many=True).data
 
         # def get_timings(self, c):
         #     ''' get the required timings array format as specified '''
@@ -81,6 +101,7 @@ def doctors_list(request):
 
     response['hospitals'] = [{'name' : _.name, 'id' : _.pk, 'location_id' : _.location.pk } for _ in hospitals]
     response['locations'] = locations
+    response['languages'] = [_[0] for _ in Clinician.language_choices]
 
     clinicians = {}
     for _ in hospitals:
