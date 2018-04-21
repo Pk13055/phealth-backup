@@ -252,7 +252,6 @@ def step4(request):
             comp['types'] = comp['types']['']
             if isinstance(comp['types'], str):
                 comp['types'] = [comp['types']]
-        print(json.dumps(place, indent=4))
         try:
             l = Location(place=place)
             l.save()
@@ -290,7 +289,7 @@ def step4(request):
 
     return render(request, 'healthseeker/registration/form4.html', {
         'title' : "Account - Location Settings",
-        'hospital' : p,
+        'seeker' : p,
 
     })
 
@@ -390,20 +389,61 @@ def accountmanager(requset):
 
     })
 
+@csrf_exempt
 @match_role("healthseeker")
-def contact(requset):
-    me = User.objects.get(pk=requset.session['pk'])
-    if requset.method == 'POST':
-        form = AddressForm(requset.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = me
-            return redirect('healthseeker:other')
-    else:
-        form = AddressForm
-    states = State.objects.all()
-    cities = City.objects.all()
-    return render(requset, 'healthseeker/contact_details.html', {'form': form, 'states': states, 'cities': cities})
+def contact(request):
+    me = User.objects.get(pk=request.session['pk'])
+    p = Seeker.objects.filter(user=me).first()
+    print(p)
+
+    if request.method == "POST":
+        data = parser.parse(request.POST.urlencode())
+        place = data['place']
+        place['address_components'] = list(place['address_components'].values())
+        for comp in place['address_components']:
+            comp['types'] = comp['types']['']
+            if isinstance(comp['types'], str):
+                comp['types'] = [comp['types']]
+        try:
+            l = Location(place=place)
+            l.save()
+            status = True
+            data = place
+        except Exception as e:
+            print(e)
+            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
+            l = temp_loc or p.location
+            if l == p.location:
+                status = True
+                data = ["Same Location as before!"]
+            elif temp_loc is None:
+                status = False
+                data = [str(e)]
+            else:
+                status = True
+                data = l
+
+        p.location = l
+        p.save()
+
+        if isinstance(data, Location):
+            class LocationSerializer(ModelSerializer):
+                class Meta:
+                    depth = 1
+                    fields = ('lat', 'long', 'full_name', 'name',)
+                    model = Location
+            data = LocationSerializer(data).data
+
+        return JsonResponse({
+            'status' : status,
+            'data' : data,
+        })
+
+    return render(request, 'healthseeker/contact_details.html', {
+        'title' : "Account - Location Settings",
+        'seeker' : p,
+
+    })
 
 
 def intrest(requset):
@@ -498,4 +538,4 @@ def changepassword(request):
 
     })
 
-
+    
