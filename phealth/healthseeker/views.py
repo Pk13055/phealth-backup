@@ -1,16 +1,22 @@
 from random import randint
 import requests
+import json
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import *
 # Create your views here.
-from api.models import User
+from api.models import User,Location
 from api.models import Seeker
 from phealth.utils import signin
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect, render, get_object_or_404
 from phealth.utils import  match_role, redirect, signin
 from django.contrib.auth.hashers import make_password,check_password
+from django.utils.decorators import method_decorator
+from querystring_parser import parser
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.serializers import ModelSerializer
+from django.http import HttpResponse, JsonResponse
 
 
 def SignIn(request):
@@ -231,32 +237,62 @@ def User_delete(request, pk):
 
 
 #------------------------------------------------------------------------------
+@csrf_exempt
+@match_role("healthseeker")
 def step4(request):
-    me = User.objects.get(pk=request.session['pk'])
+    me = User.objects.get(pk=request.session['pk']) 
+    p = Seeker.objects.filter(user=me).first()
+    print(p)
 
-    sc = Address.objects.filter(user=me).first()
-    print(sc)
-    if request.method == 'POST':
-        if sc:
-            form = AddressForm(request.POST, instance=sc)
-        else:
-            form = AddressForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = me
-            post.save()
-            print(post.pk)
-            return redirect('healthseeker:step5')
+    if request.method == "POST":
+        data = parser.parse(request.POST.urlencode())
+        place = data['place']
+        place['address_components'] = list(place['address_components'].values())
+        for comp in place['address_components']:
+            comp['types'] = comp['types']['']
+            if isinstance(comp['types'], str):
+                comp['types'] = [comp['types']]
+        print(json.dumps(place, indent=4))
+        try:
+            l = Location(place=place)
+            l.save()
+            status = True
+            data = place
+        except Exception as e:
+            print(e)
+            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
+            l = temp_loc or p.location
+            if l == p.location:
+                status = True
+                data = ["Same Location as before!"]
+            elif temp_loc is None:
+                status = False
+                data = [str(e)]
+            else:
+                status = True
+                data = l
 
-    if sc:
-        form = AddressForm(instance=sc)
-    else:
-        form = AddressForm
-    states = State.objects.all()
-    cities = City.objects.all()
-    return render(request, 'healthseeker/registration/form4.html', {'form': form,'states':states,'cities':cities,'sc':sc})
+        p.location = l
+        p.save()
 
+        if isinstance(data, Location):
+            class LocationSerializer(ModelSerializer):
+                class Meta:
+                    depth = 1
+                    fields = ('lat', 'long', 'full_name', 'name',)
+                    model = Location
+            data = LocationSerializer(data).data
 
+        return JsonResponse({
+            'status' : status,
+            'data' : data,
+        })
+
+    return render(request, 'healthseeker/registration/form4.html', {
+        'title' : "Account - Location Settings",
+        'hospital' : p,
+
+    })
 
 def step5(request):
     me = User.objects.get(pk=request.session.get("pk"))
@@ -386,8 +422,19 @@ def booking(request):
 def favaroitedoctors(requset):
     return render(requset,'healthseeker/favorite_decors.html',{})
 
-def complaints(requset):
-    return render(requset,'healthseeker/comlaints.html',{})
+def complaints(request):
+    me=User.objects.get(pk=request.session['pk'])
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:complaints')
+    else:
+        form=PostForm()
+    result = Seeker.objects.get(user=me)
+    print(result)
+    return render(request,'healthseeker/comlaints.html',{'form':form,'result':result})
 
 def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
