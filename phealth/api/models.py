@@ -501,7 +501,10 @@ class Seeker(models.Model):
 
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-    family = models.ForeignKey(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
+
+    family = models.OneToOneField(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
     appointments = models.ManyToManyField('Appointment', editable=False)
     profession = models.CharField(max_length=100, choices=profession_choices, default="other")
     language = models.ManyToManyField('Languages',  null=True, blank=True)
