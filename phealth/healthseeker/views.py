@@ -37,11 +37,11 @@ def SignIn(request):
 def dashboard(request):
     me = User.objects.get(pk=request.session['pk'])
     email = User.objects.get(pk=request.session['pk'])
-    part = Seeker.objects.create(user=email)
+    part = Seeker.objects.get(user=email)
     print(part)
 
     #part = Seeker.objects.values('appointments').count()
-    appointment = Seeker.objects.all().values('appointments').count()
+    appointment = part.appointments.all().count()
 
     healthchecks = HealthCheckup.objects.count()
     ps = 40
@@ -50,7 +50,7 @@ def dashboard(request):
     if Address.objects.filter(user=me).count() > 0:
         ps +=20
 
-    if Seeker.objects.filter(user=me).values('profession'):
+    if Seeker.objects.get(user=me).profession:
         ps +=20
 
 

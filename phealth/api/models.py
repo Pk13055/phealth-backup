@@ -498,6 +498,18 @@ class Seeker(models.Model):
         ('other', 'other'),
     )
 
+    language_choices = (
+        ('english', 'english'),
+        ('hindi', 'hindi'),
+        ('telugu', 'telugu'),
+        ('marathi', 'marathi'),
+        ('malayalam', 'malayalam'),
+        ('gujarati', 'gujarati'),
+        ('bhojpuri', 'bhojpuri'),
+        ('tamil', 'tamil'),
+        ('other', 'other'),
+    )
+
 
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
@@ -506,7 +518,7 @@ class Seeker(models.Model):
     family = models.OneToOneField(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
     appointments = models.ManyToManyField('Appointment', editable=False)
     profession = models.CharField(max_length=100, choices=profession_choices, default="other")
-    language = models.ManyToManyField('Languages',  null=True, blank=True)
+    language = models.CharField(max_length=200, choices=language_choices, default='english')
 
 
     healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
