@@ -37,7 +37,7 @@ def SignIn(request):
 def dashboard(request):
     me = User.objects.get(pk=request.session['pk'])
     email = User.objects.get(pk=request.session['pk'])
-    part = Seeker.objects.get(user=email)
+    part = Seeker.objects.get(user=me)
     print(part)
 
     #part = Seeker.objects.values('appointments').count()
@@ -75,6 +75,8 @@ def otp(request):
             upost.password = make_password(request.POST['password'])
             me = User.objects.get(pk=request.session['pk'])
             print(me)
+            s = Seeker.objects.create(user=me)
+            print(s)
             upost.save()
             if signin("healthseeker", request):
                 return redirect('healthseeker:step2')
@@ -298,7 +300,7 @@ def step4(request):
     })
 
 def step5(request):
-    me = User.objects.get(pk=request.session.get("pk"))
+    me = User.objects.get(pk=request.session['pk'])
     ps = 40
     if Seeker.objects.filter(family=me).count() > 0:
         ps += 20
@@ -308,7 +310,7 @@ def step5(request):
         ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -=20
-    if Seeker.objects.all().values('profession'):
+    if Seeker.objects.get(user=me).profession:
         ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -=20
@@ -327,7 +329,7 @@ def step6(request):
         ps += 20
     if Address.objects.filter(user=me).count() > 0:
         ps += 20
-    if Seeker.objects.all().values('profession'):
+    if Seeker.objects.get(user=me).profession:
         ps += 20
     if request.method == 'POST':
         if sc:
@@ -457,8 +459,8 @@ def intrest(requset):
 @match_role("healthseeker")
 def booking(request):
     me = User.objects.get(pk=request.session['pk'])
-    sobj = Seeker.objects.filter(user=me)
-    result = Seeker.objects.all().values('appointments')
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.appointments.all()
     return render(request, 'healthseeker/booked.html', {'values': result})
 #-----------------------------------------------------------------------------------------------------------
 
@@ -475,7 +477,7 @@ def complaints(request):
             return redirect('healthseeker:complaints')
     else:
         form=PostForm()
-    result = Seeker.objects.filter(user=me)
+    result = Seeker.objects.get(user=me)
     print(result)
     return render(request,'healthseeker/comlaints.html',{'form':form,'result':result})
 
@@ -484,8 +486,8 @@ def healthalerts(requset):
 
 def schedule(request):
     me = User.objects.get(pk=request.session['pk'])
-    sobj = Seeker.objects.filter(user=me)
-    result = Seeker.objects.all().values('appointments')
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.appointments.all()
     return render(request, 'healthseeker/scheduled.html', {'values': result})
 
 
