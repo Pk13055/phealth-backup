@@ -35,8 +35,8 @@ def SignIn(request):
 
 
 def dashboard(request):
-    me = User.objects.get(pk=request.session['pk'])
-    email = User.objects.get(pk=request.session['pk'])
+    me = User.objects.get(pk=request.session.get("pk"))
+    email = User.objects.get(pk=request.session.get("pk"))
     part = Seeker.objects.get(user=me)
     print(part)
 
@@ -75,8 +75,6 @@ def otp(request):
             upost.password = make_password(request.POST['password'])
             me = User.objects.get(pk=request.session['pk'])
             print(me)
-            s = Seeker.objects.create(user=me)
-            print(s)
             upost.save()
             if signin("healthseeker", request):
                 return redirect('healthseeker:step2')
@@ -131,6 +129,9 @@ def step2(request):
         request.session['discountcard_id'] = request.POST['discountcard_id']
         return redirect('healthseeker:step3')
     cards = DiscountCard.objects.all()
+    me = User.objects.get(pk=request.session['pk'])
+    s= Seeker.objects.create(user=me)
+    print(s)
     return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 #-----------------------------------------------------------------------------------------------
@@ -249,7 +250,6 @@ def step4(request):
     me = User.objects.get(pk=request.session['pk']) 
     p = Seeker.objects.filter(user=me).first()
     print(p)
-
     if request.method == "POST":
         data = parser.parse(request.POST.urlencode())
         place = data['place']
@@ -438,17 +438,19 @@ def contact(request):
                     fields = ('lat', 'long', 'full_name', 'name',)
                     model = Location
             data = LocationSerializer(data).data
-
         return JsonResponse({
             'status' : status,
             'data' : data,
         })
-
+    me = User.objects.get(pk=request.session['pk'])
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.location
     return render(request, 'healthseeker/contact_details.html', {
         'title' : "Account - Location Settings",
         'seeker' : p,
+        'result':result,
 
-    })
+        })
 
 
 def intrest(requset):
