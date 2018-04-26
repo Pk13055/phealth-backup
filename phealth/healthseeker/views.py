@@ -35,24 +35,24 @@ def SignIn(request):
 
 
 def dashboard(request):
-    me = User.objects.get(pk=request.session.get("pk"))
-    email = User.objects.get(pk=request.session.get("pk"))
+    me = User.objects.get(pk=request.session['pk'])
+    email = User.objects.get(pk=request.session['pk'])
     part = Seeker.objects.get(user=me)
     print(part)
 
     #part = Seeker.objects.values('appointments').count()
-    appointment = part.appointments.all().count()
-
-    healthchecks = HealthCheckup.objects.count()
+    appointment = Seeker.objects.filter(user=me).values('appointments').count()
+    print(me,"appointment=",appointment)
+    healthchecks = Seeker.objects.filter(user=me).values('healthchecks').count()
+    print(me,"healthchecks=",healthchecks)
     ps = 40
     if Seeker.objects.filter(family=me).count() > 0:
         ps +=20
     if Address.objects.filter(user=me).count() > 0:
         ps +=20
 
-    if Seeker.objects.get(user=me).profession:
+    if Seeker.objects.filter(user=me).values('profession'):
         ps +=20
-
 
 
     return render(request, 'healthseeker/dashboard.html', {
@@ -63,6 +63,7 @@ def dashboard(request):
                                     'ps':ps
 
     })
+
 
 
 def otp(request):
@@ -161,6 +162,7 @@ def step3(request):
    # print('data', data)
    family = Seeker.objects.filter(family = me)
    print(family.first())
+
    #psobjs = Affiliation.objects.filter(ipId=x)
    #queryset = Sessions.objects.filter(sessionId__in=family.first)
 
@@ -463,6 +465,7 @@ def booking(request):
     me = User.objects.get(pk=request.session['pk'])
     sobj = Seeker.objects.get(user=me)
     result = sobj.appointments.all()
+    print(me, "appointment=", result)
     return render(request, 'healthseeker/booked.html', {'values': result})
 #-----------------------------------------------------------------------------------------------------------
 
