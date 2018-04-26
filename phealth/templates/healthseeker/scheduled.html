@@ -3,26 +3,26 @@
 
 {% block content %}
 
-      
+
 
         <section class="form_reg_one_hero dash_board">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        
+
                         <div class="form_reg_one form_reg_one_m_p">
-                            
-                            
+
+
                             <div class="form_reg_one_in form_reg_one_in_my_p">
-                                
+
                                 <h3>Appoinments</h3>
-                        
+
                                {% include 'healthseeker/base_appointments.html' %}
-                                
+
                                 <div class="my_pro_form_he my_pro_form_wait">
-                                
+
                                     <h2>Customer Care</h2>
-                                    
+
                                     <div class="custo_care_acc">
                                          {% for result in values %}
                                         <ul class="health_recordsz">
@@ -40,20 +40,20 @@
                                                 <span>Shree Krishna Dental <br>Clinic {{ result.date | date:"l" }},{{ result.time }}</span>
                                             </div>
                                         </li>
-                                            
+
                                         <li class="view_desript view_desript_a">
                                             <a class="Presciptiona" href="#">View Presciption</a>
                                             <a class="View_Reports" href="#">View Reports</a>
                                         </li>
                                         <li class="view_desript view_desript_b">
                                             <a data-toggle="modal" data-target=".bs-example-modal-lg" class="Presciptiona" href="#">Feedback / Complaints</a>
-                                            
+
                                             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" >
                                   <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                      
+
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                  
+
                                         <div class="modal-body revewi_feedbac">
                                             <div class="full_width">
                                                 <div class="appointment_main_hero appointment_main_hero_fina">
@@ -89,12 +89,12 @@
 
 					                           </div>
                                             </div>
-                                            
+
                                             <div class="full_width start_ratging">
                                                 <h4>Rate your Experience</h4>
-                                                
+
                                                 <table>
-                                                  
+
                                                   <tbody>
                                                     <tr class="hotel_a">
                                                       <td>Doctor</td>
@@ -128,11 +128,11 @@
                                                         </div>
                                                       </td>
                                                     </tr>
-                                                    
+
                                                   </tbody>
                                                 </table>
-                                                
-                                                
+
+
                                                 <form class="feddback_comment">
                                                     <div class="form-group">
                                                       <textarea class="form-control" rows="3" placeholder="Write down your feedback"></textarea>
@@ -140,8 +140,8 @@
                                                 </form>
 
                                             </div>
-                                            
-                                            
+
+
                                         </div>
 
                                     </div>
@@ -149,7 +149,7 @@
                                 </div>
                                             <a class="View_Reports" href="#">Book Again</a>
                                         </li>
-                                        
+
                                         </ul>
                                     </div>
                                 </div>
@@ -162,4 +162,5 @@
                 </div>
             </div>
         </section>
+
              {% endblock %}

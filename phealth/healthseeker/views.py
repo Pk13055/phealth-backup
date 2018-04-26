@@ -75,6 +75,7 @@ def otp(request):
             upost.role = "healthseeker"
             upost.password = make_password(request.POST['password'])
             me = User.objects.get(pk=request.session['pk'])
+            s = Seeker.objects.get(user=me)
             print(me)
             upost.save()
             if signin("healthseeker", request):
@@ -447,11 +448,13 @@ def contact(request):
     me = User.objects.get(pk=request.session['pk'])
     sobj = Seeker.objects.get(user=me)
     result = sobj.location
+    data = result.full_name
+    print(data)
     return render(request, 'healthseeker/contact_details.html', {
         'title' : "Account - Location Settings",
         'seeker' : p,
         'result':result,
-
+        'data':data
         })
 
 
