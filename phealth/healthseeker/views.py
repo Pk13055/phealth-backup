@@ -35,24 +35,25 @@ def SignIn(request):
 
 
 def dashboard(request):
-    me = User.objects.get(pk=request.session['pk'])
-    email = User.objects.get(pk=request.session['pk'])
-    part = Seeker.objects.get(user=email)
-    print(part)
-
+    me = User.objects.get(pk=request.session.get("pk"))
+    email = User.objects.get(pk=request.session.get("pk"))
     #part = Seeker.objects.values('appointments').count()
-    appointment = part.appointments.all().count()
+    appointment = Seeker.objects.filter(user=me).values('appointments').count()
+    print(me,"appointment=",appointment)
+    healthchecks = Seeker.objects.filter(user=me).values('healthchecks').count()
+    print(me,"healthchecks=",healthchecks)
 
-    healthchecks = HealthCheckup.objects.count()
+
+
+
     ps = 40
     if Seeker.objects.filter(family=me).count() > 0:
         ps +=20
     if Address.objects.filter(user=me).count() > 0:
         ps +=20
 
-    if Seeker.objects.get(user=me).profession:
+    if Seeker.objects.filter(user=me).values('profession'):
         ps +=20
-
 
 
     return render(request, 'healthseeker/dashboard.html', {
@@ -63,6 +64,7 @@ def dashboard(request):
                                     'ps':ps
 
     })
+
 
 
 def otp(request):
@@ -125,10 +127,13 @@ def registration(request):
 
 
 def step2(request):
+    me = User.objects.get(pk=request.session['pk'])
     if request.method == 'POST':
         request.session['discountcard_id'] = request.POST['discountcard_id']
         return redirect('healthseeker:step3')
     cards = DiscountCard.objects.all()
+    sav = Seeker.objects.create(user=me)
+    print(sav)
     return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 #-----------------------------------------------------------------------------------------------
@@ -158,6 +163,7 @@ def step3(request):
    # print('data', data)
    family = Seeker.objects.filter(family = me)
    print(family.first())
+
    #psobjs = Affiliation.objects.filter(ipId=x)
    #queryset = Sessions.objects.filter(sessionId__in=family.first)
 
@@ -457,8 +463,9 @@ def intrest(requset):
 @match_role("healthseeker")
 def booking(request):
     me = User.objects.get(pk=request.session['pk'])
-    sobj = Seeker.objects.filter(user=me)
-    result = Seeker.objects.all().values('appointments')
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.appointments.all()
+    print(me, "appointment=", result)
     return render(request, 'healthseeker/booked.html', {'values': result})
 #-----------------------------------------------------------------------------------------------------------
 

@@ -19,12 +19,11 @@
                                 {% include 'healthseeker/base_profile.html' %}
 
                                 <div class="my_pro_form_he">
-                                     <form class="registration_form">
 
 
                                 <h2>Please fill the Personal Information form!</h2>
 
-                                  <form method="POST" class="registration_form1">{% csrf_token %}
+                                  <form method="POST" class="registration_form">{% csrf_token %}
                                    <div class="row">
                             	        {% for field in form %}
                                                    <div class="form-group custom_md_3 col-md-6">
