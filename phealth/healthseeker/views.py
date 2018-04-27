@@ -465,8 +465,10 @@ def booking(request):
     me = User.objects.get(pk=request.session['pk'])
     sobj = Seeker.objects.get(user=me)
     result = sobj.appointments.all()
+    count = sobj.appointments.all().count()
+    print(count)
     print(me, "appointment=", result)
-    return render(request, 'healthseeker/booked.html', {'values': result})
+    return render(request, 'healthseeker/booked.html', {'values': result , 'count': count})
 #-----------------------------------------------------------------------------------------------------------
 
 def favaroitedoctors(requset):

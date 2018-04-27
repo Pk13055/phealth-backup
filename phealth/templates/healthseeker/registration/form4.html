@@ -135,29 +135,19 @@
                                             </div>
                                         </div>
                                         <div class="manual location_sections">
-                                            <div class="form-group">
-                                                <label for="id_state">State:</label>
-                                                <br>
-                                                <select name="state" class="form-control h40" placeholder="state" id="id_state">
-                                                    <option value="" selected>---------</option>
-                                                    {% for result in states %}
-                                                    <option value="{{ result.pk }}">{{ result.name }}</option>
-                                                    {% endfor %}
+
+                                            <select name="country" class="countries order-alpha" id="countryId">
+                                                    <option value="">Select Country</option>
+                                                </select><br><br>
+                                                <select name="state" class="states order-alpha" id="stateId">
+                                                    <option value="">Select State</option>
+                                                </select><br><br>
+                                                <select name="city" class="cities order-alpha limit-pop-10000" id="cityId">
+                                                    <option value="">Select City</option>
                                                 </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="id_city">City:</label>
-                                                <br>
-                                                <select name="city" class="form-control h40" placeholder="city" id="id_city">
-                                                    <option value="" selected>---------</option>
-
-                                                    {% for result in cities %}
-                                                    <option value="{{ result.pk }}">{{ result.name }}</option>
-                                                    {% endfor %}
-
-                                                </select>
-                                            </div>
+                                                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                                <script src="//geodata.solutions/includes/countrystatecity.js"></script>
+                                        </div>
                                             <div class="form-group">
                                                 <label for="id_area">Area:</label>
                                                 <br>
