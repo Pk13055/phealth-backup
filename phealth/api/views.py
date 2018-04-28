@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
+from psycopg2.extras import NumericRange
 from querystring_parser import parser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
@@ -193,6 +194,67 @@ def attach_user(request):
     return JsonResponse({
         'status' : status,
         'data' : data,
+    })
+
+@require_POST
+@csrf_exempt
+def healthchecks_list(request, healthcheck=None):
+    '''
+        @description returns a list of the matching healthchecks
+        @param request -> POST request
+        @param type -> Preventive/Diabetes/Cancer/Antenatal
+        @param age_group -> 0:60:10, 60+
+        @param gender -> male/female
+    '''
+    status = False
+
+    class HealthCheckupSerializer(ModelSerializer):
+
+        hospitals = SerializerMethodField()
+        def get_hospitals(self, checkup):
+            class ProviderSerializer(ModelSerializer):
+                class Meta:
+                    model = Provider
+                    depth = 3
+                    fields = ('location', 'specialities',
+                    'facilities', 'offerings', 'special_checks', 'id',
+                    'name', 'type',)
+            return ProviderSerializer(checkup.provider_set.all(), many=True).data
+
+        class Meta:
+            model = HealthCheckup
+            depth = 4
+            fields = '__all__'
+
+    if healthcheck:
+        try:
+            cur_check = HealthCheckup.objects.get(Q(uid=healthcheck) | Q(id=healthcheck))
+            status = True
+            data = HealthCheckupSerializer(cur_check).data
+        except ValidationError:
+            status = False
+            data = ["Invalid UID/id"]
+
+        return JsonResponse({
+                'status' : status,
+                'data' : data
+            })
+
+    healthchecks = HealthCheckup.objects.filter(type__icontains=
+        request.POST['type']).filter(Q(gender__icontains=request.POST['gender'])
+            | Q(gender__icontains='both'))
+
+
+    age_low, age_high = tuple(map(int, request.POST['age_range'].split('-')))
+    age_range = NumericRange(age_low, age_high)
+    healthchecks = healthchecks.filter(age__contained_by=age_range)
+
+    data = HealthCheckupSerializer(healthchecks, many=True).data
+    status = True
+
+    return JsonResponse({
+        'status' : status,
+        'data' : data
     })
 
 
