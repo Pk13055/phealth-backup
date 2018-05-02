@@ -849,6 +849,7 @@ class Appointment(models.Model):
 		('confirmed', 'confirmed'),
 		('cancelled', 'cancelled'),
 		('rescheduled', 'rescheduled'),
+		('completed', 'completed'),
 	)
 
 	CSS_options = (

@@ -1,15 +1,15 @@
 from random import randint
+
 import requests
-from django.shortcuts import render, redirect
-from .forms import *
+from django.contrib.auth.hashers import check_password, make_password
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+
 # Create your views here.
-from api.models import User
-from api.models import Seeker
-from phealth.utils import signin
-from django.contrib.auth.hashers import make_password
-from django.shortcuts import redirect, render, get_object_or_404
-from phealth.utils import  match_role, redirect, signin
-from django.contrib.auth.hashers import make_password,check_password
+from api.models import Seeker, User
+from phealth.utils import match_role, redirect, signin
+
+from .forms import *
 
 
 def SignIn(request):
@@ -234,8 +234,6 @@ def intrest(requset):
 
 
 
-def booking(requset):
-    return render(requset,'healthseeker/booked.html',{})
 
 def favaroitedoctors(requset):
     return render(requset,'healthseeker/favorite_decors.html',{})
@@ -246,11 +244,47 @@ def complaints(requset):
 def healthalerts(requset):
     return render(requset,'healthseeker/health_alerts.html',{})
 
-def schedule(request):
+# Appointment Routes
 
-    return render(request,'healthseeker/scheduled.html',{
 
+def appointment_booked(request):
+    '''appointment route for the upcoming appointments'''
+
+    seeker = Seeker.objects.filter(user__email=request.session['email']).first()
+    records = seeker.appointments.filter(status='pending').order_by('-from_timestamp')
+
+    return render(request,'healthseeker/appointment/appointment.html.j2',{
+        'title' : "Appointment - Booked",
+        'type' : 'booked',
+        'records' : records,
     })
+
+
+def appointment_scheduled(request):
+    '''scheduled appointments'''
+
+    seeker = Seeker.objects.filter(user__email=request.session['email']).first()
+    records = seeker.appointments.filter(Q(status='confirmed') | Q(status='rescheduled')).order_by('-from_timestamp')
+
+    return render(request,'healthseeker/appointment/appointment.html.j2', {
+        'title' : "Appointment - Scheduled",
+        'type' : 'scheduled',
+        'records' : records,
+    })
+
+
+def appointment_past(request):
+    ''' complete history of past appointments'''
+
+    seeker = Seeker.objects.filter(user__email=request.session['email']).first()
+    records = seeker.appointments.filter(Q(status='completed') | Q(status='cancelled')).order_by('-from_timestamp')
+
+    return render(request, 'healthseeker/appointment/appointment.html.j2', {
+        'title' : 'Appointment - History',
+        'type' : 'past',
+        'records' : records,
+    })
+
 
 def reference(request):
 
