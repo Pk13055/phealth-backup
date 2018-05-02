@@ -8,7 +8,7 @@
                         <div class="full_width form_reg_one">
 
                             <div class="header_form">
-                                <div class="form_reg_one_in">
+
                                     <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:30%"></div></div>
                                 </div>
 
@@ -98,12 +98,13 @@
                     </div>
                                   </div>
                                 </div>
-
+                        <div class="form_reg_one_in">
                                 <div class="full_width">
                                 <table class="table table-striped famil_membe_table">
                                          <thead>
                                     <tr>
                                         <th>Name</th>
+                                    <!-- <th>Relation</th>-->
                                         <th>Mobile</th>
                                         <th>Email</th>
                                         <th>Gender</th>
@@ -115,8 +116,9 @@
                                    {% for result in family %}
                                     <tr>
                                         <td>{{ result.user.name }} </td>
+                                       <!-- <td>{{ result.family }} </td>-->
                                         <td>{{ result.user.mobile }} </td>
-                                        <td>{{ result.family }}</td>
+                                        <td>{{ result.user.email }}</td>
                                         <td>{{ result.user.gender }} </td>
                                         <td>{{ result.user.dob }} </td>
 
