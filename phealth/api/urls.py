@@ -8,6 +8,8 @@ app_name = "api"
 
 custom_apis = [
 	path('doctors/', views.doctors_list, name='doctors_list'),
+	path('healthchecks/', views.healthchecks_list, name='healthchecks_list'),
+	path('healthchecks/<uuid:healthcheck>/', views.healthchecks_list, name='healthchecks_list'),
 	path('appointment/', views.make_appointment, name='book_appointment'),
 	path('attach_user/', views.attach_user, name='attach_user')
 ]
