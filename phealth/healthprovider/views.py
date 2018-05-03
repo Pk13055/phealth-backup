@@ -316,6 +316,10 @@ def account_basic(request):
         'user_form' : UserForm(instance=p.poc),
     })
 
+#------------------------------------------------------------------------------------
+@match_role("healthprovider")
+def account_contact(request):
+	''' route for account - contact  '''
 
 @method_decorator(match_role("healthprovider"), name="dispatch")
 class ContactTableView(DatatableView):
@@ -351,6 +355,7 @@ class ContactTableView(DatatableView):
         # p = get_provider(self.request.session['email'])
         # return Appointment.objects.order_by('time', 'date').filter(provider=p)
         return
+
 
 
 @csrf_exempt
@@ -413,6 +418,7 @@ def account_contact(request):
 
 @match_role("healthprovider")
 def account_speciality(request):
+
     ''' route for account - speciality  '''
 
     u = Provider.objects.filter(poc__email=request.session['email']).first()
@@ -437,6 +443,8 @@ def account_speciality(request):
         "speciality_list" : s,
     })
 
+
+#------------------------------------------------------------
 
 @match_role("healthprovider")
 def account_facilities(request):

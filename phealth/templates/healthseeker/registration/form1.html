@@ -3,7 +3,11 @@
 {% load static %}
 
 {% block content %}
-
+<style>
+    ::-webkit-input-placeholder {
+  text-transform:capitalize;
+}
+</style>
 
         <section class="form_reg_one_hero">
             <div class="container">
@@ -54,6 +58,8 @@
                                       </ul>
                                     </div>
                                    </div>
+
+
                         </form>
 
 
@@ -68,4 +74,13 @@
                 </div>
             </div>
         </section>
+<script>
+$(document).ready(function(){
+        $('#id_password').attr('type', 'password');
+        $('#id_dob').attr('type', 'date');
+        $('#id_dob').val('');
+});
+</script>
+
+
 {% endblock %}

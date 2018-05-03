@@ -1,19 +1,15 @@
 {% load static %}
+<ul class="my_profile_div my_profile_div_w">
+    <li>
+        <a href="{% url 'healthseeker:booking' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Booked</a>
+    </li>
 
+    <li>
+        <a href="{% url 'healthseeker:schedule' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Scheduled</a>
+    </li>
 
+    <li><a href="{% url 'healthseeker:complaints' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Visited</a></li>
 
+    <li class="search_for_dc"><input class="form-control" type="text" placeholder="Enter Doctor name or Hospital"></li>
 
- <ul class="dropdown-menu">
-                            <li><a href="../dashboard/booked.html">My Appointments</a></li>
-                            <li><a href="../dashboard/health_records.html">Health Records</a></li>
-                            <li><a href="../dashboard/health_alerts.html">Health Alerts</a></li>
-                            <li><a href="../dashboard/favorite_decors.html">Favorite Decors</a></li>
-                            <li><a href="../dashboard/comlaints.html">Facilitation</a></li>
-                            <li><a href="../dashboard/change_pswd.html">Settings</a></li>
-                            <li><a href="#">Logout</a></li>
-                          </ul>.
-
-
-
-{% block appointments %}
-        {% endblock %}
+</ul>

@@ -1,11 +1,9 @@
-{% static 'healthseeker/img/avatar3.png' %}
 
 {% load static %}
     <ul class="my_profile_div">
-        <li><a href="../dashboard/personal_information.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Personal information</a></li>
-        <li class="active"><a href="../dashboard/family_details.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Family Details</a></li>
-        <li><a href="../dashboard/contact_details.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Contact Details</a></li>
-        <li><a href="../dashboard/other_info.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Other Information</a></li>
+        <li><a href="{% url 'healthseeker:information' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Personal information</a></li>
+        <li><a href="{% url 'healthseeker:family' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Family Details</a></li>
+        <li><a href="{% url 'healthseeker:contact' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Contact Details</a></li>
+        <li><a href="{% url 'healthseeker:other' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Other Information</a></li>
     </ul>
-{% block profile %}
-{% endblock %}
+
