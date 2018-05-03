@@ -1,0 +1,73 @@
+{%  extends "healthseeker/base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+
+
+
+      
+        <section class="form_reg_one_hero dash_board">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="form_reg_one form_reg_one_m_p">
+                            
+                            
+                            <div class="form_reg_one_in form_reg_one_in_my_p">
+                                
+                                <h3>Appoinments</h3>
+                        
+                                {% include 'healthseeker/base_appointments.html' %}
+
+                                <div class="my_pro_form_he my_pro_form_wait">
+
+                                    <h2>Customer Care</h2>
+                                    <h3 align="right"class="counter" >Total Appointments = <b><span class="text-danger">{{ count }}</span></b></h3>
+                                    <div class="custo_care_acc">
+                                        {% for result in values %}
+                                            <ul class="health_recordsz">
+                                                    <li>
+                                                        <div class="item">
+                                                            <span>{{ result.date | date:"D" }}</span>
+                                                              <h2>{{ result.date | date:"d" }}</h2>
+                                                             <span>{{ result.date | date:"M" }}</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="health_recc_name">
+                                                            <p>{{ result.under.user.name }}</p>
+                                                         <span>{{result.provider.name }} <br> {{ result.provider.type }}</span>
+                                                              {{ result.date | date:"l" }},{{ result.time }}</span>
+                                                        </div>
+                                                    </li>
+                                                    <li class="dpctor_li">
+                                                        <div class="doctor_presc">
+                                                            <p><img src="{% static 'healthseeker/img/dashboard/icon1.png' %}">Booked Waiting for Doctor Confirmation</p>
+                                                        </div>
+                                                    </li>
+                                            </ul>
+                                        {% endfor %}
+                                    </div>
+                                
+                                </div>
+                                
+                                
+                                <ul class="save_next">
+                                    <li><a class="next_inf" href="../dashboard/scheduled.html">Next</a></li>
+                                    
+                                </ul>
+                                
+                        </div>
+                            
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock  %}
+      
+     

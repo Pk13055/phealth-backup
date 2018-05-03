@@ -8,23 +8,24 @@
                     <ul class="my_profile_div my_profile_div_w">
                         <li>
                             <a href="{% url 'healthseeker:appointment_booked' %}">
-                                <img src="{% static 'img/dashboard/my_profile.png' %}">Booked</a>
+                                <img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Booked</a>
                         </li>
 
                         <li>
                             <a href="{% url 'healthseeker:appointment_scheduled' %}">
-                                <img src="{% static 'img/dashboard/my_profile.png' %}">Scheduled</a>
+                                <img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Scheduled</a>
                         </li>
 
                         <li>
                             <a href="{% url 'healthseeker:appointment_past' %}">
-                                <img src="{% static 'img/dashboard/my_profile.png' %}">Visited</a>
+                                <img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Visited</a>
                         </li>
                         <li class="search_for_dc">
                             <input class="form-control" id="search-box" type="text" placeholder="Enter Doctor name or Hospital">
                         </li>
                     </ul>
                     <div class="my_pro_form_he my_pro_form_wait">
+                        <h3 align="right"class="counter" >Total Appointments = <b><span class="text-danger">{{ records|length }}</span></b></h3>
                         {% for record in records %}
                         <div class="custo_care_acc" data-attr="{{ record.under.user.name|lower }}{{ record.provider.name|lower }}">
                             <ul class="health_recordsz">
@@ -140,7 +141,7 @@
                                 {% elif type == 'booked' %}
                                 <li class="dpctor_li">
                                         <div class="doctor_presc">
-                                            <p><img src="{% static 'dashboard/img/icon1.png' %}">Waiting for Doctor Confirmation!</p>
+                                            <p><img src="{% static 'healthseeker/img/dashboard/icon1.png' %}">Waiting for Doctor Confirmation!</p>
                                         </div>
                                     </li>
                                 {% endif %}

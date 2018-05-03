@@ -1,0 +1,64 @@
+{% extends 'healthseeker/base.html' %}
+{% load static %}
+{% block content %}
+ <section class="form_reg_one_hero">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="full_width form_reg_one">
+
+                           <h3>Edit Details</h3>
+                            <div class="form_reg_one_in">
+
+                                <div class="full_width space">
+
+
+                                <form method="POST" class="registration_form">{% csrf_token %}
+                                   <div class="row">
+                            	        {% for field in form %}
+                                                   <div class="form-group custom_md_3 col-md-6">
+                                        <div class="icon-addon addon-md">
+
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										  </div>
+										{% endfor %}
+
+
+                                    <div class="col-md-3" style="float:right">
+                                         <ul class="save_next">
+                                        <li><input type="submit" class="btn save_inf" value="Update"></li>
+                                      </ul>
+                                    </div>
+                                   </div>
+                        </form>
+                      </div>
+
+                    </div>
+                                  </div>
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+
+
+

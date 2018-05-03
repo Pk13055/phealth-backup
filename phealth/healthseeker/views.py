@@ -1,12 +1,18 @@
+import json
 from random import randint
 
 import requests
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from querystring_parser import parser
+from rest_framework.serializers import ModelSerializer
 
 # Create your views here.
-from api.models import Seeker, User
+from api.models import Location, Seeker, User
 from phealth.utils import match_role, redirect, signin
 
 from .forms import *
@@ -22,19 +28,41 @@ def SignIn(request):
     elif request.method == "POST":
         print(request.POST)
         if signin("healthseeker", request):
-            return redirect('healthseeker:contactdetails')
+            return redirect('healthseeker:dashboard')
         return redirect('healthseeker:signin')
 
 
-def healthseekersignin(request):
-    if request.method == "POST":
-        data = request.POST
-        if signin("admin", data):
-            return redirect('healthseeker:healthseekerdashboard_home')
-    return render(request,'healthseeker/sigin.html',{})
+@match_role("healthseeker")
+def dashboard(request):
+    me = User.objects.get(pk=request.session['pk'])
+    email = User.objects.get(pk=request.session['pk'])
+    part = Seeker.objects.get(user=me)
+    print(part)
 
-def healthseekerdashboard(request):
-    pass
+    #part = Seeker.objects.values('appointments').count()
+    appointment = Seeker.objects.filter(user=me).values('appointments').count()
+    print(me,"appointment=",appointment)
+    healthchecks = Seeker.objects.filter(user=me).values('healthchecks').count()
+    print(me,"healthchecks=",healthchecks)
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps +=20
+    if Address.objects.filter(user=me).count() > 0:
+        ps +=20
+
+    if Seeker.objects.filter(user=me).values('profession'):
+        ps +=20
+
+
+    return render(request, 'healthseeker/dashboard.html', {
+                                    'user': me,
+                                    'email':email,
+                                    'appointment':appointment,
+                                    'healthchecks':healthchecks,
+                                    'ps':ps
+
+    })
+
 
 def otp(request):
     if request.method == "POST":
@@ -44,17 +72,17 @@ def otp(request):
             upost = uform.save(commit=False)
             upost.role = "healthseeker"
             upost.password = make_password(request.POST['password'])
+            me = User.objects.get(pk=request.session['pk'])
+            s = Seeker.objects.get(user=me)
+            print(me)
             upost.save()
             if signin("healthseeker", request):
-                return redirect('healthseeker:step3')
+                return redirect('healthseeker:step2')
         else:
             return render(request,'healthseeker/registration/otp.html',{ 'error': "Invalid Otp"})
 
     else:
         return render(request,'healthseeker/registration/otp.html',{})
-
-
-
 
 
 def registration(request):
@@ -92,161 +120,360 @@ def registration(request):
     })
 
 
-
-def registrationform2(request):
-    return render(request,'healthseeker/registration/form2.html',{
-
-    })
-
-#-----------------------------------------------------------------------------------------------
+def step2(request):
+    if request.method == 'POST':
+        request.session['discountcard_id'] = request.POST['discountcard_id']
+        return redirect('healthseeker:step3')
+    cards = DiscountCard.objects.all()
+    me = User.objects.get(pk=request.session['pk'])
+    s= Seeker.objects.create(user=me)
+    print(s)
+    return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 
 @match_role("healthseeker")
 def step3(request):
-    #me = User.objects.get(pk=)
-    if request.method == 'POST':
-        form = FamilyForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.role = "healthseeker"
-            post.save()
-            member = User.objects.get(pk=post.pk)
-            me = User.objects.get(pk=request.session['pk'])
-            Seeker.objects.create(user=member,family=me)
-            return redirect('healthseeker:step3')
-    else:
-        form = FamilyForm()
-    u = User.objects.all()
-    return render(request, 'healthseeker/registration/form3.html', {'form': form,'users':u })
+   me = User.objects.get(pk=request.session['pk'])
+
+   if not request.session.get('discountcard_id'):
+       return  redirect('healthseeker:step4')
+
+
+   if request.method == 'POST':
+       form = FamilyForm(request.POST)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.role = "healthseeker"
+           post.save()
+           member = User.objects.get(pk=post.pk)
+           Seeker.objects.create(user=member,family=me)
+           return redirect('healthseeker:step3')
+   else:
+       form = FamilyForm()
+   records = User.objects.all()
+
+
+   data = User.objects.all()
+   # print('data', data)
+   family = Seeker.objects.filter(family = me)
+   print(family.first())
+
+   #psobjs = Affiliation.objects.filter(ipId=x)
+   #queryset = Sessions.objects.filter(sessionId__in=family.first)
+
+   discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
+   return render(request, 'healthseeker/registration/form3.html', {'form': form,'family':family ,'discountcard':discountcard})
 
 
 @match_role("healthseeker")
 def family_edit(request, pk):
-    post = get_object_or_404(User, pk=pk)
-    if request.method == "POST":
-        form =FamilyForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('site_admin:step3')
-    else:
-        form = FamilyForm(instance=post)
-    return render(request, 'healthseeker/registration/form3.html', {'form': form})
+   post = get_object_or_404(User, pk=pk)
+   if request.method == "POST":
+       form =FamilyForm(request.POST, instance=post)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.save()
+           return redirect('healthseeker:step3')
+   else:
+       form = FamilyForm(instance=post)
+   return render(request, 'healthseeker/registration/familymember_edit.html', {'form': form})
 
 
 @match_role("healthseeker")
 def family_delete(request, pk):
-    result = User.objects.get(pk=pk)
-    result.delete()
-    return redirect('site_admin:step3')
-
+   result = User.objects.get(pk=pk)
+   result.delete()
+   return redirect('site_admin:step3')
 
 
 @match_role("healthseeker")
 def form_view(request):
-    result = User.objects.all()
-    return render(request, 'healthseeker/registration/form3.html', {'values': result})
+   result = User.objects.all()
+   return render(request, 'healthseeker/registration/form3.html', {'values': result})
+
 
 @match_role("healthseeker")
 def form_edit(request, pk):
-    post = get_object_or_404(User, pk=pk)
-    if request.method == "POST":
-        form = UserForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('healthseeker:form3_view')
-    else:
-        form = User(instance=post)
-    return render(request, 'healthseeker/registration/from3.html', {'form': form})
+   post = get_object_or_404(User, pk=pk)
+   if request.method == "POST":
+       form = UserForm(request.POST, instance=post)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.save()
+           return redirect('healthseeker:form3_view')
+   else:
+       form = UserForm()
+   return render(request, 'healthseeker/registration/from3.html', {'form': form})
 
 
 @match_role("healthseeker")
 def form3_delete(request, pk):
-    result = User.objects.get(pk=pk)
-    result.delete()
-    return redirect('healthseeker:form3_view')
+   result = User.objects.get(pk=pk)
+   result.delete()
+   return redirect('healthseeker:form3_view')
 
 
+# def form3_edit(request, pk):
+#     post = get_object_or_404(User, pk=pk)
+#     if request.method == "POST":
+#         form = UserForm(request.POST, instance=post)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.save()
+#             return redirect('healthseeker:form3')
+#     else:
+#         form = UserForm(instance=post)
+#     return render(request, 'healthseeker/registration/form3.html', {'form': form})
 
 
+# @match_role("admin")
+# def User_delete(request, pk):
+#     result = User.objects.get(pk=pk)
+#     result.delete()
+#     return redirect('healthseeker:form_view')
 
 
-
-'''
-def form3_edit(request, pk):
-    post = get_object_or_404(User, pk=pk)
+@csrf_exempt
+@match_role("healthseeker")
+def step4(request):
+    me = User.objects.get(pk=request.session['pk'])
+    p = Seeker.objects.filter(user=me).first()
+    print(p)
     if request.method == "POST":
-        form = UserForm(request.POST, instance=post)
+        data = parser.parse(request.POST.urlencode())
+        place = data['place']
+        place['address_components'] = list(place['address_components'].values())
+        for comp in place['address_components']:
+            comp['types'] = comp['types']['']
+            if isinstance(comp['types'], str):
+                comp['types'] = [comp['types']]
+        try:
+            l = Location(place=place)
+            l.save()
+            status = True
+            data = place
+        except Exception as e:
+            print(e)
+            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
+            l = temp_loc or p.location
+            if l == p.location:
+                status = True
+                data = ["Same Location as before!"]
+            elif temp_loc is None:
+                status = False
+                data = [str(e)]
+            else:
+                status = True
+                data = l
+
+        p.location = l
+        p.save()
+
+        if isinstance(data, Location):
+            class LocationSerializer(ModelSerializer):
+                class Meta:
+                    depth = 1
+                    fields = ('lat', 'long', 'full_name', 'name',)
+                    model = Location
+            data = LocationSerializer(data).data
+
+        return JsonResponse({
+            'status' : status,
+            'data' : data,
+        })
+
+    return render(request, 'healthseeker/registration/form4.html', {
+        'title' : "Account - Location Settings",
+        'seeker' : p,
+
+    })
+
+
+def step5(request):
+    me = User.objects.get(pk=request.session['pk'])
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -=20
+    if Address.objects.filter(user=me).count() > 0:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -=20
+    if Seeker.objects.get(user=me).profession:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -=20
+
+    return render(request,'healthseeker/registration/form5.html',{'ps':ps})
+
+
+@match_role("healthseeker")
+def step6(request):
+    me = User.objects.get(pk=request.session['pk'])
+    sc = Seeker.objects.filter(user=me).first()
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps += 20
+    if Address.objects.filter(user=me).count() > 0:
+        ps += 20
+    if Seeker.objects.get(user=me).profession:
+        ps += 20
+    if request.method == 'POST':
+        if sc:
+            form = LanguageForm(request.POST, instance=sc)
+        else:
+            form = LanguageForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = me
+            return redirect('healthseeker:dashboard')
+
+    if sc:
+        form = LanguageForm(instance=sc)
+    else:
+        form = LanguageForm()
+    lang = Languages.objects.all()
+    print(me)
+    return render(request, 'healthseeker/registration/form6.html', {'form': form, 'lang': lang, 'ps':ps})
+
+
+@match_role("healthseeker")
+def family(request):
+   me = User.objects.get(pk=request.session['pk'])
+
+   if not request.session.get('discountcard_id'):
+       return  redirect('healthseeker:family')
+
+
+   if request.method == 'POST':
+       form = FamilyForm(request.POST)
+       if form.is_valid():
+           post = form.save(commit=False)
+           post.role = "healthseeker"
+           post.save()
+           member = User.objects.get(pk=post.pk)
+           Seeker.objects.create(user=member,family=me)
+           return redirect('healthseeker:family')
+   else:
+       form = FamilyForm()
+   records = User.objects.all()
+
+
+   data = User.objects.all()
+   # print('data', data)
+   family = Seeker.objects.filter(family = me)
+   print(family.first())
+   #psobjs = Affiliation.objects.filter(ipId=x)
+   #queryset = Sessions.objects.filter(sessionId__in=family.first)
+
+
+   discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
+   return render(request, 'healthseeker/family_details.html', {'form': form,'family':family ,'discountcard':discountcard})
+
+
+@match_role("healthseeker")
+def accountmanager(request):
+
+    return render(request,'healthseeker/account_manager.html',{
+
+    })
+
+
+@csrf_exempt
+@match_role("healthseeker")
+def contact(request):
+    me = User.objects.get(pk=request.session['pk'])
+    p = Seeker.objects.filter(user=me).first()
+    print(p)
+
+    if request.method == "POST":
+        data = parser.parse(request.POST.urlencode())
+        place = data['place']
+        place['address_components'] = list(place['address_components'].values())
+        for comp in place['address_components']:
+            comp['types'] = comp['types']['']
+            if isinstance(comp['types'], str):
+                comp['types'] = [comp['types']]
+        try:
+            l = Location(place=place)
+            l.save()
+            status = True
+            data = place
+        except Exception as e:
+            print(e)
+            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
+            l = temp_loc or p.location
+            if l == p.location:
+                status = True
+                data = ["Same Location as before!"]
+            elif temp_loc is None:
+                status = False
+                data = [str(e)]
+            else:
+                status = True
+                data = l
+
+        p.location = l
+        p.save()
+
+        if isinstance(data, Location):
+            class LocationSerializer(ModelSerializer):
+                class Meta:
+                    depth = 1
+                    fields = ('lat', 'long', 'full_name', 'name',)
+                    model = Location
+            data = LocationSerializer(data).data
+        return JsonResponse({
+            'status' : status,
+            'data' : data,
+        })
+    me = User.objects.get(pk=request.session['pk'])
+    sobj = Seeker.objects.get(user=me)
+    result = sobj.location
+    data = result.full_name
+    print(data)
+    return render(request, 'healthseeker/contact_details.html', {
+        'title' : "Account - Location Settings",
+        'seeker' : p,
+        'result':result,
+        'data':data
+        })
+
+
+@match_role("healthseeker")
+def interests(request):
+    return render(request,'healthseeker/manage_intrests.html',{})
+
+
+@match_role("healthseeker")
+def favourite_doctors(request):
+    return render(request,'healthseeker/favorite_decors.html',{})
+
+
+@match_role("healthseeker")
+def complaints(request):
+    me=User.objects.get(pk=request.session['pk'])
+    if request.method == 'POST':
+        form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('healthseeker:form3')
+            return redirect('healthseeker:complaints')
     else:
-        form = UserForm(instance=post)
-    return render(request, 'healthseeker/registration/form3.html', {'form': form})
-
-
-
-@match_role("admin")
-def User_delete(request, pk):
-    result = User.objects.get(pk=pk)
-    result.delete()
-    return redirect('healthseeker:form_view')'''
-
-
-
-
-#------------------------------------------------------------------------------
-def registrationform4(request):
-
-    return render(request, 'healthseeker/registration/form4.html', {
-
-    })
-
-def registrationform5(request):
-
-    return render(request,'healthseeker/registration/form5.html',{
-
-    })
-
-def addfamilymembers(request):
-    print(request.GET)
-    return render(request,'healthseeker/family_details.html',{})
-
-
-def accountmanager(requset):
-
-    return render(requset,'healthseeker/account_manager.html',{
-
-    })
+        form=PostForm()
+    result = Seeker.objects.get(user=me)
+    print(result)
+    return render(request,'healthseeker/comlaints.html',{'form':form,'result':result})
 
 @match_role("healthseeker")
-def contactdetails(requset):
+def healthalerts(request):
+    return render(request,'healthseeker/health_alerts.html',{})
 
-    return render(requset,'healthseeker/contact_details.html',{
-
-    })
-
-def intrest(requset):
-    return render(requset,'healthseeker/manage_intrests.html',{})
-
-
-
-
-
-def favaroitedoctors(requset):
-    return render(requset,'healthseeker/favorite_decors.html',{})
-
-def complaints(requset):
-    return render(requset,'healthseeker/comlaints.html',{})
-
-def healthalerts(requset):
-    return render(requset,'healthseeker/health_alerts.html',{})
 
 # Appointment Routes
 
-
+@match_role("healthseeker")
 def appointment_booked(request):
     '''appointment route for the upcoming appointments'''
 
@@ -260,6 +487,7 @@ def appointment_booked(request):
     })
 
 
+@match_role("healthseeker")
 def appointment_scheduled(request):
     '''scheduled appointments'''
 
@@ -273,6 +501,7 @@ def appointment_scheduled(request):
     })
 
 
+@match_role("healthseeker")
 def appointment_past(request):
     ''' complete history of past appointments'''
 
@@ -286,28 +515,59 @@ def appointment_past(request):
     })
 
 
+@match_role("healthseeker")
 def reference(request):
 
     return render(request,'healthseeker/refer_earn.html',{
 
     })
 
-def personalinformation(request):
 
-    return render(request,'healthseeker/personal_information.html',{
+@match_role("healthseeker")
+def information(request):
+    me = User.objects.get(pk=request.session['pk'])
+    if request.method == "POST":
+        form = FamilyForm(request.POST, instance=me)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('healthseeker:family')
+    else:
+        form = FamilyForm(instance=me)
+    return render(request, 'healthseeker/personal_information.html', {'form': form})
 
-    })
 
-def otherinformation(request):
+@match_role("healthseeker")
+def other(request):
+    me = User.objects.get(pk=request.session['pk'])
+    sc = Seeker.objects.filter(user=me).first()
+    if request.method == 'POST':
+        if sc:
+            form = LanguageForm(request.POST, instance=sc)
+        else:
+            form = LanguageForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = me
+            return redirect('healthseeker:dashboard')
 
-    return render(request,'healthseeker/other_info.html',{
+    if sc:
+        form = LanguageForm(instance=sc)
+    else:
+        form = LanguageForm()
+    lang = Languages.objects.all()
+    return render(request, 'healthseeker/other_info.html', {'form': form, 'lang': lang})
 
-    })
+
+@match_role("healthseeker")
 def records(request):
 
     return render(request,'healthseeker/health_records.html',{
 
     })
+
+
+@match_role("healthseeker")
 def changepassword(request):
 
     return render(request,'healthseeker/change_pswd.html',{

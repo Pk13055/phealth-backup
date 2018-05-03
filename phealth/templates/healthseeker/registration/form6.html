@@ -10,12 +10,12 @@
                             
                             <div class="header_form">
                                 <div class="form_reg_one_in">
-                                    <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:40%"></div></div>
+                                    <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{ ps }}%"></div></div>
                                 </div>
                                
                             </div>
                             
-                            <a href="#" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip to page</a>
+                            <a href="{% url 'healthseeker:dashboard' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in">
                                 <!--<h2>Please fill the Registration form!</h2>
                                 <p>Base on your profile & intrest we will provide free Health tips</p>
@@ -28,58 +28,39 @@
                                         <h2>Other Information</h2>
                                         <p>Languages Known</p>
                                     </div>
-                                    
-                                    <ul>
-                                        <li class="no_margin_left"><a href="#"><i class="fa fa-star"></i> Bengali</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Gujarati</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Hindi</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Kannada</a></li>
-                                        
-                                        <li class="no_margin_left"><a href="#"><i class="fa fa-star"></i> Marathi</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Odia</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Tamil</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Telugu</a></li>
-                                        
-                                        <li class="no_margin_left"><a href="#"><i class="fa fa-star"></i> English</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Urdu</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Nepali</a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i> Bengali</a></li>
-                                        
-                                        
-                                        
-                                        
-                                    </ul>
-                                    
-                                    
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                        <select style="padding-left: 0 !important;
-    border-bottom: 1px solid #d8d8d8 !important;
-    border: 0;
-    width: 100%;    background-color: transparent;" name="cars" class="form-control">
-                                            <option value="volvo">Profession</option>
-                                            <option value="saab">Option one</option>
-                                            <option value="fiat">Option Two</option>
-                                            <option value="audi">Option Three</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                                    
-                                    
-                                    
-                                    
-                                    
+                                    <h4><b>Select Your Language</b></h4>
+
+                                        <form method="POST" class="post-form">
+                                            {% csrf_token %}
+
+                                    {% for field in form %}
+										   <div class="form-group">
+											{{ field.label_tag }}<br>
+											{{ field }}
+											{% for error in field.errors %}
+											  <p style="color: red">{{ error }}</p>
+											{% endfor %}
+										  </div>
+										{% endfor %}
+
+ <button type="submit" class="btn btn-success pull-right savebtn" style="color: #fff;background-color: #5cb85c;
+    border-color: #4cae4c;">Save & Next</button>
+                        </form>
+
+                                    <br><br>
+
+
                                     
                                 </div>
                                 
           
                             </div>
                         </div>
-                        
-                        
-                         <ul class="save_next">
-                            <li><a class="save_inf" href="#">Save</a></li>
-                            <li><a class="next_inf" href="../registrations/form3.html">Back</a></li>
+
+
+
+                        <ul class="save_next">
+                            <li><a class="next_inf" href="{% url 'healthseeker:step5' %}">Back</a></li>
                         </ul>
                         
                     </div>

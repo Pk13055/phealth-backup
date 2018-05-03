@@ -193,13 +193,28 @@ class Location(models.Model):
 class Address(models.Model):
 	''' address, can be of the user or any other model
 	'''
+
+	location_type_options = (
+		('current', "Current Location"),
+		('manual', "Update Manually"),
+	)
+	resident_type_options = (
+		('home', "Home"),
+		('office', "Office"),
+		('other', "Other"),
+	)
 	id = models.AutoField(primary_key=True)
-	city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
-	# district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+	user = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True)
+	location_type = models.CharField(choices=location_type_options, max_length=200, default='current')
 	latitude = models.FloatField(blank=True, null=True)
 	longitude = models.FloatField(blank=True, null=True)
-	pincode = models.CharField(max_length=9)
-	extra = models.CharField(max_length=100, blank=True, null=True)
+	city = models.ForeignKey(City, on_delete=models.DO_NOTHING, blank=True, null=True)
+	door_no = models.CharField(max_length=200, blank=True, null=True)
+	area = models.CharField(max_length=200, blank=True, null=True)
+	landmark = models.CharField(max_length=200, blank=True, null=True)
+	resident_type = models.CharField(choices=resident_type_options, max_length=200, default='home')
+	pincode = models.CharField(max_length=9, blank=True, null=True)
+
 
 	class Meta:
 		managed = True
@@ -525,6 +540,7 @@ class Seeker(models.Model):
 		('tamil', 'tamil'),
 		('other', 'other'),
 	)
+
 
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
@@ -1072,6 +1088,13 @@ class Familymember(models.Model):
 	created_date = models.DateTimeField(default=timezone.now)
 	def __str__(self):
 		return self.name
+
+
+class Languages(models.Model):
+    name = models.CharField(max_length=200)
+    created_date = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return self.name
 
 class IdConfiguration(models.Model):
 	affix = models.CharField(max_length=200,null=True, blank=True)
