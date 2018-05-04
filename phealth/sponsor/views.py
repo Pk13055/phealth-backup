@@ -19,7 +19,7 @@ from querystring_parser import parser
 from phealth.utils import getIP, get_sponsor
 from common.views import send_OTP
 from api.models import (User, Sponsor, Seeker, Question, Transaction, DiscountCard,
-						HealthCheckup, Organization, Address)
+						HealthCheckup, Organization)
 
 # Create your views here.
 

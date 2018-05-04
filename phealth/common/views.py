@@ -15,7 +15,7 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.serializers import ModelSerializer
 
-from api.models import (Address, Appointment, Clinician, Coupon, Provider,
+from api.models import (Location, Appointment, Clinician, Coupon, Provider,
                         Speciality, User)
 from phealth import utils
 from phealth.utils import match_role
@@ -119,31 +119,22 @@ def autocomplete(request, category, query):
 	if category == 'condition':
 		queryset = Speciality.objects.filter(name__icontains=query).all()
 		if queryset:
-			model_type = Speciality
-	elif category == 'location' or category == 'city':
-		queryset = Address.objects.filter(Q(extra__icontains=query) |
-			Q(city__name__icontains=query) | Q(city__state__name__icontains=query)).all()
-		if queryset:
-			model_type = Address
-
-	if queryset:
-		class DataSerializer(ModelSerializer):
-			class Meta:
-				model = model_type
-				depth = 5
-				fields = '__all__'
-		data = DataSerializer(queryset, many=True)
-		# final_data = JSONRenderer().render(data.data).decode()
-		final_data = data.data
-		return JsonResponse({
-			'status' : True,
-			'data' : final_data,
-			})
+			class DataSerializer(ModelSerializer):
+				class Meta:
+					model = Speciality
+					depth = 5
+					fields = '__all__'
+			data = DataSerializer(queryset, many=True)
+			return JsonResponse({
+				'status' : True,
+				'data' : data.data,
+				})
 
 	return JsonResponse({
 		'status' : False,
 		'data' : [],
 		})
+
 
 @require_POST
 @csrf_exempt

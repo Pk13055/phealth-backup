@@ -44,19 +44,6 @@ def current_timestamp():
 
 # Address and Location related models
 
-class City(models.Model):
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=60)
-	code = models.CharField(max_length=5)
-
-	def __str__(self):
-		return "<City %s | %s | %s >" % (self.code, self.state.name, self.name)
-
-	class Meta:
-		managed = True
-		db_table = 'cities'
-
-
 class Location(models.Model):
 
 	id = models.AutoField(primary_key=True)
@@ -188,40 +175,6 @@ class Location(models.Model):
 		distance = math.acos( math.sin(self.rad_lat) * math.sin(rad_lat_2) + \
 			math.cos(self.rad_lat) * math.cos(rad_lat_2) * math.cos(del_lng) ) * R
 		return distance
-
-
-class Address(models.Model):
-	''' address, can be of the user or any other model
-	'''
-
-	location_type_options = (
-		('current', "Current Location"),
-		('manual', "Update Manually"),
-	)
-	resident_type_options = (
-		('home', "Home"),
-		('office', "Office"),
-		('other', "Other"),
-	)
-	id = models.AutoField(primary_key=True)
-	user = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True)
-	location_type = models.CharField(choices=location_type_options, max_length=200, default='current')
-	latitude = models.FloatField(blank=True, null=True)
-	longitude = models.FloatField(blank=True, null=True)
-	city = models.ForeignKey(City, on_delete=models.DO_NOTHING, blank=True, null=True)
-	door_no = models.CharField(max_length=200, blank=True, null=True)
-	area = models.CharField(max_length=200, blank=True, null=True)
-	landmark = models.CharField(max_length=200, blank=True, null=True)
-	resident_type = models.CharField(choices=resident_type_options, max_length=200, default='home')
-	pincode = models.CharField(max_length=9, blank=True, null=True)
-
-
-	class Meta:
-		managed = True
-		db_table = 'address'
-
-
-# Functionality models
 
 
 class Coupon(models.Model):
@@ -642,7 +595,7 @@ class Clinician(models.Model):
 
 	# education locations and other details can be stored here
 	education = JSONBField(JSONField(validators=[
-		KeysValidator(['year', 'title', 'description', 'type'])
+	KeysValidator(['year', 'title', 'description', 'type'])
 	]), null=True, blank=True, default=list)
 
 	# experience/training obtained in an institute

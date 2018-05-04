@@ -260,16 +260,6 @@ def healthchecks_list(request, healthcheck=None):
 
 # default API viewset
 
-class CityViewSet(ModelViewSet):
-    queryset = City.objects.all()
-    serializer_class = CitySerializer
-
-
-class AddressViewSet(ModelViewSet):
-    queryset = Address.objects.all()
-    serializer_class = AddressSerializer
-
-
 class CouponViewSet(ModelViewSet):
     queryset = Coupon.objects.all()
     serializer_class = CouponSerializer

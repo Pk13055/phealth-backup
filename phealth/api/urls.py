@@ -20,8 +20,6 @@ urlpatterns = [
 
 router = DefaultRouter()
 
-router.register(r'city', views.CityViewSet)
-router.register(r'address', views.AddressViewSet)
 router.register(r'coupon', views.CouponViewSet)
 router.register(r'testcategory', views.TestCategoryViewSet)
 router.register(r'testsubcategory', views.TestSubcategoryViewSet)
