@@ -33,7 +33,7 @@ def logout(request):
 
 def home_route(request):
 	'''site home route for debugging purposes'''
-	return render(request, 'home.html.j2', context={
+	return render(request, 'index.html', context={
 		'title' : "HOME"
 	})
 

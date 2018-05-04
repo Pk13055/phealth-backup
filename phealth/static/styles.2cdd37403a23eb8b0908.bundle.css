@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */.ap-search-ngprime span{width:100%}.ap-search-ngprime span input{width:100%;border:none;outline:none;margin-left:10%}.pac-container{z-index:1051!important}
+
+/* .paginator-ap-result {
+    margin-top: 2% !important;
+    bottom: 5% !important;
+    position: relative !important;
+    left: 20% !important;
+} */.app_list_menu li{margin-left:35px!important;text-align:left!important}typeahead-container>ul li{width:100%!important}ngx-carousel .ngxcarouselPointDefault{position:absolute;bottom:0;left:0;right:0}ngx-carousel .ngxcarouselPoint li{-webkit-transform:scale(1);transform:scale(1)}ngx-carousel button{border:none;position:absolute;bottom:0;top:0;width:50px;height:50px;border-radius:999%;margin:auto}ngx-carousel button[NgxCarouselPrev]{left:0;background:#fff;border:1px solid #ccc}ngx-carousel button[NgxCarouselNext]{right:0;background:#fff;border:1px solid #ccc}.date_based_select{float:none;width:60%}.date_based_select_date{width:28%}.loader-overlay{position:absolute;width:100%;top:0;left:0;opacity:1;z-index:500000;background:-webkit-gradient(linear,left top,left bottom,from(#fff),to(#ccf));background:linear-gradient(180deg,#fff 0,#ccf)}
