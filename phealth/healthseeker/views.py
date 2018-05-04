@@ -304,8 +304,40 @@ def step5(request):
         ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -=20
-
-    return render(request,'healthseeker/registration/form5.html',{'ps':ps})
+    if request.method == 'POST':
+        form = FriendForm(request.POST)
+        if form.is_valid():
+            # otp here
+            mobile = request.POST['mobile']
+            name = request.POST['name']
+            request.session['userdata'] = request.POST
+            otp = randint(1, 99999)
+            request.session['otp'] = otp
+            base = request.META['HTTP_REFERER']
+            print(base)
+            base_url = "http://api.msg91.com/api/sendhttp.php"
+            params = {
+                'sender': "CLICKH",
+                'route': 4,
+                'country': 91,
+                'mobiles': [mobile],
+                'authkey': '182461AjomJGPHB5a0041cb',
+                'message': "Invitation Messsage :" + base,
+            }
+            r = requests.get(base_url, params=params)
+            form = FriendForm(request.POST)
+            upost = form.save(commit=False)
+            upost.role = "healthseeker"
+            me = User.objects.get(pk=request.session['pk'])
+            s = Seeker.objects.get(user=me)
+            print(me)
+            upost.save()
+            return redirect('healthseeker:step5')
+    else:
+        uform = FriendForm()
+    return render(request, 'healthseeker/registration/form5.html', context={
+        "uform": uform,
+    })
 
 
 @match_role("healthseeker")

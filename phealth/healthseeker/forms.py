@@ -80,3 +80,13 @@ class PostForm(forms.ModelForm):
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
 
+class FriendForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('name', 'mobile', )
+
+    def __init__(self, *args, **kwargs):
+        super(FriendForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
