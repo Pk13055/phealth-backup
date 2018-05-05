@@ -1,4 +1,68 @@
-{% extends "healthseeker/base_dashboard.html" %} {% load static %} {% block content %}
+{% extends "healthseeker/base_dashboard.html" %} {% load static %} {% block styles %} {% if type == 'past' %}
+<style>
+    .event-danger {
+        background-color: green;
+    }
+
+    .event-warning {
+        background-color: firebrick;
+    }
+
+    .btn-primary {
+        background-color: dodgerblue;
+    }
+
+    .btn-danger {
+        background-color: firebrick;
+    }
+
+    fieldset,
+    label {
+        margin: 0;
+        padding: 0;
+    }
+
+    .rating {
+        border: none;
+        float: left;
+    }
+
+    .rating>input {
+        display: none;
+    }
+
+    .rating>label:before {
+        margin: 5px;
+        font-size: 1.25em;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f005";
+    }
+
+    .rating>.half:before {
+        content: "\f089";
+        position: absolute;
+    }
+
+    .rating>label {
+        color: #ddd;
+        float: right;
+    }
+
+    .rating>input:checked~label,
+    .rating:not(:checked)>label:hover,
+    .rating:not(:checked)>label:hover~label {
+        color: #FFD700;
+    }
+
+    .rating>input:checked+label:hover,
+    .rating>input:checked~label:hover,
+    .rating>label:hover~input:checked~label,
+    .rating>input:checked~label:hover~label {
+        color: #FFED85;
+    }
+</style>
+{% endif %} {% endblock styles %} {% block content %}
 <section class="form_reg_one_hero dash_board">
     <div class="container">
         <div class="row">
@@ -25,10 +89,19 @@
                         </li>
                     </ul>
                     <div class="my_pro_form_he my_pro_form_wait">
-                        <h3 align="right"class="counter" >Total Appointments = <b><span class="text-danger">{{ records|length }}</span></b></h3>
+                        <h3 align="right" class="counter">Total Appointments =
+                            <b>
+                                <span class="text-danger">{{ records|length }}</span>
+                            </b>
+                        </h3>
                         {% for record in records %}
                         <div class="custo_care_acc" data-attr="{{ record.under.user.name|lower }}{{ record.provider.name|lower }}">
                             <ul class="health_recordsz">
+                                {% if type == 'past' %}
+                                <li>
+                                    <span class="label {{ record.css_class }}">{{ record.status }}</span>
+                                </li>
+                                {% endif %}
                                 <li>
                                     <div class="item">
                                         <span>{{ record.date|date:"D" }}</span>
@@ -39,131 +112,191 @@
                                 <li>
                                     <div class="health_recc_name">
                                         <p>{{ record.under.user.name|title }}</p>
-                                        <span><strong>{{ record.provider.name|title }}</strong>
+                                        <span>
+                                            <strong>{{ record.provider.name|title }}</strong>
                                             <br>{{ record.time|date:"h:iA" }}</span>
                                     </div>
                                 </li>
                                 {% if type == 'past' %}
                                 <li class="view_desript view_desript_a">
-                                    <a class="Presciptiona" href="#">View Presciption</a>
-                                    <a class="View_Reports" href="#">View Reports</a>
+                                    <!-- <a class="Presciptiona" href="#">View Presciption</a> -->
+                                    <a class="View_Reports" href="{% url 'healthseeker:records' %}">View Reports</a>
                                 </li>
                                 <li class="view_desript view_desript_b">
-                                    <a data-toggle="modal" data-target=".bs-example-modal-lg" class="Presciptiona" href="#">Feedback / Complaints</a>
-                                    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                                <div class="modal-body revewi_feedbac">
-                                                    <div class="full_width">
-                                                        <div class="appointment_main_hero appointment_main_hero_fina">
-                                                            <div class="app_list_in">
-                                                                <div class="appointment_list_in">
-                                                                    <div class="appointment_list_clo">
-                                                                        <div class="alt-center">
-                                                                            <div class="alt-center-l">
-                                                                                <div class="alt-center-lp">
-                                                                                    <div class="alt-logo">
-                                                                                        <a href="#">
-                                                                                            <img alt="" src="{% static 'img/doctor_new.jpg' %}">
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="content_confirm">
-                                                                                <div class="content_confirm_in">
-                                                                                    <div class="full_width doctr_details">
-                                                                                        <h4>Dr Santhosh Kumar</h4>
-                                                                                        <p>Gynocologist / Obstertriciam</p>
-                                                                                        <span class="review_date">29th Feb 2018 at 3PM</span>
-                                                                                        <span class="appo_id_rev">Appontment ID 45846449</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="full_width start_ratging">
-                                                        <h4>Rate your Experience</h4>
-                                                        <table>
-                                                            <tbody>
-                                                                <tr class="hotel_a">
-                                                                    <td>Doctor</td>
-                                                                    <td>
-                                                                        <div class="stars-outer">
-                                                                            <div class="stars-inner"></div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr class="hotel_b">
-                                                                    <td>Clinic & Aminities</td>
-                                                                    <td>
-                                                                        <div class="stars-outer">
-                                                                            <div class="stars-inner"></div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr class="hotel_c">
-                                                                    <td>Staff & Hospitality</td>
-                                                                    <td>
-                                                                        <div class="stars-outer">
-                                                                            <div class="stars-inner"></div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr class="hotel_d">
-                                                                    <td>Timelines</td>
-                                                                    <td>
-                                                                        <div class="stars-outer">
-                                                                            <div class="stars-inner"></div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <form class="feddback_comment">
-                                                            <div class="form-group">
-                                                                <textarea class="form-control" rows="3" placeholder="Write down your feedback"></textarea>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% if not record.reviewed %}
+                                    <a data-target="{{ record.uid }}" class="Presciptiona render_modal" href="#!">Feedback / Complaints</a>
+                                    {% else %}
+                                    <button type="button" class="btn btn-default" disabled>Already reviewed!</button>
+                                    {% endif %}
                                     <a class="View_Reports" href="#">Book Again</a>
                                 </li>
                                 {% elif type == 'booked' %}
                                 <li class="dpctor_li">
-                                        <div class="doctor_presc">
-                                            <p><img src="{% static 'healthseeker/img/dashboard/icon1.png' %}">Waiting for Doctor Confirmation!</p>
-                                        </div>
-                                    </li>
+                                    <div class="doctor_presc">
+                                        <p>
+                                            <img src="{% static 'healthseeker/img/dashboard/icon1.png' %}">Waiting for Doctor Confirmation!</p>
+                                    </div>
+                                </li>
                                 {% endif %}
                             </ul>
                         </div>
-                        {% endfor %}
+                        {% endfor %} {% if type == 'past' %}
+                        <div class="modal fade" id="feedback-modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form id="feedback-form" method="POST">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        <div class="modal-header">Review Appointment
+                                            <span class="appo_id_rev">Appontment ID
+                                                <label class="label label-primary" id="apt_uid"></label>
+                                                <input type="hidden" name="apt_id" id="a_id" required>
+                                            </span>
+                                        </div>
+                                        <div class="modal-body revewi_feedbac">
+                                            <div class="full_width appointment_main_hero appointment_main_hero_fina app_list_in appointment_list_in appointment_list_clo">
+                                                <div class="alt-center">
+                                                    <div class="alt-center-l alt-center-lp alt-logo">
+                                                        <img alt="" src="{% static 'img/doctor_new.jpg' %}">
+                                                    </div>
+                                                    <div class="content_confirm">
+                                                        <div class="content_confirm_in">
+                                                            <div class="full_width doctr_details">
+                                                                <h2 id="doctor_name"></h2>
+                                                                <h3 id="hospital_name"></h3>
+                                                                <span class="review_date" id="apt_date"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="full_width start_ratging">
+                                                <h4>Rate your Experience</h4>
+                                                <table class="table table-striped table-hoverable">
+                                                    <tbody>
+                                                        {% for category in review_cats %}
+                                                        <tr>
+                                                            <th>{{ category | title }}</th>
+                                                            <td>
+                                                                <fieldset class="rating {{ category }}">
+                                                                    <input class="rating_stars" type="radio" id="5" value="5" />
+                                                                    <label class="full" for="5" title="Awesome!"></label>
+                                                                    <input class="rating_stars" type="radio" id="4.5" value="4.5" />
+                                                                    <label class="half" for="4.5" title="Pretty good"></label>
+                                                                    <input class="rating_stars" type="radio" id="4" value="4" />
+                                                                    <label class="full" for="4" title="Good"></label>
+                                                                    <input class="rating_stars" type="radio" id="3.5" value="3.5" />
+                                                                    <label class="half" for="3.5" title="Average"></label>
+                                                                    <input class="rating_stars" type="radio" id="3" value="3" />
+                                                                    <label class="full" for="3" title="Not so great"></label>
+                                                                    <input class="rating_stars" type="radio" id="2.5" value="2.5" />
+                                                                    <label class="half" for="2.5" title="Below Average"></label>
+                                                                    <input class="rating_stars" type="radio" id="2" value="2" />
+                                                                    <label class="full" for="2" title="Bad"></label>
+                                                                    <input class="rating_stars" type="radio" id="1.5" value="1.5" />
+                                                                    <label class="half" for="1.5" title="Very Bad"></label>
+                                                                    <input class="rating_stars" type="radio" id="1" value="1" />
+                                                                    <label class="full" for="1" title="Hated it!"></label>
+                                                                    <input class="rating_stars" type="radio" id="0.5" value="0.5" />
+                                                                    <label class="half" for="0.5" title="Sucks big time - 0.5 stars"></label>
+                                                                </fieldset>
+                                                                <input type="hidden" class="rating_val text-danger" name="categories[{{category}}]" value="2.5" required>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                <form class="feddback_comment">
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" rows="3" name="message" placeholder="Write down your feedback"></textarea>
+                                                        <input type="hidden" name="hosp_id" id="p_id" required>
+                                                        <input type="hidden" name="clinician_id" id="c_id" required>
+                                                        {% csrf_token %}
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="$('form#feedback-form').submit();">Submit!
+                                                <i class="fa fa-chevron-up"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+{% endblock %}
+{% block scripts %}
 <script>
-    $(document).ready(function() {
-        $("input#search-box").on('input', function() {
+    $(document).ready(function () {
+        $("input#search-box").on('input', function () {
             let str = $(this).val().toLowerCase();
-            if(str.split(" ").join("") != "") {
+            if (str.split(" ").join("") != "") {
                 $("div.custo_care_acc").hide();
                 setTimeout(() => $("div[data-attr*='" + str + "'").fadeIn(), 300);
-            }
-            else $("div.custo_care_acc").show();
+            } else $("div.custo_care_acc").show();
         });
     });
 </script>
+{% if type == 'past' %}
+<script>
+    $(document).ready(function () {
+        $("fieldset.rating").each((i, e) => {
+            let $ratings = $(e),
+                seed = String(Math.random()).slice(2, 10);
+            $ratings.find("input").attr('id', (i, id) => {
+                return String(id) + seed;
+            });
+            $ratings.find("label").attr('for', (i, val) => {
+                return String(val) + seed;
+            });
+        });
+
+        $("input.rating_stars").on('change', function () {
+            $(this).closest('tr').find('input.rating_val').attr('value', $(this).val());
+        });
+        $("a.render_modal").on('click', function () {
+            let apt_uid = $(this).data('target');
+            $.ajax({
+                url: '/api/custom/appointment/' + apt_uid + '/',
+                method: "GET",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status) {
+                        let $modal = $("#feedback-modal");
+                        // set display attributes
+                        $modal.find("label#apt_uid").text(apt_uid);
+                        $modal.find("h2#doctor_name").text(response.data.under.name);
+                        $modal.find("h3#hospital_name").text(response.data.provider.name);
+                        $modal.find("span#apt_date").text(response.data.date);
+
+                        // set backend attributes
+                        $modal.find("input#c_id").val(response.data.under.id);
+                        $modal.find("input#p_id").val(response.data.provider.id);
+                        $modal.find("input#a_id").val(apt_uid);
+                        $("#feedback-modal").modal('show');
+
+                    } else alert("ERROR! Invalid/non-existent appointment!");
+                }
+            });
+        });
+        $('#feedback-modal').on('hidden.bs.modal', function (e) {
+            $(this).find("input.rating_val").attr('value', '2.5');
+            $(this).find("input#c_id").removeAttr('value');
+            $(this).find("input#p_id").removeAttr('value');
+            $(this).find("input#a_id").removeAttr('value');
+            $(this).find("textarea[name='message']").empty();
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

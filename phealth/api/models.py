@@ -763,6 +763,66 @@ class Organization(models.Model):
 	location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
+class Feedback(models.Model):
+	'''
+		The feedback/complaint for a given provider AND/OR clinician
+		- Ratings for the various parameters (optional)
+		- User, provider => compulsory
+		- Clinician => optional
+		- Appointment => The linked appointment object (optional)
+		- categories => Types of parameters (set according to field setter)
+			- Doctor
+			- Clinic & Aminities
+			- Staff & Hospitality
+			- Timelines
+	'''
+	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(editable=False, default=uuid.uuid4)
+	date_added = models.DateTimeField(default=current_timestamp)
+
+	user = models.ForeignKey(Seeker, on_delete=models.DO_NOTHING)
+	message = models.TextField(null=True, blank=True, max_length=255)
+
+	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING)
+	clinician = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, blank=True, null=True)
+	appointment = models.ForeignKey('Appointment', on_delete=models.DO_NOTHING, blank=True, null=True)
+
+	cat_keys = KeysValidator(['doctor', 'clinic_amenities', 'staff_hospitality', 'scheduling'])
+
+	def get_categories():
+		''' set the default categories according to the ones being validated '''
+		cats = {}
+		[cats.update({_ : 0}) for _ in Feedback.cat_keys.keys]
+		return cats
+
+	categories = JSONField(validators=[cat_keys], default=get_categories)
+
+	class Meta:
+		managed = True
+		db_table = 'feedbacks'
+
+
+	def clean(self, *args, **kwargs):
+		''' override to check validity of categories '''
+
+		error_msg = "%s error | %s"
+		if not all([_ in Feedback.cat_keys.keys for _ in self.categories]):
+			raise ValidationError({ 'categories' : error_msg % ("Keys", "Invalid Keys")})
+		if not all([(isinstance(self.categories[_], int) or isinstance(self.categories[_], float)) and self.categories[_] >= 0
+			and self.categories[_] <= 5 for _ in self.categories]):
+			raise ValidationError({ 'categories' : error_msg % ("Values", "Invalid ratings")})
+		elif self.clinician not in self.provider.clinicians.all():
+			raise ValidationError({ 'clinician' : error_msg % ("Clinician", "Clinician does not belong to provider!")})
+		return super().clean(*args, **kwargs)
+
+
+	def save(self):
+		''' override save to save internal fields at model level '''
+		self.full_clean()
+		super().save()
+		if self.appointment: self.appointment.save()
+
+
 class Sponsor(models.Model):
 	''' the sponsor who can bulk register users as seekers
 	'''
@@ -826,10 +886,12 @@ class Appointment(models.Model):
 		('event-success', 'Success'),
 		('event-warning', 'Warning'),
 		('event-special', 'Special'),
+		('event-danger', 'Danger'),
 	)
 
 	# indexing and meta fields
 	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(default=uuid.uuid4, unique=True)
 	create_on = models.DateTimeField(default=current_timestamp, editable=False)
 	date_modified = models.DateTimeField(default=current_timestamp, editable=False)
 
@@ -837,6 +899,8 @@ class Appointment(models.Model):
 	time = models.TimeField()
 	duration = models.PositiveIntegerField(default=30)
 	status = models.CharField(choices=status_options, default='pending', max_length=40)
+	reviewed = models.BooleanField(default=False, editable=False)
+
 	under = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
 	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
 
@@ -850,7 +914,7 @@ class Appointment(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.date_modified = current_timestamp()
-
+		self.reviewed = bool(Feedback.objects.filter(appointment=self))
 		self.from_timestamp = datetime.datetime.combine(self.date, self.time)
 		self.to_timestamp = self.from_timestamp + datetime.timedelta(minutes=self.duration)
 
