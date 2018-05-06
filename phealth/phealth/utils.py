@@ -50,19 +50,24 @@ def getIP(request):
 	return client_ip, is_routable
 
 def signin(role, request):
-	''' signin middleware
+	'''
+		SIGNIN Middleware *** DONOT CHANGE ***
+
 	'''
 	email = request.POST['username']
 	password = request.POST['password']
-	print(password)
 
 	# implemented type should only support list
 	if not isinstance(role, (list, str,)):
 		raise Http404("Signin functionality for type not implemented")
-
 	if not isinstance(role, list): role = [role]
+	assert(isinstance(role, list)) # ensure the role is list
 
+	# single user email, multiple similar emails will be ignored
 	u = User.objects.filter(email=email).first()
+
+	if not u:
+		return False
 
 	client_ip, is_routable = getIP(request)
 	if client_ip is not None: u.last_IP = client_ip
