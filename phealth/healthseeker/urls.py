@@ -14,6 +14,7 @@ profile_routes = [
     url(r'^family_edit/(?P<pk>\d+)/family_edit/$', views.family_edit, name='family_edit'),
     url(r'^family_delete/family_delete/(?P<pk>\d+)/$', views.family_delete, name='family_delete'),
 
+    path('change_password/', views.change_password, name='change_password'),
     url(r'^contact/?$', views.contact, name='contact'),
     url(r'^interests/?$', views.interests, name='intrest'),
     url(r'^other/?$', views.other, name='other'),

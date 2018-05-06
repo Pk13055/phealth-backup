@@ -589,8 +589,24 @@ def records(request):
 
 
 @match_role("healthseeker")
-def changepassword(request):
+def change_password(request):
+    ''' method to change the seeker password '''
 
-    return render(request,'healthseeker/change_pswd.html',{
+    seeker = Seeker.objects.filter(user__pk=request.session['pk']).first()
+    status = None
 
+    if request.method == "POST":
+        if check_password(request.POST['old_password'], seeker.user.password):
+            status = True
+            seeker.user.password = make_password(request.POST['new_password'])
+            seeker.user.save()
+            disable_session = request.POST.get('disable_session', False) # do something with this
+            if disable_session:
+                return redirect('common:signout')
+        else:
+            status = False
+
+    return render(request, 'healthseeker/change_password.html.j2', {
+        'title' : "Account - Change password",
+        'status' : status,
     })
