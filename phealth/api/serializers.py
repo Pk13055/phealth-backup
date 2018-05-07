@@ -2,22 +2,6 @@ from rest_framework.serializers import HyperlinkedModelSerializer
 from api.models import *
 
 
-class CitySerializer(HyperlinkedModelSerializer):
-
-    class Meta:
-        model = City
-        depth = 6
-        fields = '__all__'
-
-
-class AddressSerializer(HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Address
-        depth = 6
-        fields = '__all__'
-
-
 class CouponSerializer(HyperlinkedModelSerializer):
 
     class Meta:

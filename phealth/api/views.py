@@ -158,6 +158,47 @@ def make_appointment(request):
         })
 
 
+def get_appointment(request, appointment_uid):
+    '''
+        get appointment based on uid supplied
+
+    '''
+
+    class AppointmentSerializer(ModelSerializer):
+        under = SerializerMethodField()
+        provider = SerializerMethodField()
+
+        def get_under(self, a):
+            return {
+                'name' : a.under.user.name,
+                'id' : a.under.pk,
+            }
+
+        def get_provider(self, a):
+            return {
+                'name' : a.provider.name,
+                'id' : a.provider.pk,
+            }
+
+        class Meta:
+            model = Appointment
+            depth = 1
+            fields = '__all__'
+
+    app = Appointment.objects.filter(uid=appointment_uid).first()
+    if app:
+        status = True
+        data = AppointmentSerializer(app).data
+    else:
+        status = False
+        data = ["No appointment matching UID"]
+
+    return JsonResponse({
+        'status' : status,
+        'data' : data
+    })
+
+
 @require_POST
 @csrf_exempt
 def attach_user(request):
@@ -259,16 +300,6 @@ def healthchecks_list(request, healthcheck=None):
 
 
 # default API viewset
-
-class CityViewSet(ModelViewSet):
-    queryset = City.objects.all()
-    serializer_class = CitySerializer
-
-
-class AddressViewSet(ModelViewSet):
-    queryset = Address.objects.all()
-    serializer_class = AddressSerializer
-
 
 class CouponViewSet(ModelViewSet):
     queryset = Coupon.objects.all()

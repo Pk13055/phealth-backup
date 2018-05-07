@@ -44,19 +44,6 @@ def current_timestamp():
 
 # Address and Location related models
 
-class City(models.Model):
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=60)
-	code = models.CharField(max_length=5)
-
-	def __str__(self):
-		return "<City %s | %s | %s >" % (self.code, self.state.name, self.name)
-
-	class Meta:
-		managed = True
-		db_table = 'cities'
-
-
 class Location(models.Model):
 
 	id = models.AutoField(primary_key=True)
@@ -188,40 +175,6 @@ class Location(models.Model):
 		distance = math.acos( math.sin(self.rad_lat) * math.sin(rad_lat_2) + \
 			math.cos(self.rad_lat) * math.cos(rad_lat_2) * math.cos(del_lng) ) * R
 		return distance
-
-
-class Address(models.Model):
-	''' address, can be of the user or any other model
-	'''
-
-	location_type_options = (
-		('current', "Current Location"),
-		('manual', "Update Manually"),
-	)
-	resident_type_options = (
-		('home', "Home"),
-		('office', "Office"),
-		('other', "Other"),
-	)
-	id = models.AutoField(primary_key=True)
-	user = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True)
-	location_type = models.CharField(choices=location_type_options, max_length=200, default='current')
-	latitude = models.FloatField(blank=True, null=True)
-	longitude = models.FloatField(blank=True, null=True)
-	city = models.ForeignKey(City, on_delete=models.DO_NOTHING, blank=True, null=True)
-	door_no = models.CharField(max_length=200, blank=True, null=True)
-	area = models.CharField(max_length=200, blank=True, null=True)
-	landmark = models.CharField(max_length=200, blank=True, null=True)
-	resident_type = models.CharField(choices=resident_type_options, max_length=200, default='home')
-	pincode = models.CharField(max_length=9, blank=True, null=True)
-
-
-	class Meta:
-		managed = True
-		db_table = 'address'
-
-
-# Functionality models
 
 
 class Coupon(models.Model):
@@ -642,7 +595,7 @@ class Clinician(models.Model):
 
 	# education locations and other details can be stored here
 	education = JSONBField(JSONField(validators=[
-		KeysValidator(['year', 'title', 'description', 'type'])
+	KeysValidator(['year', 'title', 'description', 'type'])
 	]), null=True, blank=True, default=list)
 
 	# experience/training obtained in an institute
@@ -810,6 +763,66 @@ class Organization(models.Model):
 	location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
+class Feedback(models.Model):
+	'''
+		The feedback/complaint for a given provider AND/OR clinician
+		- Ratings for the various parameters (optional)
+		- User, provider => compulsory
+		- Clinician => optional
+		- Appointment => The linked appointment object (optional)
+		- categories => Types of parameters (set according to field setter)
+			- Doctor
+			- Clinic & Aminities
+			- Staff & Hospitality
+			- Timelines
+	'''
+	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(editable=False, default=uuid.uuid4)
+	date_added = models.DateTimeField(default=current_timestamp)
+
+	user = models.ForeignKey(Seeker, on_delete=models.DO_NOTHING)
+	message = models.TextField(null=True, blank=True, max_length=255)
+
+	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING)
+	clinician = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, blank=True, null=True)
+	appointment = models.ForeignKey('Appointment', on_delete=models.DO_NOTHING, blank=True, null=True)
+
+	cat_keys = KeysValidator(['doctor', 'clinic_amenities', 'staff_hospitality', 'scheduling'])
+
+	def get_categories():
+		''' set the default categories according to the ones being validated '''
+		cats = {}
+		[cats.update({_ : 0}) for _ in Feedback.cat_keys.keys]
+		return cats
+
+	categories = JSONField(validators=[cat_keys], default=get_categories)
+
+	class Meta:
+		managed = True
+		db_table = 'feedbacks'
+
+
+	def clean(self, *args, **kwargs):
+		''' override to check validity of categories '''
+
+		error_msg = "%s error | %s"
+		if not all([_ in Feedback.cat_keys.keys for _ in self.categories]):
+			raise ValidationError({ 'categories' : error_msg % ("Keys", "Invalid Keys")})
+		if not all([(isinstance(self.categories[_], int) or isinstance(self.categories[_], float)) and self.categories[_] >= 0
+			and self.categories[_] <= 5 for _ in self.categories]):
+			raise ValidationError({ 'categories' : error_msg % ("Values", "Invalid ratings")})
+		elif self.clinician not in self.provider.clinicians.all():
+			raise ValidationError({ 'clinician' : error_msg % ("Clinician", "Clinician does not belong to provider!")})
+		return super().clean(*args, **kwargs)
+
+
+	def save(self):
+		''' override save to save internal fields at model level '''
+		self.full_clean()
+		super().save()
+		if self.appointment: self.appointment.save()
+
+
 class Sponsor(models.Model):
 	''' the sponsor who can bulk register users as seekers
 	'''
@@ -873,10 +886,12 @@ class Appointment(models.Model):
 		('event-success', 'Success'),
 		('event-warning', 'Warning'),
 		('event-special', 'Special'),
+		('event-danger', 'Danger'),
 	)
 
 	# indexing and meta fields
 	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(default=uuid.uuid4, unique=True)
 	create_on = models.DateTimeField(default=current_timestamp, editable=False)
 	date_modified = models.DateTimeField(default=current_timestamp, editable=False)
 
@@ -884,6 +899,8 @@ class Appointment(models.Model):
 	time = models.TimeField()
 	duration = models.PositiveIntegerField(default=30)
 	status = models.CharField(choices=status_options, default='pending', max_length=40)
+	reviewed = models.BooleanField(default=False, editable=False)
+
 	under = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
 	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
 
@@ -897,7 +914,7 @@ class Appointment(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.date_modified = current_timestamp()
-
+		self.reviewed = bool(Feedback.objects.filter(appointment=self))
 		self.from_timestamp = datetime.datetime.combine(self.date, self.time)
 		self.to_timestamp = self.from_timestamp + datetime.timedelta(minutes=self.duration)
 

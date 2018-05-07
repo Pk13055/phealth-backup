@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Clickhealth</title>
+<base href="/"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+<link href="{% static './assets/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static './assets/css/style.css' %}" rel="stylesheet">
+<link href="{% static './assets/css/fontopen.css' %}" rel="stylesheet">
+<link href="{% static './assets/css/font.css' %}" rel="stylesheet">
+<link href="{% static './assets/css/animate.css' %}" rel="stylesheet">
+<link href="{% static './assets/css/font-awesome.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'assets/css/owl.carousel.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/style1.css' %}"/>
+<link href="{% static 'styles.2cdd37403a23eb8b0908.bundle.css' %}" rel="stylesheet"/>
+</head>
+<body>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHGMLI2HsaWsBBrFD7zHFKZJwSXIOToiA&libraries=places"></script>
+<script src="{% static './assets/js/jquery.min.js' %}"></script>
+<script src="{% static './assets/js/bootstrap.min.js' %}"></script>
+<script src="http://www.web2feel.com/freeby/scroll-effects/assets/viewportchecker.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{% static './assets/js/owl.carousel.min.js' %}"></script>
+<script src="{% static './assets/js/bootstrap-combobox.js' %}"></script>
+<script>$(document).ready(function () {
+      $('.combobox').combobox()
+    });</script>
+	<script type="text/javascript">$(function () {
+      $("#chkPassport").click(function () {
+        if ($(this).is(":checked")) {
+          $("#dvPassport").show();
+        } else {
+          $("#dvPassport").hide();
+        }
+      });
+    });
+
+
+    $(function () {
+      var $h3s = $('.qa-faq-title').click(function () {
+        $h3s.removeClass('active2');
+        $(this).addClass('active2');
+      });
+    });</script>
+	<div id="loader" style="display:none">
+	<div class="loader-overlay">
+	<img src="{% static './assets/img/loader.gif' %}"></div>
+	</div><app-root></app-root>
+	<script type="text/javascript" src="{% static 'inline.04fa182ebd4da87cfbf8.bundle.js' %}"></script>
+	<script type="text/javascript" src="{% static 'polyfills.46af3f84a403e219371b.bundle.js' %}"></script>
+	<script type="text/javascript" src="{% static 'main.a253c07cee2086555708.bundle.js' %}"></script>
+	</body>
+	</html>

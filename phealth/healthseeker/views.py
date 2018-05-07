@@ -15,7 +15,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 
 # Create your views here.
-from api.models import Location, Seeker, User
+from api.models import (Appointment, Clinician, Feedback, Location, Provider,
+                        Seeker, User)
 from phealth.utils import match_role, redirect, signin
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -538,12 +539,32 @@ def appointment_past(request):
     ''' complete history of past appointments'''
 
     seeker = Seeker.objects.filter(user__email=request.session['email']).first()
-    records = seeker.appointments.filter(Q(status='completed') | Q(status='cancelled')).order_by('-from_timestamp')
+
+    if request.method == "POST":
+        # add feedback if valid
+        params = parser.parse(request.POST.urlencode())
+        print(params)
+        try:
+            ratings = {}
+            [ratings.update({_ : float(params['categories'][_])}) for _ in params['categories']]
+            apt = Appointment.objects.get(uid=params['apt_id'])
+            provider = Provider.objects.get(pk=params['hosp_id'])
+            clinician = provider.clinicians.get(pk=params['clinician_id'])
+            feedback = Feedback(user=seeker, provider=provider,
+                 clinician=clinician, appointment=apt,
+                 categories=ratings, message=params['message'])
+            feedback.save()
+        except Exception as e:
+            print("Error in feedback | %s" % str(e))
+
+    records = seeker.appointments.filter(Q(status='completed')
+        | Q(status='cancelled')).order_by('-from_timestamp')
 
     return render(request, 'healthseeker/appointment/appointment.html.j2', {
         'title' : 'Appointment - History',
         'type' : 'past',
         'records' : records,
+        'review_cats' : Feedback.cat_keys.keys
     })
 
 
@@ -642,12 +663,31 @@ def records(request):
 
     })
 
-@match_role("healthseeker")
-def change_pswd(request):
-
-   return render(request,'healthseeker/change_pswd.html' ,{})
 
 @match_role("healthseeker")
 def intrests(request):
 
     return render(request,'healthseeker/manage_intrests.html',{})
+
+@match_role("healthseeker")
+def change_password(request):
+    ''' method to change the seeker password '''
+
+    seeker = Seeker.objects.filter(user__pk=request.session['pk']).first()
+    status = None
+
+    if request.method == "POST":
+        if check_password(request.POST['old_password'], seeker.user.password):
+            status = True
+            seeker.user.password = make_password(request.POST['new_password'])
+            seeker.user.save()
+            disable_session = request.POST.get('disable_session', False) # do something with this
+            if disable_session:
+                return redirect('common:signout')
+        else:
+            status = False
+
+    return render(request, 'healthseeker/change_password.html.j2', {
+        'title' : "Account - Change password",
+        'status' : status,
+    })

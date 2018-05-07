@@ -1,6 +1,6 @@
 from django import forms
 
-from api.models import *
+from api.models import Location, Post, Seeker, User
 
 
 class UserForm(forms.ModelForm):
@@ -58,9 +58,10 @@ class LanguageForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
+    # MODIFY THIS LATER ***
     class Meta:
-        model = Address
-        fields = ('location_type', 'longitude','latitude','city','area','door_no','landmark','resident_type','pincode' )
+        model = Location
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(AddressForm, self).__init__(*args, **kwargs)
@@ -80,6 +81,7 @@ class PostForm(forms.ModelForm):
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
 
+
 class FriendForm(forms.ModelForm):
     class Meta:
         model = User
@@ -90,4 +92,5 @@ class FriendForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+
 
