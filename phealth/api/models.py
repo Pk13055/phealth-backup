@@ -735,34 +735,6 @@ class Provider(models.Model):
 		db_table = 'providers'
 
 
-class Organization(models.Model):
-	'''
-		comprises the org of a given sponsor
-	'''
-
-	org_type_choices = (
-		("corporate", "Corporations"),
-		("college", "Educational Institutions"),
-		("ngo", "Non-government Organizations"),
-		("community", "Gated communities"),
-	)
-
-	org_size_choices = (
-		("50-100", "50-100"),
-		("100-500", "100-500"),
-		("500-1000", "500-1000"),
-		("1000-5000", "1000-5000"),
-		("5000-10000", "5000-10000"),
-		("10000+", "10000+"),
-	)
-
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=50)
-	size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
-	type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
-	location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
-
-
 class Feedback(models.Model):
 	'''
 		The feedback/complaint for a given provider AND/OR clinician
@@ -821,6 +793,35 @@ class Feedback(models.Model):
 		self.full_clean()
 		super().save()
 		if self.appointment: self.appointment.save()
+
+
+class Organization(models.Model):
+	'''
+		comprises the org of a given sponsor
+	'''
+
+	org_type_choices = (
+		("corporate", "Corporations"),
+		("college", "Educational Institutions"),
+		("ngo", "Non-government Organizations"),
+		("community", "Gated communities"),
+	)
+
+	org_size_choices = (
+		("50-100", "50-100"),
+		("100-500", "100-500"),
+		("500-1000", "500-1000"),
+		("1000-5000", "1000-5000"),
+		("5000-10000", "5000-10000"),
+		("10000+", "10000+"),
+	)
+
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=50)
+	size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
+	type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	image = models.ImageField(upload_to='organization_images', default='default_org.jpg')
+	location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Sponsor(models.Model):
