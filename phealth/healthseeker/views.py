@@ -10,10 +10,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from querystring_parser import parser
 from rest_framework.serializers import ModelSerializer
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import User
 
 # Create your views here.
 from api.models import Location, Seeker, User
 from phealth.utils import match_role, redirect, signin
+from django.contrib.auth.hashers import make_password, check_password
 
 from .forms import *
 
@@ -47,8 +51,8 @@ def dashboard(request):
     ps = 40
     if Seeker.objects.filter(family=me).count() > 0:
         ps +=20
-    if Address.objects.filter(user=me).count() > 0:
-        ps +=20
+    #if Address.objects.filter(user=me).count() > 0:
+        #ps +=20
 
     if Seeker.objects.filter(user=me).values('profession'):
         ps +=20
@@ -474,11 +478,6 @@ def contact(request):
 
 
 @match_role("healthseeker")
-def interests(request):
-    return render(request,'healthseeker/manage_intrests.html',{})
-
-
-@match_role("healthseeker")
 def favourite_doctors(request):
     return render(request,'healthseeker/favorite_decors.html',{})
 
@@ -494,6 +493,7 @@ def complaints(request):
             return redirect('healthseeker:complaints')
     else:
         form=PostForm()
+        print(form)
     result = Seeker.objects.get(user=me)
     print(result)
     return render(request,'healthseeker/comlaints.html',{'form':form,'result':result})
@@ -549,10 +549,55 @@ def appointment_past(request):
 
 @match_role("healthseeker")
 def reference(request):
-
-    return render(request,'healthseeker/refer_earn.html',{
-
+    me = User.objects.get(pk=request.session['pk'])
+    ps = 40
+    if Seeker.objects.filter(family=me).count() > 0:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -= 20
+    if Address.objects.filter(user=me).count() > 0:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -= 20
+    if Seeker.objects.get(user=me).profession:
+        ps += 20
+    elif Seeker.objects.filter(family=me).count() > 0:
+        ps -= 20
+    if request.method == 'POST':
+        uform = FriendForm(request.POST)
+        if uform.is_valid():
+            # otp here
+            mobile = request.POST['mobile']
+            name = request.POST['name']
+            request.session['userdata'] = request.POST
+            otp = randint(1, 99999)
+            request.session['otp'] = otp
+            base = request.META['HTTP_REFERER']
+            print(base)
+            base_url = "http://api.msg91.com/api/sendhttp.php"
+            params = {
+                'sender': "CLICKH",
+                'route': 4,
+                'country': 91,
+                'mobiles': [mobile],
+                'authkey': '182461AjomJGPHB5a0041cb',
+                'message': "Invitation Messsage :" + base,
+            }
+            r = requests.get(base_url, params=params)
+            uform = FriendForm(request.POST)
+            upost = uform.save(commit=False)
+            upost.role = "healthseeker"
+            me = User.objects.get(pk=request.session['pk'])
+            s = Seeker.objects.get(user=me)
+            print(me)
+            upost.save()
+            return redirect('healthseeker:reference')
+    else:
+        uform = FriendForm()
+    return render(request, 'healthseeker/refer_earn.html', context={
+        "uform": uform,
     })
+
 
 
 @match_role("healthseeker")
@@ -590,7 +635,6 @@ def other(request):
     lang = Languages.objects.all()
     return render(request, 'healthseeker/other_info.html', {'form': form, 'lang': lang})
 
-
 @match_role("healthseeker")
 def records(request):
 
@@ -598,10 +642,12 @@ def records(request):
 
     })
 
+@match_role("healthseeker")
+def change_pswd(request):
+
+   return render(request,'healthseeker/change_pswd.html' ,{})
 
 @match_role("healthseeker")
-def changepassword(request):
+def intrests(request):
 
-    return render(request,'healthseeker/change_pswd.html',{
-
-    })
+    return render(request,'healthseeker/manage_intrests.html',{})

@@ -90,3 +90,4 @@ class FriendForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+
