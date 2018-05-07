@@ -497,15 +497,17 @@ class Seeker(models.Model):
 
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+
 	location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
 	relation = models.ForeignKey('Familymember', on_delete=models.DO_NOTHING,null=True, blank=True)
 
-	family = models.OneToOneField(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
-	appointments = models.ManyToManyField('Appointment', editable=False)
+	dob = models.DateField(default=current_timestamp)
 	profession = models.CharField(max_length=100, choices=profession_choices, default="other")
 	language = models.CharField(max_length=100, choices=language_choices, default="english")
 
+	family = models.OneToOneField(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
 
+	appointments = models.ManyToManyField('Appointment', editable=False)
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
 
 	def __str__(self):
