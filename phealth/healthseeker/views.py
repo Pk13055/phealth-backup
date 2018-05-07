@@ -665,9 +665,11 @@ def records(request):
 
 
 @match_role("healthseeker")
-def intrests(request):
+def interests(request):
 
-    return render(request,'healthseeker/manage_intrests.html',{})
+    return render(request, 'healthseeker/manage_intrests.html', {
+        'title' : "Healthseeker - Interests"
+    })
 
 @match_role("healthseeker")
 def change_password(request):
