@@ -301,8 +301,8 @@ def step5(request):
         ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -=20
-    if Address.objects.filter(user=me).count() > 0:
-        ps += 20
+    #if Address.objects.filter(user=me).count() > 0:
+        #ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -=20
     if Seeker.objects.get(user=me).profession:
@@ -352,8 +352,8 @@ def step6(request):
     ps = 40
     if Seeker.objects.filter(family=me).count() > 0:
         ps += 20
-    if Address.objects.filter(user=me).count() > 0:
-        ps += 20
+    #if Address.objects.filter(user=me).count() > 0:
+        #ps += 20
     if Seeker.objects.get(user=me).profession:
         ps += 20
     if request.method == 'POST':
@@ -576,8 +576,8 @@ def reference(request):
         ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -= 20
-    if Address.objects.filter(user=me).count() > 0:
-        ps += 20
+    #if Address.objects.filter(user=me).count() > 0:
+       # ps += 20
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -= 20
     if Seeker.objects.get(user=me).profession:
