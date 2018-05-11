@@ -50,6 +50,7 @@ class Location(models.Model):
 	place_id = models.CharField(max_length=128, unique=True, editable=False) # used to reference the place using maps API
 	name = models.CharField(max_length=100) # can be used for object referral
 	full_name = models.CharField(max_length=200) # can be used to display
+	extra = models.CharField(max_length=50, null=True, blank=True) # can be used to store door no, and other info
 
 	lat = models.DecimalField(max_digits=8, decimal_places=5)
 	long = models.DecimalField(max_digits=8, decimal_places=5)
@@ -101,13 +102,18 @@ class Location(models.Model):
 		super(Location, self).__init__(*args, **kwargs)
 		if place is not None:
 			self.place_id = place['place_id']
-			self.name = place['name']
 			self.full_name = place['formatted_address']
+			try:
+				self.name = place['name']
+			except KeyError:
+				self.name = ', '.join(self.full_name.split(',')[:3])
 
 			self.lat = Decimal(str(round(float(place['location']['lat']), 5)))
 			self.long = Decimal(str(round(float(place['location']['lng']), 5)))
-
-			self.landmark = place['vicinity']
+			try:
+				self.landmark = place['vicinity']
+			except KeyError:
+				self.landmark = self.name
 			self.address_component = place['address_components']
 
 

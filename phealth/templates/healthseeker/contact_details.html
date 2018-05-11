@@ -1,212 +1,227 @@
-{%  extends "healthseeker/base_dashboard.html" %}
-{% load static %}
-{% block content %}
-
+{% extends "healthseeker/base_dashboard.html" %} {% load static %} {% block styles %}
 <style>
-    .h40{
+    .h40 {
         height: 32px !important;
     }
+
     .manual {
         display: none;
     }
 </style>
-
-<script src="{% static 'common/js/all.js' %}"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMCBCYMwsj0JQowT1a4GMNtYJqVEPqxVc&libraries=places"></script>
+{% endblock styles %} {% block scripts %}
+<script src="//geodata.solutions/includes/statecity.js"></script>
 <script>
-        let makeRequest = (obj) => {
-            var place = obj.place || "", latLong = obj.latLong;
-            let setPlace = (place) => {
-                place = placeToJSON(place);
-                $.ajax({
-                    url: window.location.pathname,
-                    method: "POST",
-                    data: {
-                        place: place,
-                    },
-                    success: function(response) {
-                        alert("Location" + ((response.status)? " " : " not ") + "updated successfully!");
-                        $("pre#id_place").text(JSON.stringify(response, null, 4));
-                        $("pre#id_place").fadeIn();
-                        if(response['status']) $("pre#id_place").css({ 'color' : 'black', });
-                        else $("pre#id_place").css({ 'color' : 'red', });
-                        setTimeout(() => { $("pre#id_place").fadeOut(); }, 5000);
+    $(document).ready(function () {
+        // control visual components
+        $("div.location_sections").hide();
+        $("div.current").fadeIn();
+
+        $(".ltype").click(function () {
+            let radioValue = $("input[name='location_type']:checked").val();
+            $("div.location_sections").hide();
+            $(radioValue).fadeIn();
+        });
+    });
+</script>
+<script>
+    // geolocation button linking
+    $(document).ready(function () {
+        $("button#geolocation_btn").on('click', function () {
+            let geocoder = new google.maps.Geocoder;
+            if (navigator.geolocation)
+                navigator.geolocation.getCurrentPosition((location) => {
+                    let lat = location.coords.latitude;
+                    lng = location.coords.longitude;
+                    geocoder.geocode({
+                        'location': {
+                            'lat': lat,
+                            'lng': lng
+                        }
+                    }, (obj, status) => {
+                        console.log(obj);
+                        if (status == 'OK') placeToJSON(obj, (place) => {
+                            console.log(place);
+                            $("input#loc_json").val(JSON.stringify(place));
+                            $("input#loc_full").val(place.formatted_address);
+                        });
+                    });
+                }, showError = (error) => {
+                    let mesg = "";
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            mesg = "User denied the request for Geolocation."
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            mesg = "Location information is unavailable."
+                            break;
+                        case error.TIMEOUT:
+                            mesg = "The request to get user location timed out."
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            mesg = "An unknown error occurred."
+                            break;
                     }
+                    console.log(mesg);
+                    mesg += " Please update manually!";
+                    alert(mesg);
                 });
-            };
-            if(latLong) {
-                let geocoder = new google.maps.Geocoder;
-                geocoder.geocode({'location': latLong }, function(results, status) {
-                    if (status === google.maps.GeocoderStatus.OK) setPlace(results[0]);
-                    else alert('Geocoder failed due to: ' + status + '! Please add manually!');
+            else alert("Geolocation not supported! Please update manually!");
+        });
+    });
+</script>
+<script>
+    // autocomplete field and location update
+    $(document).ready(function () {
+        let autocomplete = new google.maps.places.Autocomplete($("input#autocomplete_field")[0], {
+            types: ['address'],
+            componentRestrictions: {
+                country: "in"
+            }
+        });
+        autocomplete.addListener('place_changed', function () {
+            let places = autocomplete.getPlace();
+            placeToJSON(places, (place) => {
+                console.log(place);
+                $("input#loc_json").val(JSON.stringify(place));
+                $("input#loc_full").val(place.formatted_address);
+            });
+        });
+    });
+</script>
+<script>
+    // manual address handling
+    let prev_string = "";
+    $(document).ready(function () {
+        $("button#updateManual").on('click', function () {
+            let state = $("select#stateId").val(),
+                city = $("select#cityId").val(),
+                remaining = $("input#manual_locality").val(),
+                query_string = [remaining, city, state, "India"].join(", ");
+            console.log(query_string);
+            if (prev_string != query_string) {
+                prev_string = query_string;
+                let url = 'http://maps.googleapis.com/maps/api/place/textsearch/json/',
+                    params = {
+                        'key': "AIzaSyDMCBCYMwsj0JQowT1a4GMNtYJqVEPqxVc",
+                        'query': query_string,
+                        'region': "in"
+                    },
+                    path = url + $.param(params);
+                $.getJSON(path, (data, status) => {
+                    if (data.status == 'OK') placeToJSON(obj, (place) => {
+                        console.log(place);
+                        $("input#loc_json").val(JSON.stringify(place));
+                        $("input#loc_full").val(place.formatted_address);
+                    });
                 });
             }
-            else setPlace(place);
-        };
+        });
+    })
 </script>
-        <section class="form_reg_one_hero dash_board">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="form_reg_one form_reg_one_m_p">
-
-
-                            <div class="form_reg_one_in form_reg_one_in_my_p">
-
-                                <h3>My Profile</h3>
-
-                                {% include 'healthseeker/base_profile.html' %}
-
-                                <div class="my_pro_form_he">
-                                     <form class="registration_form">
-
-
-                                <h2>Please fill the contcat datails form!</h2>
-
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="white-box">
-                                        <div class="form-group ">
-                                            <label class="radio-inline">
-                                                <input type="radio" name="location_type" class="ltype" value=".current" checked>Current Location
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="location_type" class="ltype" value=".manual">Update Manually
-                                            </label>
-                                        </div>
-                                        <br>
-                                        <div class="current location_sections">
-
-                                            <ul class="nav nav-tabs">
-                                                <li>
-                                                    <a data-toggle="tab" href="#geo">Current Location</a>
-                                                </li>
-                                                <li class="active">
-                                                    <a data-toggle="tab" href="#map">Enter Your Location</a>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content">
-                                                <div id="geo" class="tab-pane fade">
-                                                    <div class="getlocation" style="cursor: pointer;">
-                                                        <img src="https://git.reviewboard.kde.org/media/uploaded/files/2015/07/30/019abdbb-80cf-4935-8d6d-0c3e6927d2b3__gps_fixed_600.png"
-                                                        style="height:50px"> Click to Get Current Location
-                                                    </div>
-                                                </div>
-                                                <div id="map" class="tab-pane fade  in active">
-                                                    <div class="form-horizontal" style="width: 550px">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-2 control-label">Location:</label>
-                                                            <div class="col-sm-10">
-                                                                <input type="text" class="form-control" id="clickhealth_address" value="{{data}}" />
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">&nbsp;</div>
-                                                        <div class="m-t-small" style="display:none">
-                                                            <label class="p-r-small col-sm-1 control-label">Lat.:</label>
-
-                                                            <div class="col-sm-3">
-                                                                <input type="text" class="form-control" style="width: 110px" name="longitude" id="clickhealth_lat" />
-                                                            </div>
-                                                            <label class="p-r-small col-sm-2 control-label">Long.:</label>
-
-                                                            <div class="col-sm-3">
-                                                                <input type="text" class="form-control" style="width: 110px" name="latitude" id="clickhealth_lon" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <script>
-                                                            var place = "";
-                                                            var input = document.getElementById('clickhealth_address');
-                                                            autocomplete = new google.maps.places.Autocomplete(input, {
-                                                                    types: ['geocode']
-                                                                });
-                                                            autocomplete.addListener('place_changed', function () {
-                                                                place = autocomplete.getPlace();
-                                                                makeRequest({ 'place' : place });
-                                                            });
-                                                        </script>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="manual location_sections">
-                                             <select name="country" class="form-control  countries order-alpha" id="countryId">
-                                                    <option value="">Select Country</option>
-                                                </select><br><br>
-                                                <select name="state" class="states form-control h40 order-alpha" id="stateId">
-                                                    <option value="">Select State</option>
-                                                </select><br><br>
-                                                <select name="city" class="cities form-control h40 order-alpha  limit-pop-10000" id="cityId">
-                                                    <option value="">Select City</option></select>
-                                                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-                                                <script src="//geodata.solutions/includes/countrystatecity.js"></script>
-                                        </div><br>
-                                    <div class="form-group">
-                                                <label for="id_area">Area:</label>
-                                                <br>
-                                                <input type="text" name="area" maxlength="200" class="form-control h40" placeholder="area" id="id_area" />
-                                            </div> <div class="form-group">
-                                                <label for="id_area">Flat No/Apartment:</label>
-                                                <br>
-                                                <input type="text" name="area" maxlength="200" class="form-control h40" placeholder="flat no/Apartment" id="id_apart" />
-                                            </div><div class="form-group">
-                                                <label for="id_area">Landmark:</label>
-                                                <br>
-                                                <input type="text" name="area" maxlength="200" class="form-control h40" placeholder="landmark" id="id_landmark" />
-                                            </div>
-
-                                        <br>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <br>
-                                                <div class="row">
-                                                    <div class="form-group col-md-12">
-                                                        <div class="icon-addon addon-md">
-                                                            <pre id="id_place"></pre>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <br>
+{% endblock scripts %} {% block content %}
+<section class="form_reg_one_hero dash_board container">
+    <div class="row form_reg_one form_reg_one_m_p form_reg_one_in form_reg_one_in_my_p">
+        <h3>My Profile</h3>
+        {% include 'healthseeker/base_profile.html' %}
+        <div class="row full_width form_reg_one">
+            <div class="row">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Health Seeker</div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="form-body">
+                                <h3 class="box-title">Contact Details</h3>
+                                <div class="col-sm-12 white-box">
+                                    <div class="form-group ">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="location_type" class="ltype" value=".current" checked>Current Location
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="location_type" class="ltype" value=".manual">Update Manually
+                                        </label>
                                     </div>
-                                </div></div>
-
+                                    <br>
+                                    <div class="current location_sections">
+                                        <ul class="nav nav-tabs">
+                                            <li>
+                                                <a data-toggle="tab" href="#geolocation_tab">Current Location</a>
+                                            </li>
+                                            <li class="active">
+                                                <a data-toggle="tab" href="#autocomplete_tab">Enter Your Location</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="geolocation_tab" class="tab-pane fade">
+                                                <button class="btn btn-info" id="geolocation_btn">
+                                                    <i class="fa fa-map-marker fa-lg"></i> Click to get location!
+                                                </button>
+                                            </div>
+                                            <div id="autocomplete_tab" class="tab-pane fade  in active">
+                                                <div class="form-horizontal" style="width: 550px">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">Location:</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" value="{{ location }}" class="form-control" id="autocomplete_field" placeholder="{{ location }}" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="manual location_sections">
+                                        <input type="hidden" name="country" id="countryId" value="IN" />
+                                        <label>Choose and fill in your address : </label>
+                                        <br>
+                                        <select name="state" class="states order-alpha" id="stateId">
+                                            <option value="">Select State</option>
+                                        </select>
+                                        <select name="city" class="cities order-alpha" id="cityId">
+                                            <option value="">Select City</option>
+                                        </select>
+                                        <input type="text" id="manual_locality" placeholder="Enter the address">
+                                        <button type="button" id="updateManual" class="btn btn-success">Update!
+                                            <i class="fa fa-chevron-up"></i>
+                                        </button>
+                                    </div>
+                                    <!-- common information to collect AND submit -->
+                                    <form method="POST" id="locForm">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="location" id="loc_json" value="" required>
+                                        <div class="form-group">
+                                            <label for="loc_full">Full Location (will be updated automatically)</label>
+                                            <br>
+                                            <input type="text" readonly value="{{ location }}" class="text-danger" id="loc_full">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Extra">Extra details (if any):</label>
+                                            <br>
+                                            <input type="text" name="extra" maxlength="200" value="{{ extra_info }}" class="form-control h40" placeholder="{{ extra_info }}"
+                                                id="Extra" />
+                                        </div>
+                                        <ul class="save_next">
+                                            <li>
+                                                <button type="submit" class="save_inf" id="saveBtn">Update!
+                                                    <i class="fa fa-chevron-up"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% if message is not None %}
+                    <div class="col-xs-10 col-xs-offset-1 well well-lg text-danger" id="success-mesg">
+                        {{ message }}
+                    </div>
+                    <script>
+                        setTimeout(() => $("div#success-mesg").fadeOut().remove(), 3000);
+                    </script>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-        </section>
-    <script>
-        $(document).ready(function () {
-            $("div.location_sections").hide();
-            $("div.current").fadeIn();
-
-            $(".ltype").click(function () {
-                let radioValue = $("input[name='location_type']:checked").val();
-                $("div.location_sections").hide();
-                $(radioValue).fadeIn();
-            });
-
-            $(".getlocation").click(function () {
-                if ("geolocation" in navigator) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        $("#clickhealth_lat").val(position.coords.latitude);
-                        $("#clickhealth_lon").val(position.coords.longitude);
-                        let latLong = {
-                            'lat' : position.coords.latitude,
-                            'lng' : position.coords.longitude,
-                        };
-                        makeRequest({ 'latLong' : latLong });
-                    });
-                } else
-                    alert("Browser doesn't support geolocation!");
-            });
-        });
-    </script>
-
-    {% endblock %}
+</section>
+{% endblock %}

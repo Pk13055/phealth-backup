@@ -2,7 +2,10 @@ import json
 from random import randint
 
 import requests
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,15 +13,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from querystring_parser import parser
 from rest_framework.serializers import ModelSerializer
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.models import User
 
 # Create your views here.
 from api.models import (Appointment, Clinician, Feedback, Location, Provider,
                         Seeker, User)
 from phealth.utils import match_role, redirect, signin
-from django.contrib.auth.hashers import make_password, check_password
 
 from .forms import *
 
@@ -237,61 +236,35 @@ def form3_delete(request, pk):
 #     result.delete()
 #     return redirect('healthseeker:form_view')
 
-
-@csrf_exempt
 @match_role("healthseeker")
 def step4(request):
+    ''' enter the location details '''
     me = User.objects.get(pk=request.session['pk'])
     p = Seeker.objects.filter(user=me).first()
-    print(p)
+    message = None
+
     if request.method == "POST":
         data = parser.parse(request.POST.urlencode())
-        place = data['place']
-        place['address_components'] = list(place['address_components'].values())
-        for comp in place['address_components']:
-            comp['types'] = comp['types']['']
-            if isinstance(comp['types'], str):
-                comp['types'] = [comp['types']]
+        place = json.loads(data['location'])
+        extra_info = ', '.join(data['extra']).strip(' ')
+        print(extra_info, json.dumps(place, indent=4), sep="\n")
         try:
-            l = Location(place=place)
-            l.save()
-            status = True
-            data = place
+            location = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
+            if not location:
+                location = Location(place=place)
+                location.extra = extra_info
+            location.save()
+            p.location = location
+            p.save()
+            return redirect('healthseeker:step5')
         except Exception as e:
-            print(e)
-            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
-            l = temp_loc or p.location
-            if l == p.location:
-                status = True
-                data = ["Same Location as before!"]
-            elif temp_loc is None:
-                status = False
-                data = [str(e)]
-            else:
-                status = True
-                data = l
-
-        p.location = l
-        p.save()
-
-        if isinstance(data, Location):
-            class LocationSerializer(ModelSerializer):
-                class Meta:
-                    depth = 1
-                    fields = ('lat', 'long', 'full_name', 'name',)
-                    model = Location
-            data = LocationSerializer(data).data
-
-        return JsonResponse({
-            'status' : status,
-            'data' : data,
-        })
+            message = "Invalid Location! Please re-renter! (%s)" % str(e)
 
     return render(request, 'healthseeker/registration/form4.html', {
         'title' : "Account - Location Settings",
         'seeker' : p,
-
-    })
+        'message' : message,
+        })
 
 
 def step5(request):
@@ -422,60 +395,39 @@ def accountmanager(request):
 def contact(request):
     me = User.objects.get(pk=request.session['pk'])
     p = Seeker.objects.filter(user=me).first()
-    print(p)
+    location = p.location
+    message = None
 
     if request.method == "POST":
         data = parser.parse(request.POST.urlencode())
-        place = data['place']
-        place['address_components'] = list(place['address_components'].values())
-        for comp in place['address_components']:
-            comp['types'] = comp['types']['']
-            if isinstance(comp['types'], str):
-                comp['types'] = [comp['types']]
-        try:
-            l = Location(place=place)
-            l.save()
-            status = True
-            data = place
-        except Exception as e:
-            print(e)
-            temp_loc = Location.objects.filter(full_name__icontains=place['formatted_address']).first()
-            l = temp_loc or p.location
-            if l == p.location:
-                status = True
-                data = ["Same Location as before!"]
-            elif temp_loc is None:
-                status = False
-                data = [str(e)]
-            else:
-                status = True
-                data = l
+        extra_info = data['extra']
+        loc_json = json.loads(data['location'])
+        print(json.dumps(loc_json,indent=4))
+        location = Location.objects.filter(full_name__icontains=loc_json['formatted_address']).first()
+        message = "Location same as before!"
+        if location is None :
+            try:
+                location = Location(place=loc_json)
+                location.extra = extra_info
+                location.save()
+                p.location = location
+                message = "Location successfully added & updated!"
+            except Exception as e:
+                message = "Invalid location! Please re-enter! (%s)" % str(e)
+        elif location != p.location:
+            location.extra = extra_info
+            location.save()
+            p.location = location
+            message = "Location successfully updated!"
 
-        p.location = l
-        p.save()
-
-        if isinstance(data, Location):
-            class LocationSerializer(ModelSerializer):
-                class Meta:
-                    depth = 1
-                    fields = ('lat', 'long', 'full_name', 'name',)
-                    model = Location
-            data = LocationSerializer(data).data
-        return JsonResponse({
-            'status' : status,
-            'data' : data,
-        })
-    me = User.objects.get(pk=request.session['pk'])
-    sobj = Seeker.objects.get(user=me)
-    result = sobj.location
-    data = result.full_name
-    print(data)
+    p.save()
     return render(request, 'healthseeker/contact_details.html', {
         'title' : "Account - Location Settings",
         'seeker' : p,
-        'result':result,
-        'data':data
-        })
+        'message' : message,
+        'location' : p.location.full_name,
+        'extra_info' : p.location.extra,
+    })
 
 
 @match_role("healthseeker")
