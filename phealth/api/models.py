@@ -21,7 +21,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User as admin_user
 from django.contrib.postgres.fields import (ArrayField, HStoreField,
-											IntegerRangeField, JSONField)
+                                            IntegerRangeField, JSONField, DateRangeField)
 from django.contrib.postgres.fields.jsonb import JSONField as JSONBField
 from django.contrib.postgres.validators import KeysValidator, ValidationError
 from django.core.validators import RegexValidator
@@ -35,14 +35,6 @@ from django.utils import timezone
 def current_timestamp():
 	return datetime.datetime.now()
 
-
-'''
-		COMMON MODELS INDEPENDENT OF
-		SITE/ROLE SPECIFICS
-'''
-
-
-# Address and Location related models
 
 class Location(models.Model):
 
@@ -212,8 +204,6 @@ class Coupon(models.Model):
 		db_table = 'coupons'
 
 
-# healthchecks and associated
-
 class TestCategory(models.Model):
 	''' cateogeries for a given test
 	'''
@@ -348,7 +338,6 @@ class DiscountCard(models.Model):
 		db_table = 'discountcards'
 
 
-
 class Speciality(models.Model):
 	''' hospital/clinician specialities
 	'''
@@ -364,8 +353,6 @@ class Speciality(models.Model):
 		managed = True
 		db_table = 'specialities'
 
-
-# user associated
 
 class Question(models.Model):
 	''' question used for recovery etc
@@ -467,12 +454,6 @@ class Transaction(models.Model):
 	class Meta:
 		managed = True
 		db_table = 'transactions'
-
-
-'''
-		SPECIFIC ROLE BASED MODELS
-
-'''
 
 
 class Seeker(models.Model):
@@ -803,6 +784,61 @@ class Feedback(models.Model):
 		if self.appointment: self.appointment.save()
 
 
+class Alert(models.Model):
+	'''
+		@description Notifier system to send alerts to patients
+		@field uid => Unique identifier
+		@field status => Internal field to trigger current active status
+		@field name -> Desired Alert name
+		@field type -> Type of alert
+		@field method -> Means of alerting
+		@field duration -> Range of dates to be alerted for
+		@field contact -> Person to alert
+	'''
+
+	alert_choices = (
+		('medication', 'medication'),
+		('checkup', 'checkup'),
+		('appointment', 'appointment'),
+		('consultation', 'consultation'),
+		('other', 'other'),
+	)
+
+	method_choices = (
+		('email', 'email'),
+		('mobile', 'mobile'),
+		('both', 'both'),
+		('none', 'none'),
+	)
+
+	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+	status = models.BooleanField(default=False, editable=False)
+
+	name = models.CharField(max_length=30)
+	type = models.CharField(max_length=40, choices=alert_choices, default='consultation')
+	method = models.CharField(max_length=15, default='mobile', choices=method_choices)
+	duration = DateRangeField()
+	contact = models.ForeignKey(Seeker, on_delete=models.DO_NOTHING, editable=False)
+
+	def __str__(self):
+		return "%s (%s) | %s" % (self.name, self.type, self.status)
+
+
+	def save(self, *args, **kwargs):
+		dur = self.duration
+		try:
+			self.status = self.status or (dur[0] <= current_timestamp().date() <= dur[1])
+		except TypeError:
+			self.status = self.status or (dur.lower <= current_timestamp().date() <= dur.upper)
+
+		super().save(*args, **kwargs)
+
+	class Meta:
+		db_table = 'alerts'
+		managed = True
+
+
 class Organization(models.Model):
 	'''
 		comprises the org of a given sponsor
@@ -870,13 +906,6 @@ class SalesAgent(models.Model):
 	class Meta:
 		managed = True
 		db_table = 'salesagents'
-
-
-'''
-
-	role specific models
-
-'''
 
 
 class Appointment(models.Model):
@@ -974,8 +1003,6 @@ class CDN(models.Model):
 		managed = True
 		db_table = 'images'
 
-
-# blog posts
 
 class BlogCategory(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -1083,6 +1110,7 @@ class FacilityType(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class Facility(models.Model):
 	facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
 	name = models.CharField(max_length=200)
@@ -1101,6 +1129,7 @@ class Timesession(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class Role(models.Model):
 	name = models.CharField(max_length=200)
 	subrole = models.CharField(max_length=200,null=True, blank=True)
@@ -1108,6 +1137,7 @@ class Role(models.Model):
 
 	def __str__(self):
 		return self.name
+
 
 class Familymember(models.Model):
 	name = models.CharField(max_length=200)
@@ -1121,6 +1151,7 @@ class Languages(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name
+
 
 class IdConfiguration(models.Model):
 	affix = models.CharField(max_length=200,null=True, blank=True)

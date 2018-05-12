@@ -14,9 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 from querystring_parser import parser
 from rest_framework.serializers import ModelSerializer
 
-# Create your views here.
-from api.models import (Appointment, Clinician, Feedback, Location, Provider,
-                        Seeker, User)
+from api.models import (Alert, Appointment, Clinician, Feedback, Location,
+                        Provider, Seeker, User)
 from phealth.utils import match_role, redirect, signin
 
 from .forms import *
@@ -453,7 +452,57 @@ def complaints(request):
 
 @match_role("healthseeker")
 def healthalerts(request):
-    return render(request,'healthseeker/health_alerts.html',{})
+    ''' modify and book health alerts '''
+
+    seeker = Seeker.objects.filter(user__pk=request.session['pk']).first()
+
+    class AlertForm(forms.ModelForm):
+        class Meta:
+            model = Alert
+            fields = ('name', 'duration', 'method',)
+
+    alert_form = AlertForm()
+
+    if request.method == "POST":
+        req_type = request.POST['req_type']
+        if req_type == "DELETE":
+            alert = Alert.objects.filter(uid=request.POST['uid']).first()
+            print(alert)
+            alert.delete()
+            return JsonResponse({
+                'status' : True,
+                'data' : "Alert has been successfully removed!"
+            })
+        elif req_type == "ADD":
+            alert_form = AlertForm(request.POST, request.FILES)
+            if 'uid' in request.POST:
+                print("Existing")
+                base_alert = Alert.objects.filter(uid=request.POST['uid']).first()
+                alert_form = AlertForm(request.POST, request.FILES, instance=base_alert)
+            if alert_form.is_valid():
+                alert = alert_form.save(commit=False)
+                alert.contact = seeker
+                alert.type = request.POST['type']
+                alert.save()
+                print(alert)
+        elif req_type == "MODIFY":
+            class AlertSerializer(ModelSerializer):
+                class Meta:
+                    model = Alert
+                    depth = 1
+                    fields = ('uid', 'name', 'method', 'type', 'duration',)
+            alert = Alert.objects.get(uid=request.POST['uid'])
+            return JsonResponse({
+                'status' : True,
+                'data' : AlertSerializer(alert).data
+            })
+
+    return render(request, 'healthseeker/health_alerts.html.j2', {
+        'title' : "Healthalerts",
+        'alerts' : Alert.objects.filter(contact=seeker),
+        'alert_types' : [_[0] for _ in Alert.alert_choices],
+        'alert_form' : alert_form,
+    })
 
 
 # Appointment Routes

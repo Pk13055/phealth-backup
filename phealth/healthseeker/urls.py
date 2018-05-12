@@ -39,7 +39,7 @@ dashboard_routes = [
     url(r'^appointment/', include(appointment_routes)),
 
     url(r'^favourite_doctors/?$', views.favourite_doctors, name='favaroitedoctors'),
-    url(r'^healthalerts/?$', views.healthalerts, name='healthalerts'),
+    url(r'^alerts/?$', views.healthalerts, name='healthalerts'),
     url(r'^reference/?$', views.reference, name='reference'),
     url(r'^accountmanager/?$', views.accountmanager, name='accountmanager'),
 ]
