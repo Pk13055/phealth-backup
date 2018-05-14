@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from querystring_parser import parser
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from api.models import (Alert, Appointment, Clinician, Feedback, Location,
                         Provider, Seeker, User)
@@ -431,7 +431,46 @@ def contact(request):
 
 @match_role("healthseeker")
 def favourite_doctors(request):
-    return render(request,'healthseeker/favorite_decors.html',{})
+    ''' most commonly booked doctors '''
+
+    seeker = Seeker.objects.filter(user__pk=request.session['pk']).first()
+    TOTAL_COUNT = 3
+    clinician_pks = list(filter(lambda _: _ is not None,
+     seeker.appointments.values_list('under', flat=True)))
+    counts = {}
+    [counts.update({_: clinician_pks.count(_)}) for _ in clinician_pks]
+
+    class ClinicianSerializer(ModelSerializer):
+        mobile = SerializerMethodField()
+        name = SerializerMethodField()
+        profile_pic = SerializerMethodField()
+
+        def get_name(self, c):
+            return c.user.name
+
+        def get_mobile(self, c):
+            return c.user.mobile
+
+        def get_profile_pic(self, c):
+            return c.user.profile_pic
+
+        class Meta:
+            model = Clinician
+            fields = ('language', 'first_fee', 'fee',
+            'education', 'experience_training',
+            'procedure_conditions', 'awards',
+            'registrations', 'name', 'profile_pic', 'mobile',
+            'discount_offerings',)
+
+    # get top few clinicians visited
+    clinician_pks = sorted(counts, key=counts.get, reverse=True)[:TOTAL_COUNT]
+    clinicians = Clinician.objects.filter(pk__in=clinician_pks)
+    clinicians = ClinicianSerializer(clinicians, many=True)
+
+    return render(request, 'healthseeker/favourite_docs.html.j2', {
+        'title' : "Favourite Doctors",
+        'clinicians' :  clinicians.data,
+    })
 
 
 @match_role("healthseeker")

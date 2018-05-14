@@ -643,6 +643,13 @@ class Clinician(models.Model):
 			raise ValidationError(errors)
 		return cleaned_fields
 
+
+	def save(self, *args, **kwargs):
+		''' save override to call validation '''
+		self.full_clean()
+		super().save(*args, **kwargs)
+
+
 	def check_availability(self, from_date, to_date):
 		''' given from and to, check whether the clinician
 			is available for the given period.
