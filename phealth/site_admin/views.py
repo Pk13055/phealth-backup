@@ -1,5 +1,10 @@
+import calendar
+
 import datetime
+
 import json
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from datatableview import (Datatable, DateTimeColumn, TextColumn,
                            ValuesDatatable)
@@ -11,6 +16,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
 from querystring_parser import parser
+from datetime import datetime, timedelta
 
 from api.models import *
 from phealth.utils import get_clinician, match_role, signin
@@ -313,13 +319,13 @@ def symptomsarea_add(request):
         form = SymptomsareaForm()
     return render(request, 'site_admin/dashboard/symptomsarea_add.html', {'form': form})
 
-class SymptomsareaTableView(DatatableView):
+"""class SymptomsareaTableView(DatatableView):
     model = SymptomsArea
 
     class datatable_class(Datatable):
         button = TextColumn('Action', None, processor='get_button_raw')
         class Meta:
-            columns = ['speciality', 'name',  'created_date']
+            columns = ['speciality', 'name', 'created_date']
 
         def get_button_raw(self, instance, **kwargs):
             return '''
@@ -327,19 +333,19 @@ class SymptomsareaTableView(DatatableView):
 					<a href="/site_admin/dashboard/symptomsarea_edit/{}/symptomsarea_edit/" class="datatable-btn btn btn-success" role="button">Edit</a>
 					<a href="/site_admin/dashboard/symptomsarea_delete/symptomsarea_delete/{}/" class="datatable-btn btn btn-danger" role="button">Delete</a>
 				</p>
-				'''.format(instance.id, instance.id)
+				'''.format(instance.id, instance.id )
 
     def get_queryset(self):
         return SymptomsArea.objects.all()
 
     def get_template_names(self):
-        return 'site_admin/dashboard/symptomsarea_view.html'
+        return 'site_admin/dashboard/symptomsarea_view.html' """
 
 
 @match_role("admin")
-def symptomarea_view(request):
+def symptomsarea_view(request):
     result = SymptomsArea.objects.all()
-    return render(request, 'site_admin/dashboard/symptomsarea_view.html', {'values': result})
+    return render(request, 'site_admin/dashboard/symptomsarea_view.html', {'result': result})
 
 @match_role("admin")
 def symptomsarea_edit(request, pk):
@@ -447,7 +453,7 @@ def speciality_edit(request, pk):
 def speciality_delete(request, pk):
     result = Speciality.objects.get(pk=pk)
     result.delete()
-    return redirect('site_admin:condition_view')
+    return redirect('site_admin:speciality_view')
 
 #Coupons
 @match_role("admin")
@@ -497,7 +503,7 @@ def coupons_reports(request):
 @match_role("admin")
 def test_add(request):
     if request.method == 'POST':
-        form = TestForm(request.POST)
+        form = TestForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
@@ -536,7 +542,7 @@ def test_delete(request, pk):
 @match_role("admin")
 def test_category_add(request):
     if request.method == 'POST':
-        form = TestcategoryForm(request.POST)
+        form = TestcategoryForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
@@ -574,7 +580,7 @@ def test_category_delete(request, pk):
 @match_role("admin")
 def test_subcategory_add(request):
     if request.method == 'POST':
-        form = TestsubcategoryForm(request.POST)
+        form = TestsubcategoryForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
@@ -804,24 +810,75 @@ def users_inactive(request, pk):
 
 @match_role("admin")
 def salesagents_add(request):
-    return render(request, 'site_admin/dashboard/salesagents_add.html')
+    return render(request, 'site_admin/dashboard/salesagents_add.html',{})
 
 @match_role("admin")
 def salesagents_view(request):
-    return render(request, 'site_admin/dashboard/salesagents_view.html', {})
+    result = SalesAgent.objects.all()
+    return render(request, 'site_admin/dashboard/salesagents_view.html', {'values':result})
 
 
 
 @match_role("admin")
 def health_weekly(request):
-    return render(request, 'site_admin/dashboard/health_weekly.html', {})
+    clinicians = Clinician.objects.all()
+    providers = Provider.objects.all()
+    result = Appointment.objects.all()
+
+    fromDate = request.GET.get("fromdate")
+    print(fromDate)
+    if request.GET.get("provider") is not None:
+        if request.GET.get('provider') != "All":
+            result = result.filter(Q(provider=request.GET.get('provider')))
+
+    if request.GET.get("under") is not None:
+        if request.GET.get('under') != "All":
+            result = result.filter(Q(under=request.GET.get('under')))
+
+    if request.GET.get("status") is not None:
+        if request.GET.get('status') != "All":
+            result = result.filter(Q(status=request.GET.get('status')))
+
+
+    if request.GET.get("fromdate") is not None:
+        fromDate = request.GET.get("fromdate")
+        spadte = fromDate.split('-')
+        day = datetime.date(int(spadte[0]), int(spadte[1]), int(spadte[2]))
+        toDate = day + timedelta(days=7)
+        print(toDate)
+        result = result.filter(Q(date__range=[fromDate,toDate]))
+    return render(request, 'site_admin/dashboard/health_weekly.html', {'values':result,'providers':providers,'clinicians':clinicians,'fromdate':fromDate})
 
 
 @match_role("admin")
 def health_monthly(request):
+    clinicians = Clinician.objects.all()
+    providers = Provider.objects.all()
+
+    specialities = Clinician.objects.all().values('specialities')
     result = Appointment.objects.all()
-    print("resultresult", result)
-    return render(request, 'site_admin/dashboard/health_monthly.html', {"result": result})
+    fromDate = ''
+    if request.GET.get("clinician") is not None:
+        if request.GET.get('clinician') != "All":
+            result = result.filter(Q(under=request.GET.get('under')))
+
+    if request.GET.get("speciality") is not None:
+        if request.GET.get('speciality') != "All":
+            result = result.filter(Q(speciality=request.GET.get('speciality')))
+
+    if request.GET.get("status") is not None:
+        if request.GET.get('status') != "All":
+            result=result.filter(Q(status = request.GET.get('status')))
+
+    if request.GET.get("fromdate") is not None:# and request.GET.get("todate") is not None:
+        fromDate = request.GET.get("fromdate")
+        sp_dt = fromDate.split('-')
+        year = sp_dt[0]
+        month = sp_dt[1]
+        #toDate = request.GET.get("todate")
+        result = result.filter(date__year=year,
+                              date__month=month).order_by('date')
+    return render(request, 'site_admin/dashboard/health_monthly.html', {'values':result,'clinicians':clinicians,'providers':providers})
 
 #---------------------Dicount Cards------------------------------------------------------------
 @match_role("admin")
@@ -856,7 +913,7 @@ def discountcard_edit(request, pk):
     return render(request, 'site_admin/dashboard/discountcard_add.html', {'form': form})
 
 @match_role("admin")
-def dicountcard_delete(request, pk):
+def discountcard_delete(request, pk):
     result = DiscountCard.objects.get(pk=pk)
     result.delete()
     return redirect('site_admin:discountcard_view')
@@ -875,6 +932,10 @@ def healthcheck_add(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
+            for test_id in form.cleaned_data['tests'].values_list('id', flat=True):
+                post.tests.add(test_id)
+            post.save()
+
             return redirect('site_admin:healthcheck_view')
     else:
         form = HealthCheckupForm()
@@ -896,7 +957,7 @@ def healthcheck_edit(request, pk):
             post.save()
             return redirect('site_admin:healthcheck_view')
     else:
-        form = DiscountForm(instance=post)
+        form = HealthCheckupForm(instance=post)
     return render(request, 'site_admin/dashboard/healthcheck_add.html', {'form': form})
 
 @match_role("admin")
@@ -909,7 +970,19 @@ def healthcheck_delete(request, pk):
 
 @match_role("admin")
 def healthcheck_reports(request):
-    return render(request, 'site_admin/dashboard/healthcheck_reports.html', {})
+    me = User.objects.filter(pk=request.session['pk']).first()
+    print(me)
+    s = Seeker.objects.get(user=me)
+    print(s)
+    result = s.healthchecks.all()
+    print(result)
+    fromDate = ''
+    toDate = ''
+    if request.GET.get("fromDate") is not None and request.GET.get("toDate") is not None:
+        fromDate = request.GET.get("fromdate")
+        toDate = request.GET.get("todate")
+        result = Appointment.objects.filter(date__range=[fromDate, toDate])
+    return render(request, 'site_admin/dashboard/healthcheck_reports.html', context={'result':result,'formdate':fromDate,'todate':toDate,'s':s})
 
 
 @match_role("admin")
@@ -1009,7 +1082,7 @@ class AppointmentTableView(DatatableView):
         return Appointment.objects.all()
 
     def get_template_names(self):
-        return ('site_admin/dashboard/appointments/daily.html', {'form': forms})
+        return ('site_admin/dashboard/appointments/daily.html.j2', {'form': forms})
 
 
 
@@ -1062,8 +1135,9 @@ def health_daily(request):
     if request.GET.get("fromdate") is not None and request.GET.get("todate") is not None:
         fromDate = request.GET.get("fromdate")
         toDate = request.GET.get("todate")
-        result = Appointment.objects.filter(date__range=[fromDate, toDate])
+        result = result.filter(date__range=[fromDate, toDate]).order_by('date')
     return render(request, 'site_admin/dashboard/health_daily.html', {'values': result,'providers':providers, 'fromdate': fromDate, 'todate': toDate, })
+
 
 @match_role("admin")
 def confirm_appointment(request, id):
@@ -1253,8 +1327,7 @@ def timing_vacation(request):
 def basic_details(request):
     ''' account route for '''
 
-    c = User.objects.filter(user__email=request.session['email']).first()
-    u = c.user
+    c = User.objects.filter(email=request.session['email']).first()
 
     class UserForm(forms.ModelForm):
         class Meta:
@@ -1262,14 +1335,14 @@ def basic_details(request):
             fields = ('name', 'gender')
 
     if request.method == "POST":
-        b = UserForm(request.POST, instance=u)
+        b = UserForm(request.POST, instance=c)
         if b.is_valid():
             b.save()
 
     return render(request, 'site_admin/dashboard/account/basic.html.j2', context={
         'title': "Account - ",
         'admin': c,
-        'form': UserForm(instance=u),
+        'form': UserForm(instance=c),
     })
 
 
@@ -1510,3 +1583,47 @@ def memberships(request):
         'admin': c,
         'memberships': x,
     })
+
+#--------------------------------------------Amenity----------------------------------------
+@match_role("admin")
+def amenities_add(request):
+    if request.method == 'POST':
+        form = AmenityForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:amenities_view')
+    else:
+        form = AmenityForm()
+    return render(request, 'site_admin/dashboard/amenities_add.html', {'form': form})
+
+
+@match_role("admin")
+def amenities_view(request,):
+    result = Amenity.objects.all()
+    print(result)
+    return render(request, 'site_admin/dashboard/amenities_view.html', {'values': result})
+
+@match_role("admin")
+def amenities_edit(request, pk):
+    post = get_object_or_404(Amenity, pk=pk)
+    if request.method == "POST":
+        form = AmenityForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('site_admin:amenities_view')
+    else:
+        form = AmenityForm(instance=post)
+    return render(request, 'site_admin/dashboard/amenities_add.html', {'form': form})
+
+@match_role("admin")
+def amenities_delete(request, pk):
+    result = Amenity.objects.get(pk=pk)
+    result.delete()
+    return redirect('site_admin:amenities_view')
+
+
+
+
+

@@ -43,11 +43,15 @@ class TestForm(forms.ModelForm):
 
     class Meta:
         model = Test
-        fields = ('name', 'code', 'department', 'description', 'subcategory')
+        fields = ('name', 'code', 'department', 'description', 'test_image')
 
 
     def __init__(self, *args, **kwargs):
         super(TestForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
 
 class CouponForm(forms.ModelForm):
 
@@ -90,11 +94,13 @@ class SpecialityForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+
+            
 class TestcategoryForm(forms.ModelForm):
 
     class Meta:
         model = TestCategory
-        fields = ('name', 'description',)
+        fields = ('name', 'description', 'test', 'category_pic')
 
 
     def __init__(self, *args, **kwargs):
@@ -107,7 +113,7 @@ class TestcategoryForm(forms.ModelForm):
 class HealthCheckupForm(forms.ModelForm):
     class Meta:
         model = HealthCheckup
-        fields = ('name', 'description', 'price', 'image', 'tests', 'applicability', 'group_or_sponsor', 'coupon',)
+        fields = ('name', 'description', 'gender', 'price', 'pre_existing_conditions', 'image', 'age', 'tests', 'applicability', 'group_or_sponsor', 'coupon',)
 
     def __init__(self, *args, **kwargs):
         super(HealthCheckupForm, self).__init__(*args, **kwargs)
@@ -129,13 +135,11 @@ class FacilityForm(forms.ModelForm):
             self.fields[myField].widget.attrs['placeholder'] = myField
 
 
-
-
 class TestsubcategoryForm(forms.ModelForm):
 
     class Meta:
         model = TestSubcategory
-        fields = ('name', 'category','description',)
+        fields = ('name', 'category','description', 'sub_category_image')
 
 
     def __init__(self, *args, **kwargs):
@@ -229,3 +233,14 @@ class IdConfigurationForm(forms.ModelForm):
             self.fields[myField].widget.attrs['placeholder'] = myField
 
 
+class AmenityForm(forms.ModelForm):
+
+    class Meta:
+        model = Amenity
+        fields = ('service_name','service_image')
+
+    def __init__(self, *args, **kwargs):
+        super(AmenityForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField

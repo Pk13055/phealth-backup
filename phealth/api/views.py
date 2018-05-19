@@ -243,12 +243,14 @@ def healthchecks_list(request, healthcheck=None):
     '''
         @description returns a list of the matching healthchecks
         @param request -> POST request
-        @param type -> Preventive/Diabetes/Cancer/Antenatal
-        @param age_group -> 0:60:10, 60+
-        @param gender -> male/female
+        @param applicability -> general/specific
+        @param age_group -> 20-40
+        @param gender -> male/female/both
+        @param pre_existing_conditions_id -> speciality object id
     '''
-    status = False
 
+    status = False
+   
     class HealthCheckupSerializer(ModelSerializer):
 
         hospitals = SerializerMethodField()
@@ -266,7 +268,6 @@ def healthchecks_list(request, healthcheck=None):
             model = HealthCheckup
             depth = 4
             fields = '__all__'
-
     if healthcheck:
         try:
             cur_check = HealthCheckup.objects.get(Q(uid=healthcheck) | Q(id=healthcheck))
@@ -280,17 +281,64 @@ def healthchecks_list(request, healthcheck=None):
                 'status' : status,
                 'data' : data
             })
+    if request.POST['applicability'].title() == 'Specific':
 
-    healthchecks = HealthCheckup.objects.filter(type__icontains=
-        request.POST['type']).filter(Q(gender__icontains=request.POST['gender'])
-            | Q(gender__icontains='both'))
+        applicability = 1
+    else:
+        applicability = 0
+
+    speciality_objects_ids = Speciality.objects.filter(pk=request.POST['pre_existing_conditions_id']).values_list('id')
+    healthchecks = HealthCheckup.objects.filter(applicability__icontains=applicability).filter(
+        gender__icontains=request.POST['gender'])
 
 
-    age_low, age_high = tuple(map(int, request.POST['age_range'].split('-')))
+    age_low, age_high = tuple(map(int, request.POST['age_group'].split('-')))
     age_range = NumericRange(age_low, age_high)
     healthchecks = healthchecks.filter(age__contained_by=age_range)
 
     data = HealthCheckupSerializer(healthchecks, many=True).data
+    status = True
+
+    return JsonResponse({
+        'status' : status,
+        'data' : data
+    })
+
+
+@require_POST
+@csrf_exempt
+def location_providers(request):
+    '''
+    Filtering providers with location and with selected healthchekup
+    @description returns a list of the matching providers
+    @param request -> POST request
+    location: name str
+    location_type: city/state str <hidden> (for example, if the client
+        chooses hyderabad, Telengana as the choice, location_type should be
+        set to the smallest subset, ie, city -> Hyderabad. If he chooses only
+        Telengana, then it should set location_type as state)
+    @param healthcheck_id -> healthcheck object id
+
+    '''
+    status = False
+    location = request.POST['location']
+    location_type = request.POST['location_type']
+    healthchecks_object = HealthCheckup.objects.filter(
+        pk=request.POST['healthcheck_id']).values_list('id')
+    
+    class HealthCheckupSerializer(ModelSerializer):
+
+        class Meta:
+            model = HealthCheckup
+            depth = 4
+            fields = '__all__'
+    hospitals = Provider.objects.filter(
+            Q(location__landmark__icontains=params['location']) |
+            Q(location__full_name__icontains=params['location'])).all()
+    providers = hospitals.filter(healthchecks__id__in=[13])
+
+
+    data = HealthCheckupSerializer(providers, many=True).data
     status = True
 
     return JsonResponse({
@@ -319,6 +367,11 @@ class TestSubcategoryViewSet(ModelViewSet):
 class TestViewSet(ModelViewSet):
     queryset = Test.objects.all()
     serializer_class = TestSerializer
+
+
+class SymptomViewSet(ModelViewSet):
+    queryset = Symptoms.objects.all()
+    serializer_class = SymptomSerializer
 
 
 class HealthCheckupViewSet(ModelViewSet):

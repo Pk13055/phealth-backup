@@ -28,6 +28,7 @@ def SignIn(request):
 			return redirect('clinician:dashboard_home')
 		return redirect('clinician:signin')
 
+
 def SignUp(request):
 	''' no signin functionality for the clinician
 	'''

@@ -27,7 +27,7 @@
                                 <h2>Please fill the Registration form!</h2>
                                 <p>Base on your profile & intrest we will provide free Health tips</p>
 
-                                  <form method="POST" class="registration_form">{% csrf_token %}
+                                  <form method="POST" class="registration_form" enctype="multipart/form-data">{% csrf_token %}
                                    <div class="row">
                             	        {% for field in uform %}
                                                    <div class="form-group custom_md_3 col-md-6">

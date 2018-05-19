@@ -38,9 +38,24 @@
                                         <th>Gender</th>
                                         <th>DOB</th>
                                         <th>Profile_Pic</th>
+                                        <th>Relation</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
+                                    <tr>
+                                        <td>{{seeker.first.user.name}}</td>
+                                       <!-- <td>{{ result.family }} </td>-->
+                                        <td>{{ seeker.first.user.mobile }} </td>
+                                        <td>{{ seeker.first.user.email }}</td>
+                                        <td>{{ seeker.first.user.gender }} </td>
+                                        <td>{{ seeker.first.user.dob }} </td>
+                                        <td>Self</td>
+                                        <td>Self</td>
+
+
+
+                                        <td><center><a class="btn btn-warning"   disabled> Edit</a> <a class="btn  btn-danger"  disabled > Delete</a></center></td>
+                                    </tr>
                                 <tbody>
                                    {% for result in family %}
                                     <tr>
@@ -50,8 +65,9 @@
                                         <td>{{ result.user.gender }} </td>
                                         <td>{{ result.user.dob }} </td>
                                        <td> <div class="image_avatar_ad">
-                                <img src="{% static '/healthseeker/img/avatar2.png' %}">
+                                <img src= "/media/{{ result.user.profile_pic }}">
                             </div></td>
+                                        <td>{{ result.relation }}</td>
                                         <!--<td>{{ result.user.profile_pic }} </td>-->
 
                                         <td><center><a class="btn btn-warning"  href="{% url 'healthseeker:family_edit' pk=result.user.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'healthseeker:family_delete' pk=result.user.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>

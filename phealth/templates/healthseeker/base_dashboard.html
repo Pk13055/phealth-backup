@@ -73,16 +73,16 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Avail services </a>
 						<ul class="dropdown-menu">
 							<li>
-								<a href="#">Book Appointment</a>
+								<a href="/">Book Appointment</a>
 							</li>
 							<li>
-								<a href="#">Book Healthchecks</a>
+								<a href="/">Book Healthchecks</a>
 							</li>
 							<li>
-								<a href="#">Buy Discount Cards</a>
+								<a href="/">Buy Discount Cards</a>
 							</li>
 							<li>
-								<a href="#">Gift health</a>
+								<a href="/">Gift health</a>
 							</li>
 						</ul>
 					</li>
@@ -90,7 +90,9 @@
 						<a href="{% url 'healthseeker:reference' %}">Refer and Earn</a>
 					</li>
 					<li>
-						<a href="{% url 'healthseeker:appointment_past' %}">Send a feedback</a>
+
+						<a href="{% url 'healthseeker:complaints' %}">Send a feedback</a>
+
 					</li>
 					<!--<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
@@ -116,7 +118,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span class="head_prof_AV">
 								<img src="{% static 'healthseeker/img/avatar3.png' %}">
-							</span>{{ session.email }}
+							</span>{{ user.name }}
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
@@ -136,7 +138,7 @@
 								<a href="{% url 'healthseeker:complaints' %}">Facilitation</a>
 							</li>
 							<li>
-								<a href="#">Settings</a>
+								<a href="{% url 'healthseeker:change_password' %}">Settings</a>
 							</li>
 							<li>
 								<a href="{% url 'common:signout' %}">Logout</a>

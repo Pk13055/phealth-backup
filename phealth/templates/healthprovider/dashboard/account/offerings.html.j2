@@ -1,4 +1,7 @@
 {% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %}
+<style>
+h4{color:red;}
+</style>
 <div class="row bg-title">
 	<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 		<h4 class="page-title">Dashboard 1</h4>
@@ -21,6 +24,7 @@
 			<div class="panel-heading">
 				Offering Details
 			</div>
+			<h4 align=center>Please Don't Refresh the Page</h4>
 			<div class="progress">
 				<div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0"
 				aria-valuemax="100" style="width: 30%;">
@@ -129,12 +133,12 @@
 										<table id="myTable" class="table table-striped">
 											<thead>
 												<tr>
-													<th>Out-Patient Services</th>
-													<th>Emergency Room</th>
-													<th>Day-Care Procedures</th>
-													<th>Lab Services</th>
-													<th>Select Speciality</th>
-													<th>Speciality Discount</th>
+													<th><strong>Out-Patient Services</strong></th>
+													<th><strong>Emergency Room</strong></th>
+													<th><strong>Day-Care Procedures</strong></th>
+													<th><strong>Lab Services</strong></th>
+													<th><strong>Select Speciality</strong></th>
+													<th><strong>Speciality Discount</strong></th>
 												</tr>
 											</thead>
 											<tbody>

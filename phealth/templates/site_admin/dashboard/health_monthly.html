@@ -2,33 +2,39 @@
 
             <div class="container-fluid">
                 <div class="row bg-title">
-					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-						<h4 class="page-title">Monthly Appointments View</h4>
-					</div>
-					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-						<ol class="breadcrumb">
-							<li><a href="index.html">Dashboard</a></li>
-							<li><a href="#">Appointments</a></li>
-							<li><a href="#">Monthly Appointments View</a></li>
-						</ol>
-					</div>
-					<!-- /.col-lg-12 -->
-				</div>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">Appointments View Daywise</h4>
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <ol class="breadcrumb">
+                            <li><a href="index.html">Dashboard</a></li>
+                            <li><a href="#">Appointments</a></li>
+                            <li><a href="#">Daily Details</a></li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                    
+                </div>
+                <!-- /row -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="white-box">
                             <div class="row row-in">
+                            <form >
                                 <div class="col-lg-3 col-sm-6 row-in-br">
-                                    <h3>Filters :</h3>
-                                </div>
+                                  <div class="input-group">
+                                       <input type="month" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="fromdate" value="{{ fromdate }}"> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                   </div>
+                               </div>
+                                
                                 <div class="col-lg-2 col-sm-6">
                                     <div class="form-group">
                                         <div class="col-md-9">
-                                            <select name="Obstetrician" class="form-control">
-                                                <option value="" disabled="" selected="">Select Status</option>
-                                                <option value="Rajesh">Dr. Rajesh</option>
-                                                <option value="Srinivasulu">Dr. Srinivasulu</option>
-                                                <option value="Priya">Dr. Priya</option>
+                                            <select name="provider" class="form-control">
+                                                <option value="All" >All Provider</option>
+                                                {%  for provider in providers %}
+                                                    <option value="{{ provider.id }}" {% if request.GET.status == 'provider' %} selected {% endif %} >{{ provider.name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -36,13 +42,11 @@
                                 <div class="col-lg-2 col-sm-6">
                                     <div class="form-group">
                                         <div class="col-md-9">
-                                            <select name="Obstetrician" class="form-control">
-                                                <option value="" disabled="" selected="">Select Status</option>
-                                                <option value="urologist">urologist</option>
-                                                <option value="Cardiologist">Cardiologist</option>
-                                                <option value="Dermatologist">Dermatologist</option>
-                                                <option value="Surgery">Surgery</option>
-                                                <option value="neurologist">neurologist</option>
+                                            <select name="clinician" class="form-control">
+                                                <option value="All" >All Clinician</option>
+                                                {%  for clinician in clinicians %}
+                                                    <option value="{{ clinician.id }}" {% if request.GET.status == 'clinician' %} selected {% endif %} >{{ clinician.user.name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -50,87 +54,126 @@
                                 <div class="col-lg-2 col-sm-6">
                                     <div class="form-group">
                                         <div class="col-md-9">
-                                            <select name="Obstetrician" class="form-control">
-                                                <option value="" disabled="" selected="">Select Status</option>
-                                                <option value="scheduled">Scheduled</option>
-                                                <option value="waitinglist">Waiting List</option>
-                                                <option value="rejected">Rejected</option>
+                                            <select name="status" class="form-control">
+                                                <option value="All" >All Status</option>
+                                                <option value="confirmed" {% if request.GET.status == 'confirmed' %}  selected {% endif %} >confirmed</option>
+                                                <option value="cancelled" {% if request.GET.status == 'cancelled' %}  selected {% endif %} >cancelled</option>
+                                                <option value="pending" {% if request.GET.status == 'pending' %}  selected {% endif %} >pending</option>
+                                                <option value="rescheduled" {% if request.GET.status == 'rescheduled' %}  selected {% endif %} >rescheduled</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12">
-                                    <button class="btn btn-block btn-info btn-rounded">Filter</button>
+                                    <button class="btn btn-block btn-info btn-rounded" type="submit">Filter</button>
                                 </div>
+                            </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="white-box">
-                            <div id="calendar"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
-                <!-- BEGIN MODAL -->
-                <div class="modal fade none-border" id="my-event">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title"><strong>Add Event</strong></h4>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                  Appointments View Daywise
                             </div>
-                            <div class="modal-body"></div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white waves-effect" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
-                                <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal Add Category -->
-                <div class="modal fade none-border" id="add-new-event">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title"><strong>Add</strong> a category</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form role="form">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="control-label">Category Name</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="control-label">Choose Category Color</label>
-                                            <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
-                                                <option value="success">Success</option>
-                                                <option value="danger">Danger</option>
-                                                <option value="info">Info</option>
-                                                <option value="primary">Primary</option>
-                                                <option value="warning">Warning</option>
-                                                <option value="inverse">Inverse</option>
-                                            </select>
+                            <div class="panel-wrapper collapse in" aria-expanded="true">
+                                <div class="panel-body">
+                                    <div class="white-box">
+                                        <div class="table-responsive">
+                                         <table class="table table-bordered">
+                                            <thead>
+                                    <tr>
+                                         <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Duration</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   {% for result in values %}
+                                    <tr>
+                                        <td>{{ result.date }}</td>
+                                        <td>{{ result.time }}</td>
+                                        <td>{{ result.duration }}</td>
+                                        <td>{{ result.status }}</td>
+                                         </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+
+
+
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Save</button>
-                                <button type="button" class="btn btn-white waves-effect" data-dismiss="modal">Close</button>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
-                <!-- END MODAL -->
+               
+                <!-- /.row -->
                 <!-- ============================================================== -->
                 <!-- Right sidebar -->
                 <!-- ============================================================== -->
-                
+                <!-- .right-sidebar -->
+                <div class="right-sidebar">
+                    <div class="slimscrollright">
+                        <div class="rpanel-title"> Service Panel <span><i class="ti-close right-side-toggle"></i></span> </div>
+                        <div class="r-panel-body">
+                            <ul id="themecolors" class="m-t-20">
+                                <li><b>With Light sidebar</b></li>
+                                <li><a href="javascript:void(0)" data-theme="default" class="default-theme">1</a></li>
+                                <li><a href="javascript:void(0)" data-theme="green" class="green-theme">2</a></li>
+                                <li><a href="javascript:void(0)" data-theme="gray" class="yellow-theme">3</a></li>
+                                <li><a href="javascript:void(0)" data-theme="blue" class="blue-theme">4</a></li>
+                                <li><a href="javascript:void(0)" data-theme="purple" class="purple-theme">5</a></li>
+                                <li><a href="javascript:void(0)" data-theme="megna" class="megna-theme">6</a></li>
+                                <li><b>With Dark sidebar</b></li>
+                                <br/>
+                                <li><a href="javascript:void(0)" data-theme="default-dark" class="default-dark-theme">7</a></li>
+                                <li><a href="javascript:void(0)" data-theme="green-dark" class="green-dark-theme">8</a></li>
+                                <li><a href="javascript:void(0)" data-theme="gray-dark" class="yellow-dark-theme">9</a></li>
+                                <li><a href="javascript:void(0)" data-theme="blue-dark" class="blue-dark-theme">10</a></li>
+                                <li><a href="javascript:void(0)" data-theme="purple-dark" class="purple-dark-theme">11</a></li>
+                                <li><a href="javascript:void(0)" data-theme="megna-dark" class="megna-dark-theme working">12</a></li>
+                            </ul>
+                            <ul class="m-t-20 all-demos">
+                                <li><b>Choose other demos</b></li>
+                            </ul>
+                            <ul class="m-t-20 chatonline">
+                                <li><b>Chat option</b></li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/john.jpg" alt="user-img" class="img-circle"> <span>Hritik Roshan<small class="text-success">online</small></span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><img src="plugins/images/users/pawandeep.jpg" alt="user-img" class="img-circle"> <span>Pwandeep rajan <small class="text-success">online</small></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
             </div>
-            
-            
-                                                				{% endblock content %}
+                                                    {% endblock content %}

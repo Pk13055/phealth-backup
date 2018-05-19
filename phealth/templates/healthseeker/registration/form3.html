@@ -54,7 +54,8 @@
                                                         {% for family in applicable_family_members %}
                                                         {{ family.name }}
                                                         {% endfor %}
-                                                                                                                </li>
+                                                        Total {{count}}
+                                                        </li>
 
                                                     </ul>
                                                 </div>
@@ -84,13 +85,14 @@
                                     </div>
                                 </div>
                                 </div>
-
+                                {% if count < discountcard.coverage %}
                                 <a href="#" class="add_family_me" data-toggle="modal" data-target=".bs-example-modal-lg">
                                   <i class="fa fa-plus"></i> Add Family Number
                                 </a>
+
                                     {% include 'healthseeker/registration/familymember.html' %}
 
-
+                                {% endif %}
 
                             </div>
                       </div>
@@ -109,10 +111,23 @@
                                         <th>Email</th>
                                         <th>Gender</th>
                                         <th>DOB</th>
+                                        <th>Relation</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td>{{seeker.first.user.name}}</td>
+                                       <!-- <td>{{ result.family }} </td>-->
+                                        <td>{{ seeker.first.user.mobile }} </td>
+                                        <td>{{ seeker.first.user.email }}</td>
+                                        <td>{{ seeker.first.user.gender }} </td>
+                                        <td>{{ seeker.first.user.dob }} </td>
+                                        <td>Self</td>
+
+
+                                        <td><center><a class="btn btn-warning"   disabled> Edit</a> <a class="btn  btn-danger"  disabled > Delete</a></center></td>
+                                    </tr>
                                    {% for result in family %}
                                     <tr>
                                         <td>{{ result.user.name }} </td>
@@ -121,6 +136,8 @@
                                         <td>{{ result.user.email }}</td>
                                         <td>{{ result.user.gender }} </td>
                                         <td>{{ result.user.dob }} </td>
+                                        <td>{{ result.relation }} </td>
+
 
                                         <td><center><a class="btn btn-warning"  href="{% url 'healthseeker:family_edit' pk=result.user.pk %}"> Edit</a> <a class="btn  btn-danger" href="{% url 'healthseeker:family_delete' pk=result.user.pk %}" onclick="return confirm('Are you sure you want to delete this item?');"  > Delete</a></center></td>
                                     </tr>

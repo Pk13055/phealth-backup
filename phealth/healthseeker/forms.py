@@ -1,12 +1,12 @@
 from django import forms
 
-from api.models import Location, Post, Seeker, User
+from api.models import Location, Post, Seeker, User, Familymember
 
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('name', 'email', 'mobile', 'password', 'gender','dob')
+        fields = ('name', 'email', 'mobile', 'password', 'gender', 'dob', 'profile_pic')
 
     widgets = {
         'password': forms.PasswordInput()
@@ -20,12 +20,17 @@ class UserForm(forms.ModelForm):
 
 
 class FamilyForm(forms.ModelForm):
+
+
     class Meta:
         model = User
-        fields = ('name', 'email', 'mobile',  'gender','dob')
+        fields = ('name', 'email', 'mobile',  'gender','dob','profile_pic' )
 
     def __init__(self, *args, **kwargs):
         super(FamilyForm, self).__init__(*args, **kwargs)
+        self.fields['relation'] = forms.ModelChoiceField(
+            queryset=Familymember.objects.all())
+            
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField

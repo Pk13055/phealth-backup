@@ -165,6 +165,12 @@
                                 <span class="hide-menu">Specialities</span>
                             </a>
                         </li>
+                         <li>
+                            <a href="{% url 'healthprovider:account_work_time' %}">
+                                <i class=" fa-fw"></i>
+                                <span class="hide-menu">Worktimings</span>
+                            </a>
+                        </li>
                         <li>
                             <a href="{% url 'healthprovider:account_facilities' %}">
                                 <i class=" fa-fw"></i>
@@ -177,6 +183,28 @@
                                 <span class="hide-menu">Offerings</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="#" class="waves-effect">
+                                <i class="mdi mdi-account-multiple fa-fw" data-icon="v"></i>
+                                <span class="hide-menu"> Amenity
+                                    <span class="fa arrow"></span>
+                                </span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{% url 'healthprovider:account_amenity' %}">
+                                <i class=" fa-fw"></i>
+                                <span class="hide-menu">Select</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'healthprovider:branch_view' %}">
+                                <i class=" fa-fw"></i>
+                                <span class="hide-menu">View/ Update</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                         <li>
                             <a href="{% url 'healthprovider:account_special_checks' %}">
                                 <i class=" fa-fw"></i>

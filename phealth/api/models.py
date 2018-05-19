@@ -204,32 +204,6 @@ class Coupon(models.Model):
 		db_table = 'coupons'
 
 
-class TestCategory(models.Model):
-	''' cateogeries for a given test
-	'''
-
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=40)
-	description = models.TextField()
-
-	class Meta:
-		managed = True
-		db_table = 'test_categories'
-
-
-class TestSubcategory(models.Model):
-	''' subcategories for a given test
-	'''
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=40)
-	description = models.TextField()
-	category = models.ForeignKey(TestCategory, on_delete=models.DO_NOTHING)
-
-	class Meta:
-		managed = True
-		db_table = 'test_subcategories'
-
-
 class Test(models.Model):
 	''' the various tests offered by
 		a healthprovider
@@ -240,11 +214,80 @@ class Test(models.Model):
 	code = models.CharField(max_length=10)
 	department = models.CharField(max_length=70)
 	description = models.TextField()
-	subcategory = models.ForeignKey(TestSubcategory, on_delete=models.DO_NOTHING)
+	# subcategory = models.ForeignKey(TestSubcategory, on_delete=models.DO_NOTHING)
+	test_image = models.ImageField(upload_to='test_pic', blank=True, null=True)
 
 	class Meta:
 		managed = True
 		db_table = 'tests'
+
+	def __str__(self):
+		return self.name
+
+
+class TestCategory(models.Model):
+	''' cateogeries for a given test
+	'''
+
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=40)
+	description = models.TextField()
+	category_pic = models.ImageField(upload_to = 'test_categories', null=True, blank=True)
+	test = models.ForeignKey(Test, blank=True, null=True, on_delete=models.CASCADE)
+
+	class Meta:
+		managed = True
+		db_table = 'test_categories'
+
+	def __str__(self):
+		return self.name
+
+
+class TestSubcategory(models.Model):
+	''' subcategories for a given test
+	'''
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=40)
+	description = models.TextField()
+	category = models.ForeignKey(TestCategory, on_delete=models.CASCADE, blank=True, null=True)
+	sub_category_image = models.ImageField(upload_to='sub_catagory_pic', blank=True, null=True)
+
+
+	class Meta:
+		managed = True
+		db_table = 'test_subcategories'
+
+	def __str__(self):
+		return self.name
+
+
+
+
+class Speciality(models.Model):
+	''' hospital/clinician specialities
+	'''
+
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=50, unique=True)
+	description = models.TextField()
+
+	def __str__(self):
+		return "<Speciality: %s | %s... >" % (self.name, self.description[:15])
+
+	class Meta:
+		managed = True
+		db_table = 'specialities'
+
+
+class Amenity(models.Model):
+	'''
+	Hospital provides the following amenities for its patients and visitors:
+	'''
+	service_name = models.CharField(max_length=40)
+	service_image = models.ImageField(upload_to='amenities', null=True, blank=True)
+
+	def __str__(self):
+		return self.service_name
 
 
 class HealthCheckup(models.Model):
@@ -281,7 +324,9 @@ class HealthCheckup(models.Model):
 	# querying the field can be done with the following
 	# from psycopg2.extras import NumericRange
 	# HealthCheckup.objects.filter(age__contained_by=NumericRange(0, 40))
-	age = IntegerRangeField(default=(0, None))
+	age = IntegerRangeField()
+	pre_existing_conditions = models.ForeignKey(Speciality, on_delete=models.CASCADE, 
+		null=True, blank=True)
 
 	tests = models.ManyToManyField(Test)
 	description = models.TextField()
@@ -292,6 +337,7 @@ class HealthCheckup(models.Model):
 
 	group_or_sponsor = models.ManyToManyField('User', null=True, blank=True)
 	coupon= models.ManyToManyField('Coupon', null=True, blank=True)
+	instructions = models.TextField(null=True, blank=True)
 
 
 	class Meta:
@@ -337,21 +383,6 @@ class DiscountCard(models.Model):
 		managed = True
 		db_table = 'discountcards'
 
-
-class Speciality(models.Model):
-	''' hospital/clinician specialities
-	'''
-
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=50, unique=True)
-	description = models.TextField()
-
-	def __str__(self):
-		return "<Speciality: %s | %s... >" % (self.name, self.description[:15])
-
-	class Meta:
-		managed = True
-		db_table = 'specialities'
 
 
 class Question(models.Model):
@@ -496,6 +527,7 @@ class Seeker(models.Model):
 
 	appointments = models.ManyToManyField('Appointment', editable=False)
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
+	transactions = models.ManyToManyField(Transaction, null=True, blank=True, editable=False)
 
 	def __str__(self):
 		return "<Seeker : %s >" % self.user.email
@@ -646,7 +678,7 @@ class Clinician(models.Model):
 
 	def save(self, *args, **kwargs):
 		''' save override to call validation '''
-		self.full_clean()
+		#self.full_clean()
 		super().save(*args, **kwargs)
 
 
@@ -697,19 +729,104 @@ class Clinician(models.Model):
 		db_table = 'clinicians'
 
 
+
+class BasicFaciltyModel(models.Model):
+	'''
+	Common model for facilities provided by Hospital
+	'''
+	name = models.CharField(max_length=50)
+	description = models.TextField(blank=True, null=True)
+
+	class Meta:
+		abstract = True
+
+
+class Diagnostic(BasicFaciltyModel):
+	'''
+	diagnostics provided by hospital
+	'''
+	image = models.ImageField(upload_to='diagnostic_pics', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		managed = True
+		db_table = 'diagnostics'
+
+
+
+class InsuranceCorporateRecognation(BasicFaciltyModel):
+	'''
+	Insurance or Corporate Recognations provided by hospital
+	'''
+	image = models.ImageField(upload_to='insurance_pics', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		managed = True
+		db_table = 'insurances'
+
+
+class QualityAccreditation(BasicFaciltyModel):
+	'''
+	QualityAccreditation provided by hospital
+	'''
+	image = models.ImageField(upload_to='quality_pics', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		managed = True
+		db_table = 'quality_accreditations'
+
+
+class ServiceType(models.Model):
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.name
+
+
+class FacilityType(models.Model):
+	service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+	icon = models.ImageField(upload_to='facility_type', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+
+class Facility(models.Model):
+	facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+	icon = models.ImageField(upload_to='facility', blank=True, null=True)
+
+
+	def __str__(self):
+		return self.name
+
+
 class Provider(models.Model):
 	''' the hospital that may or may not be a branch
 	'''
 
-	type_choices = (
-		('clinic', 'clinic'),
-		('hospital', 'hospital'),
-		('diagnostic_centre', 'diagnostic center'),
-	)
+	# type_choices = (
+	# 	('clinic', 'clinic'),
+	# 	('hospital', 'hospital'),
+	# 	('diagnostic_centre', 'diagnostic center'),
+	# )
 
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100, default="Generic Hospital")
-	type = models.CharField(choices=type_choices, default='hospital', max_length=30)
+	# type = models.CharField(choices=type_choices, default='hospital', max_length=30)
+	service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
 	active_from = models.DateField(default=current_timestamp)
 
 	location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
@@ -719,17 +836,74 @@ class Provider(models.Model):
 	parent_provider = models.ForeignKey("self", on_delete=models.DO_NOTHING, null=True, blank=True)
 
 	clinicians = models.ManyToManyField(Clinician,null=True, blank=True)
+	amenities = models.ManyToManyField(Amenity,null=True, blank=True)
 	specialities = models.ManyToManyField(Speciality,null=True, blank=True)
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
 
-	facilities = ArrayField(models.TextField(), null=True, blank=True)
+	facilities = models.ManyToManyField(FacilityType, null=True, blank=True)
 	offerings = ArrayField(models.TextField(), null=True, blank=True)
 	special_checks = ArrayField(models.TextField(), null=True, blank=True)
+
+	work_timings = ArrayField(
+		ArrayField(
+			models.TimeField(),
+			size=2),
+		size=7, null=True, blank=True)
+	
+	fax = models.BigIntegerField(blank=True, null=True)
+	contact_person = models.CharField(max_length=50, blank=True, null=True)
+	contact_number = models.PositiveIntegerField(blank=True, null=True)
+	no_of_beds = models.PositiveIntegerField(blank=True, null=True)
+
+
+	def check_availability(self, from_date, to_date):
+		''' given from and to, check whether the clinician
+			is available for the given period.
+			@param from_date -> datetime.date
+			@param to_date -> datetime.date
+			@return boolean
+		'''
+		try:
+			if not isinstance(from_date, datetime.date):
+				from_date = datetime.datetime.strptime(from_date, '%Y-%m-%d').date()
+			if not isinstance(to_date, datetime.date):
+				to_date = datetime.datetime.strptime(to_date, '%Y-%m-%d').date()
+		except:
+			return False
+
+		if to_date < from_date: return False
+		for date_slot in self.vacations:
+			start_date, end_date = date_slot
+			if from_date >= start_date and to_date <= end_date:
+				return False
+		return True
+
+	def check_session(self, session):
+		'''
+			given a session, check if a doctor is available in that session
+			@param session -> str "morning"/"afternoon"/"evening"
+			@return True/False
+		'''
+		get_time = lambda x: datetime.datetime.strptime(x, '%H:%M').time()
+		session_timings = {
+			'morning': get_time('11:00'),
+			'afternoon': get_time('16:00'),
+			'evening': get_time('21:00'),
+			'night': get_time('23:59'),
+		}
+
+		if session not in session_timings: return False
+		for time_slot in self.work_timings:
+			if time_slot[0] <= session_timings[session] <= time_slot[1]:
+				return True
+		return False
+
+	def __str__(self):
+		return self.name
 
 	class Meta:
 		managed = True
 		db_table = 'providers'
-
 
 class Feedback(models.Model):
 	'''
@@ -1100,31 +1274,6 @@ class Group(models.Model):
 	def __str__(self):
 		return self.name
 
-
-class ServiceType(models.Model):
-	name = models.CharField(max_length=200)
-	created_date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return self.name
-
-
-class FacilityType(models.Model):
-	service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
-	name = models.CharField(max_length=200)
-	created_date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return self.name
-
-
-class Facility(models.Model):
-	facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
-	name = models.CharField(max_length=200)
-	created_date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return self.name
 
 
 class Timesession(models.Model):

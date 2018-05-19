@@ -16,7 +16,8 @@ profile_routes = [
 
     path('change_password/', views.change_password, name='change_password'),
     url(r'^contact/?$', views.contact, name='contact'),
-    url(r'^interests/?$', views.interests, name='intrest'),
+    url(r'^intrests/?$', views.intrests, name='intrests'),
+    url(r'^change_password/?$', views.change_password, name='settings'),
     url(r'^other/?$', views.other, name='other'),
 ]
 

@@ -37,6 +37,7 @@ DEFAULT_FROM_EMAIL = 'rajesh@mbrinformatics.com'
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    '192.168.1.102',
     "ec2-13-127-28-19.ap-south-1.compute.amazonaws.com",
     "ec2-35-154-57-53.ap-south-1.compute.amazonaws.com",
 ]

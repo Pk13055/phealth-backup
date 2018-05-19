@@ -14,8 +14,9 @@ from django.views.decorators.csrf import csrf_exempt
 from querystring_parser import parser
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from api.models import (Alert, Appointment, Clinician, Feedback, Location,
-                        Provider, Seeker, User)
+# Create your views here.
+from api.models import (Alert, Appointment, Clinician, DiscountCard, Feedback,
+                        Languages, Location, Provider, Seeker, User)
 from phealth.utils import match_role, redirect, signin
 
 from .forms import *
@@ -75,10 +76,11 @@ def otp(request):
             upost = uform.save(commit=False)
             upost.role = "healthseeker"
             upost.password = make_password(request.POST['password'])
-            me = User.objects.get(pk=request.session['pk'])
-            s = Seeker.objects.get(user=me)
-            print(me)
             upost.save()
+            me = User.objects.get(email=request.session['userdata']['email'])
+            s = Seeker.objects.create(user=me)
+            print(me)
+            #upost.save()
             if signin("healthseeker", request):
                 return redirect('healthseeker:step2')
         else:
@@ -90,7 +92,7 @@ def otp(request):
 
 def registration(request):
     if request.method == 'POST':
-        uform = UserForm(request.POST)
+        uform = UserForm(request.POST,request.FILES)
         if uform.is_valid():
 
             #otp here
@@ -129,8 +131,8 @@ def step2(request):
         return redirect('healthseeker:step3')
     cards = DiscountCard.objects.all()
     me = User.objects.get(pk=request.session['pk'])
-    s= Seeker.objects.create(user=me)
-    print(s)
+    #s= Seeker.objects.create(user=me)
+    #print(s)
     return render(request,'healthseeker/registration/form2.html',{'cards':cards})
 
 
@@ -138,18 +140,20 @@ def step2(request):
 def step3(request):
    me = User.objects.get(pk=request.session['pk'])
 
+
    if not request.session.get('discountcard_id'):
        return  redirect('healthseeker:step4')
 
 
    if request.method == 'POST':
        form = FamilyForm(request.POST)
+       relation_object = Familymember.objects.get(id=request.POST['relation'])
        if form.is_valid():
            post = form.save(commit=False)
            post.role = "healthseeker"
            post.save()
            member = User.objects.get(pk=post.pk)
-           Seeker.objects.create(user=member,family=me)
+           Seeker.objects.create(user=member,family=me, relation=relation_object)
            return redirect('healthseeker:step3')
    else:
        form = FamilyForm()
@@ -158,24 +162,34 @@ def step3(request):
 
    data = User.objects.all()
    # print('data', data)
+   seeker = Seeker.objects.filter(user=me)
    family = Seeker.objects.filter(family = me)
-   print(family.first())
+   count = family.count() + seeker.count()
+
+   print('family ', family)
 
    #psobjs = Affiliation.objects.filter(ipId=x)
    #queryset = Sessions.objects.filter(sessionId__in=family.first)
 
    discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
-   return render(request, 'healthseeker/registration/form3.html', {'form': form,'family':family ,'discountcard':discountcard})
+   return render(request, 'healthseeker/registration/form3.html', {'form': form,'family':family ,
+        'discountcard':discountcard, 'seeker': seeker, 'count': count})
 
 
 @match_role("healthseeker")
 def family_edit(request, pk):
    post = get_object_or_404(User, pk=pk)
+
    if request.method == "POST":
+       seeker = Seeker.objects.get(user=post)
        form =FamilyForm(request.POST, instance=post)
        if form.is_valid():
            post = form.save(commit=False)
            post.save()
+
+           seeker.relation = Familymember.objects.get(id=request.POST['relation'])
+           seeker.save()
+
            return redirect('healthseeker:step3')
    else:
        form = FamilyForm(instance=post)
@@ -184,9 +198,11 @@ def family_edit(request, pk):
 
 @match_role("healthseeker")
 def family_delete(request, pk):
-   result = User.objects.get(pk=pk)
-   result.delete()
-   return redirect('site_admin:step3')
+   seeker = Seeker.objects.filter(user_id=pk)
+   email = seeker.first().user.email
+   seeker.delete()
+   User.objects.filter(email=email).delete()
+   return redirect('healthseeker:step3')
 
 
 @match_role("healthseeker")
@@ -331,6 +347,9 @@ def step6(request):
     if request.method == 'POST':
         if sc:
             form = LanguageForm(request.POST, instance=sc)
+            sc.language = form.data.get('language')
+            sc.profession = form.data.get('profession')
+            sc.save()
         else:
             form = LanguageForm(request.POST)
         if form.is_valid():
@@ -356,7 +375,7 @@ def family(request):
 
 
    if request.method == 'POST':
-       form = FamilyForm(request.POST)
+       form = FamilyForm(request.POST, request.FILES)
        if form.is_valid():
            post = form.save(commit=False)
            post.role = "healthseeker"
@@ -367,6 +386,7 @@ def family(request):
    else:
        form = FamilyForm()
    records = User.objects.all()
+   seeker = Seeker.objects.filter(user=me)
 
 
    data = User.objects.all()
@@ -378,7 +398,7 @@ def family(request):
 
 
    discountcard = DiscountCard.objects.get(pk = request.session['discountcard_id'])
-   return render(request, 'healthseeker/family_details.html', {'form': form,'family':family ,'discountcard':discountcard})
+   return render(request, 'healthseeker/family_details.html', {'form': form,'family':family ,'discountcard':discountcard, 'seeker':seeker})
 
 
 @match_role("healthseeker")
@@ -617,13 +637,8 @@ def reference(request):
     elif Seeker.objects.filter(family=me).count() > 0:
         ps -= 20
     #if Address.objects.filter(user=me).count() > 0:
-       # ps += 20
-    elif Seeker.objects.filter(family=me).count() > 0:
-        ps -= 20
-    if Seeker.objects.get(user=me).profession:
-        ps += 20
-    elif Seeker.objects.filter(family=me).count() > 0:
-        ps -= 20
+
+        #ps += 20
     if request.method == 'POST':
         uform = FriendForm(request.POST)
         if uform.is_valid():
@@ -682,6 +697,9 @@ def other(request):
     if request.method == 'POST':
         if sc:
             form = LanguageForm(request.POST, instance=sc)
+            sc.language = form.data.get('language')
+            sc.profession = form.data.get('profession')
+            sc.save()
         else:
             form = LanguageForm(request.POST)
         if form.is_valid():
@@ -705,7 +723,7 @@ def records(request):
 
 
 @match_role("healthseeker")
-def interests(request):
+def intrests(request):
 
     return render(request, 'healthseeker/manage_intrests.html', {
         'title' : "Healthseeker - Interests"
