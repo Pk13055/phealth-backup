@@ -1,7 +1,27 @@
-{% extends "healthseeker/base_dashboard.html" %} {% load static %}
-{% block scripts %}
+{% extends "healthseeker/base_dashboard.html" %} {% load static %} {% block styles %}
+<style>
+    div#contact-map {
+        height: 100%;
+        width: auto;
+    }
+</style>
+<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMCBCYMwsj0JQowT1a4GMNtYJqVEPqxVc&libraries=places"></script>
 <script>
-    $(document).ready(function() {
+    var map;
+</script>
+{% endblock styles %} {% block scripts %}
+<script>
+    let map_init = (lat, lng) => {
+        map = new google.maps.Map($("#contact-map")[0], {
+            zoom: 20,
+            center: new google.maps.LatLng(lat, lng),
+        });
+        let marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat, lng)
+        });
+        marker.setMap(map);
+    };
+    $(document).ready(function () {
         $("div.alt-details").hide();
         let $triggers = $("b.detail-toggle");
         $("div.alt-details").each((i, e) => {
@@ -9,15 +29,21 @@
             $(e).attr('id', cur_id);
             $($triggers[i]).attr('data-target', cur_id);
         });
-        $triggers.on('click', function() {
+        $triggers.on('click', function () {
             let target = $(this).data('target');
-            $("div.alt-details").hide();
-            $('div#' + target).fadeIn();
+            // $("div.alt-details").hide();
+            $('div#' + target).fadeToggle();
         });
+        $(".map-toggle").on('click', function () {
+            let lat = $(this).data('lat'),
+                lng = $(this).data('lng');
+            map_init(lat, lng);
+            google.maps.event.trigger(map, "resize");
+        });
+
     });
 </script>
-{% endblock scripts %}
-{% block content %}
+{% endblock scripts %} {% block content %}
 <section class="container form_reg_one_hero dash_board">
     <div class="row">
         <div class="col-xs-12">
@@ -41,7 +67,7 @@
                                                     </b>
                                                 </div>
                                                 <!-- replace with title later -->
-                                                <p>MS - General Surgery, 15 Years Experience </p>
+                                                <p>{{ clinician.designation }}</p>
                                                 <span class="lagu_span">{{ clinician.language }}</span>
                                                 <span>
                                                     <i class="fa fa-phone" aria-hidden="true"></i>{{ clinician.mobile }}</span>
@@ -54,31 +80,12 @@
                                         </div>
                                         <div class="col-md-4 col-lg-4 padding_left_0">
                                             <div class="full_width doctr_details3">
-                                                <!-- add doctor details -->
-                                                <h4>09:00 PM - 04:00 PM</h4>
-                                                <p>Ayyappa Society Main Road, Madhapur, Hyderabad,
-                                                </p>
-                                                <a data-toggle="modal" data-target="#myModal" href="#">View map
+                                                <!-- <h4>09:00 PM - 04:00 PM</h4> -->
+                                                <p>{{ clinician.address.full_name }}</p>
+                                                <a data-toggle="modal" data-target="#map-modal" href="#" class="map-toggle" data-lat="{{ clinician.address.location.lat }}"
+                                                    data-lng="{{ clinician.address.location.lng }}">View map
                                                     <span class="fa fa-angle-right"></span>
                                                 </a>
-                                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                                    <div class="modal-dialog fade" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                                <h4 class="modal-title" id="myModalLabel">View Map</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.131522315598!2d78.39221431443993!3d17.453417988039117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb91638b1458e1%3A0x872cd53869cbcd42!2sMBR+Informatics+Pvt+Ltd!5e0!3m2!1sen!2sin!4v1517829412276"
-                                                                    width="100%" height="350" frameborder="0" style="border:0"
-                                                                    allowfullscreen></iframe>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-lg-3">
@@ -234,6 +241,21 @@
                         <h3>It's a bit empty here! Try booking an appointment first!</h3>
                     </div>
                     {% endfor %}
+                </div>
+            </div>
+            <div class="modal fade" id="map-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog fade" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">View Map</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="contact-map" class="text-center" style="width: 1000px; height: 500px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -464,6 +464,8 @@ def favourite_doctors(request):
         mobile = SerializerMethodField()
         name = SerializerMethodField()
         profile_pic = SerializerMethodField()
+        hospital_name = SerializerMethodField()
+        address = SerializerMethodField()
 
         def get_name(self, c):
             return c.user.name
@@ -474,19 +476,35 @@ def favourite_doctors(request):
         def get_profile_pic(self, c):
             return c.user.profile_pic
 
+        def get_hospital_name(self, c):
+            try:
+                return c.provider_set.first().name
+            except:
+                return "Independent"
+
+        def get_address(self, c):
+            location = c.provider_set.first().location
+            return {
+                'full_name' : location.name,
+                'place_id' : location.place_id,
+                'location' : {
+                    'lat' : location.lat,
+                    'lng' : location.long,
+                }
+            }
         class Meta:
             model = Clinician
             fields = ('language', 'first_fee', 'fee',
             'education', 'experience_training',
             'procedure_conditions', 'awards',
             'registrations', 'name', 'profile_pic', 'mobile',
-            'discount_offerings',)
+            'discount_offerings','hospital_name','address',)
 
     # get top few clinicians visited
     clinician_pks = sorted(counts, key=counts.get, reverse=True)[:TOTAL_COUNT]
     clinicians = Clinician.objects.filter(pk__in=clinician_pks)
     clinicians = ClinicianSerializer(clinicians, many=True)
-
+    print(clinicians)
     return render(request, 'healthseeker/favourite_docs.html.j2', {
         'title' : "Favourite Doctors",
         'clinicians' :  clinicians.data,
