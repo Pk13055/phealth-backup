@@ -9,8 +9,8 @@
 			</div>
 			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 				<ol class="breadcrumb">
-					<li><a href="index.html">Dashboard</a></li>
-					<li><a href="#">Add New Payment</a></li>
+					<li><a href="{% url 'sponsor:dashboard_home' %}">Dashboard</a></li>
+					<li><a href="{% url 'sponsor:payments_new' %}">Add New Payment</a></li>
 				</ol>
 			</div>
 			<!-- /.col-lg-12 -->
@@ -36,10 +36,8 @@
 										<div class="row">
 											{% for discount in discounts %}
 											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<!-- <img class="img-responsive" alt="user" src=""> -->
 												<div class="white-box">
 													<div class="text-muted">
-														<!-- <span class="m-r-10"> Actual Amount Rs.599</span> -->
 														<a class="text-muted m-l-10" href="#">Amount Rs. {{ discount.price }}</a>
 													</div>
 													<h3 class="m-t-20 m-b-20">{{ discount.name }}</h3>
@@ -52,6 +50,12 @@
 													</p>
 													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodaldiscount{{ discount.id }}">View Details</button>
 													<a href="{% url 'sponsor:payments_add' type='discountcard'  package_id=discount.uid %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select &amp; Pay</button></a>
+												</div>
+											</div>
+											{% empty %}
+											<div class="col-xs-12">
+												<div class="jumbotron">
+													<h3>No discount cards available right now!</h3>
 												</div>
 											</div>
 											{% endfor %}
@@ -74,10 +78,9 @@
 										<div class="row">
 											{% for checkup in checkups %}
 											<div class="col-md-6 col-lg-3 col-xs-12 col-sm-6">
-												<!-- <img class="img-responsive" alt="user" src="plugins/images/big/img2.jpg"> -->
+												<img class="img-responsive" alt="user" src="{% static 'common/dashboard/plugins/images/big/img2.jpg' %}">
 												<div class="white-box">
 													<div class="text-muted">
-														<!-- <span class="m-r-10"> Actual Amount Rs.599</span> -->
 														<a class="text-muted m-l-10" href="#">Amount Rs. {{ checkup.price }}</a>
 													</div>
 													<h3 class="m-t-20 m-b-20">{{ checkup.name }}</h3>
@@ -90,6 +93,12 @@
 													</p>
 													<button class="btn btn-success btn-rounded waves-effect waves-light m-t-20" data-toggle="modal" data-target="#viewdetailsmodalcheckup">View Details</button>
 													<a href="{% url 'sponsor:payments_add' type='healthcheck' package_id=checkup.uid %}"><button class="btn btn-success btn-rounded waves-effect waves-light m-t-20">Select &amp; Pay</button></a>
+												</div>
+											</div>
+											{% empty %}
+											<div class="col-xs-12">
+												<div class="jumbotron">
+													<h3>No healthchecks available right now!</h3>
 												</div>
 											</div>
 											{% endfor %}

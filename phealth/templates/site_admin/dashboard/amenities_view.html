@@ -1,0 +1,68 @@
+{% extends "site_admin/dashboard/base.html" %} {% load static %}
+{% load bootstrap %}
+{% block script %}
+<script>
+    datatableview.auto_initialize = true;
+</script>
+{% endblock script %}
+{% block content %}
+
+
+
+         <div class="container-fluid">
+            <div class="row bg-title">
+               <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                  <h4 class="page-title">Amenities</h4>
+               </div>
+               <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                  <ol class="breadcrumb">
+                     <li><a href="{% url 'site_admin:dashboard_home' %}">Dashboard</a></li>
+                     <li><a href="#">View / Amenities   </a></li>
+                  </ol>
+               </div>
+               <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="panel panel-info">
+                     <div class="panel-heading">
+                         Amenities
+                     </div>
+                     <br>
+
+
+                      <div class="row">
+                       <div class="col-sm-12">
+                          <div class="white-box">
+                             <h3 class="box-title m-b-0">   View / Amenities   </h3>
+                             <div class="row">
+                             <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Amenity Name</th>
+                                            <th>Amenity Logo</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for result in values %}
+                                        <tr>
+                                            <td>{{result.service_name}}</td>
+                                            <td>{{result.service_image}}</td>
+                                            <td><a href="{% url 'site_admin:amenities_edit' result.pk %}" class="datatable-btn btn btn-success" role="button" >Edit</a>
+                                                <a href="{% url 'site_admin:amenities_delete' result.pk %}" class="datatable-btn btn btn-danger" role="button" >Delete</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                            </div>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2018 &copy; Phealth </footer>
+         </div>
+         {% endblock content %}

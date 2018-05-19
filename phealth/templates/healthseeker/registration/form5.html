@@ -8,21 +8,19 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="full_width form_reg_one">
-                            
+
                             <div class="header_form">
-                                <div class="form_reg_one_in">
+                               <div class="form_reg_one_in">
                                     <div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{ ps }}%"></div></div>
                                 </div>
-                               
                             </div>
-                            
                             <a href="{% url 'healthseeker:step6' %}" class="skipt0page"><i class="fa fa-share"></i> &nbsp;Skip this page</a>
                             <div class="form_reg_one_in">
                                 <!--<h2>Please fill the Registration form!</h2>
                                 <p>Base on your profile & intrest we will provide free Health tips</p>
-                                
+
                                 -->
-                                
+
                                <div class="full_width curent_location">
                                     <div class="form_reg_one_DC">
                                         <h2>Refer & Earn</h2>
@@ -44,25 +42,30 @@
                                                                 <div class="form_reg_one_in">
                                                                     <h2>Refer and Earn</h2>
                                                                     <p>Invite your friends and Earn exiting Benifits</p>
-                                                                    <form class="registration_form">
-
+                                                                      <form method="POST" class="registration_form">{% csrf_token %}
                                                                         <div class="row">
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Name" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Phone Number" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
+                            	                                            {% for field in uform %}
+                                                                         <div class="form-group custom_md_3 col-md-6">
+                                                                            <div class="icon-addon addon-md">
 
+											                                    {{ field }}
+											                                {% for error in field.errors %}
+											                                    <p style="color: red">{{ error }}</p>
+											                                {% endfor %}
+                                                                            </div>
+										                                    </div>
+										                                    {% endfor %}
+                                                                            <div class="col-md-3" style="float:right">
+                                                                        <ul class="save_next">
+                                                                            <li><input type="submit" class="btn save_inf" value="Send"></li>
+                                                                        </ul>
+                                                                            </div>
                                                                         </div>
                                                                     </form>
-                                                                    <a class="search_vtm btn btn-4 btn-4c icon-arrow-right" href="#">Send Invitation</a>
-                                                                    </div>
                                                                 </div>
+                                                                 <h2>Invitation sent to Mobile !</h2>
+
+                                                            </div>
 
                                                             </div>
                                                         </div>
@@ -74,7 +77,7 @@
                                         <div class="col-md-4">
                                             <div class="full_width refere_and_earn">
                                                 <img src="{% static 'healthseeker/img/refere.png' %}">
-                                                <p>Refer to 2 friend </p>
+                                                <p>Refer to 2 friends </p>
                                                 <h6>Earn Cashback 50</h6>
                                                 <a data-toggle="modal" data-target=".bs-example-modal-lg2" href="#">Select</a>
                                                 <div class="modal fade bs-example-modal-lg2 refere_earn_modal" tabindex="-1" role="dialog">
@@ -86,36 +89,40 @@
                                                                 <div class="form_reg_one_in">
                                                                     <h2>Refer and Earn</h2>
                                                                     <p>Invite your friends and Earn exiting Benifits</p>
-                                                                    <form class="registration_form">
-
+                                                                    <form method="POST" class="registration_form">{% csrf_token %}
                                                                         <div class="row">
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Name" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Phone Number" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Name" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Phone Number" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
+                            	                                            {% for field in uform %}
+                                                                         <div class="form-group custom_md_3 col-md-6">
+                                                                            <div class="icon-addon addon-md">
 
+											                                    {{ field }}
+											                                {% for error in field.errors %}
+											                                    <p style="color: red">{{ error }}</p>
+											                                {% endfor %}
+                                                                            </div>
+										                                    </div>
+										                                    {% endfor %}
+                                                                             {% for field in uform %}
+                                                                         <div class="form-group custom_md_3 col-md-6">
+                                                                            <div class="icon-addon addon-md">
+
+											                                    {{ field }}
+											                                {% for error in field.errors %}
+											                                    <p style="color: red">{{ error }}</p>
+											                                {% endfor %}
+                                                                            </div>
+										                                    </div>
+										                                    {% endfor %}
+                                                                            <div class="col-md-3" style="float:right">
+                                                                        <ul class="save_next">
+                                                                            <li><input type="submit" class="btn save_inf" value="Send"></li>
+                                                                        </ul>
+                                                                            </div>
                                                                         </div>
                                                                     </form>
-                                                                    <a class="search_vtm btn btn-4 btn-4c icon-arrow-right" href="#">Send Invitation</a>
                                                                     </div>
-                                                                </div>
-
+                                                                 <h2>Invitation sent to Mobile !</h2>
+                                                             </div>
                                                             </div>
                                                         </div>
                                                 </div>
@@ -125,7 +132,7 @@
                                         <div class="col-md-4">
                                             <div class="full_width refere_and_earn">
                                                 <img src="{% static 'healthseeker/img/refere.png' %}">
-                                                <p>Refer to 3 friend </p>
+                                                <p>Refer to 3 friends </p>
                                                 <h6>Earn Cashback 50</h6>
                                                 <a data-toggle="modal" data-target=".bs-example-modal-lg3" href="#">Select</a>
                                                 <div class="modal fade bs-example-modal-lg3 refere_earn_modal" tabindex="-1" role="dialog">
@@ -137,45 +144,51 @@
                                                                 <div class="form_reg_one_in">
                                                                     <h2>Refer and Earn</h2>
                                                                     <p>Invite your friends and Earn exiting Benifits</p>
-                                                                    <form class="registration_form">
-
+                                                                   <form method="POST" class="registration_form">{% csrf_token %}
                                                                         <div class="row">
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Name" class="form-control" id="email">
-                                                                                </div>
+                            	                                            {% for field in uform %}
+                                                                         <div class="form-group custom_md_3 col-md-6">
+                                                                            <div class="icon-addon addon-md">
+
+											                                    {{ field }}
+											                                {% for error in field.errors %}
+											                                    <p style="color: red">{{ error }}</p>
+											                                {% endfor %}
                                                                             </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Phone Number" class="form-control" id="email">
-                                                                                </div>
+										                                    </div>
+										                                    {% endfor %}
+                                                                            {% for field in uform %}
+                                                                         <div class="form-group custom_md_3 col-md-6">
+                                                                            <div class="icon-addon addon-md">
+
+											                                    {{ field }}
+											                                {% for error in field.errors %}
+											                                    <p style="color: red">{{ error }}</p>
+											                                {% endfor %}
                                                                             </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Name" class="form-control" id="email">
-                                                                                </div>
+										                                    </div>
+										                                    {% endfor %}
+                                                                            {% for field in uform %}
+                                                                         <div class="form-group custom_md_3 col-md-6">
+                                                                            <div class="icon-addon addon-md">
+
+											                                    {{ field }}
+											                                {% for error in field.errors %}
+											                                    <p style="color: red">{{ error }}</p>
+											                                {% endfor %}
                                                                             </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Phone Number" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Name" class="form-control" id="email">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group custom_md_3 col-md-6">
-                                                                                <div class="icon-addon addon-md">
-                                                                                    <input type="text" placeholder="Phone Number" class="form-control" id="email">
-                                                                                </div>
+										                                    </div>
+										                                    {% endfor %}
+                                                                            <div class="col-md-3" style="float:right">
+                                                                        <ul class="save_next">
+                                                                            <li><input type="submit" class="btn save_inf" value="Send"></li>
+                                                                        </ul>
                                                                             </div>
                                                                         </div>
                                                                     </form>
-                                                                    <a class="search_vtm btn btn-4 btn-4c icon-arrow-right" href="#">Send Invitation &amp; Go</a>
                                                                     </div>
-                                                                </div>
-
+                                                                 <h2>Invitation sent to Mobile !</h2>
+                                                              </div>
                                                             </div>
                                                         </div>
                                                 </div>
@@ -188,34 +201,41 @@
 
                                 </div>
 
-                                
-                                
-                                
-                                
-                              
-                                
-                              
-                                
-                            <!--    
+
+
+
+
+
+
+
+
+                            <!--
                                 <div class="full_width">
                                     <ul class="add_more_li">
                                         <li>Hindi</li>
                                         <li>English</li>
                                     </ul>
                                 </div>-->
-                                
+
                             </div>
                         </div>
-                        
-                        
+
+
                         <ul class="save_next">
                             <li><a class="save_inf" href="{% url 'healthseeker:step6' %}">Next</a></li>
                             <li><a class="next_inf" href="{% url 'healthseeker:step4' %}">Back</a></li>
                         </ul>
-                        
+
                     </div>
                 </div>
             </div>
         </section>
-      
+
+<script>
+$(document).ready(function(){
+        $('#id_password').attr('type', 'password');
+        $('#id_dob').attr('type', 'date');
+        $('#id_dob').val('');
+});
+</script>
       {% endblock %}

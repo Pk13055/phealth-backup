@@ -1,12 +1,12 @@
 from django import forms
 
-from api.models import *
+from api.models import Location, Post, Seeker, User, Familymember
 
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('name', 'email', 'mobile', 'password', 'gender','dob')
+        fields = ('name', 'email', 'mobile', 'password', 'gender', 'dob', 'profile_pic')
 
     widgets = {
         'password': forms.PasswordInput()
@@ -20,12 +20,17 @@ class UserForm(forms.ModelForm):
 
 
 class FamilyForm(forms.ModelForm):
+
+
     class Meta:
         model = User
-        fields = ('name', 'email', 'mobile',  'gender','dob')
+        fields = ('name', 'email', 'mobile',  'gender','dob','profile_pic' )
 
     def __init__(self, *args, **kwargs):
         super(FamilyForm, self).__init__(*args, **kwargs)
+        self.fields['relation'] = forms.ModelChoiceField(
+            queryset=Familymember.objects.all())
+            
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
@@ -58,9 +63,10 @@ class LanguageForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
+    # MODIFY THIS LATER ***
     class Meta:
-        model = Address
-        fields = ('location_type', 'longitude','latitude','city','area','door_no','landmark','resident_type','pincode' )
+        model = Location
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(AddressForm, self).__init__(*args, **kwargs)
@@ -79,4 +85,17 @@ class PostForm(forms.ModelForm):
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
+
+
+class FriendForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('name', 'mobile', )
+
+    def __init__(self, *args, **kwargs):
+        super(FriendForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
 

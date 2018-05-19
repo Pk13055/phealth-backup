@@ -1,4 +1,7 @@
-{% extends "healthprovider/dashboard/base.html.j2" %} {% load static %} {% block content %} {% load bootstrap %}
+{% extends "healthprovider/dashboard/base.html.j2" %}
+{% load static %}
+{% load bootstrap %}
+{% block content %}
 <div class="row bg-title">
 	<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 		<h4 class="page-title">Dashboard 1</h4>
@@ -18,24 +21,46 @@
 							<div class="panel-heading">
                                     Specialities
                             </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
-                                    </div>
+                            <div class="progress">
+                                 <div class="progress-bar progress-bar-danger wow animated progress-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"> <span class="sr-only">60% Complete</span> </div>
+                            </div>
 							<div class="panel-wrapper collapse in" aria-expanded="true">
 								<div class="panel-body">
-                                    <form  method="POST">
-									    {% csrf_token %}
-								{{ form | bootstrap }}
-
-                                        <div class="pull-right">
+                                    <form  method="POST"> {% csrf_token %}
+									   {{ speciality_form | bootstrap }}
+								        <div class="pull-right">
                                             <button type="submit" class="btn btn-success">Save & Go</button>
                                         </div>
                                     </form>
+								</div>
+							</div>
+							<div class="row">
+							<div class="col-sm-12">
+								<div class="white-box">
+									<div class="table-responsive">
+										<table id="myTable" class="table table-striped">
+											<thead>
+												<tr>
+													<th><strong>Speciality</strong></th>
+													<th><strong>Description</strong></th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for list in speciality_list %}
+												<tr>
+													<td>{{ list.name }}</td>
+													<td>{{ list.description }}</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
 						</div>
+						</div>
 					</div>
+</div>
 
 
 {% endblock content %}

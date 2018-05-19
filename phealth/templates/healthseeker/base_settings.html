@@ -1,8 +1,8 @@
 {% load static %}
 
 <ul class="my_profile_div">
-    <li class="active"><a href="../dashboard/change_pswd.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Change Password</a></li>
-    <li><a href="../dashboard/manage_intrests.html"><img src="{% static 'img/dashboard/my_profile.png' %}">Manage Intrests</a></li>
+    <li class="active"><a href="{% url 'healthseeker:change_password' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Change Password</a></li>
+    <li><a href="{% url 'healthseeker:intrests' %}"><img src="{% static 'healthseeker/img/dashboard/my_profile.png' %}">Manage Intrests</a></li>
 
 </ul>
 

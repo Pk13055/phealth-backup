@@ -2,7 +2,6 @@ import datetime
 import json
 import random
 from random import randint
-
 import requests
 from datatableview import (Datatable, DateTimeColumn, TextColumn,
                            ValuesDatatable)
@@ -20,7 +19,7 @@ from querystring_parser import parser
 from rest_framework.serializers import ModelSerializer
 
 from api.models import (Appointment, Clinician, Location, Organization,
-                        Provider, Speciality, Transaction, User)
+                        Provider, Speciality, Transaction, User,Amenity)
 from phealth.utils import get_provider, match_role, redirect, signin
 
 # Create your views here.
@@ -50,10 +49,21 @@ class UserForm(forms.ModelForm):
 class ProviderregForm(forms.ModelForm):
     class Meta:
         model = Provider
-        fields = ('type', 'name',)
+        fields = ('service_type', 'name',)
 
     def __init__(self, *args, **kwargs):
         super(ProviderregForm, self).__init__(*args, **kwargs)
+        for myField in self.fields:
+            self.fields[myField].widget.attrs['class'] = 'form-control'
+            self.fields[myField].widget.attrs['placeholder'] = myField
+
+class AmenityForm(forms.ModelForm):
+    class Meta:
+        model = Amenity
+        fields = ('service_name', 'service_image',)
+
+    def __init__(self, *args, **kwargs):
+        super(AmenityForm, self).__init__(*args, **kwargs)
         for myField in self.fields:
             self.fields[myField].widget.attrs['class'] = 'form-control'
             self.fields[myField].widget.attrs['placeholder'] = myField
@@ -422,7 +432,7 @@ def account_speciality(request):
     ''' route for account - speciality  '''
 
     u = Provider.objects.filter(poc__email=request.session['email']).first()
-    s = u.specialities.all()
+    s = u.specialities.all()  # type: object
     class SpecialityForm(forms.ModelForm):
         class Meta:
             model = Speciality
@@ -431,11 +441,11 @@ def account_speciality(request):
     if request.method == "POST":
         b = SpecialityForm(request.POST, request.FILES)
         if b.is_valid():
-            u.save()
             speciality = b.save()
             u.specialities.add(speciality)
+            u.save()
         else:
-            v = b
+            v = v
 
     return render(request, 'healthprovider/dashboard/account/speciality.html.j2', context={
         'title' : "account - speciality",
@@ -541,7 +551,6 @@ def branch_new(request):
             branch = new_branch.save(commit=False)
             branch.is_branch = True
             branch.parent_provider = p
-            branch.address = p.address
             branch.poc = p.poc
             branch.save()
             return redirect("healthprovider:branch_view")
@@ -560,8 +569,13 @@ def branch_view(request):
 
     if request.method == "POST":
         b_id = request.POST['b_id']
+        print('b_id', b_id)
         branch = p.provider_set.filter(pk=b_id).first()
         if branch:
+            for branch_appointments in branch.appointment_set.all():
+                for branch_feedbacks in branch.feedback_set.all():
+                    branch_feedbacks.delete()
+                branch_appointments.delete()
             branch.delete()
             return HttpResponse("Branch successfully deleted!")
         else:
@@ -816,7 +830,7 @@ def appointment_monthly(request):
 
 @match_role("healthprovider")
 def payment_new(request):
-    ''' route for payment - new  '''
+    """ route for payment - new  """
 
     p = Provider.objects.filter(poc__email=request.session['email']).first()
 
@@ -856,7 +870,7 @@ def payment_view(request):
 
 @match_role("healthprovider")
 def clinician_new(request):
-    ''' route for clinician - new  '''
+    """ route for clinician - new  """
 
     p = Provider.objects.filter(poc__email=request.session['email']).first()
     user_form = UserForm()
@@ -864,10 +878,14 @@ def clinician_new(request):
     if request.method == 'POST':
         u = UserForm(request.POST, request.FILES)
         if u.is_valid():
-            user = u.save()
+            user = u.save(commit=False)
+            user.password = make_password(request.POST['password'])
+            user.role = 'clinician'
+            user.save()
             c = Clinician()
             c.user = user
             c.save()
+            print(c)
             p.clinicians.add(c)
             p.save()
 
@@ -917,3 +935,64 @@ class ClinicianTableView(DatatableView):
     def get_queryset(self):
         p = get_provider(self.request.session['email'])
         return p.clinicians.all()
+
+@match_role("healthprovider")
+def account_work_time(request):
+    ''' work timing routes for clinician '''
+    me = User.objects.filter(email=request.session['email']).first()
+    print(me)
+    c = Provider.objects.filter(poc__email=me).first()
+    print(c.name)
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday"]
+    if request.method == "POST":
+        p_dict = parser.parse(request.POST.urlencode())
+        timings = []
+        work_timings = c.work_timings
+        base_compare = c.work_timings
+        assert (len(days) == len(work_timings))
+        for day, actual in zip(days, base_compare):
+            try:
+                timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+                                                                             '%H:%M:%S').time(),
+                                        p_dict['timings'][day])))
+            except ValueError:
+                try:
+                    timings.append(list(map(lambda x: datetime.datetime.strptime(x,
+                                                                                 '%H:%M').time(),
+                                            p_dict['timings'][day])))
+                except KeyError:
+                    timings.append(actual)
+            except KeyError:
+                timings.append(actual)
+
+        c.work_timings = timings
+        c.save()
+
+    work_timings = []
+    if c.work_timings:
+        for day, w_t in zip(days, c.work_timings):
+            cur_obj = {'day': day}
+            cur_obj['start'] = w_t[0].isoformat().split('.')[0][:5]
+            cur_obj['end'] = w_t[-1].isoformat().split('.')[0][:5]
+            work_timings.append(cur_obj)
+
+    return render(request, 'healthprovider/dashboard/account/worktime.html.j2', context={
+        'title': "Timings - Work timings",
+        'provider': c,
+        'timings': work_timings,
+        'days' :days,
+    })
+
+
+@match_role("healthprovider")
+def account_amenity(request):
+    provider_object = Provider.objects.filter(poc__email=request.session['email']).first()
+    amenity_objects = Amenity.objects.all()  # type: object
+    if request.method == "POST":
+        list_amenity_ids = request.POST.getlist('amenity')
+        for amenity in list_amenity_ids:
+            provider_object.amenities.add(amenity)
+        provider_object.save()
+        print(provider_object)
+    return render(request, 'healthprovider/dashboard/account/amenity.html.j2', {'s': amenity_objects})

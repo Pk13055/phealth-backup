@@ -1,25 +1,24 @@
-import random
 import datetime
-import xlrd
+import json
+import random
 
-from django.shortcuts import render, redirect, reverse
-from django.http import JsonResponse, Http404
-from phealth.utils import match_role, signin
-from django.contrib.auth.hashers import make_password
-from django import forms
-from django.core.validators import RegexValidator
-from django.core import serializers
-from django.views.generic.base import TemplateView
-from datatableview.views import DatatableView, XEditableDatatableView
-from datatableview import Datatable
-# from datatableview.cache import cache_types
 import datatableview
+import xlrd
+from datatableview import Datatable
+from datatableview.views import DatatableView, XEditableDatatableView
+from django import forms
+from django.contrib.auth.hashers import make_password
+from django.core import serializers
+from django.core.validators import RegexValidator
+from django.http import Http404, JsonResponse
+from django.shortcuts import redirect, render, reverse
+from django.views.generic.base import TemplateView
 from querystring_parser import parser
 
-from phealth.utils import getIP, get_sponsor
+from api.models import (DiscountCard, HealthCheckup, Location, Organization,
+                        Question, Seeker, Sponsor, Transaction, User)
 from common.views import send_OTP
-from api.models import (User, Sponsor, Seeker, Question, Transaction, DiscountCard,
-						HealthCheckup, Organization, Address)
+from phealth.utils import get_sponsor, getIP, match_role, signin
 
 # Create your views here.
 
@@ -379,32 +378,37 @@ def user_view(request):
 # account details
 
 @match_role("sponsor")
-def basic(request):
+def account_basic(request):
+	''' edit basic organizational and POC details '''
+
 	s = Sponsor.objects.filter(user__email=request.session['email']).first()
-	o  = s.organization
+
+	class OrgForm(forms.ModelForm):
+		class Meta:
+			model = Organization
+			fields = ('name', 'type', 'size', 'image',)
+
+	class POCForm(forms.ModelForm):
+		class Meta:
+			model = User
+			fields = ('mobile', 'email',  'gender',)
+
 	if request.method == "POST":
-		print(request.POST)
-		# b_dict = parser.parse(request.POST.urlencode())
-		o.name = request.POST['org_name']
-		o.size = request.POST['groupsize']
-		o.type = request.POST['businessregtype']
-		s.user.role = request.POST['designation']
-		s.user.name = request.POST.get('name', False)
-		s.user.mobile = request.POST['mobileno']
-		s.user.email = request.POST['email']
-		o.save()
-		s.save()
-		# print(b_dict)
+		org_form = OrgForm(request.POST, request.FILES, instance=s.organization)
+		poc_form = POCForm(request.POST, request.FILES, instance=s.user)
+		if org_form.is_valid(): org_form.save()
+		if poc_form.is_valid():
+			poc_form.save()
+			request.session['email'] = s.user.email
+	else:
+		org_form = OrgForm(instance=s.organization)
+		poc_form = POCForm(instance=s.user)
+
 	return render(request, 'sponsor/dashboard/account/basic.html.j2', context={
-		'title': 'Basic Details',
+		'title': 'Account - Basic Details',
 		'sponsor': get_sponsor(request.session['email']),
-		'poc_name': s.user.name,
-		'designation': s.user.role,
-		'orgname': o.name,
-		'orgtype': o.type,
-		'orgsize': o.size,
-		'mobileno': s.user.mobile,
-		'email' : s.user.email,
+		'org_form' : org_form,
+		'poc_form' : poc_form,
 	})
 
 
@@ -473,28 +477,50 @@ def contact(request):
 	})
 
 @match_role("sponsor")
-def organization(request):
-	class AddressForm(forms.ModelForm):
-		class Meta:
-			model = Address
-			fields = ('city', 'pincode', 'extra')
+def account_organization(request):
 
 	s = Sponsor.objects.filter(user__email=request.session['email']).first()
-	o = s.organization
+	message = None
+
+	class OrganizationForm(forms.ModelForm):
+		class Meta:
+			model = Organization
+			exclude = ('location',)
 
 	if request.method == "POST":
-		address = AddressForm(request.POST)
+		org_form = OrganizationForm(request.POST, request.FILES, instance=s.organization)
+		if org_form.is_valid():
+			org_form.save()
+		location_obj = json.loads(request.POST['j_string'])
+		full_name = location_obj['formatted_address']
+		try:
+			pos_loc = Location.objects.get(full_name__icontains=full_name)
+			s.organization.location = pos_loc
+			s.organization.save()
+			message = 'Location found in database! (using exsiting)'
+		except Exception as e:
+			message = 'Location added to database!'
+			try:
+				pos_loc = Location(place=location_obj)
+				pos_loc.save()
+				s.organization.location = pos_loc
+				s.organization.save()
+			except Exception as e:
+				message = 'Invalid location! (%s)' % str(e)
+	else:
+		org_form = OrganizationForm(instance=s.organization)
 
-		if address.is_valid():
-			a = address.save()
-			o.location = a
-			o.save()
-			s.save()
+	try:
+		location = s.organization.location.full_name
+	except:
+		location = None
 
+	print(location, message)
 	return render(request, 'sponsor/dashboard/account/organization.html.j2', context={
-		'title': 'Organization',
-		'sponsor': get_sponsor(request.session['email']),
-		'address_form': AddressForm(instance=o.location)
+		'title': 'Account - Organization',
+		'org_form' : org_form,
+		'location' : location,
+		'message' : message,
 	})
 
 # payments
@@ -622,4 +648,3 @@ def participants_new(request):
 		'title': 'Participants',
 		'sponsor': get_sponsor(request.session['email']),
 	})
-

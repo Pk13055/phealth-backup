@@ -22,17 +22,22 @@
                             <h3 class="box-title m-b-0">View Health Checks Reports</h3>
                             
                     <div class="panel panel-default">
-                        <div class="panel-heading" style="background-color: aliceblue">
-                                <div class="form-group">
-                                    <label>Select Dates</label>
-                                    <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="01/01/2015 - 01/31/2015" /> 
-                                </div>
-                                
-                                    <div class="form-group">
-                                        <button class="btn btn-primary">Filter</button>
+                         <form>
+                         <div class="col-lg-2 col-sm-6 row-in-br">
+                                    <div class="input-group">
+                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="fromdate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
                                     </div>
-                        </div>
-                         <div class="panel-body">
+                                </div>
+                                <div class="col-lg-2 col-sm-6 row-in-br">
+                                    <div class="input-group">
+                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="todate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                    </div>
+                                    </div>
+                                    </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-12">
+                                    <button class="btn btn-block btn-info btn-rounded"type="submit">Filter</button>
+                                </div>
+                            <div class="panel-body">
                              
                              <p class="text-muted m-b-30"></p>
                            
@@ -53,17 +58,18 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Clickhealth Health Checks</td>
-                                            <td>img</td>
-                                            <td>365</td>
-                                            <td>P0001200</td>
-                                            <td>Trxn0051</td>
-                                            <td>03-03-2018</td>
+
+                                            <td>{{result.id}}</td>
+                                            <td>{{result.tests.name}}</td>
+                                            <td>{{result.image}}</td>
+                                            <td>{{result.price}}</td>
+                                            <td>{{s.user_id}}</td>
+                                            <td>{{s.transactions.id}}</td>
+                                            <td>{{s.transactions.timestamp}}</td>
                                         </tr>
-                                        
-                                        
-                                        
+
+
+
                                         
                                      
                                         
@@ -76,7 +82,6 @@
                     </div>
                             
 
-                            
                         </div>
                     </div>
                     

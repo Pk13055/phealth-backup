@@ -23,12 +23,12 @@
                             <form >
                                 <div class="col-lg-2 col-sm-6 row-in-br">
                                     <div class="input-group">
-                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="fromdate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" value="{{ fromdate }}" name="fromdate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-sm-6 row-in-br">
                                     <div class="input-group">
-                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="todate"> <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                        <input type="date" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="todate" value="{{ todate }}"> <span class="input-group-addon"><i class="icon-calender"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-sm-6">
@@ -37,7 +37,7 @@
                                             <select name="provider" class="form-control">
                                                 <option value="All" >All Provider</option>
                                                 {%  for provider in providers %}
-                                                    <option value="{{ provider.id }}"   >{{ provider.name }}</option>
+                                                    <option value="{{ provider.id }}" {% if request.GET.status == 'provider' %} selected {% endif %} >{{ provider.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12">
-                                    <button class="btn btn-block btn-info btn-rounded"type="submit">Filter</button>
+                                    <button class="btn btn-block btn-info btn-rounded" type="submit">Filter</button>
                                 </div>
                             </form>
                             </div>

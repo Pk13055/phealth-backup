@@ -1,21 +1,6 @@
 from rest_framework.serializers import HyperlinkedModelSerializer
 from api.models import *
-
-
-class CitySerializer(HyperlinkedModelSerializer):
-
-    class Meta:
-        model = City
-        depth = 6
-        fields = '__all__'
-
-
-class AddressSerializer(HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Address
-        depth = 6
-        fields = '__all__'
+from rest_framework import serializers
 
 
 class CouponSerializer(HyperlinkedModelSerializer):
@@ -49,6 +34,14 @@ class TestSerializer(HyperlinkedModelSerializer):
         depth = 6
         fields = '__all__'
 
+class SymptomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Symptoms
+        depth = 6
+        fields = '__all__'
+
+
 
 class HealthCheckupSerializer(HyperlinkedModelSerializer):
 
@@ -66,7 +59,7 @@ class DiscountCardSerializer(HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class SpecialitySerializer(HyperlinkedModelSerializer):
+class SpecialitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Speciality

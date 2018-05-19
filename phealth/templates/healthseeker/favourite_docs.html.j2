@@ -1,0 +1,264 @@
+{% extends "healthseeker/base_dashboard.html" %} {% load static %} {% block styles %}
+<style>
+    div#contact-map {
+        height: 100%;
+        width: auto;
+    }
+</style>
+<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMCBCYMwsj0JQowT1a4GMNtYJqVEPqxVc&libraries=places"></script>
+<script>
+    var map;
+</script>
+{% endblock styles %} {% block scripts %}
+<script>
+    let map_init = (lat, lng) => {
+        map = new google.maps.Map($("#contact-map")[0], {
+            zoom: 20,
+            center: new google.maps.LatLng(lat, lng),
+        });
+        let marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat, lng)
+        });
+        marker.setMap(map);
+    };
+    $(document).ready(function () {
+        $("div.alt-details").hide();
+        let $triggers = $("b.detail-toggle");
+        $("div.alt-details").each((i, e) => {
+            let cur_id = String(Math.random()).slice(3, 9);
+            $(e).attr('id', cur_id);
+            $($triggers[i]).attr('data-target', cur_id);
+        });
+        $triggers.on('click', function () {
+            let target = $(this).data('target');
+            // $("div.alt-details").hide();
+            $('div#' + target).fadeToggle();
+        });
+        $(".map-toggle").on('click', function () {
+            let lat = $(this).data('lat'),
+                lng = $(this).data('lng');
+            map_init(lat, lng);
+            google.maps.event.trigger(map, "resize");
+        });
+
+    });
+</script>
+{% endblock scripts %} {% block content %}
+<section class="container form_reg_one_hero dash_board">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form_reg_one form_reg_one_in_my_p  form_reg_one_m_p">
+                <h3>Favorite Doctors</h3>
+                <div class="row full_width refer_earn_ds favoreite_doctors catalog-row alternative">
+                    {% for clinician in clinicians %}
+                    <div class="appointment_main_hero">
+                        <div class="app_list_in appointment_list_in appointment_list_clo alt-center">
+                            <div class="alt-center-l alt-center-lp alt-logo flight-line-b">
+                                <img alt="" src="{{ clinician.profile_pic  }}">
+                            </div>
+                            <div class="alt-center-c">
+                                <div class="alt-center-cb">
+                                    <div class="row">
+                                        <div class="col-md-5 col-lg-5">
+                                            <div class="full_width doctr_details">
+                                                <div class="flight-line-b">
+                                                    <b>
+                                                        <h4>{{ clinician.name }}</h4>
+                                                    </b>
+                                                </div>
+                                                <!-- replace with title later -->
+                                                <p>{{ clinician.designation }}</p>
+                                                <span class="lagu_span">{{ clinician.language }}</span>
+                                                <span>
+                                                    <i class="fa fa-phone" aria-hidden="true"></i>{{ clinician.mobile }}</span>
+
+                                                <a data-toggle="tooltip" title="Add to favorite and get maximum discount" class="heart_fav activet activet" href="">
+                                                    <i class="fa fa-heart"></i>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-lg-4 padding_left_0">
+                                            <div class="full_width doctr_details3">
+                                                <!-- <h4>09:00 PM - 04:00 PM</h4> -->
+                                                <p>{{ clinician.address.full_name }}</p>
+                                                <a data-toggle="modal" data-target="#map-modal" href="#" class="map-toggle" data-lat="{{ clinician.address.location.lat }}"
+                                                    data-lng="{{ clinician.address.location.lng }}">View map
+                                                    <span class="fa fa-angle-right"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-lg-3">
+                                            <div class="alt-flight-lr pricing_list padding">
+                                                <div class="flt-i-price">
+                                                    <span>Rs</span>{{ clinician.fee }}</div>
+                                                <a class="flight-line-b cat-list-btn popper" href="#!" data-toggle="popover" id="timeslots">Book appointment</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="full_width">
+                                    <div class="view_more_de">
+                                        <div class="flight-line-b">
+                                            <b class="detail-toggle">View more details</b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alt-details">
+                            <div class="row doctorinfo">
+                                <div class="col-md-5 padding_right_0">
+                                    <div class="full_width veiw_collaps">
+                                        <div class="header_main_col">
+                                            <img src="{{ clinician.profile_pic }}">
+                                            <div class="avatar_main_des">
+                                                <span>About</span>
+                                                <h4>{{ clinician.name }}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="full_width veiw_collaps veiw_collaps_23">
+                                        <div class="header_main_col">
+                                            <h4>
+                                                <img src="{% static 'healthseeker/img/award1.png' %}"> Awards and Rewards</h4>
+                                        </div>
+                                        <div class="row">
+                                            {% for award in clinician.awards %}
+                                            <p>
+                                                <h5>{{ award.name }}
+                                                    <small>{{ award.recognised_by }}</small>
+                                                </h5>
+                                                <p>
+                                                    {{ award.description }}
+                                                    <span class="label label-success">{{ award.year }}</span>
+                                                </p>
+                                            </p>
+                                            {% empty %}
+                                            <p class="well">
+                                                <span class="lead text-muted">Nothing uploaded!</span>
+                                            </p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="full_width veiw_collaps veiw_collaps_23">
+                                        <div class="header_main_col">
+                                            <h4>Discounts</h4>
+                                        </div>
+                                        <div class="row">
+                                            {% for offer in clinician.discount_offerings %} {% if offer.amount != '0' %}
+                                            <p>
+                                                <h5>
+                                                    <strong>{{ offer.name }}</strong>
+                                                    <small>{{ offer.amount }}%</small>
+                                                </h5>
+                                                {{ offfer.description }}
+                                                <span class="label label-danger">{{ offer.type }}</span>
+                                            </p>
+                                            {% endif %} {% empty %}
+                                            <p class="lead text-muted">No special discounts!</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div class="full_width veiw_collaps veiw_collaps_23">
+                                        <div class="header_main_col">
+                                            <h4>Education</h4>
+                                        </div>
+                                        {% for edu in clinician.education %}
+                                        <p>
+                                            <h5>
+                                                <strong>{{ edu.title }}</strong>
+                                                <small>{{ edu.year }}</small>
+                                            </h5>
+                                            {{ edu.description }}
+                                            <span class="label label-primary">{{ edu.type }}</span>
+                                        </p>
+                                        {% empty %}
+                                        <p class="lead text-muted">Nothing uploaded!</p>
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="full_width veiw_collaps veiw_collaps_23">
+                                        <div class="header_main_col">
+                                            <h4>Conditions Treated </h4>
+                                        </div>
+                                        {% for condition in clinician.procedure_conditions %}
+                                        <p>
+                                            <h5>
+                                                <strong>{{ condition.name }}</strong>
+                                                <small>{{ condition.date }}</small>
+                                            </h5>
+                                            {{ condition.description }}
+                                            <span class="label label-info">{{ condition.type }}</span>
+                                        </p>
+                                        {% empty %}
+                                        <p class="lead text-muted">Nothing uploaded!</p>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="full_width veiw_collaps veiw_collaps_23">
+                                        <div class="header_main_col">
+                                            <h4>Experience/Training</h4>
+                                        </div>
+                                        {% for exp in clinician.experience_training %}
+                                        <p>
+                                            <h5>
+                                                <strong>{{ exp.position }}</strong>
+                                                <small>{{ exp.year }}</small>
+                                            </h5>
+                                            {{ exp.description }}
+                                            <span class="label label-warning">{{ exp.type }}</span>
+                                        </p>
+                                        {% empty %}
+                                        <p class="lead text-muted">Nothing uploaded!</p>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="full_width veiw_collaps veiw_collaps_23">
+                                        <div class="header_main_col">
+                                            <h4>Registration</h4>
+                                        </div>
+                                        {% for registration in clinician.registrations %}
+                                        <p>
+                                            <h5>
+                                                <strong>{{ registration.name }}</strong>
+                                                <small>{{ registration.year }}</small>
+                                            </h5>
+                                            <span class="label label-default">{{ registration.reg_no }}</span>
+                                        </p>
+                                        {% empty %}
+                                        <p class="lead text-muted">Nothing uploaded!</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-xs-12 well">
+                        <h3>It's a bit empty here! Try booking an appointment first!</h3>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal fade" id="map-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog fade" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">View Map</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="contact-map" class="text-center" style="width: 1000px; height: 500px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

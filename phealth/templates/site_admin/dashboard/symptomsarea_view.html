@@ -36,9 +36,28 @@
                           <div class="white-box">
                              <h3 class="box-title m-b-0">   View / Manage  Conditions / Symptomsarea  </h3>
                              <div class="row">
-                        {{ datatable }}
-                    </div>
-
+                             <div class="table-responsive">
+                                <table id="myTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>speciality</th>
+                                            <th>name</th>
+                                            <th>created_date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for result in result %}
+                                        <tr>
+                                            <td>{{result.speciality}}</td>
+                                            <td>{{result.name}}</td>
+                                            <td>{{result.created_date}}</td>
+                                            <td><a href="{% url 'site_admin:symptomsarea_edit' result.pk %}" class="datatable-btn btn btn-success" role="button" >Edit</a>
+                                                <a href="{% url 'site_admin:symptomsarea_delete' result.pk %}" class="datatable-btn btn btn-danger" role="button" >Delete</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                            </div>
                           </div>
                        </div>
                     </div>

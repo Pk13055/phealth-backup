@@ -4,6 +4,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             <div class="modal-body add_familymnumber">
                 <div class="form_reg_one_in">
+                    {% if family.count <  discountcard.coverage   %}
                     <h2>Add Family Number</h2>
 
                                   <form method="POST" class="registration_form">{% csrf_token %}
@@ -12,13 +13,13 @@
                                                    <div class="form-group custom_md_3 col-md-6">
                                         <div class="icon-addon addon-md">
 
-											{{ field }}
-											{% for error in field.errors %}
-											  <p style="color: red">{{ error }}</p>
-											{% endfor %}
-										  </div>
-										  </div>
-										{% endfor %}
+                  											{{ field }}
+                  											{% for error in field.errors %}
+                  											  <p style="color: red">{{ error }}</p>
+                  											{% endfor %}
+                  										  </div>
+                  										  </div>
+                  										{% endfor %}
 
 
                                     <div class="col-md-3" style="float:right">
@@ -29,6 +30,9 @@
                                    </div>
                         </form>
                 </div>
+                 {% else %}
+                                    <h1>You have already added coverage numbers</h1>
+                                {% endif %}
 
 
                 </div>

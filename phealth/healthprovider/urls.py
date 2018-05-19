@@ -11,7 +11,10 @@ account_routes = [
 	url(r'^speciality/?$', views.account_speciality, name="account_speciality"),
 	url(r'^facilities/?$', views.account_facilities, name="account_facilities"),
 	url(r'^offerings/?$', views.account_offerings, name="account_offerings"),
+	url(r'^worktimings/?$', views.account_work_time, name="account_work_time"),
+	url(r'^amenity/?$', views.account_amenity, name="account_amenity"),
 	url(r'^special_checks/?$', views.account_special_checks, name="account_special_checks"),
+	url(r'^worktimings/?$', views.account_work_time, name="account_work_time"),
 ]
 
 branch_update_routes = [
@@ -22,6 +25,8 @@ branch_update_routes = [
 	url(r'^offerings/?$', views.branch_offerings, name="branch_offerings_update"),
 	url(r'^organization/?$', views.branch_organization, name="branch_organization_update"),
 	url(r'^speciality/?$', views.branch_speciality, name="branch_speciality_update"),
+
+
 ]
 
 branch_routes = [

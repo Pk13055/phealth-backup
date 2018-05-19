@@ -45,9 +45,14 @@ dashboard_routes = [
     url(r'^condition_delete/condition_delete/(?P<pk>\d+)/$', views.condition_delete, name='condition_delete'),
 
     url(r'^symptomsarea_add/?$', views.symptomsarea_add, name='symptomsarea_add'),
-    url(r'^symptomsarea_view/?$', views.ConditionTableView.as_view(), name='symptomsarea_view'),
+    url(r'^symptomsarea_view/?$', views.symptomsarea_view, name='symptomsarea_view'),
     url(r'^symptomsarea_edit/(?P<pk>\d+)/symptomsarea_edit/$', views.symptomsarea_edit, name='symptomsarea_edit'),
     url(r'^symptomsarea_delete/symptomsarea_delete/(?P<pk>\d+)/$', views.symptomsarea_delete, name='symptomsarea_delete'),
+
+    url(r'^amenities_add/?$', views.amenities_add, name='amenities_add'),
+    url(r'^amenities_view/?$', views.amenities_view, name='amenities_view'),
+    url(r'^amenities_edit/(?P<pk>\d+)/amenities_edit/$', views.amenities_edit, name='amenities_edit'),
+    url(r'^amenities_delete/amenities_delete/(?P<pk>\d+)/$', views.amenities_delete, name='amenities_delete'),
 
 
 
@@ -127,12 +132,12 @@ dashboard_routes = [
     url(r'^discountcard_view/?$', views.discountcard_view, name='discountcard_view'),
     url(r'^discountcard_reports/?$', views.discountcard_reports, name='discountcard_reports'),
     url(r'^discountcard_edit/(?P<pk>\d+)/discountcard_edit/$', views.discountcard_edit, name='discountcard_edit'),
-    url(r'^discountcard_delete/discountcard_delete/(?P<pk>\d+)/$', views.dicountcard_delete,
+    url(r'^discountcard_delete/discountcard_delete/(?P<pk>\d+)/$', views.discountcard_delete,
         name='discountcard_delete'),
     url(r'^healthcheck_add/?$', views.healthcheck_add, name='healthcheck_add'),
     url(r'^healthcheck_view/?$', views.healthcheck_view, name='healthcheck_view'),
     url(r'^healthcheck_edit/(?P<pk>\d+)/healthcheck_edit/$', views.healthcheck_edit, name='healthcheck_edit'),
-    url(r'^healthcheck_delete/healthcheck_delete/(?P<pk>\d+)/$', views.dicountcard_delete, name='healthcheck_delete'),
+    url(r'^healthcheck_delete/healthcheck_delete/(?P<pk>\d+)/$', views.healthcheck_delete, name='healthcheck_delete'),
     url(r'^healthcheck_reports/?$', views.healthcheck_reports, name='healthcheck_reports'),
     url(r'^healthprovider_plans_add/?$', views.healthprovider_plans_add, name='healthprovider_plans_add'),
     url(r'^healthprovider_plans_view/?$', views.healthprovider_plans_view, name='healthprovider_plans_view'),

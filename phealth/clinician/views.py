@@ -28,6 +28,7 @@ def SignIn(request):
 			return redirect('clinician:dashboard_home')
 		return redirect('clinician:signin')
 
+
 def SignUp(request):
 	''' no signin functionality for the clinician
 	'''
@@ -301,6 +302,7 @@ def timing_vacation(request):
 			vacs = [ list(map(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d').date(),
 			 [i, j])) for i, j in zip(vacs[::2], vacs[1::2])]
 			c.vacations = vacs
+			c.save()
 		except:
 			pass
 
@@ -343,16 +345,16 @@ def basic_details(request):
 			model = User
 			fields = ('name', 'gender', 'language',)
 
-		if request.method == "POST":
-			b = UserForm(request.POST, instance=c.user)
-			if b.is_valid():
-				c.language = b.cleaned_data.get('language')
-				del b.__dict__['fields']['language']
-				b.save()
-				c.save()
+	if request.method == "POST":
+		b = UserForm(request.POST, instance=c.user)
+		if b.is_valid():
+			c.language = b.cleaned_data.get('language')
+			del b.__dict__['fields']['language']
+			b.save()
+			c.save()
 
 	return render(request, 'clinician/dashboard/account/basic.html.j2', context={
-		'title' : "Account - ",
+		'title' : "Account - Basic Details",
 		'clinician' : c,
 		'form' : UserForm(instance=c.user, initial={'language' : c.language }),
 		})

@@ -21,7 +21,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User as admin_user
 from django.contrib.postgres.fields import (ArrayField, HStoreField,
-											IntegerRangeField, JSONField)
+                                            IntegerRangeField, JSONField, DateRangeField)
 from django.contrib.postgres.fields.jsonb import JSONField as JSONBField
 from django.contrib.postgres.validators import KeysValidator, ValidationError
 from django.core.validators import RegexValidator
@@ -36,33 +36,13 @@ def current_timestamp():
 	return datetime.datetime.now()
 
 
-'''
-		COMMON MODELS INDEPENDENT OF
-		SITE/ROLE SPECIFICS
-'''
-
-
-# Address and Location related models
-
-class City(models.Model):
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=60)
-	code = models.CharField(max_length=5)
-
-	def __str__(self):
-		return "<City %s | %s | %s >" % (self.code, self.state.name, self.name)
-
-	class Meta:
-		managed = True
-		db_table = 'cities'
-
-
 class Location(models.Model):
 
 	id = models.AutoField(primary_key=True)
 	place_id = models.CharField(max_length=128, unique=True, editable=False) # used to reference the place using maps API
 	name = models.CharField(max_length=100) # can be used for object referral
 	full_name = models.CharField(max_length=200) # can be used to display
+	extra = models.CharField(max_length=50, null=True, blank=True) # can be used to store door no, and other info
 
 	lat = models.DecimalField(max_digits=8, decimal_places=5)
 	long = models.DecimalField(max_digits=8, decimal_places=5)
@@ -114,13 +94,18 @@ class Location(models.Model):
 		super(Location, self).__init__(*args, **kwargs)
 		if place is not None:
 			self.place_id = place['place_id']
-			self.name = place['name']
 			self.full_name = place['formatted_address']
+			try:
+				self.name = place['name']
+			except KeyError:
+				self.name = ', '.join(self.full_name.split(',')[:3])
 
 			self.lat = Decimal(str(round(float(place['location']['lat']), 5)))
 			self.long = Decimal(str(round(float(place['location']['lng']), 5)))
-
-			self.landmark = place['vicinity']
+			try:
+				self.landmark = place['vicinity']
+			except KeyError:
+				self.landmark = self.name
 			self.address_component = place['address_components']
 
 
@@ -190,40 +175,6 @@ class Location(models.Model):
 		return distance
 
 
-class Address(models.Model):
-	''' address, can be of the user or any other model
-	'''
-
-	location_type_options = (
-		('current', "Current Location"),
-		('manual', "Update Manually"),
-	)
-	resident_type_options = (
-		('home', "Home"),
-		('office', "Office"),
-		('other', "Other"),
-	)
-	id = models.AutoField(primary_key=True)
-	user = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True)
-	location_type = models.CharField(choices=location_type_options, max_length=200, default='current')
-	latitude = models.FloatField(blank=True, null=True)
-	longitude = models.FloatField(blank=True, null=True)
-	city = models.ForeignKey(City, on_delete=models.DO_NOTHING, blank=True, null=True)
-	door_no = models.CharField(max_length=200, blank=True, null=True)
-	area = models.CharField(max_length=200, blank=True, null=True)
-	landmark = models.CharField(max_length=200, blank=True, null=True)
-	resident_type = models.CharField(choices=resident_type_options, max_length=200, default='home')
-	pincode = models.CharField(max_length=9, blank=True, null=True)
-
-
-	class Meta:
-		managed = True
-		db_table = 'address'
-
-
-# Functionality models
-
-
 class Coupon(models.Model):
 	''' coupons that can be used for discount
 		across the board by anyone.
@@ -253,34 +204,6 @@ class Coupon(models.Model):
 		db_table = 'coupons'
 
 
-# healthchecks and associated
-
-class TestCategory(models.Model):
-	''' cateogeries for a given test
-	'''
-
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=40)
-	description = models.TextField()
-
-	class Meta:
-		managed = True
-		db_table = 'test_categories'
-
-
-class TestSubcategory(models.Model):
-	''' subcategories for a given test
-	'''
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=40)
-	description = models.TextField()
-	category = models.ForeignKey(TestCategory, on_delete=models.DO_NOTHING)
-
-	class Meta:
-		managed = True
-		db_table = 'test_subcategories'
-
-
 class Test(models.Model):
 	''' the various tests offered by
 		a healthprovider
@@ -291,11 +214,80 @@ class Test(models.Model):
 	code = models.CharField(max_length=10)
 	department = models.CharField(max_length=70)
 	description = models.TextField()
-	subcategory = models.ForeignKey(TestSubcategory, on_delete=models.DO_NOTHING)
+	# subcategory = models.ForeignKey(TestSubcategory, on_delete=models.DO_NOTHING)
+	test_image = models.ImageField(upload_to='test_pic', blank=True, null=True)
 
 	class Meta:
 		managed = True
 		db_table = 'tests'
+
+	def __str__(self):
+		return self.name
+
+
+class TestCategory(models.Model):
+	''' cateogeries for a given test
+	'''
+
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=40)
+	description = models.TextField()
+	category_pic = models.ImageField(upload_to = 'test_categories', null=True, blank=True)
+	test = models.ForeignKey(Test, blank=True, null=True, on_delete=models.CASCADE)
+
+	class Meta:
+		managed = True
+		db_table = 'test_categories'
+
+	def __str__(self):
+		return self.name
+
+
+class TestSubcategory(models.Model):
+	''' subcategories for a given test
+	'''
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=40)
+	description = models.TextField()
+	category = models.ForeignKey(TestCategory, on_delete=models.CASCADE, blank=True, null=True)
+	sub_category_image = models.ImageField(upload_to='sub_catagory_pic', blank=True, null=True)
+
+
+	class Meta:
+		managed = True
+		db_table = 'test_subcategories'
+
+	def __str__(self):
+		return self.name
+
+
+
+
+class Speciality(models.Model):
+	''' hospital/clinician specialities
+	'''
+
+	id = models.AutoField(primary_key=True)
+	name = models.CharField(max_length=50, unique=True)
+	description = models.TextField()
+
+	def __str__(self):
+		return "<Speciality: %s | %s... >" % (self.name, self.description[:15])
+
+	class Meta:
+		managed = True
+		db_table = 'specialities'
+
+
+class Amenity(models.Model):
+	'''
+	Hospital provides the following amenities for its patients and visitors:
+	'''
+	service_name = models.CharField(max_length=40)
+	service_image = models.ImageField(upload_to='amenities', null=True, blank=True)
+
+	def __str__(self):
+		return self.service_name
 
 
 class HealthCheckup(models.Model):
@@ -332,7 +324,9 @@ class HealthCheckup(models.Model):
 	# querying the field can be done with the following
 	# from psycopg2.extras import NumericRange
 	# HealthCheckup.objects.filter(age__contained_by=NumericRange(0, 40))
-	age = IntegerRangeField(default=(0, None))
+	age = IntegerRangeField()
+	pre_existing_conditions = models.ForeignKey(Speciality, on_delete=models.CASCADE, 
+		null=True, blank=True)
 
 	tests = models.ManyToManyField(Test)
 	description = models.TextField()
@@ -343,6 +337,7 @@ class HealthCheckup(models.Model):
 
 	group_or_sponsor = models.ManyToManyField('User', null=True, blank=True)
 	coupon= models.ManyToManyField('Coupon', null=True, blank=True)
+	instructions = models.TextField(null=True, blank=True)
 
 
 	class Meta:
@@ -389,24 +384,6 @@ class DiscountCard(models.Model):
 		db_table = 'discountcards'
 
 
-
-class Speciality(models.Model):
-	''' hospital/clinician specialities
-	'''
-
-	id = models.AutoField(primary_key=True)
-	name = models.CharField(max_length=50, unique=True)
-	description = models.TextField()
-
-	def __str__(self):
-		return "<Speciality: %s | %s... >" % (self.name, self.description[:15])
-
-	class Meta:
-		managed = True
-		db_table = 'specialities'
-
-
-# user associated
 
 class Question(models.Model):
 	''' question used for recovery etc
@@ -510,12 +487,6 @@ class Transaction(models.Model):
 		db_table = 'transactions'
 
 
-'''
-		SPECIFIC ROLE BASED MODELS
-
-'''
-
-
 class Seeker(models.Model):
 	''' the common user who will be using the platform
 	'''
@@ -544,16 +515,19 @@ class Seeker(models.Model):
 
 	id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+
 	location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
 	relation = models.ForeignKey('Familymember', on_delete=models.DO_NOTHING,null=True, blank=True)
 
-	family = models.OneToOneField(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
-	appointments = models.ManyToManyField('Appointment', editable=False)
+	dob = models.DateField(default=current_timestamp)
 	profession = models.CharField(max_length=100, choices=profession_choices, default="other")
 	language = models.CharField(max_length=100, choices=language_choices, default="english")
 
+	family = models.OneToOneField(User,related_name='family', on_delete=models.DO_NOTHING, null=True, blank=True)
 
+	appointments = models.ManyToManyField('Appointment', editable=False)
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
+	transactions = models.ManyToManyField(Transaction, null=True, blank=True, editable=False)
 
 	def __str__(self):
 		return "<Seeker : %s >" % self.user.email
@@ -642,7 +616,7 @@ class Clinician(models.Model):
 
 	# education locations and other details can be stored here
 	education = JSONBField(JSONField(validators=[
-		KeysValidator(['year', 'title', 'description', 'type'])
+	KeysValidator(['year', 'title', 'description', 'type'])
 	]), null=True, blank=True, default=list)
 
 	# experience/training obtained in an institute
@@ -701,6 +675,13 @@ class Clinician(models.Model):
 			raise ValidationError(errors)
 		return cleaned_fields
 
+
+	def save(self, *args, **kwargs):
+		''' save override to call validation '''
+		#self.full_clean()
+		super().save(*args, **kwargs)
+
+
 	def check_availability(self, from_date, to_date):
 		''' given from and to, check whether the clinician
 			is available for the given period.
@@ -748,19 +729,104 @@ class Clinician(models.Model):
 		db_table = 'clinicians'
 
 
+
+class BasicFaciltyModel(models.Model):
+	'''
+	Common model for facilities provided by Hospital
+	'''
+	name = models.CharField(max_length=50)
+	description = models.TextField(blank=True, null=True)
+
+	class Meta:
+		abstract = True
+
+
+class Diagnostic(BasicFaciltyModel):
+	'''
+	diagnostics provided by hospital
+	'''
+	image = models.ImageField(upload_to='diagnostic_pics', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		managed = True
+		db_table = 'diagnostics'
+
+
+
+class InsuranceCorporateRecognation(BasicFaciltyModel):
+	'''
+	Insurance or Corporate Recognations provided by hospital
+	'''
+	image = models.ImageField(upload_to='insurance_pics', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		managed = True
+		db_table = 'insurances'
+
+
+class QualityAccreditation(BasicFaciltyModel):
+	'''
+	QualityAccreditation provided by hospital
+	'''
+	image = models.ImageField(upload_to='quality_pics', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		managed = True
+		db_table = 'quality_accreditations'
+
+
+class ServiceType(models.Model):
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.name
+
+
+class FacilityType(models.Model):
+	service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+	icon = models.ImageField(upload_to='facility_type', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+
+class Facility(models.Model):
+	facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	created_date = models.DateTimeField(default=timezone.now)
+	icon = models.ImageField(upload_to='facility', blank=True, null=True)
+
+
+	def __str__(self):
+		return self.name
+
+
 class Provider(models.Model):
 	''' the hospital that may or may not be a branch
 	'''
 
-	type_choices = (
-		('clinic', 'clinic'),
-		('hospital', 'hospital'),
-		('diagnostic_centre', 'diagnostic center'),
-	)
+	# type_choices = (
+	# 	('clinic', 'clinic'),
+	# 	('hospital', 'hospital'),
+	# 	('diagnostic_centre', 'diagnostic center'),
+	# )
 
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100, default="Generic Hospital")
-	type = models.CharField(choices=type_choices, default='hospital', max_length=30)
+	# type = models.CharField(choices=type_choices, default='hospital', max_length=30)
+	service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
 	active_from = models.DateField(default=current_timestamp)
 
 	location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=True, blank=True)
@@ -770,16 +836,188 @@ class Provider(models.Model):
 	parent_provider = models.ForeignKey("self", on_delete=models.DO_NOTHING, null=True, blank=True)
 
 	clinicians = models.ManyToManyField(Clinician,null=True, blank=True)
+	amenities = models.ManyToManyField(Amenity,null=True, blank=True)
 	specialities = models.ManyToManyField(Speciality,null=True, blank=True)
 	healthchecks = models.ManyToManyField(HealthCheckup, null=True, blank=True)
 
-	facilities = ArrayField(models.TextField(), null=True, blank=True)
+	facilities = models.ManyToManyField(FacilityType, null=True, blank=True)
 	offerings = ArrayField(models.TextField(), null=True, blank=True)
 	special_checks = ArrayField(models.TextField(), null=True, blank=True)
+
+	work_timings = ArrayField(
+		ArrayField(
+			models.TimeField(),
+			size=2),
+		size=7, null=True, blank=True)
+	
+	fax = models.BigIntegerField(blank=True, null=True)
+	contact_person = models.CharField(max_length=50, blank=True, null=True)
+	contact_number = models.PositiveIntegerField(blank=True, null=True)
+	no_of_beds = models.PositiveIntegerField(blank=True, null=True)
+
+
+	def check_availability(self, from_date, to_date):
+		''' given from and to, check whether the clinician
+			is available for the given period.
+			@param from_date -> datetime.date
+			@param to_date -> datetime.date
+			@return boolean
+		'''
+		try:
+			if not isinstance(from_date, datetime.date):
+				from_date = datetime.datetime.strptime(from_date, '%Y-%m-%d').date()
+			if not isinstance(to_date, datetime.date):
+				to_date = datetime.datetime.strptime(to_date, '%Y-%m-%d').date()
+		except:
+			return False
+
+		if to_date < from_date: return False
+		for date_slot in self.vacations:
+			start_date, end_date = date_slot
+			if from_date >= start_date and to_date <= end_date:
+				return False
+		return True
+
+	def check_session(self, session):
+		'''
+			given a session, check if a doctor is available in that session
+			@param session -> str "morning"/"afternoon"/"evening"
+			@return True/False
+		'''
+		get_time = lambda x: datetime.datetime.strptime(x, '%H:%M').time()
+		session_timings = {
+			'morning': get_time('11:00'),
+			'afternoon': get_time('16:00'),
+			'evening': get_time('21:00'),
+			'night': get_time('23:59'),
+		}
+
+		if session not in session_timings: return False
+		for time_slot in self.work_timings:
+			if time_slot[0] <= session_timings[session] <= time_slot[1]:
+				return True
+		return False
+
+	def __str__(self):
+		return self.name
 
 	class Meta:
 		managed = True
 		db_table = 'providers'
+
+class Feedback(models.Model):
+	'''
+		The feedback/complaint for a given provider AND/OR clinician
+		- Ratings for the various parameters (optional)
+		- User, provider => compulsory
+		- Clinician => optional
+		- Appointment => The linked appointment object (optional)
+		- categories => Types of parameters (set according to field setter)
+			- Doctor
+			- Clinic & Aminities
+			- Staff & Hospitality
+			- Timelines
+	'''
+	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(editable=False, default=uuid.uuid4)
+	date_added = models.DateTimeField(default=current_timestamp)
+
+	user = models.ForeignKey(Seeker, on_delete=models.DO_NOTHING)
+	message = models.TextField(null=True, blank=True, max_length=255)
+
+	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING)
+	clinician = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, blank=True, null=True)
+	appointment = models.ForeignKey('Appointment', on_delete=models.DO_NOTHING, blank=True, null=True)
+
+	cat_keys = KeysValidator(['doctor', 'clinic_amenities', 'staff_hospitality', 'scheduling'])
+
+	def get_categories():
+		''' set the default categories according to the ones being validated '''
+		cats = {}
+		[cats.update({_ : 0}) for _ in Feedback.cat_keys.keys]
+		return cats
+
+	categories = JSONField(validators=[cat_keys], default=get_categories)
+
+	class Meta:
+		managed = True
+		db_table = 'feedbacks'
+
+
+	def clean(self, *args, **kwargs):
+		''' override to check validity of categories '''
+
+		error_msg = "%s error | %s"
+		if not all([_ in Feedback.cat_keys.keys for _ in self.categories]):
+			raise ValidationError({ 'categories' : error_msg % ("Keys", "Invalid Keys")})
+		if not all([(isinstance(self.categories[_], int) or isinstance(self.categories[_], float)) and self.categories[_] >= 0
+			and self.categories[_] <= 5 for _ in self.categories]):
+			raise ValidationError({ 'categories' : error_msg % ("Values", "Invalid ratings")})
+		elif self.clinician not in self.provider.clinicians.all():
+			raise ValidationError({ 'clinician' : error_msg % ("Clinician", "Clinician does not belong to provider!")})
+		return super().clean(*args, **kwargs)
+
+
+	def save(self):
+		''' override save to save internal fields at model level '''
+		self.full_clean()
+		super().save()
+		if self.appointment: self.appointment.save()
+
+
+class Alert(models.Model):
+	'''
+		@description Notifier system to send alerts to patients
+		@field uid => Unique identifier
+		@field status => Internal field to trigger current active status
+		@field name -> Desired Alert name
+		@field type -> Type of alert
+		@field method -> Means of alerting
+		@field duration -> Range of dates to be alerted for
+		@field contact -> Person to alert
+	'''
+
+	alert_choices = (
+		('medication', 'medication'),
+		('checkup', 'checkup'),
+		('appointment', 'appointment'),
+		('consultation', 'consultation'),
+		('other', 'other'),
+	)
+
+	method_choices = (
+		('email', 'email'),
+		('mobile', 'mobile'),
+		('both', 'both'),
+		('none', 'none'),
+	)
+
+	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+	status = models.BooleanField(default=False, editable=False)
+
+	name = models.CharField(max_length=30)
+	type = models.CharField(max_length=40, choices=alert_choices, default='consultation')
+	method = models.CharField(max_length=15, default='mobile', choices=method_choices)
+	duration = DateRangeField()
+	contact = models.ForeignKey(Seeker, on_delete=models.DO_NOTHING, editable=False)
+
+	def __str__(self):
+		return "%s (%s) | %s" % (self.name, self.type, self.status)
+
+
+	def save(self, *args, **kwargs):
+		dur = self.duration
+		try:
+			self.status = self.status or (dur[0] <= current_timestamp().date() <= dur[1])
+		except TypeError:
+			self.status = self.status or (dur.lower <= current_timestamp().date() <= dur.upper)
+
+		super().save(*args, **kwargs)
+
+	class Meta:
+		db_table = 'alerts'
+		managed = True
 
 
 class Organization(models.Model):
@@ -807,6 +1045,7 @@ class Organization(models.Model):
 	name = models.CharField(max_length=50)
 	size = models.CharField(choices=org_size_choices, max_length=30, default="50-100")
 	type = models.CharField(choices=org_type_choices, max_length=100, default="corporate")
+	image = models.ImageField(upload_to='organization_images', default='default_org.jpg')
 	location = models.OneToOneField(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
@@ -850,13 +1089,6 @@ class SalesAgent(models.Model):
 		db_table = 'salesagents'
 
 
-'''
-
-	role specific models
-
-'''
-
-
 class Appointment(models.Model):
 	''' appointments made by the user
 	'''
@@ -873,10 +1105,12 @@ class Appointment(models.Model):
 		('event-success', 'Success'),
 		('event-warning', 'Warning'),
 		('event-special', 'Special'),
+		('event-danger', 'Danger'),
 	)
 
 	# indexing and meta fields
 	id = models.AutoField(primary_key=True)
+	uid = models.UUIDField(default=uuid.uuid4, unique=True)
 	create_on = models.DateTimeField(default=current_timestamp, editable=False)
 	date_modified = models.DateTimeField(default=current_timestamp, editable=False)
 
@@ -884,6 +1118,8 @@ class Appointment(models.Model):
 	time = models.TimeField()
 	duration = models.PositiveIntegerField(default=30)
 	status = models.CharField(choices=status_options, default='pending', max_length=40)
+	reviewed = models.BooleanField(default=False, editable=False)
+
 	under = models.ForeignKey(Clinician, on_delete=models.DO_NOTHING, null=True, blank=True)
 	provider = models.ForeignKey(Provider, on_delete=models.DO_NOTHING, null=True, blank=True)
 
@@ -897,7 +1133,7 @@ class Appointment(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.date_modified = current_timestamp()
-
+		self.reviewed = bool(Feedback.objects.filter(appointment=self))
 		self.from_timestamp = datetime.datetime.combine(self.date, self.time)
 		self.to_timestamp = self.from_timestamp + datetime.timedelta(minutes=self.duration)
 
@@ -948,8 +1184,6 @@ class CDN(models.Model):
 		managed = True
 		db_table = 'images'
 
-
-# blog posts
 
 class BlogCategory(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -1041,30 +1275,6 @@ class Group(models.Model):
 		return self.name
 
 
-class ServiceType(models.Model):
-	name = models.CharField(max_length=200)
-	created_date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return self.name
-
-
-class FacilityType(models.Model):
-	service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
-	name = models.CharField(max_length=200)
-	created_date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return self.name
-
-class Facility(models.Model):
-	facility_type = models.ForeignKey(FacilityType, on_delete=models.CASCADE)
-	name = models.CharField(max_length=200)
-	created_date = models.DateTimeField(default=timezone.now)
-
-	def __str__(self):
-		return self.name
-
 
 class Timesession(models.Model):
 	name = models.CharField(max_length=200)
@@ -1075,6 +1285,7 @@ class Timesession(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class Role(models.Model):
 	name = models.CharField(max_length=200)
 	subrole = models.CharField(max_length=200,null=True, blank=True)
@@ -1082,6 +1293,7 @@ class Role(models.Model):
 
 	def __str__(self):
 		return self.name
+
 
 class Familymember(models.Model):
 	name = models.CharField(max_length=200)
@@ -1095,6 +1307,7 @@ class Languages(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name
+
 
 class IdConfiguration(models.Model):
 	affix = models.CharField(max_length=200,null=True, blank=True)

@@ -1,0 +1,166 @@
+{% extends "healthseeker/base_dashboard.html" %} {% load static %} {% load bootstrap %} {% block scripts %}
+<script>
+    $(document).ready(function () {
+        // convert to date fields
+        $("input[name*='duration']").prop('type', "date");
+
+        // remove uid
+        $("div#alert-modal").on('shown.bs.modal', function() {
+            $("input#uid").remove();
+            $("form#alert-form")[0].reset();
+        });
+
+        // listen to delete requests
+        $("button.delete_btn").on('click', function () {
+            let uid = $(this).data('target'),
+                $record = $(this).closest("ul.health_recordsz");
+            if (confirm("Are you sure you want to delete this alert?"))
+                $.ajax({
+                    url: window.location.pathname,
+                    method: "POST",
+                    data: {
+                        'req_type': "DELETE",
+                        'uid': uid,
+                        'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val()
+                    },
+                    success: function (response) {
+                        alert(response.data);
+                        $record.fadeOut().remove();
+                    }
+                });
+        });
+
+        // modifier form population
+        $("a.modify_btn").on('click', function () {
+            let uid = $(this).data('pk'),
+                $record = $(this).closest("ul.health_recordsz"),
+                $form = $("form#alert-form");
+            $.ajax({
+                url: window.location.pathname,
+                method: "POST",
+                data: {
+                    'req_type' : "MODIFY",
+                    'uid' : uid,
+                    'csrfmiddlewaretoken' : $("input[name='csrfmiddlewaretoken']").val()
+                },
+                success: function(response) {
+                    if(response.status) {
+                        $("input[name='type'][value='" + response.data.type + "'").prop('checked', true);
+                        $("input#id_name").val(response.data.name);
+                        let duration = JSON.parse(response.data.duration);
+                        $("input#id_duration_0").val(duration.lower);
+                        $("input#id_duration_1").val(duration.upper);
+                        $("select#id_method").val(response.data.method);
+                        $form.append($("<input>", {'id' : "uid", 'value' : uid, 'type' : "hidden", 'name' : 'uid' }));
+                    }
+                    else alert("Error fetching alert!");
+                }
+            });
+        });
+    });
+</script>
+{% endblock scripts %} {% block content %}
+<section class="form_reg_one_hero dash_board container">
+    <div class="row">
+        <div class="form_reg_one form_reg_one_m_p form_reg_one_in form_reg_one_in_my_p">
+            <h3>Health Alerts</h3>
+            <div class="my_pro_form_he">
+                <h2 style="    margin-bottom: 6px;">Configure Health Alerts</h2>
+                <p class="lead text-muted">Add alerts to remind yourself, or a loved one about appointments, consultations and much more!</p>
+                <a style="background-color: #2658a4 !important;" href="#" class="add_family_me add_family_me_my_p" data-toggle="modal" data-target=".healthalert-modal">
+                    <i class="fa fa-plus"></i> Add Falert
+                </a>
+                <div class="modal fade healthalert-modal" id="alert-modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog add_famil_fr_health" role="document">
+                        <div class="modal-content health_rec_modal">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <div class="modal-body add_familymnumber add_familymnumber3">
+                                <div class="form_reg_one_in">
+                                    <h2>New Alert</h2>
+                                    <form class="registration_form health_reco_form" method="POST" id="alert-form">
+                                        <section class="health_record_owl health_chenks div_slde_main large-12 columns" id="demos">
+                                            <div class="owl-carousel owl-theme">
+                                                {% for type in alert_types %}
+                                                <div class="item">
+                                                    <div class="form-control">
+                                                        <input type="radio" name="type" value="{{ type }}" id="alert_{{ type }}">
+                                                        <label for="alert_{{ type }}">
+                                                            <h5>{{ type|title }}
+                                                                <small>
+                                                                    <i class="fa fa-stethoscope"></i>
+                                                                </small>
+                                                            </h5>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </section>
+                                        <div class="row">
+                                            {% csrf_token %} {{ alert_form | bootstrap }}
+                                        </div>
+                                        <div class="alert_noto alert_noto2">
+                                            <p style="color: #2658a4;">Alert:</p>
+                                            <li>
+                                                <a href="#">Self</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Spouse</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Both</a>
+                                            </li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn search_vtm btn btn-4 btn-4c icon-arrow-right" name="req_type" value="ADD" type="submit">Save &amp; Go</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="full_width">
+                    {% for alert in alerts %}
+                    <ul class="health_recordsz health_alerts">
+                        <li class="time_record">
+                            <div class="item">
+                                <img src="{% static 'healthseeker/img/icons/health_alerts.jpg' %}">
+                            </div>
+                            <span>{{ alert.type }}</span>
+                        </li>
+                        <li class="heal_rec_heading health_alerts1">
+                            <div class="health_recc_name">
+                                <p>
+                                    <strong>{{ alert.name }}</strong>
+                                </p>
+                                <span>{{ alert.duration.lower|date }} to {{ alert.duration.upper|date }}</span>
+                            </div>
+                        </li>
+                        <li class="doctor_pres_record">
+                            <div class="doctor_presc">
+                                <a href="#" class="btn_he_re modify_btn" data-pk="{{ alert.uid }}" data-toggle="modal" data-target=".healthalert-modal">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> &nbsp;Modify</a>
+                                <a href="#" class="btn_he_re share_btn">
+                                    <i class="fa fa-share-alt" aria-hidden="true"></i> &nbsp;Share</a>
+                            </div>
+                        </li>
+                        <li class="deatils_re_of_record">
+                            <button class="btn btn-danger delete_btn" data-target="{{ alert.uid }}">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                        </li>
+                    </ul>
+                    {% empty %}
+                    <ul class="health_recordsz health_alerts">
+                        <li>
+                            <div class="well">No alerts added!</div>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
